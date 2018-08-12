@@ -3,7 +3,7 @@
     "servicosJuridicosApp": {
         "assunto" : {
             "home": {
-                "title": "Assuntos",
+                "title": "Assunto",
                 "createLabel": "Criar novo Assunto",
                 "createOrEditLabel": "Criar ou editar Assunto"
             },

@@ -1,8 +1,6 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
-
 import { ServicosJuridicosSharedModule } from 'app/shared';
-
 import {
     PasswordStrengthBarComponent,
     RegisterComponent,
