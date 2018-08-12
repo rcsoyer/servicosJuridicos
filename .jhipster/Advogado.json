@@ -1,0 +1,58 @@
+{
+    "name": "Advogado",
+    "fields": [
+        {
+            "fieldName": "nome",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": 80
+        },
+        {
+            "fieldName": "cpf",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "minlength",
+                "maxlength"
+            ],
+            "fieldValidateRulesMinlength": 11,
+            "fieldValidateRulesMaxlength": 11
+        },
+        {
+            "fieldName": "ramal",
+            "fieldType": "Integer"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "processo",
+            "otherEntityName": "processoJudicial",
+            "otherEntityRelationshipName": "advogado"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "feriasLicenca",
+            "otherEntityName": "feriasLicenca",
+            "otherEntityRelationshipName": "advogado"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "dgCoordenacao",
+            "otherEntityName": "advogadoDgCoordenacao",
+            "otherEntityRelationshipName": "advogado"
+        }
+    ],
+    "changelogDate": "20180812192917",
+    "entityTableName": "advogado",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

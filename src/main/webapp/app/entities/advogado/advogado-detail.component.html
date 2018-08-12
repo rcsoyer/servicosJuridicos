@@ -1,0 +1,35 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="advogado">
+            <h2><span jhiTranslate="servicosJuridicosApp.advogado.detail.title">Advogado</span> {{advogado.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="servicosJuridicosApp.advogado.nome">Nome</span></dt>
+                <dd>
+                    <span>{{advogado.nome}}</span>
+                </dd>
+                <dt><span jhiTranslate="servicosJuridicosApp.advogado.cpf">Cpf</span></dt>
+                <dd>
+                    <span>{{advogado.cpf}}</span>
+                </dd>
+                <dt><span jhiTranslate="servicosJuridicosApp.advogado.ramal">Ramal</span></dt>
+                <dd>
+                    <span>{{advogado.ramal}}</span>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/advogado', advogado.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

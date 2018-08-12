@@ -1,0 +1,45 @@
+{
+    "name": "FeriasLicenca",
+    "fields": [
+        {
+            "fieldName": "dtInicio",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "dtFim",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "tipo",
+            "fieldType": "FeriasLicensaTipo",
+            "fieldValues": "FERIAS,LICENSA",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
+            "relationshipName": "advogado",
+            "otherEntityName": "advogado",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20180812192920",
+    "entityTableName": "ferias_licenca",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

@@ -1,0 +1,70 @@
+{
+    "name": "ProcessoJudicial",
+    "fields": [
+        {
+            "fieldName": "numero",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "minlength",
+                "maxlength"
+            ],
+            "fieldValidateRulesMinlength": 20,
+            "fieldValidateRulesMaxlength": 20
+        },
+        {
+            "fieldName": "prazoFinal",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "dtAtribuicao",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "dtInicio",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "dtConclusao",
+            "fieldType": "LocalDate"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
+            "relationshipName": "assunto",
+            "otherEntityName": "assunto",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
+            "relationshipName": "modalidade",
+            "otherEntityName": "modalidade",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "relationshipValidateRules": "required",
+            "relationshipName": "advogado",
+            "otherEntityName": "advogado",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20180812192918",
+    "entityTableName": "processo_judicial",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*"
+}

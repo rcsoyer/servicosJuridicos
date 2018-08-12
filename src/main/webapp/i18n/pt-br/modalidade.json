@@ -1,0 +1,22 @@
+
+{
+    "servicosJuridicosApp": {
+        "modalidade" : {
+            "home": {
+                "title": "Modalidades",
+                "createLabel": "Criar novo Modalidade",
+                "createOrEditLabel": "Criar ou editar Modalidade"
+            },
+            "created": "Um novo Modalidade foi criado com o identificador {{ param }}",
+            "updated": "Um Modalidade foi atualizado com o identificador {{ param }}",
+            "deleted": "Um Modalidade foi deletado com o identificador {{ param }}",
+            "delete": {
+                "question": "Tem certeza de que deseja excluir Modalidade {{ id }}?"
+            },
+            "detail": {
+                "title": "Modalidade"
+            },
+            "descricao": "Descricao"
+        }
+    }
+}

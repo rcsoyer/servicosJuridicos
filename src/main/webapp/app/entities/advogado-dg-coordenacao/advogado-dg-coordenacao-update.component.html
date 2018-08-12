@@ -1,0 +1,106 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-advogado-dg-coordenacao-heading" jhiTranslate="servicosJuridicosApp.advogadoDgCoordenacao.home.createOrEditLabel">Create or edit a Advogado Dg Coordenacao</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!advogadoDgCoordenacao.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="advogadoDgCoordenacao.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.advogadoDgCoordenacao.dgPessoalInicio" for="field_dgPessoalInicio">Dg Pessoal Inicio</label>
+                    <input type="text" class="form-control" name="dgPessoalInicio" id="field_dgPessoalInicio"
+                        [(ngModel)]="advogadoDgCoordenacao.dgPessoalInicio" required minlength="1" maxlength="1"/>
+                    <div [hidden]="!(editForm.controls.dgPessoalInicio?.dirty && editForm.controls.dgPessoalInicio?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.dgPessoalInicio?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.dgPessoalInicio?.errors?.minlength" jhiTranslate="entity.validation.minlength" translateValues="{ min: 1 }">
+                        This field is required to be at least 1 characters.
+                        </small>
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.dgPessoalInicio?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 1 }">
+                        This field cannot be longer than 1 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.advogadoDgCoordenacao.dgPessoalFim" for="field_dgPessoalFim">Dg Pessoal Fim</label>
+                    <input type="text" class="form-control" name="dgPessoalFim" id="field_dgPessoalFim"
+                        [(ngModel)]="advogadoDgCoordenacao.dgPessoalFim" minlength="1" maxlength="1"/>
+                    <div [hidden]="!(editForm.controls.dgPessoalFim?.dirty && editForm.controls.dgPessoalFim?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.dgPessoalFim?.errors?.minlength" jhiTranslate="entity.validation.minlength" translateValues="{ min: 1 }">
+                        This field is required to be at least 1 characters.
+                        </small>
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.dgPessoalFim?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 1 }">
+                        This field cannot be longer than 1 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.advogadoDgCoordenacao.dgDupla" for="field_dgDupla">Dg Dupla</label>
+                    <input type="text" class="form-control" name="dgDupla" id="field_dgDupla"
+                        [(ngModel)]="advogadoDgCoordenacao.dgDupla" minlength="1" maxlength="1"/>
+                    <div [hidden]="!(editForm.controls.dgDupla?.dirty && editForm.controls.dgDupla?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.dgDupla?.errors?.minlength" jhiTranslate="entity.validation.minlength" translateValues="{ min: 1 }">
+                        This field is required to be at least 1 characters.
+                        </small>
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.dgDupla?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 1 }">
+                        This field cannot be longer than 1 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.advogadoDgCoordenacao.rangeDgCoordenacao" for="field_rangeDgCoordenacao">Range Dg Coordenacao</label>
+                    <select class="form-control" name="rangeDgCoordenacao" [(ngModel)]="advogadoDgCoordenacao.rangeDgCoordenacao" id="field_rangeDgCoordenacao" >
+                        <option value="INCLUSIVE">{{'servicosJuridicosApp.RangeDgCoordenacao.INCLUSIVE' | translate}}</option>
+                        <option value="EXCLUSIVE">{{'servicosJuridicosApp.RangeDgCoordenacao.EXCLUSIVE' | translate}}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.advogadoDgCoordenacao.advogado" for="field_advogado">Advogado</label>
+                    <select class="form-control" id="field_advogado" name="advogado" [(ngModel)]="advogadoDgCoordenacao.advogadoId"  required>
+                        <option *ngIf="!editForm.value.advogado" [ngValue]="null" selected></option>
+                        <option [ngValue]="advogadoOption.id" *ngFor="let advogadoOption of advogados; trackBy: trackAdvogadoById">{{advogadoOption.id}}</option>
+                    </select>
+                </div>
+                <div [hidden]="!(editForm.controls.advogado?.dirty && editForm.controls.advogado?.invalid)">
+                    <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.advogado?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.advogadoDgCoordenacao.coordenacao" for="field_coordenacao">Coordenacao</label>
+                    <select class="form-control" id="field_coordenacao" name="coordenacao" [(ngModel)]="advogadoDgCoordenacao.coordenacaoId"  required>
+                        <option *ngIf="!editForm.value.coordenacao" [ngValue]="null" selected></option>
+                        <option [ngValue]="coordenacaoJuridicaOption.id" *ngFor="let coordenacaoJuridicaOption of coordenacaojuridicas; trackBy: trackCoordenacaoJuridicaById">{{coordenacaoJuridicaOption.id}}</option>
+                    </select>
+                </div>
+                <div [hidden]="!(editForm.controls.coordenacao?.dirty && editForm.controls.coordenacao?.invalid)">
+                    <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.coordenacao?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

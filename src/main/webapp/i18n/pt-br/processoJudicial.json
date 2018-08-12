@@ -1,0 +1,29 @@
+
+{
+    "servicosJuridicosApp": {
+        "processoJudicial" : {
+            "home": {
+                "title": "Processo Judicials",
+                "createLabel": "Criar novo Processo Judicial",
+                "createOrEditLabel": "Criar ou editar Processo Judicial"
+            },
+            "created": "Um novo Processo Judicial foi criado com o identificador {{ param }}",
+            "updated": "Um Processo Judicial foi atualizado com o identificador {{ param }}",
+            "deleted": "Um Processo Judicial foi deletado com o identificador {{ param }}",
+            "delete": {
+                "question": "Tem certeza de que deseja excluir Processo Judicial {{ id }}?"
+            },
+            "detail": {
+                "title": "Processo Judicial"
+            },
+            "numero": "Numero",
+            "prazoFinal": "Prazo Final",
+            "dtAtribuicao": "Dt Atribuicao",
+            "dtInicio": "Dt Inicio",
+            "dtConclusao": "Dt Conclusao",
+            "assunto": "Assunto",
+            "modalidade": "Modalidade",
+            "advogado": "Advogado"
+        }
+    }
+}

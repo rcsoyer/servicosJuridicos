@@ -1,0 +1,9 @@
+{
+    "servicosJuridicosApp": {
+        "RangeDgCoordenacao" : {
+            "null": "",
+            "INCLUSIVE": "INCLUSIVE",
+            "EXCLUSIVE": "EXCLUSIVE"
+        }
+    }
+}

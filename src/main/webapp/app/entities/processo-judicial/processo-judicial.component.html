@@ -1,0 +1,88 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="servicosJuridicosApp.processoJudicial.home.title">Processo Judicials</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-processo-judicial" [routerLink]="['/processo-judicial/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span  jhiTranslate="servicosJuridicosApp.processoJudicial.home.createLabel">
+            Create new Processo Judicial
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <div class="table-responsive" *ngIf="processoJudicials">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="numero"><span jhiTranslate="servicosJuridicosApp.processoJudicial.numero">Numero</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="prazoFinal"><span jhiTranslate="servicosJuridicosApp.processoJudicial.prazoFinal">Prazo Final</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="dtAtribuicao"><span jhiTranslate="servicosJuridicosApp.processoJudicial.dtAtribuicao">Dt Atribuicao</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="dtInicio"><span jhiTranslate="servicosJuridicosApp.processoJudicial.dtInicio">Dt Inicio</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="dtConclusao"><span jhiTranslate="servicosJuridicosApp.processoJudicial.dtConclusao">Dt Conclusao</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="assuntoId"><span jhiTranslate="servicosJuridicosApp.processoJudicial.assunto">Assunto</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="modalidadeId"><span jhiTranslate="servicosJuridicosApp.processoJudicial.modalidade">Modalidade</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="advogadoId"><span jhiTranslate="servicosJuridicosApp.processoJudicial.advogado">Advogado</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let processoJudicial of processoJudicials ;trackBy: trackId">
+                <td><a [routerLink]="['/processo-judicial', processoJudicial.id, 'view' ]">{{processoJudicial.id}}</a></td>
+                <td>{{processoJudicial.numero}}</td>
+                <td>{{processoJudicial.prazoFinal | date:'mediumDate'}}</td>
+                <td>{{processoJudicial.dtAtribuicao | date:'mediumDate'}}</td>
+                <td>{{processoJudicial.dtInicio | date:'mediumDate'}}</td>
+                <td>{{processoJudicial.dtConclusao | date:'mediumDate'}}</td>
+                <td>
+                    <div *ngIf="processoJudicial.assuntoId">
+                        <a [routerLink]="['../assunto', processoJudicial.assuntoId , 'view' ]" >{{processoJudicial.assuntoId}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="processoJudicial.modalidadeId">
+                        <a [routerLink]="['../modalidade', processoJudicial.modalidadeId , 'view' ]" >{{processoJudicial.modalidadeId}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="processoJudicial.advogadoId">
+                        <a [routerLink]="['../advogado', processoJudicial.advogadoId , 'view' ]" >{{processoJudicial.advogadoId}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['/processo-judicial', processoJudicial.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/processo-judicial', processoJudicial.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'processo-judicial/'+ processoJudicial.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="processoJudicials && processoJudicials.length">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
+    </div>
+</div>

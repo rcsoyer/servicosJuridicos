@@ -1,0 +1,27 @@
+
+{
+    "servicosJuridicosApp": {
+        "advogadoDgCoordenacao" : {
+            "home": {
+                "title": "Advogado Dg Coordenacaos",
+                "createLabel": "Criar novo Advogado Dg Coordenacao",
+                "createOrEditLabel": "Criar ou editar Advogado Dg Coordenacao"
+            },
+            "created": "Um novo Advogado Dg Coordenacao foi criado com o identificador {{ param }}",
+            "updated": "Um Advogado Dg Coordenacao foi atualizado com o identificador {{ param }}",
+            "deleted": "Um Advogado Dg Coordenacao foi deletado com o identificador {{ param }}",
+            "delete": {
+                "question": "Tem certeza de que deseja excluir Advogado Dg Coordenacao {{ id }}?"
+            },
+            "detail": {
+                "title": "Advogado Dg Coordenacao"
+            },
+            "dgPessoalInicio": "Dg Pessoal Inicio",
+            "dgPessoalFim": "Dg Pessoal Fim",
+            "dgDupla": "Dg Dupla",
+            "rangeDgCoordenacao": "Range Dg Coordenacao",
+            "advogado": "Advogado",
+            "coordenacao": "Coordenacao"
+        }
+    }
+}

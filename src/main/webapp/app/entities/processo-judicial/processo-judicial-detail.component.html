@@ -1,0 +1,61 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="processoJudicial">
+            <h2><span jhiTranslate="servicosJuridicosApp.processoJudicial.detail.title">Processo Judicial</span> {{processoJudicial.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="servicosJuridicosApp.processoJudicial.numero">Numero</span></dt>
+                <dd>
+                    <span>{{processoJudicial.numero}}</span>
+                </dd>
+                <dt><span jhiTranslate="servicosJuridicosApp.processoJudicial.prazoFinal">Prazo Final</span></dt>
+                <dd>
+                    <span>{{processoJudicial.prazoFinal}}</span>
+                </dd>
+                <dt><span jhiTranslate="servicosJuridicosApp.processoJudicial.dtAtribuicao">Dt Atribuicao</span></dt>
+                <dd>
+                    <span>{{processoJudicial.dtAtribuicao}}</span>
+                </dd>
+                <dt><span jhiTranslate="servicosJuridicosApp.processoJudicial.dtInicio">Dt Inicio</span></dt>
+                <dd>
+                    <span>{{processoJudicial.dtInicio}}</span>
+                </dd>
+                <dt><span jhiTranslate="servicosJuridicosApp.processoJudicial.dtConclusao">Dt Conclusao</span></dt>
+                <dd>
+                    <span>{{processoJudicial.dtConclusao}}</span>
+                </dd>
+                <dt><span jhiTranslate="servicosJuridicosApp.processoJudicial.assunto">Assunto</span></dt>
+                <dd>
+                    <div *ngIf="processoJudicial.assuntoId">
+                        <a [routerLink]="['/assunto', processoJudicial.assuntoId, 'view']">{{processoJudicial.assuntoId}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="servicosJuridicosApp.processoJudicial.modalidade">Modalidade</span></dt>
+                <dd>
+                    <div *ngIf="processoJudicial.modalidadeId">
+                        <a [routerLink]="['/modalidade', processoJudicial.modalidadeId, 'view']">{{processoJudicial.modalidadeId}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="servicosJuridicosApp.processoJudicial.advogado">Advogado</span></dt>
+                <dd>
+                    <div *ngIf="processoJudicial.advogadoId">
+                        <a [routerLink]="['/advogado', processoJudicial.advogadoId, 'view']">{{processoJudicial.advogadoId}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/processo-judicial', processoJudicial.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

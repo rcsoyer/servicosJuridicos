@@ -1,0 +1,63 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-advogado-heading" jhiTranslate="servicosJuridicosApp.advogado.home.createOrEditLabel">Create or edit a Advogado</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!advogado.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="advogado.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.advogado.nome" for="field_nome">Nome</label>
+                    <input type="text" class="form-control" name="nome" id="field_nome"
+                        [(ngModel)]="advogado.nome" required maxlength="80"/>
+                    <div [hidden]="!(editForm.controls.nome?.dirty && editForm.controls.nome?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.nome?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.nome?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 80 }">
+                        This field cannot be longer than 80 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.advogado.cpf" for="field_cpf">Cpf</label>
+                    <input type="text" class="form-control" name="cpf" id="field_cpf"
+                        [(ngModel)]="advogado.cpf" required minlength="11" maxlength="11"/>
+                    <div [hidden]="!(editForm.controls.cpf?.dirty && editForm.controls.cpf?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.cpf?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.cpf?.errors?.minlength" jhiTranslate="entity.validation.minlength" translateValues="{ min: 11 }">
+                        This field is required to be at least 11 characters.
+                        </small>
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.cpf?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 11 }">
+                        This field cannot be longer than 11 characters.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.advogado.ramal" for="field_ramal">Ramal</label>
+                    <input type="number" class="form-control" name="ramal" id="field_ramal"
+                        [(ngModel)]="advogado.ramal" />
+                </div>
+
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

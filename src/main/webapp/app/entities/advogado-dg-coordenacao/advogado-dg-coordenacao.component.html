@@ -1,0 +1,80 @@
+<div>
+    <h2 id="page-heading">
+        <span jhiTranslate="servicosJuridicosApp.advogadoDgCoordenacao.home.title">Advogado Dg Coordenacaos</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-advogado-dg-coordenacao" [routerLink]="['/advogado-dg-coordenacao/new']">
+            <fa-icon [icon]="'plus'"></fa-icon>
+            <span  jhiTranslate="servicosJuridicosApp.advogadoDgCoordenacao.home.createLabel">
+            Create new Advogado Dg Coordenacao
+            </span>
+        </button>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <br/>
+    <div class="table-responsive" *ngIf="advogadoDgCoordenacaos">
+        <table class="table table-striped">
+            <thead>
+            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="dgPessoalInicio"><span jhiTranslate="servicosJuridicosApp.advogadoDgCoordenacao.dgPessoalInicio">Dg Pessoal Inicio</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="dgPessoalFim"><span jhiTranslate="servicosJuridicosApp.advogadoDgCoordenacao.dgPessoalFim">Dg Pessoal Fim</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="dgDupla"><span jhiTranslate="servicosJuridicosApp.advogadoDgCoordenacao.dgDupla">Dg Dupla</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="rangeDgCoordenacao"><span jhiTranslate="servicosJuridicosApp.advogadoDgCoordenacao.rangeDgCoordenacao">Range Dg Coordenacao</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="advogadoId"><span jhiTranslate="servicosJuridicosApp.advogadoDgCoordenacao.advogado">Advogado</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th jhiSortBy="coordenacaoId"><span jhiTranslate="servicosJuridicosApp.advogadoDgCoordenacao.coordenacao">Coordenacao</span> <fa-icon [icon]="'sort'"></fa-icon></th>
+            <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let advogadoDgCoordenacao of advogadoDgCoordenacaos ;trackBy: trackId">
+                <td><a [routerLink]="['/advogado-dg-coordenacao', advogadoDgCoordenacao.id, 'view' ]">{{advogadoDgCoordenacao.id}}</a></td>
+                <td>{{advogadoDgCoordenacao.dgPessoalInicio}}</td>
+                <td>{{advogadoDgCoordenacao.dgPessoalFim}}</td>
+                <td>{{advogadoDgCoordenacao.dgDupla}}</td>
+                <td jhiTranslate="{{'servicosJuridicosApp.RangeDgCoordenacao.' + advogadoDgCoordenacao.rangeDgCoordenacao}}">{{advogadoDgCoordenacao.rangeDgCoordenacao}}</td>
+                <td>
+                    <div *ngIf="advogadoDgCoordenacao.advogadoId">
+                        <a [routerLink]="['../advogado', advogadoDgCoordenacao.advogadoId , 'view' ]" >{{advogadoDgCoordenacao.advogadoId}}</a>
+                    </div>
+                </td>
+                <td>
+                    <div *ngIf="advogadoDgCoordenacao.coordenacaoId">
+                        <a [routerLink]="['../coordenacao-juridica', advogadoDgCoordenacao.coordenacaoId , 'view' ]" >{{advogadoDgCoordenacao.coordenacaoId}}</a>
+                    </div>
+                </td>
+                <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['/advogado-dg-coordenacao', advogadoDgCoordenacao.id, 'view' ]"
+                                class="btn btn-info btn-sm">
+                            <fa-icon [icon]="'eye'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/advogado-dg-coordenacao', advogadoDgCoordenacao.id, 'edit']"
+                                class="btn btn-primary btn-sm">
+                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                        </button>
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'advogado-dg-coordenacao/'+ advogadoDgCoordenacao.id + '/delete'} }]"
+                                replaceUrl="true"
+                                queryParamsHandling="merge"
+                                class="btn btn-danger btn-sm">
+                            <fa-icon [icon]="'times'"></fa-icon>
+                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div *ngIf="advogadoDgCoordenacaos && advogadoDgCoordenacaos.length">
+        <div class="row justify-content-center">
+            <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+        </div>
+        <div class="row justify-content-center">
+            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        </div>
+    </div>
+</div>

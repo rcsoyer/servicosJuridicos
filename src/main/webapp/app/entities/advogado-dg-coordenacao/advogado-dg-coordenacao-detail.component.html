@@ -1,0 +1,51 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="advogadoDgCoordenacao">
+            <h2><span jhiTranslate="servicosJuridicosApp.advogadoDgCoordenacao.detail.title">Advogado Dg Coordenacao</span> {{advogadoDgCoordenacao.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="servicosJuridicosApp.advogadoDgCoordenacao.dgPessoalInicio">Dg Pessoal Inicio</span></dt>
+                <dd>
+                    <span>{{advogadoDgCoordenacao.dgPessoalInicio}}</span>
+                </dd>
+                <dt><span jhiTranslate="servicosJuridicosApp.advogadoDgCoordenacao.dgPessoalFim">Dg Pessoal Fim</span></dt>
+                <dd>
+                    <span>{{advogadoDgCoordenacao.dgPessoalFim}}</span>
+                </dd>
+                <dt><span jhiTranslate="servicosJuridicosApp.advogadoDgCoordenacao.dgDupla">Dg Dupla</span></dt>
+                <dd>
+                    <span>{{advogadoDgCoordenacao.dgDupla}}</span>
+                </dd>
+                <dt><span jhiTranslate="servicosJuridicosApp.advogadoDgCoordenacao.rangeDgCoordenacao">Range Dg Coordenacao</span></dt>
+                <dd>
+                    <span jhiTranslate="{{'servicosJuridicosApp.RangeDgCoordenacao.' + advogadoDgCoordenacao.rangeDgCoordenacao}}">{{advogadoDgCoordenacao.rangeDgCoordenacao}}</span>
+                </dd>
+                <dt><span jhiTranslate="servicosJuridicosApp.advogadoDgCoordenacao.advogado">Advogado</span></dt>
+                <dd>
+                    <div *ngIf="advogadoDgCoordenacao.advogadoId">
+                        <a [routerLink]="['/advogado', advogadoDgCoordenacao.advogadoId, 'view']">{{advogadoDgCoordenacao.advogadoId}}</a>
+                    </div>
+                </dd>
+                <dt><span jhiTranslate="servicosJuridicosApp.advogadoDgCoordenacao.coordenacao">Coordenacao</span></dt>
+                <dd>
+                    <div *ngIf="advogadoDgCoordenacao.coordenacaoId">
+                        <a [routerLink]="['/coordenacao-juridica', advogadoDgCoordenacao.coordenacaoId, 'view']">{{advogadoDgCoordenacao.coordenacaoId}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/advogado-dg-coordenacao', advogadoDgCoordenacao.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

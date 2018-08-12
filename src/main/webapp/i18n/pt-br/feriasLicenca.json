@@ -1,0 +1,25 @@
+
+{
+    "servicosJuridicosApp": {
+        "feriasLicenca" : {
+            "home": {
+                "title": "Ferias Licencas",
+                "createLabel": "Criar novo Ferias Licenca",
+                "createOrEditLabel": "Criar ou editar Ferias Licenca"
+            },
+            "created": "Um novo Ferias Licenca foi criado com o identificador {{ param }}",
+            "updated": "Um Ferias Licenca foi atualizado com o identificador {{ param }}",
+            "deleted": "Um Ferias Licenca foi deletado com o identificador {{ param }}",
+            "delete": {
+                "question": "Tem certeza de que deseja excluir Ferias Licenca {{ id }}?"
+            },
+            "detail": {
+                "title": "Ferias Licenca"
+            },
+            "dtInicio": "Dt Inicio",
+            "dtFim": "Dt Fim",
+            "tipo": "Tipo",
+            "advogado": "Advogado"
+        }
+    }
+}

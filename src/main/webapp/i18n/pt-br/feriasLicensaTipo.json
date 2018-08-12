@@ -1,0 +1,9 @@
+{
+    "servicosJuridicosApp": {
+        "FeriasLicensaTipo" : {
+            "null": "",
+            "FERIAS": "FERIAS",
+            "LICENSA": "LICENSA"
+        }
+    }
+}

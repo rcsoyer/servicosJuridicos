@@ -1,0 +1,82 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-ferias-licenca-heading" jhiTranslate="servicosJuridicosApp.feriasLicenca.home.createOrEditLabel">Create or edit a Ferias Licenca</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!feriasLicenca.id">
+                    <label for="id" jhiTranslate="global.field.id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="feriasLicenca.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.feriasLicenca.dtInicio" for="field_dtInicio">Dt Inicio</label>
+                    <div class="input-group">
+                        <input id="field_dtInicio" type="text" class="form-control" name="dtInicio" ngbDatepicker  #dtInicioDp="ngbDatepicker" [(ngModel)]="feriasLicenca.dtInicio"
+                        required/>
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary" (click)="dtInicioDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                        </span>
+                    </div>
+                    <div [hidden]="!(editForm.controls.dtInicio?.dirty && editForm.controls.dtInicio?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.dtInicio?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.feriasLicenca.dtFim" for="field_dtFim">Dt Fim</label>
+                    <div class="input-group">
+                        <input id="field_dtFim" type="text" class="form-control" name="dtFim" ngbDatepicker  #dtFimDp="ngbDatepicker" [(ngModel)]="feriasLicenca.dtFim"
+                        required/>
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary" (click)="dtFimDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                        </span>
+                    </div>
+                    <div [hidden]="!(editForm.controls.dtFim?.dirty && editForm.controls.dtFim?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.dtFim?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.feriasLicenca.tipo" for="field_tipo">Tipo</label>
+                    <select class="form-control" name="tipo" [(ngModel)]="feriasLicenca.tipo" id="field_tipo"  required>
+                        <option value="FERIAS">{{'servicosJuridicosApp.FeriasLicensaTipo.FERIAS' | translate}}</option>
+                        <option value="LICENSA">{{'servicosJuridicosApp.FeriasLicensaTipo.LICENSA' | translate}}</option>
+                    </select>
+                    <div [hidden]="!(editForm.controls.tipo?.dirty && editForm.controls.tipo?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.tipo?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.feriasLicenca.advogado" for="field_advogado">Advogado</label>
+                    <select class="form-control" id="field_advogado" name="advogado" [(ngModel)]="feriasLicenca.advogadoId"  required>
+                        <option *ngIf="!editForm.value.advogado" [ngValue]="null" selected></option>
+                        <option [ngValue]="advogadoOption.id" *ngFor="let advogadoOption of advogados; trackBy: trackAdvogadoById">{{advogadoOption.id}}</option>
+                    </select>
+                </div>
+                <div [hidden]="!(editForm.controls.advogado?.dirty && editForm.controls.advogado?.invalid)">
+                    <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.advogado?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
