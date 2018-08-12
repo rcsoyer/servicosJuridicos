@@ -1,49 +1,20 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 
+import { NgbDateMomentAdapter } from './util/datepicker-adapter';
 import {
     ServicosJuridicosSharedLibsModule,
     ServicosJuridicosSharedCommonModule,
-    CSRFService,
-    AuthServerProvider,
-    AccountService,
-    UserService,
-    StateStorageService,
-    LoginService,
-    LoginModalService,
     JhiLoginModalComponent,
-    Principal,
-    HasAnyAuthorityDirective,
+    HasAnyAuthorityDirective
 } from './';
 
 @NgModule({
-    imports: [
-        ServicosJuridicosSharedLibsModule,
-        ServicosJuridicosSharedCommonModule
-    ],
-    declarations: [
-        JhiLoginModalComponent,
-        HasAnyAuthorityDirective
-    ],
-    providers: [
-        LoginService,
-        LoginModalService,
-        AccountService,
-        StateStorageService,
-        Principal,
-        CSRFService,
-        AuthServerProvider,
-        UserService,
-        DatePipe
-    ],
+    imports: [ServicosJuridicosSharedLibsModule, ServicosJuridicosSharedCommonModule],
+    declarations: [JhiLoginModalComponent, HasAnyAuthorityDirective],
+    providers: [{ provide: NgbDateAdapter, useClass: NgbDateMomentAdapter }],
     entryComponents: [JhiLoginModalComponent],
-    exports: [
-        ServicosJuridicosSharedCommonModule,
-        JhiLoginModalComponent,
-        HasAnyAuthorityDirective,
-        DatePipe
-    ],
+    exports: [ServicosJuridicosSharedCommonModule, JhiLoginModalComponent, HasAnyAuthorityDirective],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
-
 })
 export class ServicosJuridicosSharedModule {}
