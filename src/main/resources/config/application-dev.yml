@@ -40,9 +40,9 @@ spring:
         serialization.indent_output: true
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
-        url: jdbc:postgresql://localhost:5432/servicosJuridicos
-        username: servicosJuridicos
-        password:
+        url: jdbc:postgresql://localhost:5432/juridico
+        username: juridico
+        password: juridico
     jpa:
         database-platform: io.github.jhipster.domain.util.FixedPostgreSQL82Dialect
         database: POSTGRESQL

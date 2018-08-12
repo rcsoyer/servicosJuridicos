@@ -1,4 +1,3 @@
-
 {
   "name": "servicos-juridicos",
   "version": "0.0.0",
@@ -33,7 +32,14 @@
     "rxjs-compat": "6.1.0",
     "swagger-ui": "2.2.10",
     "tslib": "1.9.0",
-    "zone.js": "0.8.26"
+    "zone.js": "0.8.26",
+    "@types/lodash": "^4.14.102",
+    "lodash": "^4.17.5",
+    "mydatepicker": "^2.6.2",
+    "ramda": "^0.25.0",
+    "text-mask-addons": "^3.7.1",
+    "angular-2-dropdown-multiselect": "^1.6.3",
+    "angular2-text-mask": "^8.0.4"
   },
   "devDependencies": {
     "@angular/cli": "6.0.0",
@@ -96,17 +102,20 @@
     "webpack-notifier": "1.6.0",
     "webpack-visualizer-plugin": "0.1.11",
     "workbox-webpack-plugin": "3.2.0",
-    "write-file-webpack-plugin": "4.2.0"
+    "write-file-webpack-plugin": "4.2.0",
+    "@types/ramda": "types/npm-ramda#dist"
   },
   "engines": {
     "node": ">=8.9.0",
     "yarn": ">=1.3.2"
   },
   "lint-staged": {
-    "src/**/*.{ts,css,scss}": ["prettier --write", "git add"]
+    "src/**/*.{ts,css,scss}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "scripts": {
-    "precommit": "lint-staged",
     "prettier:format": "yarn prettier --write 'src/**/*.{ts,css,scss}'",
     "lint": "tslint --project tsconfig.json -e 'node_modules/**'",
     "lint:fix": "yarn run lint --fix",
