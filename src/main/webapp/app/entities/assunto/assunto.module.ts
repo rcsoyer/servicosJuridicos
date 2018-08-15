@@ -1,7 +1,6 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
-
-import { ServicosJuridicosSharedModule } from 'app/shared';
+import { ServicosJuridicosSharedModule } from '../../shared';
 import {
     AssuntoComponent,
     AssuntoDetailComponent,
@@ -9,7 +8,8 @@ import {
     AssuntoDeletePopupComponent,
     AssuntoDeleteDialogComponent,
     assuntoRoute,
-    assuntoPopupRoute
+    assuntoPopupRoute,
+    AssuntoUtils
 } from './';
 
 const ENTITY_STATES = [...assuntoRoute, ...assuntoPopupRoute];
@@ -23,7 +23,8 @@ const ENTITY_STATES = [...assuntoRoute, ...assuntoPopupRoute];
         AssuntoDeleteDialogComponent,
         AssuntoDeletePopupComponent
     ],
+    providers: [AssuntoUtils],
     entryComponents: [AssuntoComponent, AssuntoUpdateComponent, AssuntoDeleteDialogComponent, AssuntoDeletePopupComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class ServicosJuridicosAssuntoModule {}
+export class ServicosJuridicosAssuntoModule { }

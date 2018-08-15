@@ -189,6 +189,10 @@
   version "22.2.3"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-22.2.3.tgz#0157c0316dc3722c43a7b71de3fdf3acbccef10d"
 
+"@types/lodash@^4.14.102":
+  version "4.14.116"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.116.tgz#5ccf215653e3e8c786a58390751033a9adca0eb9"
+
 "@types/node@*":
   version "10.5.8"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.5.8.tgz#6f14ccecad1d19332f063a6a764f8907801fece0"
@@ -204,6 +208,10 @@
 "@types/q@^0.0.32":
   version "0.0.32"
   resolved "https://registry.yarnpkg.com/@types/q/-/q-0.0.32.tgz#bd284e57c84f1325da702babfc82a5328190c0c5"
+
+"@types/ramda@types/npm-ramda#dist":
+  version "0.25.0"
+  resolved "https://codeload.github.com/types/npm-ramda/tar.gz/9529aa3c8ff70ff84afcbc0be83443c00f30ea90"
 
 "@types/selenium-webdriver@3.0.8":
   version "3.0.8"
@@ -425,6 +433,12 @@ amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
 
+angular-2-dropdown-multiselect@^1.6.3:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/angular-2-dropdown-multiselect/-/angular-2-dropdown-multiselect-1.8.0.tgz#d98f36f9e7a77f8043d99dd9e1e6eb63ae28edf8"
+  dependencies:
+    tslib "^1.9.0"
+
 angular-router-loader@0.8.2:
   version "0.8.2"
   resolved "https://registry.yarnpkg.com/angular-router-loader/-/angular-router-loader-0.8.2.tgz#989bdf33d9ed197fe62a66e0871fa159787ba420"
@@ -436,6 +450,12 @@ angular2-template-loader@0.6.2:
   resolved "https://registry.yarnpkg.com/angular2-template-loader/-/angular2-template-loader-0.6.2.tgz#c0d44e90fff0fac95e8b23f043acda7fd1c51d7c"
   dependencies:
     loader-utils "^0.2.15"
+
+angular2-text-mask@^8.0.4:
+  version "8.0.5"
+  resolved "https://registry.yarnpkg.com/angular2-text-mask/-/angular2-text-mask-8.0.5.tgz#e08ad1c1898e9468a6d6983cbf1c83289d5e654d"
+  dependencies:
+    text-mask-core "^5.0.0"
 
 ansi-cyan@^0.1.1:
   version "0.1.1"
@@ -6272,6 +6292,10 @@ mute-stream@0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.7.tgz#3075ce93bc21b8fab43e1bc4da7e8115ed1e7bab"
 
+mydatepicker@^2.6.2:
+  version "2.6.4"
+  resolved "https://registry.yarnpkg.com/mydatepicker/-/mydatepicker-2.6.4.tgz#002c170144e6b9227c3717b7a64dfa1b4ee1d1fd"
+
 nan@^2.10.0, nan@^2.9.2:
   version "2.10.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.10.0.tgz#96d0cd610ebd58d4b4de9cc0c6828cda99c7548f"
@@ -7590,6 +7614,10 @@ querystringify@^2.0.0:
 quick-lru@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-1.1.0.tgz#4360b17c61136ad38078397ff11416e186dcfbb8"
+
+ramda@^0.25.0:
+  version "0.25.0"
+  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.25.0.tgz#8fdf68231cffa90bc2f9460390a0cb74a29b29a9"
 
 randexp@0.4.9:
   version "0.4.9"
@@ -8995,6 +9023,14 @@ test-exclude@^4.2.1:
     object-assign "^4.1.0"
     read-pkg-up "^1.0.1"
     require-main-filename "^1.0.1"
+
+text-mask-addons@^3.7.1:
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/text-mask-addons/-/text-mask-addons-3.8.0.tgz#17b61ef665a4f36811f2ea1f01a223b4be61ab26"
+
+text-mask-core@^5.0.0:
+  version "5.1.2"
+  resolved "https://registry.yarnpkg.com/text-mask-core/-/text-mask-core-5.1.2.tgz#80dd5ebe04825757e46619e691407a9f8b3c1b6f"
 
 text-table@^0.2.0:
   version "0.2.0"

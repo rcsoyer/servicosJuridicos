@@ -1,21 +1,20 @@
-import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-import { JhiPaginationUtil, JhiResolvePagingParams } from 'ng-jhipster';
-import { UserRouteAccessService } from 'app/core';
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot, Routes } from '@angular/router';
+import { JhiResolvePagingParams } from 'ng-jhipster';
 import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Assunto } from 'app/shared/model/assunto.model';
-import { AssuntoService } from './assunto.service';
-import { AssuntoComponent } from './assunto.component';
+import { UserRouteAccessService } from '../../core';
+import { Assunto } from '../../shared/model/assunto.model';
+import { AssuntoDeletePopupComponent } from './assunto-delete-dialog.component';
 import { AssuntoDetailComponent } from './assunto-detail.component';
 import { AssuntoUpdateComponent } from './assunto-update.component';
-import { AssuntoDeletePopupComponent } from './assunto-delete-dialog.component';
-import { IAssunto } from 'app/shared/model/assunto.model';
+import { AssuntoComponent } from './assunto.component';
+import { AssuntoService } from './assunto.service';
 
 @Injectable({ providedIn: 'root' })
-export class AssuntoResolve implements Resolve<IAssunto> {
-    constructor(private service: AssuntoService) {}
+export class AssuntoResolve implements Resolve<Assunto> {
+    constructor(private service: AssuntoService) { }
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const id = route.params['id'] ? route.params['id'] : null;

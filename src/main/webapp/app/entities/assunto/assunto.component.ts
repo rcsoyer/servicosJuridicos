@@ -1,132 +1,85 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
-
-import { IAssunto } from 'app/shared/model/assunto.model';
-import { Principal } from 'app/core';
-
-import { ITEMS_PER_PAGE } from 'app/shared';
+import { JhiAlertService, JhiEventManager, JhiParseLinks } from 'ng-jhipster';
+import { Principal } from '../../core';
+import { ComponentAbstract } from '../../shared/components-abstract/component.abstract';
+import { Assunto } from '../../shared/model/assunto.model';
+import { AssuntoUtils } from './assunto-utils';
+import { ASSUNTO_LIST_MODIFICATION } from './assunto.constants';
 import { AssuntoService } from './assunto.service';
+import * as _ from 'lodash';
+import * as R from 'ramda';
 
 @Component({
-    selector: 'jhi-assunto',
+    selector: 'assunto-component',
     templateUrl: './assunto.component.html'
 })
-export class AssuntoComponent implements OnInit, OnDestroy {
-    currentAccount: any;
-    assuntos: IAssunto[];
-    error: any;
-    success: any;
-    eventSubscriber: Subscription;
-    routeData: any;
-    links: any;
-    totalItems: any;
-    queryCount: any;
-    itemsPerPage: any;
-    page: any;
-    predicate: any;
-    previousPage: any;
-    reverse: any;
+export class AssuntoComponent extends ComponentAbstract<Assunto> implements OnInit {
+    private readonly path = '/assunto';
 
     constructor(
         private assuntoService: AssuntoService,
-        private parseLinks: JhiParseLinks,
-        private jhiAlertService: JhiAlertService,
-        private principal: Principal,
-        private activatedRoute: ActivatedRoute,
-        private router: Router,
-        private eventManager: JhiEventManager
+        protected principal: Principal,
+        protected activatedRoute: ActivatedRoute,
+        protected router: Router,
+        protected eventManager: JhiEventManager,
+        public assuntoUtils: AssuntoUtils,
+        protected parseLinks: JhiParseLinks,
+        protected jhiAlertService: JhiAlertService
     ) {
-        this.itemsPerPage = ITEMS_PER_PAGE;
-        this.routeData = this.activatedRoute.data.subscribe(data => {
-            this.page = data.pagingParams.page;
-            this.previousPage = data.pagingParams.page;
-            this.reverse = data.pagingParams.ascending;
-            this.predicate = data.pagingParams.predicate;
-        });
+        super(
+            parseLinks,
+            router,
+            jhiAlertService,
+            principal,
+            activatedRoute,
+            eventManager
+        );
     }
 
-    loadAll() {
-        this.assuntoService
-            .query({
-                page: this.page - 1,
-                size: this.itemsPerPage,
-                sort: this.sort()
-            })
-            .subscribe(
-                (res: HttpResponse<IAssunto[]>) => this.paginateAssuntos(res.body, res.headers),
-                (res: HttpErrorResponse) => this.onError(res.message)
-            );
+    private createModelConsulta(): void {
+        this.modelConsulta = new Assunto();
+        this.modelConsulta.ativo = undefined;
     }
 
-    loadPage(page: number) {
-        if (page !== this.previousPage) {
-            this.previousPage = page;
-            this.transition();
-        }
+    transition(): void {
+        super.basicTransition(this.path);
     }
 
-    transition() {
-        this.router.navigate(['/assunto'], {
-            queryParams: {
-                page: this.page,
-                size: this.itemsPerPage,
-                sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-            }
-        });
-        this.loadAll();
-    }
-
-    clear() {
-        this.page = 0;
-        this.router.navigate([
-            '/assunto',
-            {
-                page: this.page,
-                sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-            }
-        ]);
-        this.loadAll();
+    protected clear() {
+        this.listResultQuery = null;
+        this.setPageDefault();
+        this.router.navigate([this.path]);
     }
 
     ngOnInit() {
-        this.loadAll();
-        this.principal.identity().then(account => {
-            this.currentAccount = account;
-        });
+        this.createModelConsulta();
+        this.setCurrentAccount();
         this.registerChangeInAssuntos();
     }
 
-    ngOnDestroy() {
-        this.eventManager.destroy(this.eventSubscriber);
-    }
-
-    trackId(index: number, item: IAssunto) {
+    trackId(index: number, item: Assunto) {
         return item.id;
     }
 
     registerChangeInAssuntos() {
-        this.eventSubscriber = this.eventManager.subscribe('assuntoListModification', response => this.loadAll());
+        this.registerChangeInEntidades(ASSUNTO_LIST_MODIFICATION);
     }
 
-    sort() {
-        const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
-        if (this.predicate !== 'id') {
-            result.push('id');
-        }
-        return result;
+    createPesos(): number[] {
+        return _.range(1, 6);
     }
 
-    private paginateAssuntos(data: IAssunto[], headers: HttpHeaders) {
-        this.links = this.parseLinks.parse(headers.get('link'));
-        this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
-        this.queryCount = this.totalItems;
-        this.assuntos = data;
+    protected query(): void {
+        this.sanitizeInputValues();
+        this.assuntoService
+            .queryByInput(this.modelConsulta, this.getPageable())
+            .subscribe(this.onQuerySuccess(), this.onQueryError());
     }
 
-    private onError(errorMessage: string) {
-        this.jhiAlertService.error(errorMessage, null, null);
+    protected sanitizeInputValues(): void {
+        const setDescricacaoNull = () => (this.modelConsulta.descricao = null);
+        R.when(_.isEmpty, setDescricacaoNull)(_.trim(this.modelConsulta.descricao));
     }
 }

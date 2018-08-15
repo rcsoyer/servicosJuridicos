@@ -1,15 +1,13 @@
 package com.rcsoyer.servicosjuridicos.repository;
 
-import com.rcsoyer.servicosjuridicos.domain.AdvogadoDgCoordenacao;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import org.springframework.data.jpa.repository.*;
+import com.rcsoyer.servicosjuridicos.domain.AdvogadoDgCoordenacao;
 
 
 /**
  * Spring Data JPA repository for the AdvogadoDgCoordenacao entity.
  */
-@SuppressWarnings("unused")
 @Repository
 public interface AdvogadoDgCoordenacaoRepository extends JpaRepository<AdvogadoDgCoordenacao, Long> {
 

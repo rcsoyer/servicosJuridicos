@@ -2,19 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-import { IAssunto } from 'app/shared/model/assunto.model';
+import { Assunto } from '../../shared/model/assunto.model';
 import { AssuntoService } from './assunto.service';
 
 @Component({
-    selector: 'jhi-assunto-update',
+    selector: 'assunto-update',
     templateUrl: './assunto-update.component.html'
 })
 export class AssuntoUpdateComponent implements OnInit {
-    private _assunto: IAssunto;
+    private _assunto: Assunto;
     isSaving: boolean;
 
-    constructor(private assuntoService: AssuntoService, private activatedRoute: ActivatedRoute) {}
+    constructor(private assuntoService: AssuntoService, private activatedRoute: ActivatedRoute) { }
 
     ngOnInit() {
         this.isSaving = false;
@@ -36,8 +35,8 @@ export class AssuntoUpdateComponent implements OnInit {
         }
     }
 
-    private subscribeToSaveResponse(result: Observable<HttpResponse<IAssunto>>) {
-        result.subscribe((res: HttpResponse<IAssunto>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
+    private subscribeToSaveResponse(result: Observable<HttpResponse<Assunto>>) {
+        result.subscribe((res: HttpResponse<Assunto>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
     }
 
     private onSaveSuccess() {
@@ -52,7 +51,7 @@ export class AssuntoUpdateComponent implements OnInit {
         return this._assunto;
     }
 
-    set assunto(assunto: IAssunto) {
+    set assunto(assunto: Assunto) {
         this._assunto = assunto;
     }
 }

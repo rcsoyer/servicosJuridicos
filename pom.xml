@@ -522,6 +522,7 @@
 					</execution>
 					<!-- Ensures that the code coverage report for unit tests is created 
 						after unit tests have been run -->
+					<!--
 					<execution>
 						<id>post-unit-test</id>
 						<phase>test</phase>
@@ -532,7 +533,7 @@
 							<dataFile>${project.testresult.directory}/coverage/jacoco/jacoco.exec</dataFile>
 							<outputDirectory>${project.testresult.directory}/coverage/jacoco</outputDirectory>
 						</configuration>
-					</execution>
+					</execution> -->
 				</executions>
 			</plugin>
 			<plugin>

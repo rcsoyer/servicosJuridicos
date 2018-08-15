@@ -1,66 +1,117 @@
-<div>
-    <h2 id="page-heading">
-        <span jhiTranslate="servicosJuridicosApp.assunto.home.title">Assuntos</span>
-        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-assunto" [routerLink]="['/assunto/new']">
+<div class="container-fluid">
+    <h2 id="page-heading" class="text-center">
+        <span>Assunto</span>
+        <button class="btn btn-primary float-right jh-create-entity create-assunto" [routerLink]="['/assunto/new']" title="Cadastrar Assunto"
+            id="jh-create-entity">
             <fa-icon [icon]="'plus'"></fa-icon>
-            <span  jhiTranslate="servicosJuridicosApp.assunto.home.createLabel">
-            Create new Assunto
-            </span>
         </button>
     </h2>
+    <hr/>
     <jhi-alert></jhi-alert>
+    <form name="searchForm" role="form" novalidate #searchForm="ngForm" (ngSubmit)="query()">
+        <div class="container-fluid">
+            <h4>
+                <span>Consulta</span>
+            </h4>
+            <div class="form-group form-row">
+                <label class="col-md-1 col-form-label" for="field_descricao">Descri&ccedil;&atilde;o</label>
+                <input type="text" class="form-control col-md-4" name="descricao" id="field_descricao" [(ngModel)]="modelConsulta.descricao"
+                    whitespaceValidator #descricao="ngModel" (input)="setPageDefault()" />
+                <div [hidden]="!(searchForm.controls.descricao?.dirty && searchForm.controls.descricao?.invalid)">
+                    <small class="form-text text-danger" [hidden]="!searchForm.controls.descricao?.errors?.whitespaceValidator">
+                        Textos vazios n&atilde;o s&atilde;o aceitos.
+                    </small>
+                </div>
+            </div>
+            <div class="form-group form-row">
+                <label class="col-md-1 col-form-label" for="field_ativo">Ativo</label>
+                <select class="form-control col-sm-2" id="field_ativo" name="ativo" [(ngModel)]="modelConsulta.ativo" (ngModelChange)="setPageDefault()">
+                    <option [ngValue]="N" selected>Selecione</option>
+                    <option [ngValue]="true">Sim</option>
+                    <option [ngValue]="false">N&atilde;o</option>
+                </select>
+            </div>
+            <div class="form-group form-row">
+                <label class="col-md-1 col-form-label" for="field_peso">Peso</label>
+                <select class="form-control col-sm-2" id="field_peso" name="peso" [(ngModel)]="modelConsulta.peso" (ngModelChange)="setPageDefault()">
+                    <option [ngValue]="N" selected>Selecione</option>
+                    <option [ngValue]="pesoOption" *ngFor="let pesoOption of createPesos();">{{pesoOption}}</option>
+                </select>
+            </div>
+            <div>
+                <label class="col-sm-1 col-form-label"></label>
+                <button type="submit" class="btn btn-outline-primary col-md-1" title="Consultar">
+                    <fa-icon [icon]="'search'"></fa-icon>
+                </button>
+                <button type="reset" class="btn btn-warning col-md-1" title="Limpar" (click)="clear()">
+                    <fa-icon [icon]="['fa','fa-minus']"></fa-icon>
+                </button>
+            </div>
+        </div>
+    </form>
     <br/>
-    <div class="table-responsive" *ngIf="assuntos">
-        <table class="table table-striped">
-            <thead>
-            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="descricao"><span jhiTranslate="servicosJuridicosApp.assunto.descricao">Descricao</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="ativo"><span jhiTranslate="servicosJuridicosApp.assunto.ativo">Ativo</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="peso"><span jhiTranslate="servicosJuridicosApp.assunto.peso">Peso</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let assunto of assuntos ;trackBy: trackId">
-                <td><a [routerLink]="['/assunto', assunto.id, 'view' ]">{{assunto.id}}</a></td>
-                <td>{{assunto.descricao}}</td>
-                <td>{{assunto.ativo}}</td>
-                <td>{{assunto.peso}}</td>
-                <td class="text-right">
-                    <div class="btn-group flex-btn-group-container">
-                        <button type="submit"
-                                [routerLink]="['/assunto', assunto.id, 'view' ]"
-                                class="btn btn-info btn-sm">
-                            <fa-icon [icon]="'eye'"></fa-icon>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-                        </button>
-                        <button type="submit"
-                                [routerLink]="['/assunto', assunto.id, 'edit']"
-                                class="btn btn-primary btn-sm">
-                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-                        </button>
-                        <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'assunto/'+ assunto.id + '/delete'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
-                                class="btn btn-danger btn-sm">
-                            <fa-icon [icon]="'times'"></fa-icon>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <div *ngIf="assuntos && assuntos.length">
-        <div class="row justify-content-center">
-            <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+    <div *ngIf="encontrouResultados(); else sem_resultados">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+                        <th jhiSortBy="descricao">
+                            <span>Descri&ccedil;&atilde;o</span>
+                            <fa-icon [icon]="'sort'"></fa-icon>
+                        </th>
+                        <th jhiSortBy="ativo">
+                            <span>Ativo</span>
+                            <fa-icon [icon]="'sort'"></fa-icon>
+                        </th>
+                        <th jhiSortBy="peso">
+                            <span>Peso</span>
+                            <fa-icon [icon]="'sort'"></fa-icon>
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let assunto of listResultQuery; trackBy: trackId">
+                        <td>
+                            <a [routerLink]="['/assunto', assunto.id, 'view' ]">{{assunto.descricao}}</a>
+                        </td>
+                        <td>{{assuntoUtils.intepretarAtivo(assunto.ativo)}}</td>
+                        <td>{{assunto.peso}}</td>
+                        <td class="text-right">
+                            <div class="btn-group flex-btn-group-container">
+                                <button type="submit" [routerLink]="['/assunto', assunto.id, 'view' ]" class="btn btn-info btn-sm">
+                                    <fa-icon [icon]="'eye'"></fa-icon>
+                                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                                </button>
+                                <button type="submit" [routerLink]="['/assunto', assunto.id, 'edit']" class="btn btn-primary btn-sm">
+                                    <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                                </button>
+                                <button type="submit" [routerLink]="['/', { outlets: { popup: 'assunto/'+ assunto.id + '/delete'} }]" replaceUrl="true" queryParamsHandling="merge"
+                                    class="btn btn-danger btn-sm">
+                                    <fa-icon [icon]="'times'"></fa-icon>
+                                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <div class="row justify-content-center">
-            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        <div>
+            <div class="row justify-content-center">
+                <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+            </div>
+            <div class="row justify-content-center">
+                <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true"
+                    (pageChange)="loadPage(page)"></ngb-pagination>
+            </div>
         </div>
     </div>
+    <ng-template #sem_resultados>
+        <hr />
+        <div class="tex-center">
+            <h6>Sem resutados</h6>
+        </div>
+    </ng-template>
 </div>
