@@ -1,22 +1,20 @@
-import { HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { faMinus } from '@fortawesome/free-solid-svg-icons';
+import * as _ from 'lodash';
 import { JhiAlertService, JhiEventManager, JhiParseLinks } from 'ng-jhipster';
+import * as R from 'ramda';
 import { Principal } from '../../core';
 import { ComponentAbstract } from '../../shared/components-abstract/component.abstract';
 import { Assunto } from '../../shared/model/assunto.model';
 import { AssuntoUtils } from './assunto-utils';
 import { ASSUNTO_LIST_MODIFICATION } from './assunto.constants';
 import { AssuntoService } from './assunto.service';
-import * as _ from 'lodash';
-import * as R from 'ramda';
 
-@Component({
-    selector: 'assunto-component',
-    templateUrl: './assunto.component.html'
-})
+@Component({ selector: 'assunto-component', templateUrl: './assunto.component.html' })
 export class AssuntoComponent extends ComponentAbstract<Assunto> implements OnInit {
     private readonly path = '/assunto';
+    public readonly faMinus = faMinus;
 
     constructor(
         private assuntoService: AssuntoService,
@@ -48,9 +46,7 @@ export class AssuntoComponent extends ComponentAbstract<Assunto> implements OnIn
     }
 
     protected clear() {
-        this.listResultQuery = null;
-        this.setPageDefault();
-        this.router.navigate([this.path]);
+        super.clear(this.path);
     }
 
     ngOnInit() {

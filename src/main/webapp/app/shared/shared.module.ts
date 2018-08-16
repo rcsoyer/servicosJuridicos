@@ -7,7 +7,7 @@ import {
     ServicosJuridicosSharedCommonModule,
     JhiLoginModalComponent,
     HasAnyAuthorityDirective
-} from './';
+} from '.';
 
 @NgModule({
     imports: [ServicosJuridicosSharedLibsModule, ServicosJuridicosSharedCommonModule],

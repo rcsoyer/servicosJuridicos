@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 
-import { ServicosJuridicosSharedLibsModule, FindLanguageFromKeyPipe, JhiAlertComponent, JhiAlertErrorComponent } from './';
+import { ServicosJuridicosSharedLibsModule, FindLanguageFromKeyPipe, JhiAlertComponent, JhiAlertErrorComponent } from '.';
 
 @NgModule({
     imports: [ServicosJuridicosSharedLibsModule],

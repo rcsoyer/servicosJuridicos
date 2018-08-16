@@ -2,11 +2,11 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from 'lodash';
-import * as R from 'ramda';
 import { JhiAlertService, JhiEventManager, JhiParseLinks } from 'ng-jhipster';
+import * as R from 'ramda';
 import { Subscription } from 'rxjs/Subscription';
-import { ITEMS_PER_PAGE } from '../../shared';
 import { Principal } from '../../core';
+import { ITEMS_PER_PAGE } from '..';
 
 export abstract class ComponentAbstract<T> implements OnDestroy {
     page: any;
@@ -24,6 +24,7 @@ export abstract class ComponentAbstract<T> implements OnDestroy {
     listResultQuery: T[];
     itemsPerPage: number;
     eventSubscriber: Subscription;
+    protected hasMadeQuery: boolean;
 
     constructor(
         protected parseLinks: JhiParseLinks,
@@ -89,6 +90,7 @@ export abstract class ComponentAbstract<T> implements OnDestroy {
 
     protected onQuerySuccess() {
         return (response: HttpResponse<T[]>) => {
+            this.hasMadeQuery = true;
             const headers = response.headers;
             this.links = this.parseLinks.parse(headers.get('link'));
             this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
@@ -137,11 +139,16 @@ export abstract class ComponentAbstract<T> implements OnDestroy {
         this.eventSubscriber = this.eventManager.subscribe(listModificationName, onSuccessQuery);
     }
 
+    protected clear(path: string) {
+        this.listResultQuery = null;
+        this.setPageDefault();
+        this.hasMadeQuery = false;
+        this.router.navigate([path]);
+    }
+
     protected abstract sanitizeInputValues(): void;
 
     protected abstract query(): void;
-
-    protected abstract clear(): void;
 
     abstract transition(): void;
 }

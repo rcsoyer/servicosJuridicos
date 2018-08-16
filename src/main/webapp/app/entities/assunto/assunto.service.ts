@@ -15,49 +15,32 @@ export class AssuntoService implements BasicService<Assunto> {
     private baseApiURL: string = SERVER_API_URL + 'api/';
     private resourceUrl: string = this.baseApiURL + 'assuntos';
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {}
 
     create(assunto: Assunto): Observable<EntityResponseType> {
-        return this.http.post<Assunto>(this.resourceUrl, assunto, {
-            observe: 'response'
-        });
+        return this.http.post<Assunto>(this.resourceUrl, assunto, { observe: 'response' });
     }
 
     update(assunto: Assunto): Observable<EntityResponseType> {
-        return this.http.put<Assunto>(this.resourceUrl, assunto, {
-            observe: 'response'
-        });
+        return this.http.put<Assunto>(this.resourceUrl, assunto, { observe: 'response' });
     }
 
     find(id: number): Observable<EntityResponseType> {
-        return this.http.get<Assunto>(`${this.resourceUrl}/${id}`, {
-            observe: 'response'
-        });
+        return this.http.get<Assunto>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
     query(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
-        return this.http.get<Assunto[]>(this.resourceUrl, {
-            params: options,
-            observe: 'response'
-        });
+        return this.http.get<Assunto[]>(this.resourceUrl, { params: options, observe: 'response' });
     }
 
-    queryByInput(
-        assunto: Assunto,
-        pageable?: any
-    ): Observable<EntityArrayResponseType> {
+    queryByInput(assunto: Assunto, pageable?: any): Observable<EntityArrayResponseType> {
         const path = this.baseApiURL + 'queryAssuntos';
         const queryParams = buildQueryParams(assunto, pageable);
-        return this.http.get<Assunto[]>(path, {
-            params: queryParams,
-            observe: 'response'
-        });
+        return this.http.get<Assunto[]>(path, { params: queryParams, observe: 'response' });
     }
 
     delete(id: number): Observable<HttpResponse<any>> {
-        return this.http.delete<any>(`${this.resourceUrl}/${id}`, {
-            observe: 'response'
-        });
+        return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 }

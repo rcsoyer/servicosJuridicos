@@ -94,8 +94,8 @@ public class ServicosJuridicosApp {
 
   private static String protocol(Environment env) {
     return Optional.ofNullable(env.getProperty("server.ssl.key-store"))
-                              .map(keyStore -> keyStore)
-                              .orElseGet(() -> "http" );
+                   .map(keyStore -> keyStore)
+                   .orElseGet(() -> "http" );
   }
 
   private static String hostAdressOrDefault() {

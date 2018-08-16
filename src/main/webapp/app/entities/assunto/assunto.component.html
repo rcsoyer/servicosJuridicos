@@ -44,7 +44,7 @@
                     <fa-icon [icon]="'search'"></fa-icon>
                 </button>
                 <button type="reset" class="btn btn-warning col-md-1" title="Limpar" (click)="clear()">
-                    <fa-icon [icon]="['fa','fa-minus']"></fa-icon>
+                    <fa-icon [icon]="faMinus"></fa-icon>
                 </button>
             </div>
         </div>
@@ -109,9 +109,11 @@
         </div>
     </div>
     <ng-template #sem_resultados>
-        <hr />
-        <div class="tex-center">
-            <h6>Sem resutados</h6>
+        <div *ngIf="hasMadeQuery">
+            <hr />
+            <div class="tex-center">
+                <h6>Sem resutados</h6>
+            </div>
         </div>
     </ng-template>
 </div>
