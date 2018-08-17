@@ -21,9 +21,6 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-/**
- * A Assunto.
- */
 @Entity
 @Getter
 @Setter

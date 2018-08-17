@@ -41,7 +41,9 @@ export abstract class UpdateComponentAbastract<T extends BaseEntity> {
     save() {
         this.isSaving = true;
         this.trimInputText();
-        R.ifElse(_.isNumber, this.subscribeToUpdate, this.subscribeToCreate)(this.model.id);
+        const create = () => this.subscribeToCreate();
+        const update = () => this.subscribeToUpdate();
+        R.ifElse(_.isNumber, update, create)(this.model.id);
     }
 
     private subscribeToCreate() {
@@ -53,7 +55,9 @@ export abstract class UpdateComponentAbastract<T extends BaseEntity> {
     }
 
     private subscribeToSaveResponse(result: Observable<HttpResponse<T>>) {
-        return () => result.subscribe(this.onSaveSuccess, this.onSaveError);
+        const onSaveError = () => this.onSaveError;
+        const onSaveSuccess = () => this.onSaveSuccess;
+        return () => result.subscribe(onSaveSuccess, onSaveError);
     }
 
     private onSaveSuccess(res: HttpResponse<T>) {

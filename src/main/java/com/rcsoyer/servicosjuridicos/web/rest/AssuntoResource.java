@@ -3,7 +3,9 @@ package com.rcsoyer.servicosjuridicos.web.rest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Supplier;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +31,7 @@ import com.rcsoyer.servicosjuridicos.web.rest.errors.BadRequestAlertException;
 import com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil;
 import com.rcsoyer.servicosjuridicos.web.rest.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+import io.vavr.control.Option;
 
 /**
  * REST controller for managing Assunto.
@@ -55,19 +58,22 @@ public class AssuntoResource {
    *         status 400 (Bad Request) if the assunto has already an ID
    * @throws URISyntaxException if the Location URI syntax is incorrect
    */
-  @PostMapping("/assuntos")
   @Timed
+  @PostMapping("/assunto")
   public ResponseEntity<AssuntoDTO> createAssunto(@Valid @RequestBody AssuntoDTO assuntoDTO)
       throws URISyntaxException {
     log.debug("REST request to save Assunto : {}", assuntoDTO);
-    if (assuntoDTO.getId() != null) {
-      throw new BadRequestAlertException("A new assunto cannot already have an ID", ENTITY_NAME,
-          "idexists");
-    }
+    throwsBadRequestIfHasId(assuntoDTO);
     AssuntoDTO result = assuntoService.save(assuntoDTO);
     return ResponseEntity.created(new URI("/api/assuntos/" + result.getId()))
         .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
         .body(result);
+  }
+
+  private void throwsBadRequestIfHasId(AssuntoDTO assuntoDTO) {
+    Supplier<BadRequestAlertException> throwBadRequestExcpetion =
+        () -> new BadRequestAlertException("A new assunto cannot already have an ID", ENTITY_NAME, "idexists");
+    Option.when(Objects.nonNull(assuntoDTO.getId()), throwBadRequestExcpetion);
   }
 
   /**
@@ -79,14 +85,16 @@ public class AssuntoResource {
    *         Server Error) if the assuntoDTO couldn't be updated
    * @throws URISyntaxException if the Location URI syntax is incorrect
    */
-  @PutMapping("/assuntos")
   @Timed
+  @PutMapping("/assunto")
   public ResponseEntity<AssuntoDTO> updateAssunto(@Valid @RequestBody AssuntoDTO assuntoDTO)
       throws URISyntaxException {
     log.debug("REST request to update Assunto : {}", assuntoDTO);
-    if (assuntoDTO.getId() == null) {
+    
+    if (Objects.isNull(assuntoDTO.getId())) {
       return createAssunto(assuntoDTO);
     }
+
     AssuntoDTO result = assuntoService.save(assuntoDTO);
     return ResponseEntity.ok()
         .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, assuntoDTO.getId().toString()))
@@ -99,8 +107,8 @@ public class AssuntoResource {
    * @param pageable the pagination information
    * @return the ResponseEntity with status 200 (OK) and the list of assuntos in body
    */
-  @GetMapping("/assuntos")
   @Timed
+  @GetMapping("/assunto")
   public ResponseEntity<List<AssuntoDTO>> getAllAssuntos(Pageable pageable) {
     log.debug("REST request to get a page of Assuntos");
     Page<AssuntoDTO> page = assuntoService.findAll(pageable);
@@ -127,8 +135,8 @@ public class AssuntoResource {
    * @return the ResponseEntity with status 200 (OK) and with body the assuntoDTO, or with status
    *         404 (Not Found)
    */
-  @GetMapping("/assuntos/{id}")
   @Timed
+  @GetMapping("/assunto/{id}")
   public ResponseEntity<AssuntoDTO> getAssunto(@PathVariable Long id) {
     log.debug("REST request to get Assunto : {}", id);
     AssuntoDTO assuntoDTO = assuntoService.findOne(id);
@@ -141,8 +149,8 @@ public class AssuntoResource {
    * @param id the id of the assuntoDTO to delete
    * @return the ResponseEntity with status 200 (OK)
    */
-  @DeleteMapping("/assuntos/{id}")
   @Timed
+  @DeleteMapping("/assunto/{id}")
   public ResponseEntity<Void> deleteAssunto(@PathVariable Long id) {
     log.debug("REST request to delete Assunto : {}", id);
     assuntoService.delete(id);

@@ -13,7 +13,7 @@ type EntityArrayResponseType = HttpResponse<Assunto[]>;
 @Injectable({ providedIn: 'root' })
 export class AssuntoService implements BasicService<Assunto> {
     private baseApiURL: string = SERVER_API_URL + 'api/';
-    private resourceUrl: string = this.baseApiURL + 'assuntos';
+    private resourceUrl: string = this.baseApiURL + 'assunto';
 
     constructor(private http: HttpClient) {}
 

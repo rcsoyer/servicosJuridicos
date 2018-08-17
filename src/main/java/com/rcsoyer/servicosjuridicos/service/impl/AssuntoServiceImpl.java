@@ -14,9 +14,6 @@ import com.rcsoyer.servicosjuridicos.service.dto.AssuntoDTO;
 import com.rcsoyer.servicosjuridicos.service.mapper.AssuntoMapper;
 
 
-/**
- * Service Implementation for managing Assunto.
- */
 @Service
 @Transactional
 public class AssuntoServiceImpl implements AssuntoService {
@@ -68,8 +65,9 @@ public class AssuntoServiceImpl implements AssuntoService {
   @Transactional(readOnly = true)
   public AssuntoDTO findOne(Long id) {
     log.debug("Request to get Assunto : {}", id);
-    /*return advogadoRepository.findById(id)
-        .map(advogadoMapper::toDto);*/
+    /*
+     * return advogadoRepository.findById(id) .map(advogadoMapper::toDto);
+     */
     return null;
   }
 

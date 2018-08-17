@@ -13,9 +13,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-/**
- * A DTO for the Assunto entity.
- */
 @Getter
 @Setter
 @ToString
