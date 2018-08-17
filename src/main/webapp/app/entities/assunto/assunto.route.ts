@@ -55,7 +55,7 @@ export const assuntoRoute: Routes = [
         path: 'assunto/new',
         component: AssuntoUpdateComponent,
         resolve: {
-            assunto: AssuntoResolve
+            model: AssuntoResolve
         },
         data: {
             authorities: ['ROLE_USER'],

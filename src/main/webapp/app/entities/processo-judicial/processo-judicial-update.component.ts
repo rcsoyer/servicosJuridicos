@@ -4,14 +4,14 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { JhiAlertService } from 'ng-jhipster';
 
-import { IProcessoJudicial } from 'app/shared/model/processo-judicial.model';
+import { IProcessoJudicial } from '../../shared/model/processo-judicial.model';
 import { ProcessoJudicialService } from './processo-judicial.service';
-import { IAssunto } from 'app/shared/model/assunto.model';
-import { AssuntoService } from 'app/entities/assunto';
-import { IModalidade } from 'app/shared/model/modalidade.model';
-import { ModalidadeService } from 'app/entities/modalidade';
-import { IAdvogado } from 'app/shared/model/advogado.model';
-import { AdvogadoService } from 'app/entities/advogado';
+import { Assunto } from '../../shared/model/assunto.model';
+import { AssuntoService } from '../../entities/assunto';
+import { IModalidade } from '../../shared/model/modalidade.model';
+import { ModalidadeService } from '../../entities/modalidade';
+import { IAdvogado } from '../../shared/model/advogado.model';
+import { AdvogadoService } from '../../entities/advogado';
 
 @Component({
     selector: 'jhi-processo-judicial-update',
@@ -21,7 +21,7 @@ export class ProcessoJudicialUpdateComponent implements OnInit {
     private _processoJudicial: IProcessoJudicial;
     isSaving: boolean;
 
-    assuntos: IAssunto[];
+    assuntos: Assunto[];
 
     modalidades: IModalidade[];
 
@@ -46,7 +46,7 @@ export class ProcessoJudicialUpdateComponent implements OnInit {
             this.processoJudicial = processoJudicial;
         });
         this.assuntoService.query().subscribe(
-            (res: HttpResponse<IAssunto[]>) => {
+            (res: HttpResponse<Assunto[]>) => {
                 this.assuntos = res.body;
             },
             (res: HttpErrorResponse) => this.onError(res.message)
@@ -95,7 +95,7 @@ export class ProcessoJudicialUpdateComponent implements OnInit {
         this.jhiAlertService.error(errorMessage, null, null);
     }
 
-    trackAssuntoById(index: number, item: IAssunto) {
+    trackAssuntoById(index: number, item: Assunto) {
         return item.id;
     }
 

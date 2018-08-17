@@ -1,5 +1,5 @@
-import { IAdvogadoDgCoordenacao } from 'app/shared/model//advogado-dg-coordenacao.model';
-import { IAssunto } from 'app/shared/model//assunto.model';
+import { IAdvogadoDgCoordenacao } from '../../shared/model//advogado-dg-coordenacao.model';
+import { Assunto } from '../../shared/model//assunto.model';
 
 export interface ICoordenacaoJuridica {
     id?: number;
@@ -7,7 +7,7 @@ export interface ICoordenacaoJuridica {
     nome?: string;
     centena?: string;
     dgAdvogados?: IAdvogadoDgCoordenacao[];
-    assuntos?: IAssunto[];
+    assuntos?: Assunto[];
 }
 
 export class CoordenacaoJuridica implements ICoordenacaoJuridica {
@@ -17,6 +17,6 @@ export class CoordenacaoJuridica implements ICoordenacaoJuridica {
         public nome?: string,
         public centena?: string,
         public dgAdvogados?: IAdvogadoDgCoordenacao[],
-        public assuntos?: IAssunto[]
+        public assuntos?: Assunto[]
     ) {}
 }

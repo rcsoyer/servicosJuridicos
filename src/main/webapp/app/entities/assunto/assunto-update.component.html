@@ -1,33 +1,27 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
-            <h2 id="jhi-assunto-heading" jhiTranslate="servicosJuridicosApp.assunto.home.createOrEditLabel">Create or edit a Assunto</h2>
+            <h2 id="jhi-assunto-heading">
+                {{tituloPagina}}
+            </h2>
             <div>
                 <jhi-alert-error></jhi-alert-error>
-                <div class="form-group" [hidden]="!model.id">
-                    <label for="id" jhiTranslate="global.field.id">ID</label>
-                    <input type="text" class="form-control" id="id" name="id" [(ngModel)]="model.id" readonly />
-                </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.assunto.descricao" for="field_descricao">Descricao</label>
+                    <label class="form-control-label" for="field_descricao">Descri&ccedil;&atilde;o</label>
                     <input type="text" class="form-control" name="descricao" id="field_descricao" [(ngModel)]="model.descricao" required minlength="1"
-                        maxlength="70" />
+                        maxlength="70" whitespaceValidator />
                     <div [hidden]="!(editForm.controls.descricao?.dirty && editForm.controls.descricao?.invalid)">
                         <small class="form-text text-danger" [hidden]="!editForm.controls.descricao?.errors?.required" jhiTranslate="entity.validation.required">
                             This field is required.
                         </small>
-                        <small class="form-text text-danger" [hidden]="!editForm.controls.descricao?.errors?.minlength" jhiTranslate="entity.validation.minlength"
-                            translateValues="{ min: 1 }">
-                            This field is required to be at least 1 characters.
-                        </small>
-                        <small class="form-text text-danger" [hidden]="!editForm.controls.descricao?.errors?.maxlength" jhiTranslate="entity.validation.maxlength"
-                            translateValues="{ max: 70 }">
-                            This field cannot be longer than 70 characters.
+                        <small class="form-text text-danger" [hidden]="!editForm.controls.descricao?.errors?.whitespaceValidator">
+                            Textos vazios n&atilde;o s&atilde;o aceitos.
                         </small>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.assunto.ativo" for="field_ativo">Ativo</label>
+                <div class="form-group form-inline">
+                    <label class="form-control-label" for="field_ativo">Ativo</label>
+                    &nbsp;&nbsp;
                     <input type="checkbox" class="form-control" name="ativo" id="field_ativo" [(ngModel)]="model.ativo" />
                     <div [hidden]="!(editForm.controls.ativo?.dirty && editForm.controls.ativo?.invalid)">
                         <small class="form-text text-danger" [hidden]="!editForm.controls.ativo?.errors?.required" jhiTranslate="entity.validation.required">
@@ -36,9 +30,11 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.assunto.peso" for="field_peso">Peso</label>
-                    <input type="number" class="form-control" name="peso" id="field_peso" [(ngModel)]="model.peso" required min="1" jhiMin="1"
-                        max="5" jhiMax="5" />
+                    <label class="form-control-label" for="field_peso">Peso</label>
+                    <select class="form-control" id="field_peso" name="peso" [(ngModel)]="model.peso" required>
+                        <option [ngValue]="N">Selecione</option>
+                        <option [ngValue]="pesoOption" *ngFor="let pesoOption of createPesos();">{{pesoOption}}</option>
+                    </select>
                     <div [hidden]="!(editForm.controls.peso?.dirty && editForm.controls.peso?.invalid)">
                         <small class="form-text text-danger" [hidden]="!editForm.controls.peso?.errors?.required" jhiTranslate="entity.validation.required">
                             This field is required.
@@ -56,16 +52,16 @@
                         </small>
                     </div>
                 </div>
-
             </div>
             <div>
-                <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
-                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;
-                    <span jhiTranslate="entity.action.cancel">Cancel</span>
+                <button type="button" id="cancel-save" class="btn btn-secondary col-md-1" (click)="previousState()" title="Cancelar">
+                    <fa-icon [icon]="'ban'"></fa-icon>
                 </button>
-                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
-                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;
-                    <span jhiTranslate="entity.action.save">Save</span>
+                <button type="reset" class="btn btn-secondary col-md-1" title="Limpar">
+                    <fa-icon [icon]="faMinus"></fa-icon>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary col-md-1" title="Salvar">
+                    <fa-icon [icon]="'save'"></fa-icon>
                 </button>
             </div>
         </form>

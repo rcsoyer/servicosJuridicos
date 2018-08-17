@@ -1,12 +1,13 @@
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { faMinus } from '@fortawesome/free-solid-svg-icons';
 import * as _ from 'lodash';
 import { JhiAlertService, JhiEventManager, JhiParseLinks } from 'ng-jhipster';
 import * as R from 'ramda';
 import { Subscription } from 'rxjs/Subscription';
-import { Principal } from '../../core';
 import { ITEMS_PER_PAGE } from '..';
+import { Principal } from '../../core';
 
 export abstract class ComponentAbstract<T> implements OnDestroy {
     page: any;
@@ -24,6 +25,7 @@ export abstract class ComponentAbstract<T> implements OnDestroy {
     listResultQuery: T[];
     itemsPerPage: number;
     eventSubscriber: Subscription;
+    public readonly faMinus = faMinus;
     protected hasMadeQuery: boolean;
 
     constructor(

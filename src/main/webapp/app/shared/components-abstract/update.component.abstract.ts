@@ -1,5 +1,6 @@
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
+import { faMinus } from '@fortawesome/free-solid-svg-icons';
 import * as _ from 'lodash';
 import { JhiAlertService } from 'ng-jhipster';
 import * as R from 'ramda';
@@ -12,9 +13,15 @@ export abstract class UpdateComponentAbastract<T extends BaseEntity> {
     public isSaving: boolean;
     public tituloPagina: string;
     protected listModification: string;
+    public readonly faMinus = faMinus;
 
-    constructor(protected service: BasicService<T>, protected activatedRoute: ActivatedRoute, private jhiAlertService: JhiAlertService) {
+    constructor(protected service: BasicService<T>, protected activatedRoute: ActivatedRoute, protected jhiAlertService: JhiAlertService) {
         this.isSaving = false;
+    }
+
+    protected onInit() {
+        this.isSaving = false;
+        this.subscribeModelRoute();
     }
 
     protected defineTituloPagina(titulo: string): void {
@@ -23,7 +30,7 @@ export abstract class UpdateComponentAbastract<T extends BaseEntity> {
         R.ifElse(_.isNumber, setTituloEditar, setTituloCadastrar)(this.model.id);
     }
 
-    protected subscribeModelRoute(): void {
+    private subscribeModelRoute(): void {
         this.activatedRoute.data.subscribe(({ model }) => (this.model = model));
     }
 
@@ -34,31 +41,29 @@ export abstract class UpdateComponentAbastract<T extends BaseEntity> {
     save() {
         this.isSaving = true;
         this.trimInputText();
-        const create = this.subscribeToCreate();
-        const update = this.subscribeToUpdate();
-        R.ifElse(_.isNumber, update, create)(this.model.id);
+        R.ifElse(_.isNumber, this.subscribeToUpdate, this.subscribeToCreate)(this.model.id);
     }
 
-    protected subscribeToCreate() {
+    private subscribeToCreate() {
         return this.subscribeToSaveResponse(this.service.create(this.model));
     }
 
-    protected subscribeToUpdate() {
+    private subscribeToUpdate() {
         return this.subscribeToSaveResponse(this.service.update(this.model));
     }
 
-    protected subscribeToSaveResponse(result: Observable<HttpResponse<T>>) {
+    private subscribeToSaveResponse(result: Observable<HttpResponse<T>>) {
         return () => result.subscribe(this.onSaveSuccess, this.onSaveError);
     }
 
-    protected onSaveSuccess(res: HttpResponse<T>) {
+    private onSaveSuccess(res: HttpResponse<T>) {
         // const broadcastObj = { name: this.listModification, content: 'OK' };
         // this.eventManager.broadcast(broadcastObj);
         this.isSaving = false;
         this.previousState();
     }
 
-    protected onSaveError(error: HttpErrorResponse) {
+    private onSaveError(error: HttpErrorResponse) {
         this.isSaving = false;
         this.jhiAlertService.error(error.message, null, null);
     }

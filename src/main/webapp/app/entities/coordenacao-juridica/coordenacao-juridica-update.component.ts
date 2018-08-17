@@ -4,10 +4,10 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { JhiAlertService } from 'ng-jhipster';
 
-import { ICoordenacaoJuridica } from 'app/shared/model/coordenacao-juridica.model';
+import { ICoordenacaoJuridica } from '../../shared/model/coordenacao-juridica.model';
 import { CoordenacaoJuridicaService } from './coordenacao-juridica.service';
-import { IAssunto } from 'app/shared/model/assunto.model';
-import { AssuntoService } from 'app/entities/assunto';
+import { Assunto } from '../../shared/model/assunto.model';
+import { AssuntoService } from '../../entities/assunto';
 
 @Component({
     selector: 'jhi-coordenacao-juridica-update',
@@ -17,7 +17,7 @@ export class CoordenacaoJuridicaUpdateComponent implements OnInit {
     private _coordenacaoJuridica: ICoordenacaoJuridica;
     isSaving: boolean;
 
-    assuntos: IAssunto[];
+    assuntos: Assunto[];
 
     constructor(
         private jhiAlertService: JhiAlertService,
@@ -32,7 +32,7 @@ export class CoordenacaoJuridicaUpdateComponent implements OnInit {
             this.coordenacaoJuridica = coordenacaoJuridica;
         });
         this.assuntoService.query().subscribe(
-            (res: HttpResponse<IAssunto[]>) => {
+            (res: HttpResponse<Assunto[]>) => {
                 this.assuntos = res.body;
             },
             (res: HttpErrorResponse) => this.onError(res.message)
@@ -69,7 +69,7 @@ export class CoordenacaoJuridicaUpdateComponent implements OnInit {
         this.jhiAlertService.error(errorMessage, null, null);
     }
 
-    trackAssuntoById(index: number, item: IAssunto) {
+    trackAssuntoById(index: number, item: Assunto) {
         return item.id;
     }
 

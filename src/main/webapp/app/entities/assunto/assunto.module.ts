@@ -11,11 +11,12 @@ import {
     assuntoPopupRoute,
     AssuntoUtils
 } from './';
+import { WhitespaceModule } from '../../shared/util/whitespace-validator/whitespace.validator.module';
 
 const ENTITY_STATES = [...assuntoRoute, ...assuntoPopupRoute];
 
 @NgModule({
-    imports: [ServicosJuridicosSharedModule, RouterModule.forChild(ENTITY_STATES)],
+    imports: [ServicosJuridicosSharedModule, RouterModule.forChild(ENTITY_STATES), WhitespaceModule],
     declarations: [
         AssuntoComponent,
         AssuntoDetailComponent,
@@ -27,4 +28,4 @@ const ENTITY_STATES = [...assuntoRoute, ...assuntoPopupRoute];
     entryComponents: [AssuntoComponent, AssuntoUpdateComponent, AssuntoDeleteDialogComponent, AssuntoDeletePopupComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class ServicosJuridicosAssuntoModule { }
+export class ServicosJuridicosAssuntoModule {}

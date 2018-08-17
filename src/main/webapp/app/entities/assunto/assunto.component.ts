@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { faMinus } from '@fortawesome/free-solid-svg-icons';
 import * as _ from 'lodash';
 import { JhiAlertService, JhiEventManager, JhiParseLinks } from 'ng-jhipster';
 import * as R from 'ramda';
@@ -14,7 +13,6 @@ import { AssuntoService } from './assunto.service';
 @Component({ selector: 'assunto-component', templateUrl: './assunto.component.html' })
 export class AssuntoComponent extends ComponentAbstract<Assunto> implements OnInit {
     private readonly path = '/assunto';
-    public readonly faMinus = faMinus;
 
     constructor(
         private assuntoService: AssuntoService,
@@ -26,14 +24,7 @@ export class AssuntoComponent extends ComponentAbstract<Assunto> implements OnIn
         protected parseLinks: JhiParseLinks,
         protected jhiAlertService: JhiAlertService
     ) {
-        super(
-            parseLinks,
-            router,
-            jhiAlertService,
-            principal,
-            activatedRoute,
-            eventManager
-        );
+        super(parseLinks, router, jhiAlertService, principal, activatedRoute, eventManager);
     }
 
     private createModelConsulta(): void {
@@ -69,9 +60,7 @@ export class AssuntoComponent extends ComponentAbstract<Assunto> implements OnIn
 
     protected query(): void {
         this.sanitizeInputValues();
-        this.assuntoService
-            .queryByInput(this.modelConsulta, this.getPageable())
-            .subscribe(this.onQuerySuccess(), this.onQueryError());
+        this.assuntoService.queryByInput(this.modelConsulta, this.getPageable()).subscribe(this.onQuerySuccess(), this.onQueryError());
     }
 
     protected sanitizeInputValues(): void {
