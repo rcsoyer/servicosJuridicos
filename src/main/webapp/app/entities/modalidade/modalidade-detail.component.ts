@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { IModalidade } from 'app/shared/model/modalidade.model';
+import { Modalidade } from 'app/shared/model/modalidade.model';
 
 @Component({
     selector: 'jhi-modalidade-detail',
     templateUrl: './modalidade-detail.component.html'
 })
 export class ModalidadeDetailComponent implements OnInit {
-    modalidade: IModalidade;
+    modalidade: Modalidade;
 
     constructor(private activatedRoute: ActivatedRoute) {}
 

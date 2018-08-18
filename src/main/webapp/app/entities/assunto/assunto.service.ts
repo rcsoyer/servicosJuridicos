@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { SERVER_API_URL } from '../../app.constants';
 import { createRequestOption } from '../../shared';
+import { Assunto } from '../../shared/model/assunto.model';
 import { BasicService } from '../../shared/service-commons/basic-service.service';
 import { buildQueryParams } from '../../shared/service-commons/build-query-params-func';
-import { Assunto } from '../../shared/model/assunto.model';
 
 type EntityResponseType = HttpResponse<Assunto>;
 type EntityArrayResponseType = HttpResponse<Assunto[]>;
@@ -15,7 +15,7 @@ export class AssuntoService implements BasicService<Assunto> {
     private baseApiURL: string = SERVER_API_URL + 'api/';
     private resourceUrl: string = this.baseApiURL + 'assunto';
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
 
     create(assunto: Assunto): Observable<EntityResponseType> {
         return this.http.post<Assunto>(this.resourceUrl, assunto, { observe: 'response' });

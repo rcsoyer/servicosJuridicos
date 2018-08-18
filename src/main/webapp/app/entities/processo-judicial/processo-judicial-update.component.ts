@@ -8,7 +8,7 @@ import { IProcessoJudicial } from '../../shared/model/processo-judicial.model';
 import { ProcessoJudicialService } from './processo-judicial.service';
 import { Assunto } from '../../shared/model/assunto.model';
 import { AssuntoService } from '../../entities/assunto';
-import { IModalidade } from '../../shared/model/modalidade.model';
+import { Modalidade } from '../../shared/model/modalidade.model';
 import { ModalidadeService } from '../../entities/modalidade';
 import { IAdvogado } from '../../shared/model/advogado.model';
 import { AdvogadoService } from '../../entities/advogado';
@@ -23,7 +23,7 @@ export class ProcessoJudicialUpdateComponent implements OnInit {
 
     assuntos: Assunto[];
 
-    modalidades: IModalidade[];
+    modalidades: Modalidade[];
 
     advogados: IAdvogado[];
     prazoFinalDp: any;
@@ -52,7 +52,7 @@ export class ProcessoJudicialUpdateComponent implements OnInit {
             (res: HttpErrorResponse) => this.onError(res.message)
         );
         this.modalidadeService.query().subscribe(
-            (res: HttpResponse<IModalidade[]>) => {
+            (res: HttpResponse<Modalidade[]>) => {
                 this.modalidades = res.body;
             },
             (res: HttpErrorResponse) => this.onError(res.message)
@@ -99,7 +99,7 @@ export class ProcessoJudicialUpdateComponent implements OnInit {
         return item.id;
     }
 
-    trackModalidadeById(index: number, item: IModalidade) {
+    trackModalidadeById(index: number, item: Modalidade) {
         return item.id;
     }
 

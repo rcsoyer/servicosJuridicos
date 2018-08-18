@@ -5,16 +5,15 @@ import { JhiPaginationUtil, JhiResolvePagingParams } from 'ng-jhipster';
 import { UserRouteAccessService } from 'app/core';
 import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Modalidade } from 'app/shared/model/modalidade.model';
 import { ModalidadeService } from './modalidade.service';
 import { ModalidadeComponent } from './modalidade.component';
 import { ModalidadeDetailComponent } from './modalidade-detail.component';
 import { ModalidadeUpdateComponent } from './modalidade-update.component';
 import { ModalidadeDeletePopupComponent } from './modalidade-delete-dialog.component';
-import { IModalidade } from 'app/shared/model/modalidade.model';
+import { Modalidade } from 'app/shared/model/modalidade.model';
 
 @Injectable({ providedIn: 'root' })
-export class ModalidadeResolve implements Resolve<IModalidade> {
+export class ModalidadeResolve implements Resolve<Modalidade> {
     constructor(private service: ModalidadeService) {}
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {

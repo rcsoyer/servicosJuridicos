@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { IModalidade } from 'app/shared/model/modalidade.model';
+import { Modalidade } from 'app/shared/model/modalidade.model';
 import { ModalidadeService } from './modalidade.service';
 
 @Component({
@@ -12,7 +12,7 @@ import { ModalidadeService } from './modalidade.service';
     templateUrl: './modalidade-delete-dialog.component.html'
 })
 export class ModalidadeDeleteDialogComponent {
-    modalidade: IModalidade;
+    modalidade: Modalidade;
 
     constructor(private modalidadeService: ModalidadeService, public activeModal: NgbActiveModal, private eventManager: JhiEventManager) {}
 

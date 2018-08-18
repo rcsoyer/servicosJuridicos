@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
-import { IModalidade } from 'app/shared/model/modalidade.model';
+import { Modalidade } from 'app/shared/model/modalidade.model';
 import { Principal } from 'app/core';
 
 import { ITEMS_PER_PAGE } from 'app/shared';
@@ -16,7 +16,7 @@ import { ModalidadeService } from './modalidade.service';
 })
 export class ModalidadeComponent implements OnInit, OnDestroy {
     currentAccount: any;
-    modalidades: IModalidade[];
+    modalidades: Modalidade[];
     error: any;
     success: any;
     eventSubscriber: Subscription;
@@ -56,7 +56,7 @@ export class ModalidadeComponent implements OnInit, OnDestroy {
                 sort: this.sort()
             })
             .subscribe(
-                (res: HttpResponse<IModalidade[]>) => this.paginateModalidades(res.body, res.headers),
+                (res: HttpResponse<Modalidade[]>) => this.paginateModalidades(res.body, res.headers),
                 (res: HttpErrorResponse) => this.onError(res.message)
             );
     }
@@ -103,7 +103,7 @@ export class ModalidadeComponent implements OnInit, OnDestroy {
         this.eventManager.destroy(this.eventSubscriber);
     }
 
-    trackId(index: number, item: IModalidade) {
+    trackId(index: number, item: Modalidade) {
         return item.id;
     }
 
@@ -119,7 +119,7 @@ export class ModalidadeComponent implements OnInit, OnDestroy {
         return result;
     }
 
-    private paginateModalidades(data: IModalidade[], headers: HttpHeaders) {
+    private paginateModalidades(data: Modalidade[], headers: HttpHeaders) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
         this.queryCount = this.totalItems;

@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { IModalidade } from 'app/shared/model/modalidade.model';
+import { Modalidade } from 'app/shared/model/modalidade.model';
 import { ModalidadeService } from './modalidade.service';
 
 @Component({
@@ -11,7 +11,7 @@ import { ModalidadeService } from './modalidade.service';
     templateUrl: './modalidade-update.component.html'
 })
 export class ModalidadeUpdateComponent implements OnInit {
-    private _modalidade: IModalidade;
+    private _modalidade: Modalidade;
     isSaving: boolean;
 
     constructor(private modalidadeService: ModalidadeService, private activatedRoute: ActivatedRoute) {}
@@ -36,8 +36,8 @@ export class ModalidadeUpdateComponent implements OnInit {
         }
     }
 
-    private subscribeToSaveResponse(result: Observable<HttpResponse<IModalidade>>) {
-        result.subscribe((res: HttpResponse<IModalidade>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
+    private subscribeToSaveResponse(result: Observable<HttpResponse<Modalidade>>) {
+        result.subscribe((res: HttpResponse<Modalidade>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
     }
 
     private onSaveSuccess() {
@@ -52,7 +52,7 @@ export class ModalidadeUpdateComponent implements OnInit {
         return this._modalidade;
     }
 
-    set modalidade(modalidade: IModalidade) {
+    set modalidade(modalidade: Modalidade) {
         this._modalidade = modalidade;
     }
 }

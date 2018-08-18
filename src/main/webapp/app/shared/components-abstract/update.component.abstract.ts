@@ -15,7 +15,9 @@ export abstract class UpdateComponentAbastract<T extends BaseEntity> {
     protected listModification: string;
     public readonly faMinus = faMinus;
 
-    constructor(protected service: BasicService<T>, protected activatedRoute: ActivatedRoute, protected jhiAlertService: JhiAlertService) {
+    constructor(protected service: BasicService<T>,
+        protected activatedRoute: ActivatedRoute,
+        protected jhiAlertService: JhiAlertService) {
         this.isSaving = false;
     }
 
@@ -41,8 +43,8 @@ export abstract class UpdateComponentAbastract<T extends BaseEntity> {
     save() {
         this.isSaving = true;
         this.trimInputText();
-        const create = () => this.subscribeToCreate();
-        const update = () => this.subscribeToUpdate();
+        const create = this.subscribeToCreate();
+        const update = this.subscribeToUpdate();
         R.ifElse(_.isNumber, update, create)(this.model.id);
     }
 
@@ -55,21 +57,23 @@ export abstract class UpdateComponentAbastract<T extends BaseEntity> {
     }
 
     private subscribeToSaveResponse(result: Observable<HttpResponse<T>>) {
-        const onSaveError = () => this.onSaveError;
-        const onSaveSuccess = () => this.onSaveSuccess;
-        return () => result.subscribe(onSaveSuccess, onSaveError);
+        return () => result.subscribe(this.onSaveSuccess(), this.onSaveError());
     }
 
-    private onSaveSuccess(res: HttpResponse<T>) {
-        // const broadcastObj = { name: this.listModification, content: 'OK' };
-        // this.eventManager.broadcast(broadcastObj);
-        this.isSaving = false;
-        this.previousState();
+    private onSaveSuccess() {
+        return (res: HttpResponse<T>) => {
+            // const broadcastObj = { name: this.listModification, content: 'OK' };
+            // this.eventManager.broadcast(broadcastObj);
+            this.isSaving = false;
+            this.previousState();
+        };
     }
 
-    private onSaveError(error: HttpErrorResponse) {
-        this.isSaving = false;
-        this.jhiAlertService.error(error.message, null, null);
+    private onSaveError() {
+        return (error: HttpErrorResponse) => {
+            this.isSaving = false;
+            this.jhiAlertService.error(error.message, null, null);
+        };
     }
 
     protected abstract trimInputText(): void;
