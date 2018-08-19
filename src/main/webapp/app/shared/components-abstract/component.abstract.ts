@@ -1,6 +1,7 @@
 import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { IconDefinition } from '@fortawesome/fontawesome-common-types';
 import { faMinus } from '@fortawesome/free-solid-svg-icons';
 import * as _ from 'lodash';
 import { JhiAlertService, JhiEventManager, JhiParseLinks } from 'ng-jhipster';
@@ -25,8 +26,8 @@ export abstract class ComponentAbstract<T> implements OnDestroy {
     listResultQuery: T[];
     itemsPerPage: number;
     eventSubscriber: Subscription;
-    public readonly faMinus = faMinus;
     protected hasMadeQuery: boolean;
+    public readonly iconFaMinus: IconDefinition = faMinus;
 
     constructor(
         protected parseLinks: JhiParseLinks,
@@ -74,11 +75,9 @@ export abstract class ComponentAbstract<T> implements OnDestroy {
     private getSort(): any {
         const order = this.reverse ? 'asc' : 'desc';
         const result = [this.predicate + ',' + order];
-
-        if (!_.isEqual(this.predicate, 'id')) {
-            result.push('id');
-        }
-
+        const predicateNotEqId = _.negate(R.equals(this.predicate));
+        const resultPushId = () => result.push('id');
+        R.when(predicateNotEqId, resultPushId)('id');
         return result;
     }
 

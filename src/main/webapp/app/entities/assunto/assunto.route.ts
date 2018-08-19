@@ -1,7 +1,9 @@
 import { HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot, Routes } from '@angular/router';
+import * as _ from 'lodash';
 import { JhiResolvePagingParams } from 'ng-jhipster';
+import * as R from 'ramda';
 import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UserRouteAccessService } from '../../core';
@@ -14,14 +16,15 @@ import { AssuntoService } from './assunto.service';
 
 @Injectable({ providedIn: 'root' })
 export class AssuntoResolve implements Resolve<Assunto> {
-    constructor(private service: AssuntoService) { }
+    constructor(private service: AssuntoService) {}
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        const id = route.params['id'] ? route.params['id'] : null;
-        if (id) {
-            return this.service.find(id).pipe(map((assunto: HttpResponse<Assunto>) => assunto.body));
-        }
-        return of(new Assunto());
+        const id = route.params['id'];
+        const findAssuntoById = () =>
+           this.service.find(id)
+                       .pipe(map((assunto: HttpResponse<Assunto>) => assunto.body));
+        const ofNewAssunto = () => of(new Assunto());
+        return R.ifElse(_.isEmpty, ofNewAssunto, findAssuntoById)(id);
     }
 }
 

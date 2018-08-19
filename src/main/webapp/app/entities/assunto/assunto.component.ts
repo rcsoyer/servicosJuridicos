@@ -60,7 +60,8 @@ export class AssuntoComponent extends ComponentAbstract<Assunto> implements OnIn
 
     protected query(): void {
         this.sanitizeInputValues();
-        this.assuntoService.queryByInput(this.modelConsulta, this.getPageable()).subscribe(this.onQuerySuccess(), this.onQueryError());
+        this.assuntoService.queryByInput(this.modelConsulta, this.getPageable())
+                            .subscribe(this.onQuerySuccess(), this.onQueryError());
     }
 
     protected sanitizeInputValues(): void {
