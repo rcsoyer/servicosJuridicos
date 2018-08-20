@@ -30,7 +30,7 @@ public final class PageableDTO {
     String[] order = dto.getSort()[0].split(",");
     Direction direction = Sort.Direction.fromString(order[1]);
     Sort sort = new Sort(direction, order[0]);
-    dto.setPageable(new PageRequest(dto.getPage(), dto.getSize(), sort));
+    dto.setPageable(PageRequest.of(dto.getPage(), dto.getSize(), sort));
     return dto;
   }
 }

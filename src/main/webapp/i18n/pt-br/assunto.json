@@ -11,7 +11,7 @@
             "updated": "Um Assunto foi atualizado com o identificador {{ param }}",
             "deleted": "Um Assunto foi deletado com o identificador {{ param }}",
             "delete": {
-                "question": "Tem certeza de que deseja excluir Assunto {{ id }}?"
+                "question": "Tem certeza de que deseja excluir Assunto '{{ descricao }}'?"
             },
             "detail": {
                 "title": "Assunto"

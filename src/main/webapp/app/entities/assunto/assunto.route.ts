@@ -70,7 +70,7 @@ export const assuntoRoute: Routes = [
         path: 'assunto/:id/edit',
         component: AssuntoUpdateComponent,
         resolve: {
-            assunto: AssuntoResolve
+            model: AssuntoResolve
         },
         data: {
             authorities: ['ROLE_USER'],

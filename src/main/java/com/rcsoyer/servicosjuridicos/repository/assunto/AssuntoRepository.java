@@ -20,4 +20,3 @@ public interface AssuntoRepository extends JpaRepository<Assunto, Long>, Queryds
     return AssuntoRestrictions.getRestrictions().andThen(findAll);
   }
 }
-

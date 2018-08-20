@@ -1,5 +1,6 @@
 package com.rcsoyer.servicosjuridicos.service;
 
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.rcsoyer.servicosjuridicos.service.dto.AssuntoDTO;
@@ -31,7 +32,7 @@ public interface AssuntoService {
    * @param id the id of the entity
    * @return the entity
    */
-  AssuntoDTO findOne(Long id);
+  Optional<AssuntoDTO> findOne(Long id);
 
   /**
    * Delete the "id" assunto.

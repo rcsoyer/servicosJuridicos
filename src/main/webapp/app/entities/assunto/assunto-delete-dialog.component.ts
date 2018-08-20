@@ -1,18 +1,16 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 import { Assunto } from '../../shared/model/assunto.model';
+import { ASSUNTO_LIST_MODIFICATION } from './assunto.constants';
 import { AssuntoService } from './assunto.service';
 
-@Component({
-    selector: 'assunto-delete-dialog',
-    templateUrl: './assunto-delete-dialog.component.html'
-})
+@Component({ selector: 'assunto-delete-dialog', templateUrl: './assunto-delete-dialog.component.html' })
 export class AssuntoDeleteDialogComponent {
     assunto: Assunto;
 
-    constructor(private assuntoService: AssuntoService, public activeModal: NgbActiveModal, private eventManager: JhiEventManager) { }
+    constructor(private assuntoService: AssuntoService, public activeModal: NgbActiveModal, private eventManager: JhiEventManager) {}
 
     clear() {
         this.activeModal.dismiss('cancel');
@@ -21,7 +19,7 @@ export class AssuntoDeleteDialogComponent {
     confirmDelete(id: number) {
         this.assuntoService.delete(id).subscribe(response => {
             this.eventManager.broadcast({
-                name: 'assuntoListModification',
+                name: ASSUNTO_LIST_MODIFICATION,
                 content: 'Deleted an assunto'
             });
             this.activeModal.dismiss(true);
@@ -29,14 +27,11 @@ export class AssuntoDeleteDialogComponent {
     }
 }
 
-@Component({
-    selector: 'assunto-delete-popup',
-    template: ''
-})
+@Component({ selector: 'assunto-delete-popup', template: '' })
 export class AssuntoDeletePopupComponent implements OnInit, OnDestroy {
     private ngbModalRef: NgbModalRef;
 
-    constructor(private activatedRoute: ActivatedRoute, private router: Router, private modalService: NgbModal) { }
+    constructor(private activatedRoute: ActivatedRoute, private router: Router, private modalService: NgbModal) {}
 
     ngOnInit() {
         this.activatedRoute.data.subscribe(({ assunto }) => {

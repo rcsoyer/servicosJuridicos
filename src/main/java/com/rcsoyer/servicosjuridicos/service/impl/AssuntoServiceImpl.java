@@ -1,5 +1,6 @@
 package com.rcsoyer.servicosjuridicos.service.impl;
 
+import java.util.Optional;
 import java.util.function.Function;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,12 +64,9 @@ public class AssuntoServiceImpl implements AssuntoService {
    */
   @Override
   @Transactional(readOnly = true)
-  public AssuntoDTO findOne(Long id) {
+  public Optional<AssuntoDTO> findOne(Long id) {
     log.debug("Request to get Assunto : {}", id);
-    /*
-     * return advogadoRepository.findById(id) .map(advogadoMapper::toDto);
-     */
-    return null;
+    return repository.findById(id).map(mapper::toDto);
   }
 
   /**
@@ -89,6 +87,8 @@ public class AssuntoServiceImpl implements AssuntoService {
     Function<AssuntoDTO, Assunto> toEntity = mapper::toEntity;
     Function<Assunto, Page<Assunto>> query = repository.query(pageable);
     Function<Page<Assunto>, Page<AssuntoDTO>> toPageDTO = page -> page.map(mapper::toDto);
-    return toEntity.andThen(query).andThen(toPageDTO).apply(dto);
+    return toEntity.andThen(query)
+                   .andThen(toPageDTO)
+                   .apply(dto);
   }
 }

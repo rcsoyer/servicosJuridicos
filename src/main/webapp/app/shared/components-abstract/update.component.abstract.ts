@@ -13,7 +13,7 @@ export abstract class UpdateComponentAbastract<T extends BaseEntity> {
     public isSaving: boolean;
     public tituloPagina: string;
     protected listModification: string;
-    public readonly faMinus = faMinus;
+    public readonly iconFaMinus = faMinus;
 
     constructor(protected service: BasicService<T>,
         protected activatedRoute: ActivatedRoute,
@@ -43,9 +43,11 @@ export abstract class UpdateComponentAbastract<T extends BaseEntity> {
     save() {
         this.isSaving = true;
         this.trimInputText();
+        const id = this.model.id;
+        this.model.id = 12;
         const create = this.subscribeToCreate();
         const update = this.subscribeToUpdate();
-        R.ifElse(_.isNumber, update, create)(this.model.id);
+        R.ifElse(_.isNumber, update, create)(id);
     }
 
     private subscribeToCreate() {
@@ -62,8 +64,6 @@ export abstract class UpdateComponentAbastract<T extends BaseEntity> {
 
     private onSaveSuccess() {
         return (res: HttpResponse<T>) => {
-            // const broadcastObj = { name: this.listModification, content: 'OK' };
-            // this.eventManager.broadcast(broadcastObj);
             this.isSaving = false;
             this.previousState();
         };
@@ -72,7 +72,7 @@ export abstract class UpdateComponentAbastract<T extends BaseEntity> {
     private onSaveError() {
         return (error: HttpErrorResponse) => {
             this.isSaving = false;
-            this.jhiAlertService.error(error.message, null, null);
+            // this.jhiAlertService.error(error.message, null, null);
         };
     }
 

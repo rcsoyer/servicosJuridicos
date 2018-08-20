@@ -65,15 +65,20 @@ public class AssuntoResource {
     log.debug("REST request to save Assunto : {}", assuntoDTO);
     throwsBadRequestIfHasId(assuntoDTO);
     AssuntoDTO result = assuntoService.save(assuntoDTO);
-    return ResponseEntity.created(new URI("/api/assuntos/" + result.getId()))
-        .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-        .body(result);
+    Long resultId = result.getId();
+    HttpHeaders headerCreationAlert = HeaderUtil.createEntityCreationAlert(ENTITY_NAME, resultId.toString());
+    URI uriCreate = new URI("/api/assuntos/" + resultId);
+    return ResponseEntity.created(uriCreate)
+                         .headers(headerCreationAlert)
+                         .body(result);
   }
 
   private void throwsBadRequestIfHasId(AssuntoDTO assuntoDTO) {
     Supplier<BadRequestAlertException> throwBadRequestExcpetion =
         () -> new BadRequestAlertException("A new assunto cannot already have an ID", ENTITY_NAME, "idexists");
-    Option.when(Objects.nonNull(assuntoDTO.getId()), throwBadRequestExcpetion);
+    Optional.of(assuntoDTO.getId())
+            .filter(Objects::isNull)
+            .orElseThrow(throwBadRequestExcpetion);
   }
 
   /**
@@ -90,15 +95,20 @@ public class AssuntoResource {
   public ResponseEntity<AssuntoDTO> updateAssunto(@Valid @RequestBody AssuntoDTO assuntoDTO)
       throws URISyntaxException {
     log.debug("REST request to update Assunto : {}", assuntoDTO);
-    
-    if (Objects.isNull(assuntoDTO.getId())) {
-      return createAssunto(assuntoDTO);
-    }
-
+    throwsBadRequestIfHasNoId(assuntoDTO);
     AssuntoDTO result = assuntoService.save(assuntoDTO);
+    String idString = assuntoDTO.getId().toString();
+    HttpHeaders headerUpdateAlert = HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, idString);
     return ResponseEntity.ok()
-        .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, assuntoDTO.getId().toString()))
-        .body(result);
+                         .headers(headerUpdateAlert)
+                         .body(result);
+  }
+  
+  private void throwsBadRequestIfHasNoId(AssuntoDTO assuntoDTO) {
+    Supplier<BadRequestAlertException> throwBadRequestExcpetion =
+        () -> new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+    boolean idIsNull = Objects.isNull(assuntoDTO.getId());
+    Option.when(idIsNull, throwBadRequestExcpetion);
   }
 
   /**
@@ -112,7 +122,7 @@ public class AssuntoResource {
   public ResponseEntity<List<AssuntoDTO>> getAllAssuntos(Pageable pageable) {
     log.debug("REST request to get a page of Assuntos");
     Page<AssuntoDTO> page = assuntoService.findAll(pageable);
-    HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/assuntos");
+    HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/assunto");
     return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
   }
 
@@ -123,7 +133,7 @@ public class AssuntoResource {
     log.debug("REST request to get a page of Assuntos");
     Pageable pageable = pageableDTO.getPageable();
     Page<AssuntoDTO> page = assuntoService.findByParams(dto, pageable);
-    HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/assuntos");
+    HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/queryAssuntos");
     return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
   }
 
@@ -139,8 +149,8 @@ public class AssuntoResource {
   @GetMapping("/assunto/{id}")
   public ResponseEntity<AssuntoDTO> getAssunto(@PathVariable Long id) {
     log.debug("REST request to get Assunto : {}", id);
-    AssuntoDTO assuntoDTO = assuntoService.findOne(id);
-    return ResponseUtil.wrapOrNotFound(Optional.ofNullable(assuntoDTO));
+    Optional<AssuntoDTO> assuntoFounded = assuntoService.findOne(id);
+    return ResponseUtil.wrapOrNotFound(assuntoFounded);
   }
 
   /**
@@ -154,7 +164,9 @@ public class AssuntoResource {
   public ResponseEntity<Void> deleteAssunto(@PathVariable Long id) {
     log.debug("REST request to delete Assunto : {}", id);
     assuntoService.delete(id);
+    HttpHeaders headerDeletionAlert = HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString());
     return ResponseEntity.ok()
-        .headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+                         .headers(headerDeletionAlert)
+                         .build();
   }
 }
