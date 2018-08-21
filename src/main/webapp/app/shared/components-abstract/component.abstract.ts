@@ -9,8 +9,10 @@ import * as R from 'ramda';
 import { Subscription } from 'rxjs/Subscription';
 import { ITEMS_PER_PAGE } from '..';
 import { Principal } from '../../core';
+import { BaseEntity } from '../model/base-entity';
+import { BasicService } from '../service-commons/basic-service.service';
 
-export abstract class ComponentAbstract<T> implements OnDestroy {
+export abstract class ComponentAbstract<T extends BaseEntity> implements OnDestroy {
     page: any;
     links: any;
     error: any;
@@ -30,6 +32,7 @@ export abstract class ComponentAbstract<T> implements OnDestroy {
     public readonly iconFaMinus: IconDefinition = faMinus;
 
     constructor(
+        protected service: BasicService<T>,
         protected parseLinks: JhiParseLinks,
         protected router: Router,
         protected jhiAlertService: JhiAlertService,
@@ -41,12 +44,17 @@ export abstract class ComponentAbstract<T> implements OnDestroy {
         this.itemsPerPage = ITEMS_PER_PAGE;
     }
 
+    protected onInit(): void {
+        this.createModelConsulta();
+        this.setCurrentAccount();
+    }
+
     private setRouteData(): void {
-        this.routeData = this.activatedRoute.data.subscribe(data => {
-            this.page = data.pagingParams.page;
-            this.previousPage = data.pagingParams.page;
-            this.reverse = data.pagingParams.ascending;
-            this.predicate = data.pagingParams.predicate;
+        this.routeData = this.activatedRoute.data.subscribe(({ pagingParams }) => {
+            this.page = pagingParams.page;
+            this.previousPage = pagingParams.page;
+            this.reverse = pagingParams.ascending;
+            this.predicate = pagingParams.predicate;
         });
     }
 
@@ -59,7 +67,7 @@ export abstract class ComponentAbstract<T> implements OnDestroy {
         R.when(previusPageNotEq, changePage)(page);
     }
 
-    protected encontrouResultados(): boolean {
+    protected findResults(): boolean {
         return !_.isEmpty(this.listResultQuery);
     }
 
@@ -126,9 +134,8 @@ export abstract class ComponentAbstract<T> implements OnDestroy {
     }
 
     protected setCurrentAccount(): void {
-        this.principal.identity().then(account => {
-            this.currentAccount = account;
-        });
+        this.principal.identity()
+                      .then(account => (this.currentAccount = account));
     }
 
     ngOnDestroy() {
@@ -147,9 +154,19 @@ export abstract class ComponentAbstract<T> implements OnDestroy {
         this.router.navigate([path]);
     }
 
+    trackId(index: number, item: T) {
+        return item.id;
+    }
+
     protected abstract sanitizeInputValues(): void;
 
-    protected abstract query(): void;
+    protected query(): void {
+        this.sanitizeInputValues();
+        this.service.queryByInput(this.modelConsulta, this.getPageable())
+                    .subscribe(this.onQuerySuccess(), this.onQueryError());
+    }
 
     abstract transition(): void;
+
+    protected abstract createModelConsulta(): void;
 }

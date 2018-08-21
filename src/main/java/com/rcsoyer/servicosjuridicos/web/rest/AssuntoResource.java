@@ -31,7 +31,6 @@ import com.rcsoyer.servicosjuridicos.web.rest.errors.BadRequestAlertException;
 import com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil;
 import com.rcsoyer.servicosjuridicos.web.rest.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
-import io.vavr.control.Option;
 
 /**
  * REST controller for managing Assunto.
@@ -107,8 +106,9 @@ public class AssuntoResource {
   private void throwsBadRequestIfHasNoId(AssuntoDTO assuntoDTO) {
     Supplier<BadRequestAlertException> throwBadRequestExcpetion =
         () -> new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-    boolean idIsNull = Objects.isNull(assuntoDTO.getId());
-    Option.when(idIsNull, throwBadRequestExcpetion);
+    Optional.of(assuntoDTO.getId())
+            .filter(Objects::nonNull)
+            .orElseThrow(throwBadRequestExcpetion);
   }
 
   /**

@@ -1,19 +1,21 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { BasicService } from '../../shared/service-commons/basic-service.service';
 import { SERVER_API_URL } from '../../app.constants';
 import { createRequestOption } from '../../shared';
 import { Modalidade } from '../../shared/model/modalidade.model';
+import { BasicService } from '../../shared/service-commons/basic-service.service';
+import { buildQueryParams } from '../../shared/service-commons/build-query-params-func';
 
 type EntityResponseType = HttpResponse<Modalidade>;
 type EntityArrayResponseType = HttpResponse<Modalidade[]>;
 
 @Injectable({ providedIn: 'root' })
 export class ModalidadeService implements BasicService<Modalidade> {
-    private resourceUrl = SERVER_API_URL + 'api/modalidades';
+    private baseApiURL: string = SERVER_API_URL + 'api/';
+    private resourceUrl: string = this.baseApiURL + 'modalidade';
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {}
 
     create(modalidade: Modalidade): Observable<EntityResponseType> {
         return this.http.post<Modalidade>(this.resourceUrl, modalidade, { observe: 'response' });
@@ -36,7 +38,9 @@ export class ModalidadeService implements BasicService<Modalidade> {
         return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
-    queryByInput(m: Modalidade, pag: any): Observable<EntityArrayResponseType> {
-        return null;
+    queryByInput(modalidade: Modalidade, pageable: any): Observable<EntityArrayResponseType> {
+        const path = this.baseApiURL + 'queryModalidades';
+        const queryParams = buildQueryParams(modalidade, pageable);
+        return this.http.get<Modalidade[]>(path, { params: queryParams, observe: 'response' });
     }
 }

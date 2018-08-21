@@ -3,7 +3,9 @@ package com.rcsoyer.servicosjuridicos.web.rest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Supplier;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,42 +57,58 @@ public class ModalidadeResource {
    *         with status 400 (Bad Request) if the modalidade has already an ID
    * @throws URISyntaxException if the Location URI syntax is incorrect
    */
-  @PostMapping("/modalidades")
   @Timed
+  @PostMapping("/modalidade")
   public ResponseEntity<ModalidadeDTO> createModalidade(
       @Valid @RequestBody ModalidadeDTO modalidadeDTO) throws URISyntaxException {
     log.debug("REST request to save Modalidade : {}", modalidadeDTO);
-    if (modalidadeDTO.getId() != null) {
-      throw new BadRequestAlertException("A new modalidade cannot already have an ID", ENTITY_NAME,
-          "idexists");
-    }
+    throwsBadRequestIfHasId(modalidadeDTO);
     ModalidadeDTO result = modalidadeService.save(modalidadeDTO);
-    return ResponseEntity.created(new URI("/api/modalidades/" + result.getId()))
-        .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-        .body(result);
+    Long resultId = result.getId();
+    HttpHeaders headerCreationAlert = HeaderUtil.createEntityCreationAlert(ENTITY_NAME, resultId.toString());
+    URI uriCreate = new URI("/api/modalidades/" + resultId);
+    return ResponseEntity.created(uriCreate)
+                         .headers(headerCreationAlert)
+                         .body(result);
+  }
+  
+  private void throwsBadRequestIfHasId(ModalidadeDTO modalidadeDTO) {
+    Supplier<BadRequestAlertException> throwBadRequestExcpetion =
+        () -> new BadRequestAlertException("A new modalidade cannot already have an ID", ENTITY_NAME, "idexists");
+    Optional.of(modalidadeDTO.getId())
+            .filter(Objects::isNull)
+            .orElseThrow(throwBadRequestExcpetion);
   }
 
   /**
-   * PUT /modalidades : Updates an existing modalidade.
+   * PUT  /modalidades : Updates an existing modalidade.
    *
    * @param modalidadeDTO the modalidadeDTO to update
-   * @return the ResponseEntity with status 200 (OK) and with body the updated modalidadeDTO, or
-   *         with status 400 (Bad Request) if the modalidadeDTO is not valid, or with status 500
-   *         (Internal Server Error) if the modalidadeDTO couldn't be updated
+   * @return the ResponseEntity with status 200 (OK) and with body the updated modalidadeDTO,
+   * or with status 400 (Bad Request) if the modalidadeDTO is not valid,
+   * or with status 500 (Internal Server Error) if the modalidadeDTO couldn't be updated
    * @throws URISyntaxException if the Location URI syntax is incorrect
    */
   @Timed
-  @PutMapping("/modalidades")
+  @PutMapping("/modalidade")
   public ResponseEntity<ModalidadeDTO> updateModalidade(
       @Valid @RequestBody ModalidadeDTO modalidadeDTO) throws URISyntaxException {
     log.debug("REST request to update Modalidade : {}", modalidadeDTO);
-    if (modalidadeDTO.getId() == null) {
-      return createModalidade(modalidadeDTO);
-    }
+    throwsBadRequestIfHasNoId(modalidadeDTO);
     ModalidadeDTO result = modalidadeService.save(modalidadeDTO);
+    String idString = modalidadeDTO.getId().toString();
+    HttpHeaders headerUpdateAlert = HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, idString);
     return ResponseEntity.ok()
-        .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, modalidadeDTO.getId().toString()))
-        .body(result);
+                         .headers(headerUpdateAlert)
+                         .body(result);
+  }
+  
+  private void throwsBadRequestIfHasNoId(ModalidadeDTO modalidadeDTO) {
+    Supplier<BadRequestAlertException> throwBadRequestExcpetion =
+        () -> new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+    Optional.of(modalidadeDTO.getId())
+            .filter(Objects::nonNull)
+            .orElseThrow(throwBadRequestExcpetion);
   }
 
   /**
@@ -99,23 +117,24 @@ public class ModalidadeResource {
    * @param pageable the pagination information
    * @return the ResponseEntity with status 200 (OK) and the list of modalidades in body
    */
-  @GetMapping("/modalidades")
   @Timed
+  @GetMapping("/modalidade")
   public ResponseEntity<List<ModalidadeDTO>> getAllModalidades(Pageable pageable) {
     log.debug("REST request to get a page of Modalidades");
     Page<ModalidadeDTO> page = modalidadeService.findAll(pageable);
-    HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/modalidades");
+    HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/modalidade");
     return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
   }
 
   @Timed
-  @GetMapping("/getModalidades")
+  @GetMapping("/queryModalidades")
   public ResponseEntity<List<ModalidadeDTO>> getModalidades(@RequestParam("dto") ModalidadeDTO dto,
       @RequestParam("pageable") PageableDTO pageableDTO) {
     log.debug("REST request to get a page of Modalidades by input params");
     Pageable pageable = pageableDTO.getPageable();
     Page<ModalidadeDTO> page = modalidadeService.findByParams(dto, pageable);
-    HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/getModalidades");
+    HttpHeaders headers =
+        PaginationUtil.generatePaginationHttpHeaders(page, "/api/queryModalidades");
     return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
   }
 
@@ -126,8 +145,8 @@ public class ModalidadeResource {
    * @return the ResponseEntity with status 200 (OK) and with body the modalidadeDTO, or with status
    *         404 (Not Found)
    */
-  @GetMapping("/modalidades/{id}")
   @Timed
+  @GetMapping("/modalidade/{id}")
   public ResponseEntity<ModalidadeDTO> getModalidade(@PathVariable Long id) {
     log.debug("REST request to get Modalidade : {}", id);
     ModalidadeDTO modalidadeDTO = modalidadeService.findOne(id);
@@ -140,12 +159,14 @@ public class ModalidadeResource {
    * @param id the id of the modalidadeDTO to delete
    * @return the ResponseEntity with status 200 (OK)
    */
-  @DeleteMapping("/modalidades/{id}")
   @Timed
+  @DeleteMapping("/modalidade/{id}")
   public ResponseEntity<Void> deleteModalidade(@PathVariable Long id) {
     log.debug("REST request to delete Modalidade : {}", id);
     modalidadeService.delete(id);
+    HttpHeaders headerDeletionAlert = HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString());
     return ResponseEntity.ok()
-        .headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+                         .headers(headerDeletionAlert)
+                         .build();
   }
 }

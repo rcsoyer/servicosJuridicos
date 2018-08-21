@@ -2,7 +2,6 @@ import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { faMinus } from '@fortawesome/free-solid-svg-icons';
 import * as _ from 'lodash';
-import { JhiAlertService } from 'ng-jhipster';
 import * as R from 'ramda';
 import { Observable } from 'rxjs/Observable';
 import { BaseEntity } from '../model/base-entity';
@@ -15,9 +14,7 @@ export abstract class UpdateComponentAbastract<T extends BaseEntity> {
     protected listModification: string;
     public readonly iconFaMinus = faMinus;
 
-    constructor(protected service: BasicService<T>,
-        protected activatedRoute: ActivatedRoute,
-        protected jhiAlertService: JhiAlertService) {
+    constructor(protected service: BasicService<T>, protected activatedRoute: ActivatedRoute) {
         this.isSaving = false;
     }
 
@@ -44,7 +41,6 @@ export abstract class UpdateComponentAbastract<T extends BaseEntity> {
         this.isSaving = true;
         this.trimInputText();
         const id = this.model.id;
-        this.model.id = 12;
         const create = this.subscribeToCreate();
         const update = this.subscribeToUpdate();
         R.ifElse(_.isNumber, update, create)(id);
@@ -72,7 +68,6 @@ export abstract class UpdateComponentAbastract<T extends BaseEntity> {
     private onSaveError() {
         return (error: HttpErrorResponse) => {
             this.isSaving = false;
-            // this.jhiAlertService.error(error.message, null, null);
         };
     }
 

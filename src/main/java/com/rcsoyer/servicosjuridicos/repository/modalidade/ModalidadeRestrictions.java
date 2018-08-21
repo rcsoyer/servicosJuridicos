@@ -25,7 +25,7 @@ final class ModalidadeRestrictions {
   }
 
   private BooleanExpression defineDescricacaotriction() {
-    return Optional.of(modalidade.getDescricao())
+    return Optional.ofNullable(modalidade.getDescricao())
                    .filter(StringUtils::isNotEmpty)
                    .map(createDescricaoRestriction())
                    .orElse(null);

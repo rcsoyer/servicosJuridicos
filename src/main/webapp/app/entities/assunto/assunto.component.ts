@@ -15,19 +15,19 @@ export class AssuntoComponent extends ComponentAbstract<Assunto> implements OnIn
     private readonly path = '/assunto';
 
     constructor(
-        private assuntoService: AssuntoService,
-        protected principal: Principal,
-        protected activatedRoute: ActivatedRoute,
-        protected router: Router,
-        protected eventManager: JhiEventManager,
-        public assuntoUtils: AssuntoUtils,
-        protected parseLinks: JhiParseLinks,
-        protected jhiAlertService: JhiAlertService
+        assuntoService: AssuntoService,
+        principal: Principal,
+        activatedRoute: ActivatedRoute,
+        router: Router,
+        eventManager: JhiEventManager,
+        parseLinks: JhiParseLinks,
+        jhiAlertService: JhiAlertService,
+        public assuntoUtils: AssuntoUtils
     ) {
-        super(parseLinks, router, jhiAlertService, principal, activatedRoute, eventManager);
+        super(assuntoService, parseLinks, router, jhiAlertService, principal, activatedRoute, eventManager);
     }
 
-    private createModelConsulta(): void {
+    protected createModelConsulta(): void {
         this.modelConsulta = new Assunto();
         this.modelConsulta.ativo = undefined;
     }
@@ -36,18 +36,13 @@ export class AssuntoComponent extends ComponentAbstract<Assunto> implements OnIn
         super.basicTransition(this.path);
     }
 
-    protected clear() {
+    clear() {
         super.clear(this.path);
     }
 
     ngOnInit() {
-        this.createModelConsulta();
-        this.setCurrentAccount();
+        super.onInit();
         this.registerChangeInAssuntos();
-    }
-
-    trackId(index: number, item: Assunto) {
-        return item.id;
     }
 
     registerChangeInAssuntos() {
@@ -58,14 +53,9 @@ export class AssuntoComponent extends ComponentAbstract<Assunto> implements OnIn
         return _.range(1, 6);
     }
 
-    protected query(): void {
-        this.sanitizeInputValues();
-        this.assuntoService.queryByInput(this.modelConsulta, this.getPageable())
-                            .subscribe(this.onQuerySuccess(), this.onQueryError());
-    }
-
     protected sanitizeInputValues(): void {
+        this.modelConsulta.descricao = _.trim(this.modelConsulta.descricao);
         const setDescricacaoNull = () => (this.modelConsulta.descricao = null);
-        R.when(_.isEmpty, setDescricacaoNull)(_.trim(this.modelConsulta.descricao));
+        R.when(_.isEmpty, setDescricacaoNull)(this.modelConsulta.descricao);
     }
 }

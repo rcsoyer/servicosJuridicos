@@ -1,132 +1,54 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
-
-import { Modalidade } from 'app/shared/model/modalidade.model';
-import { Principal } from 'app/core';
-
-import { ITEMS_PER_PAGE } from 'app/shared';
+import * as _ from 'lodash';
+import { JhiAlertService, JhiEventManager, JhiParseLinks } from 'ng-jhipster';
+import * as R from 'ramda';
+import { Principal } from '../../core';
+import { ComponentAbstract } from '../../shared/components-abstract/component.abstract';
+import { Modalidade } from '../../shared/model/modalidade.model';
+import { MODALIDADE_LIST_MODIFICATION } from './modalidade.constants';
 import { ModalidadeService } from './modalidade.service';
 
-@Component({
-    selector: 'jhi-modalidade',
-    templateUrl: './modalidade.component.html'
-})
-export class ModalidadeComponent implements OnInit, OnDestroy {
-    currentAccount: any;
-    modalidades: Modalidade[];
-    error: any;
-    success: any;
-    eventSubscriber: Subscription;
-    routeData: any;
-    links: any;
-    totalItems: any;
-    queryCount: any;
-    itemsPerPage: any;
-    page: any;
-    predicate: any;
-    previousPage: any;
-    reverse: any;
+@Component({ selector: 'modalidade-component', templateUrl: './modalidade.component.html' })
+export class ModalidadeComponent extends ComponentAbstract<Modalidade> implements OnInit {
+    private readonly path = '/modalidade';
 
     constructor(
-        private modalidadeService: ModalidadeService,
-        private parseLinks: JhiParseLinks,
-        private jhiAlertService: JhiAlertService,
-        private principal: Principal,
-        private activatedRoute: ActivatedRoute,
-        private router: Router,
-        private eventManager: JhiEventManager
+        modalidadeService: ModalidadeService,
+        parseLinks: JhiParseLinks,
+        jhiAlertService: JhiAlertService,
+        principal: Principal,
+        activatedRoute: ActivatedRoute,
+        router: Router,
+        eventManager: JhiEventManager
     ) {
-        this.itemsPerPage = ITEMS_PER_PAGE;
-        this.routeData = this.activatedRoute.data.subscribe(data => {
-            this.page = data.pagingParams.page;
-            this.previousPage = data.pagingParams.page;
-            this.reverse = data.pagingParams.ascending;
-            this.predicate = data.pagingParams.predicate;
-        });
-    }
-
-    loadAll() {
-        this.modalidadeService
-            .query({
-                page: this.page - 1,
-                size: this.itemsPerPage,
-                sort: this.sort()
-            })
-            .subscribe(
-                (res: HttpResponse<Modalidade[]>) => this.paginateModalidades(res.body, res.headers),
-                (res: HttpErrorResponse) => this.onError(res.message)
-            );
-    }
-
-    loadPage(page: number) {
-        if (page !== this.previousPage) {
-            this.previousPage = page;
-            this.transition();
-        }
+        super(modalidadeService, parseLinks, router, jhiAlertService, principal, activatedRoute, eventManager);
     }
 
     transition() {
-        this.router.navigate(['/modalidade'], {
-            queryParams: {
-                page: this.page,
-                size: this.itemsPerPage,
-                sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-            }
-        });
-        this.loadAll();
+        super.basicTransition(this.path);
     }
 
     clear() {
-        this.page = 0;
-        this.router.navigate([
-            '/modalidade',
-            {
-                page: this.page,
-                sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-            }
-        ]);
-        this.loadAll();
+        super.clear(this.path);
     }
 
     ngOnInit() {
-        this.loadAll();
-        this.principal.identity().then(account => {
-            this.currentAccount = account;
-        });
+        super.onInit();
         this.registerChangeInModalidades();
     }
 
-    ngOnDestroy() {
-        this.eventManager.destroy(this.eventSubscriber);
-    }
-
-    trackId(index: number, item: Modalidade) {
-        return item.id;
+    protected createModelConsulta(): void {
+        this.modelConsulta = new Modalidade();
     }
 
     registerChangeInModalidades() {
-        this.eventSubscriber = this.eventManager.subscribe('modalidadeListModification', response => this.loadAll());
+        this.registerChangeInEntidades(MODALIDADE_LIST_MODIFICATION);
     }
 
-    sort() {
-        const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
-        if (this.predicate !== 'id') {
-            result.push('id');
-        }
-        return result;
-    }
-
-    private paginateModalidades(data: Modalidade[], headers: HttpHeaders) {
-        this.links = this.parseLinks.parse(headers.get('link'));
-        this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
-        this.queryCount = this.totalItems;
-        this.modalidades = data;
-    }
-
-    private onError(errorMessage: string) {
-        this.jhiAlertService.error(errorMessage, null, null);
+    protected sanitizeInputValues(): void {
+        this.modelConsulta.descricao = _.trim(this.modelConsulta.descricao);
+        const setDescricacaoNull = () => (this.modelConsulta.descricao = null);
+        R.when(_.isEmpty, setDescricacaoNull)(this.modelConsulta.descricao);
     }
 }
