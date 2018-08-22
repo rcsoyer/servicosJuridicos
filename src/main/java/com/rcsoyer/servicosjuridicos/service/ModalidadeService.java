@@ -1,5 +1,6 @@
 package com.rcsoyer.servicosjuridicos.service;
 
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.rcsoyer.servicosjuridicos.service.dto.ModalidadeDTO;
@@ -31,7 +32,7 @@ public interface ModalidadeService {
    * @param id the id of the entity
    * @return the entity
    */
-  ModalidadeDTO findOne(Long id);
+  Optional<ModalidadeDTO> findOne(Long id);
 
   /**
    * Delete the "id" modalidade.
@@ -40,5 +41,5 @@ public interface ModalidadeService {
    */
   void delete(Long id);
 
-  Page<ModalidadeDTO> findByParams(final ModalidadeDTO dto, final Pageable pageable);
+  Page<ModalidadeDTO> findByParams(ModalidadeDTO dto, Pageable pageable);
 }

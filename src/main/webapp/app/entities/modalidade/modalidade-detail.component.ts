@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-
-import { Modalidade } from 'app/shared/model/modalidade.model';
+import { Modalidade } from '../../shared/model/modalidade.model';
 
 @Component({
-    selector: 'jhi-modalidade-detail',
+    selector: 'modalidade-detail',
     templateUrl: './modalidade-detail.component.html'
 })
 export class ModalidadeDetailComponent implements OnInit {

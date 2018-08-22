@@ -12,7 +12,7 @@ export class AssuntoUpdateComponent extends UpdateComponentAbastract<Assunto> im
     }
 
     ngOnInit() {
-        super.onInit();
+        this.onInit();
         this.defineTituloPagina('Assunto');
     }
 

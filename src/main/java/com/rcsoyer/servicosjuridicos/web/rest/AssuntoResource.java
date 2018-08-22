@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import javax.validation.Valid;
 import org.slf4j.Logger;
@@ -73,10 +74,16 @@ public class AssuntoResource {
   }
 
   private void throwsBadRequestIfHasId(AssuntoDTO assuntoDTO) {
-    Supplier<BadRequestAlertException> throwBadRequestExcpetion =
-        () -> new BadRequestAlertException("A new assunto cannot already have an ID", ENTITY_NAME, "idexists");
-    Optional.of(assuntoDTO.getId())
-            .filter(Objects::isNull)
+    Supplier<BadRequestAlertException> throwBadRequestExcpetion = () -> {
+      String msgError = "A new assunto cannot already have an ID";
+      BadRequestAlertException badRequestAlertException =
+          new BadRequestAlertException(msgError, ENTITY_NAME, "idexists");
+      log.error(msgError, badRequestAlertException);
+      return badRequestAlertException;
+    };
+    Predicate<AssuntoDTO> hasNoId = assunto -> Objects.isNull(assunto.getId());
+    Optional.of(assuntoDTO)
+            .filter(hasNoId)
             .orElseThrow(throwBadRequestExcpetion);
   }
 
@@ -104,10 +111,16 @@ public class AssuntoResource {
   }
   
   private void throwsBadRequestIfHasNoId(AssuntoDTO assuntoDTO) {
-    Supplier<BadRequestAlertException> throwBadRequestExcpetion =
-        () -> new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-    Optional.of(assuntoDTO.getId())
-            .filter(Objects::nonNull)
+    Supplier<BadRequestAlertException> throwBadRequestExcpetion = () -> {
+      String msgError = "Invalid id";
+      BadRequestAlertException badRequestAlertException =
+          new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+      log.error(msgError, badRequestAlertException);
+      return badRequestAlertException;
+    };
+    Predicate<AssuntoDTO> hasId = assunto -> Objects.nonNull(assunto.getId());
+    Optional.of(assuntoDTO)
+            .filter(hasId)
             .orElseThrow(throwBadRequestExcpetion);
   }
 

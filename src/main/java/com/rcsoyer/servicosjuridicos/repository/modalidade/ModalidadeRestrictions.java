@@ -20,8 +20,8 @@ final class ModalidadeRestrictions {
     this.qModalidade = QModalidade.modalidade;
   }
 
-  static BooleanExpression getRestrictions(final Modalidade modalidade) {
-    return new ModalidadeRestrictions(modalidade).defineDescricacaotriction();
+  static Function<Modalidade, BooleanExpression> getRestrictions() {
+    return modalidade -> new ModalidadeRestrictions(modalidade).defineDescricacaotriction();
   }
 
   private BooleanExpression defineDescricacaotriction() {

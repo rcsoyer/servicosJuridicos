@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import javax.validation.Valid;
 import org.slf4j.Logger;
@@ -39,11 +40,9 @@ import io.github.jhipster.web.util.ResponseUtil;
 @RequestMapping("/api")
 public class ModalidadeResource {
 
-  private final Logger log = LoggerFactory.getLogger(ModalidadeResource.class);
-
   private static final String ENTITY_NAME = "modalidade";
-
   private final ModalidadeService modalidadeService;
+  private final Logger log = LoggerFactory.getLogger(ModalidadeResource.class);
 
   public ModalidadeResource(ModalidadeService modalidadeService) {
     this.modalidadeService = modalidadeService;
@@ -73,10 +72,16 @@ public class ModalidadeResource {
   }
   
   private void throwsBadRequestIfHasId(ModalidadeDTO modalidadeDTO) {
-    Supplier<BadRequestAlertException> throwBadRequestExcpetion =
-        () -> new BadRequestAlertException("A new modalidade cannot already have an ID", ENTITY_NAME, "idexists");
-    Optional.of(modalidadeDTO.getId())
-            .filter(Objects::isNull)
+    Supplier<BadRequestAlertException> throwBadRequestExcpetion = () -> {
+      String msgError = "A new modalidade cannot already have an ID";
+      BadRequestAlertException badRequestAlertException =
+          new BadRequestAlertException(msgError, ENTITY_NAME, "idexists");
+      log.error(msgError, badRequestAlertException);
+      return badRequestAlertException;
+    };
+    Predicate<ModalidadeDTO> hasNoId = modalidade -> Objects.isNull(modalidade.getId());
+    Optional.of(modalidadeDTO)
+            .filter(hasNoId)
             .orElseThrow(throwBadRequestExcpetion);
   }
 
@@ -104,10 +109,16 @@ public class ModalidadeResource {
   }
   
   private void throwsBadRequestIfHasNoId(ModalidadeDTO modalidadeDTO) {
-    Supplier<BadRequestAlertException> throwBadRequestExcpetion =
-        () -> new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-    Optional.of(modalidadeDTO.getId())
-            .filter(Objects::nonNull)
+    Supplier<BadRequestAlertException> throwBadRequestExcpetion = () -> {
+      String msgError = "Invalid id";
+      BadRequestAlertException badRequestAlertException =
+          new BadRequestAlertException(msgError, ENTITY_NAME, "idnull");
+      log.error(msgError, badRequestAlertException);
+      return badRequestAlertException;
+    };
+    Predicate<ModalidadeDTO> hasId = modalidade -> Objects.nonNull(modalidade.getId());
+    Optional.of(modalidadeDTO)
+            .filter(hasId)
             .orElseThrow(throwBadRequestExcpetion);
   }
 
@@ -133,8 +144,7 @@ public class ModalidadeResource {
     log.debug("REST request to get a page of Modalidades by input params");
     Pageable pageable = pageableDTO.getPageable();
     Page<ModalidadeDTO> page = modalidadeService.findByParams(dto, pageable);
-    HttpHeaders headers =
-        PaginationUtil.generatePaginationHttpHeaders(page, "/api/queryModalidades");
+    HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/queryModalidades");
     return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
   }
 
@@ -149,8 +159,8 @@ public class ModalidadeResource {
   @GetMapping("/modalidade/{id}")
   public ResponseEntity<ModalidadeDTO> getModalidade(@PathVariable Long id) {
     log.debug("REST request to get Modalidade : {}", id);
-    ModalidadeDTO modalidadeDTO = modalidadeService.findOne(id);
-    return ResponseUtil.wrapOrNotFound(Optional.ofNullable(modalidadeDTO));
+    Optional<ModalidadeDTO> modalidadeDTO = modalidadeService.findOne(id);
+    return ResponseUtil.wrapOrNotFound(modalidadeDTO);
   }
 
   /**

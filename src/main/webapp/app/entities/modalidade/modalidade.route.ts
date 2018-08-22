@@ -1,27 +1,29 @@
-import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-import { JhiPaginationUtil, JhiResolvePagingParams } from 'ng-jhipster';
-import { UserRouteAccessService } from 'app/core';
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot, Routes } from '@angular/router';
+import * as _ from 'lodash';
+import { JhiResolvePagingParams } from 'ng-jhipster';
+import * as R from 'ramda';
 import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ModalidadeService } from './modalidade.service';
-import { ModalidadeComponent } from './modalidade.component';
+import { UserRouteAccessService } from '../../core';
+import { Modalidade } from '../../shared/model/modalidade.model';
+import { ModalidadeDeletePopupComponent } from './modalidade-delete-dialog.component';
 import { ModalidadeDetailComponent } from './modalidade-detail.component';
 import { ModalidadeUpdateComponent } from './modalidade-update.component';
-import { ModalidadeDeletePopupComponent } from './modalidade-delete-dialog.component';
-import { Modalidade } from 'app/shared/model/modalidade.model';
+import { ModalidadeComponent } from './modalidade.component';
+import { ModalidadeService } from './modalidade.service';
 
 @Injectable({ providedIn: 'root' })
 export class ModalidadeResolve implements Resolve<Modalidade> {
     constructor(private service: ModalidadeService) {}
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        const id = route.params['id'] ? route.params['id'] : null;
-        if (id) {
-            return this.service.find(id).pipe(map((modalidade: HttpResponse<Modalidade>) => modalidade.body));
-        }
-        return of(new Modalidade());
+        const id = route.params['id'];
+        const findModalidadeById =
+            () => this.service.find(id).pipe(map((modalidade: HttpResponse<Modalidade>) => modalidade.body));
+        const ofNewModalidade = () => of(new Modalidade());
+        return R.ifElse(_.isEmpty, ofNewModalidade, findModalidadeById)(id);
     }
 }
 
@@ -55,7 +57,7 @@ export const modalidadeRoute: Routes = [
         path: 'modalidade/new',
         component: ModalidadeUpdateComponent,
         resolve: {
-            modalidade: ModalidadeResolve
+            model: ModalidadeResolve
         },
         data: {
             authorities: ['ROLE_USER'],
@@ -67,7 +69,7 @@ export const modalidadeRoute: Routes = [
         path: 'modalidade/:id/edit',
         component: ModalidadeUpdateComponent,
         resolve: {
-            modalidade: ModalidadeResolve
+            model: ModalidadeResolve
         },
         data: {
             authorities: ['ROLE_USER'],

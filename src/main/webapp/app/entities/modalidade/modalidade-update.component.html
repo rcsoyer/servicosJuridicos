@@ -1,41 +1,44 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
-            <h2 id="jhi-modalidade-heading" jhiTranslate="servicosJuridicosApp.modalidade.home.createOrEditLabel">Create or edit a Modalidade</h2>
+            <h2 id="jhi-modalidade-heading">
+                {{tituloPagina}}
+            </h2>
             <div>
                 <jhi-alert-error></jhi-alert-error>
-                <div class="form-group" [hidden]="!modalidade.id">
-                    <label for="id" jhiTranslate="global.field.id">ID</label>
-                    <input type="text" class="form-control" id="id" name="id"
-                        [(ngModel)]="modalidade.id" readonly />
-                </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.modalidade.descricao" for="field_descricao">Descricao</label>
-                    <input type="text" class="form-control" name="descricao" id="field_descricao"
-                        [(ngModel)]="modalidade.descricao" required minlength="1" maxlength="60"/>
+                    <label class="form-control-label" for="field_descricao">
+                        Descri&ccedil;&atilde;o
+                    </label>
+                    <input type="text" class="form-control" name="descricao" id="field_descricao" [(ngModel)]="model.descricao" required minlength="1"
+                        maxlength="60" whitespaceValidator />
                     <div [hidden]="!(editForm.controls.descricao?.dirty && editForm.controls.descricao?.invalid)">
-                        <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.descricao?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
+                        <small class="form-text text-danger" [hidden]="!editForm.controls.descricao?.errors?.required" jhiTranslate="entity.validation.required">
+                            This field is required.
                         </small>
-                        <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.descricao?.errors?.minlength" jhiTranslate="entity.validation.minlength" translateValues="{ min: 1 }">
-                        This field is required to be at least 1 characters.
+                        <small class="form-text text-danger" [hidden]="!editForm.controls.descricao?.errors?.minlength" jhiTranslate="entity.validation.minlength"
+                            translateValues="{ min: 1 }">
+                            This field is required to be at least 1 characters.
                         </small>
-                        <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.descricao?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 60 }">
-                        This field cannot be longer than 60 characters.
+                        <small class="form-text text-danger" [hidden]="!editForm.controls.descricao?.errors?.maxlength" jhiTranslate="entity.validation.maxlength"
+                            translateValues="{ max: 60 }">
+                            This field cannot be longer than 60 characters.
+                        </small>
+                        <small class="form-text text-danger" [hidden]="!editForm.controls.descricao?.errors?.whitespaceValidator">
+                            Textos vazios n&atilde;o s&atilde;o aceitos.
                         </small>
                     </div>
                 </div>
-
             </div>
             <div>
-                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
-                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                <button type="button" id="cancel-save" class="btn btn-secondary col-md-1" (click)="previousState()" title="Cancelar">
+                    <fa-icon [icon]="'ban'"></fa-icon>
                 </button>
-                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
-                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                <button type="reset" class="btn btn-warning col-md-1" title="Limpar">
+                    <fa-icon [icon]="iconFaMinus"></fa-icon>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary col-md-1" title="Salvar">
+                    <fa-icon [icon]="'save'"></fa-icon>
                 </button>
             </div>
         </form>

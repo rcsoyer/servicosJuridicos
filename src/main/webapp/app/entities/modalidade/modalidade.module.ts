@@ -1,7 +1,6 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
-
-import { ServicosJuridicosSharedModule } from 'app/shared';
+import { ServicosJuridicosSharedModule } from '../../shared';
 import {
     ModalidadeComponent,
     ModalidadeDetailComponent,
@@ -11,11 +10,12 @@ import {
     modalidadeRoute,
     modalidadePopupRoute
 } from './';
+import { WhitespaceModule } from '../../shared/util/whitespace-validator/whitespace.validator.module';
 
 const ENTITY_STATES = [...modalidadeRoute, ...modalidadePopupRoute];
 
 @NgModule({
-    imports: [ServicosJuridicosSharedModule, RouterModule.forChild(ENTITY_STATES)],
+    imports: [ServicosJuridicosSharedModule, RouterModule.forChild(ENTITY_STATES), WhitespaceModule],
     declarations: [
         ModalidadeComponent,
         ModalidadeDetailComponent,

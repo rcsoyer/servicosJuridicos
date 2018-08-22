@@ -1,7 +1,6 @@
-
 {
     "servicosJuridicosApp": {
-        "assunto" : {
+        "assunto": {
             "home": {
                 "title": "Assunto",
                 "createLabel": "Criar novo Assunto",
@@ -11,7 +10,7 @@
             "updated": "Assunto atualizado com sucesso",
             "deleted": "Assunto excluído com sucesso",
             "delete": {
-                "question": "Tem certeza de que deseja excluir Assunto '{{ descricao }}'?"
+                "question": "Tem certeza de que deseja excluir o Assunto: '{{ descricao }}'?"
             },
             "detail": {
                 "title": "Assunto"

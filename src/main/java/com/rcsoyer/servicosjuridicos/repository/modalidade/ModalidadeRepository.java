@@ -1,5 +1,6 @@
 package com.rcsoyer.servicosjuridicos.repository.modalidade;
 
+import java.util.function.Function;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,8 +17,8 @@ import com.rcsoyer.servicosjuridicos.domain.Modalidade;
 public interface ModalidadeRepository
     extends JpaRepository<Modalidade, Long>, QuerydslPredicateExecutor<Modalidade> {
 
-  default Page<Modalidade> query(Modalidade modalidade, Pageable pageable) {
-    BooleanExpression restrictions = ModalidadeRestrictions.getRestrictions(modalidade);
-    return findAll(restrictions, pageable);
+  default Function<Modalidade, Page<Modalidade>> query(Pageable pageable) {
+    Function<BooleanExpression, Page<Modalidade>> findAll = restrictions -> findAll(restrictions, pageable);
+    return ModalidadeRestrictions.getRestrictions().andThen(findAll);
   }
 }

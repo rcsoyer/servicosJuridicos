@@ -1,14 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
-
-import { Modalidade } from 'app/shared/model/modalidade.model';
+import { Modalidade } from '../../shared/model/modalidade.model';
+import { MODALIDADE_LIST_MODIFICATION } from './modalidade.constants';
 import { ModalidadeService } from './modalidade.service';
 
 @Component({
-    selector: 'jhi-modalidade-delete-dialog',
+    selector: 'modalidade-delete-dialog',
     templateUrl: './modalidade-delete-dialog.component.html'
 })
 export class ModalidadeDeleteDialogComponent {
@@ -23,7 +22,7 @@ export class ModalidadeDeleteDialogComponent {
     confirmDelete(id: number) {
         this.modalidadeService.delete(id).subscribe(response => {
             this.eventManager.broadcast({
-                name: 'modalidadeListModification',
+                name: MODALIDADE_LIST_MODIFICATION,
                 content: 'Deleted an modalidade'
             });
             this.activeModal.dismiss(true);
@@ -32,7 +31,7 @@ export class ModalidadeDeleteDialogComponent {
 }
 
 @Component({
-    selector: 'jhi-modalidade-delete-popup',
+    selector: 'modalidade-delete-popup',
     template: ''
 })
 export class ModalidadeDeletePopupComponent implements OnInit, OnDestroy {

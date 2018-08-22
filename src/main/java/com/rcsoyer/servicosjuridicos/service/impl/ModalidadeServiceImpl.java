@@ -1,5 +1,8 @@
 package com.rcsoyer.servicosjuridicos.service.impl;
 
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -20,14 +23,13 @@ import com.rcsoyer.servicosjuridicos.service.mapper.ModalidadeMapper;
 @Transactional
 public class ModalidadeServiceImpl implements ModalidadeService {
 
-  private final ModalidadeRepository repository;
   private final ModalidadeMapper mapper;
+  private final ModalidadeRepository repository;
   private final Logger log = LoggerFactory.getLogger(ModalidadeServiceImpl.class);
 
-  public ModalidadeServiceImpl(ModalidadeRepository modalidadeRepository,
-      ModalidadeMapper modalidadeMapper) {
-    this.repository = modalidadeRepository;
+  public ModalidadeServiceImpl(ModalidadeRepository modalidadeRepository, ModalidadeMapper modalidadeMapper) {
     this.mapper = modalidadeMapper;
+    this.repository = modalidadeRepository;
   }
 
   /**
@@ -39,9 +41,12 @@ public class ModalidadeServiceImpl implements ModalidadeService {
   @Override
   public ModalidadeDTO save(ModalidadeDTO modalidadeDTO) {
     log.debug("Request to save Modalidade : {}", modalidadeDTO);
-    Modalidade modalidade = mapper.toEntity(modalidadeDTO);
-    modalidade = repository.save(modalidade);
-    return mapper.toDto(modalidade);
+    Function<ModalidadeDTO, Modalidade> toEntity = mapper::toEntity;
+    UnaryOperator<Modalidade> save = repository::save;
+    Function<Modalidade, ModalidadeDTO> toDto = mapper::toDto;
+    return toEntity.andThen(save)
+                   .andThen(toDto)
+                   .apply(modalidadeDTO);
   }
 
   /**
@@ -54,7 +59,8 @@ public class ModalidadeServiceImpl implements ModalidadeService {
   @Transactional(readOnly = true)
   public Page<ModalidadeDTO> findAll(Pageable pageable) {
     log.debug("Request to get all Modalidades");
-    return repository.findAll(pageable).map(mapper::toDto);
+    return repository.findAll(pageable)
+                     .map(mapper::toDto);
   }
 
   /**
@@ -65,11 +71,10 @@ public class ModalidadeServiceImpl implements ModalidadeService {
    */
   @Override
   @Transactional(readOnly = true)
-  public ModalidadeDTO findOne(Long id) {
+  public Optional<ModalidadeDTO> findOne(Long id) {
     log.debug("Request to get Modalidade : {}", id);
-    /*return advogadoRepository.findById(id)
-            .map(advogadoMapper::toDto);*/
-    return null;
+    return repository.findById(id)
+                     .map(mapper::toDto);
   }
 
   /**
@@ -87,7 +92,11 @@ public class ModalidadeServiceImpl implements ModalidadeService {
   @Transactional(readOnly = true)
   public Page<ModalidadeDTO> findByParams(final ModalidadeDTO dto, final Pageable pageable) {
     log.debug("ModalidadeService method to get Modalidades by params");
-    Modalidade modalidade = mapper.toEntity(dto);
-    return repository.query(modalidade, pageable).map(mapper::toDto);
+    Function<ModalidadeDTO, Modalidade> toEntity = mapper::toEntity;
+    Function<Modalidade, Page<Modalidade>> query = repository.query(pageable);
+    Function<Page<Modalidade>, Page<ModalidadeDTO>> toPageDTO = page -> page.map(mapper::toDto);
+    return toEntity.andThen(query)
+                   .andThen(toPageDTO)
+                   .apply(dto);
   }
 }

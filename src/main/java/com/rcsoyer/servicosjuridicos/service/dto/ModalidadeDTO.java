@@ -5,8 +5,6 @@ import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,8 +28,7 @@ public class ModalidadeDTO implements Serializable {
   private String descricao;
 
   @JsonCreator
-  public static ModalidadeDTO of(String json)
-      throws JsonParseException, JsonMappingException, IOException {
+  public static ModalidadeDTO of(String json) throws IOException {
     return JsonConverter.readValue(json, ModalidadeDTO.class);
   }
 }

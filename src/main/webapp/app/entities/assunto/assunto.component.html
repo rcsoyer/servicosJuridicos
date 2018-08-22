@@ -17,6 +17,7 @@
                 <label class="col-md-1 col-form-label" for="field_descricao">Descri&ccedil;&atilde;o</label>
                 <input type="text" class="form-control col-md-4" name="descricao" id="field_descricao" [(ngModel)]="modelConsulta.descricao"
                     whitespaceValidator #descricao="ngModel" (input)="setPageDefault()" />
+                &nbsp;&nbsp;
                 <div [hidden]="!(searchForm.controls.descricao?.dirty && searchForm.controls.descricao?.invalid)">
                     <small class="form-text text-danger" [hidden]="!searchForm.controls.descricao?.errors?.whitespaceValidator">
                         Textos vazios n&atilde;o s&atilde;o aceitos.
