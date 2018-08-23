@@ -1,66 +1,125 @@
-<div>
-    <h2 id="page-heading">
-        <span jhiTranslate="servicosJuridicosApp.coordenacaoJuridica.home.title">Coordenacao Juridicas</span>
-        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-coordenacao-juridica" [routerLink]="['/coordenacao-juridica/new']">
+<div class="container-fluid">
+    <h2 id="page-heading" class="text-center">
+        <span>Coordena&ccedil;&atilde;o Jur&iacute;dica</span>
+        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-coordenacao-juridica" title="Cadastrar Coordenação Jurídica"
+            [routerLink]="['/coordenacao-juridica/new']">
             <fa-icon [icon]="'plus'"></fa-icon>
-            <span  jhiTranslate="servicosJuridicosApp.coordenacaoJuridica.home.createLabel">
-            Create new Coordenacao Juridica
-            </span>
         </button>
     </h2>
+    <hr/>
     <jhi-alert></jhi-alert>
+    <form name="searchForm" role="form" novalidate #searchForm="ngForm" (ngSubmit)="query()">
+        <div class="container-fluid">
+            <h4>
+                <span>Consulta</span>
+            </h4>
+            <div class="form-group form-row">
+                <label class="col-md-1 col-form-label" for="field_sigla">Sigla</label>
+                <div class="col-xs-2">
+                    <input type="text" class="form-control text-uppercase" name="sigla" id="field_sigla" [(ngModel)]="modelConsulta.sigla" maxlength="6"
+                        whitespaceValidator #sigla="ngModel" />
+                </div>
+                <div [hidden]="!(searchForm.controls.sigla?.dirty && searchForm.controls.sigla?.invalid)">
+                    <small class="form-text text-danger" [hidden]="!searchForm.controls.sigla?.errors?.whitespaceValidator">
+                        Textos vazios n&atilde;o s&atilde;o aceitos.
+                    </small>
+                </div>
+            </div>
+            <div class="form-group form-row">
+                <label class="col-md-1 col-form-label" for="field_nome">Nome</label>
+                <div class="col-xs-2">
+                    <input type="text" class="form-control" name="nome" id="field_nome" [(ngModel)]="modelConsulta.nome" whitespaceValidator
+                        #nome="ngModel" />
+                </div>
+                <div [hidden]="!(searchForm.controls.nome?.dirty && searchForm.controls.nome?.invalid)">
+                    <small class="form-text text-danger" [hidden]="!searchForm.controls.nome?.errors?.whitespaceValidator">
+                        Textos vazios n&atilde;o s&atilde;o aceitos.
+                    </small>
+                </div>
+            </div>
+            <div class="form-group form-row">
+                <label class="col-md-1 col-form-label" for="field_assuntos">Assunto</label>
+                <ss-multiselect-dropdown class="col-md-4" [(ngModel)]="assuntosModel" id="field_assuntos" name="assuntos" [options]="assuntoOptions"
+                    [settings]="optionsSettings" [texts]="optionsTexts">
+                </ss-multiselect-dropdown>
+            </div>
+            <div>
+                <label class="col-sm-1 col-form-label"></label>
+                <button type="submit" class="btn btn-outline-primary col-md-1" title="Consultar">
+                    <fa-icon [icon]="'search'"></fa-icon>
+                </button>
+                <button type="reset" class="btn btn-warning col-md-1" title="Limpar" (click)="clear()">
+                    <fa-icon [icon]="iconFaMinus"></fa-icon>
+                </button>
+            </div>
+        </div>
+    </form>
     <br/>
-    <div class="table-responsive" *ngIf="coordenacaoJuridicas">
-        <table class="table table-striped">
-            <thead>
-            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="sigla"><span jhiTranslate="servicosJuridicosApp.coordenacaoJuridica.sigla">Sigla</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="nome"><span jhiTranslate="servicosJuridicosApp.coordenacaoJuridica.nome">Nome</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="centena"><span jhiTranslate="servicosJuridicosApp.coordenacaoJuridica.centena">Centena</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let coordenacaoJuridica of coordenacaoJuridicas ;trackBy: trackId">
-                <td><a [routerLink]="['/coordenacao-juridica', coordenacaoJuridica.id, 'view' ]">{{coordenacaoJuridica.id}}</a></td>
-                <td>{{coordenacaoJuridica.sigla}}</td>
-                <td>{{coordenacaoJuridica.nome}}</td>
-                <td>{{coordenacaoJuridica.centena}}</td>
-                <td class="text-right">
-                    <div class="btn-group flex-btn-group-container">
-                        <button type="submit"
-                                [routerLink]="['/coordenacao-juridica', coordenacaoJuridica.id, 'view' ]"
-                                class="btn btn-info btn-sm">
-                            <fa-icon [icon]="'eye'"></fa-icon>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-                        </button>
-                        <button type="submit"
-                                [routerLink]="['/coordenacao-juridica', coordenacaoJuridica.id, 'edit']"
-                                class="btn btn-primary btn-sm">
-                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-                        </button>
-                        <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'coordenacao-juridica/'+ coordenacaoJuridica.id + '/delete'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
-                                class="btn btn-danger btn-sm">
-                            <fa-icon [icon]="'times'"></fa-icon>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <div *ngIf="coordenacaoJuridicas && coordenacaoJuridicas.length">
-        <div class="row justify-content-center">
-            <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+    <div *ngIf="foundResults(); else sem_resultados">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
+                        <th jhiSortBy="sigla">
+                            <span>Sigla</span>
+                            <fa-icon [icon]="'sort'"></fa-icon>
+                        </th>
+                        <th jhiSortBy="nome">
+                            <span>Nome</span>
+                            <fa-icon [icon]="'sort'"></fa-icon>
+                        </th>
+                        <th jhiSortBy="centena">
+                            <span>Centena</span>
+                            <fa-icon [icon]="'sort'"></fa-icon>
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let coordenacaoJuridica of listResultQuery; trackBy: trackId">
+                        <td>
+                            {{coordenacaoJuridica.sigla}}
+                        </td>
+                        <td>
+                            {{coordenacaoJuridica.nome}}
+                        </td>
+                        <td>
+                            {{coordenacaoJuridica.centena}}
+                        </td>
+                        <td class="text-right">
+                            <div class="btn-group flex-btn-group-container">
+                                <button type="submit" [routerLink]="['/coordenacao-juridica', coordenacaoJuridica.id, 'view' ]" title="Visualizar" class="btn btn-info btn-sm">
+                                    <fa-icon [icon]="'eye'"></fa-icon>
+                                </button>
+                                <button type="submit" [routerLink]="['/coordenacao-juridica', coordenacaoJuridica.id, 'edit']" title="Editar" class="btn btn-primary btn-sm">
+                                    <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                                </button>
+                                <button type="submit" title="Excluir" [routerLink]="['/', { outlets: { popup: 'coordenacao-juridica/'+ coordenacaoJuridica.id + '/delete'} }]"
+                                    replaceUrl="true" queryParamsHandling="merge" class="btn btn-danger btn-sm">
+                                    <fa-icon [icon]="'times'"></fa-icon>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <div class="row justify-content-center">
-            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        <div>
+            <div class="row justify-content-center">
+                <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+            </div>
+            <div class="row justify-content-center">
+                <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true"
+                    (pageChange)="loadPage(page)"></ngb-pagination>
+            </div>
         </div>
     </div>
+    <ng-template #sem_resultados>
+        <div *ngIf="hasMadeQuery">
+            <hr />
+            <div class="tex-center">
+                <h6>Sem resutados</h6>
+            </div>
+        </div>
+    </ng-template>
 </div>

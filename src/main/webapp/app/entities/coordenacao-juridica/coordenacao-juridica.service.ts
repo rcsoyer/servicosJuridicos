@@ -1,38 +1,51 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { SERVER_API_URL } from '../../app.constants';
+import { createRequestOption } from '../../shared';
+import { CoordenacaoJuridica } from '../../shared/model/coordenacao-juridica.model';
+import { BasicService } from '../../shared/service-commons/basic-service.service';
+import { buildQueryParams } from '../../shared/service-commons/build-query-params-func';
+import { MaskNumberUtils } from '../../shared/util/masknumber-utils/masknumber-utils';
 
-import { SERVER_API_URL } from 'app/app.constants';
-import { createRequestOption } from 'app/shared';
-import { ICoordenacaoJuridica } from 'app/shared/model/coordenacao-juridica.model';
-
-type EntityResponseType = HttpResponse<ICoordenacaoJuridica>;
-type EntityArrayResponseType = HttpResponse<ICoordenacaoJuridica[]>;
+type EntityResponseType = HttpResponse<CoordenacaoJuridica>;
+type EntityArrayResponseType = HttpResponse<CoordenacaoJuridica[]>;
 
 @Injectable({ providedIn: 'root' })
-export class CoordenacaoJuridicaService {
-    private resourceUrl = SERVER_API_URL + 'api/coordenacao-juridicas';
+export class CoordenacaoJuridicaService implements BasicService<CoordenacaoJuridica> {
+    private baseApiURL: string = SERVER_API_URL + 'api/';
+    private resourceUrl: string = this.baseApiURL + 'coordenacao-juridica';
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient, private maskNumberUtils: MaskNumberUtils) {}
 
-    create(coordenacaoJuridica: ICoordenacaoJuridica): Observable<EntityResponseType> {
-        return this.http.post<ICoordenacaoJuridica>(this.resourceUrl, coordenacaoJuridica, { observe: 'response' });
+    create(coordenacaoJuridica: CoordenacaoJuridica): Observable<EntityResponseType> {
+        return this.http.post<CoordenacaoJuridica>(this.resourceUrl, coordenacaoJuridica, { observe: 'response' });
     }
 
-    update(coordenacaoJuridica: ICoordenacaoJuridica): Observable<EntityResponseType> {
-        return this.http.put<ICoordenacaoJuridica>(this.resourceUrl, coordenacaoJuridica, { observe: 'response' });
+    update(coordenacaoJuridica: CoordenacaoJuridica): Observable<EntityResponseType> {
+        return this.http.put<CoordenacaoJuridica>(this.resourceUrl, coordenacaoJuridica, { observe: 'response' });
     }
 
     find(id: number): Observable<EntityResponseType> {
-        return this.http.get<ICoordenacaoJuridica>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+        return this.http.get<CoordenacaoJuridica>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
     query(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
-        return this.http.get<ICoordenacaoJuridica[]>(this.resourceUrl, { params: options, observe: 'response' });
+        return this.http.get<CoordenacaoJuridica[]>(this.resourceUrl, { params: options, observe: 'response' });
+    }
+
+    queryByInput(coordenacao: CoordenacaoJuridica, pageable: any): Observable<EntityArrayResponseType> {
+        const path = this.baseApiURL + 'getCoordenacoes';
+        const queryParams = buildQueryParams(coordenacao, pageable);
+        return this.http.get<CoordenacaoJuridica[]>(path, { params: queryParams, observe: 'response' });
     }
 
     delete(id: number): Observable<HttpResponse<any>> {
         return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+    }
+
+    getMaskCentena(): Function {
+        return this.maskNumberUtils.maskNumero(5);
     }
 }

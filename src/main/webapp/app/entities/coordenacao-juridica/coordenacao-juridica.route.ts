@@ -2,19 +2,18 @@ import { Injectable } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
 import { JhiPaginationUtil, JhiResolvePagingParams } from 'ng-jhipster';
-import { UserRouteAccessService } from 'app/core';
+import { UserRouteAccessService } from '../../core';
 import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { CoordenacaoJuridica } from 'app/shared/model/coordenacao-juridica.model';
+import { CoordenacaoJuridica } from '../../shared/model/coordenacao-juridica.model';
 import { CoordenacaoJuridicaService } from './coordenacao-juridica.service';
 import { CoordenacaoJuridicaComponent } from './coordenacao-juridica.component';
 import { CoordenacaoJuridicaDetailComponent } from './coordenacao-juridica-detail.component';
 import { CoordenacaoJuridicaUpdateComponent } from './coordenacao-juridica-update.component';
 import { CoordenacaoJuridicaDeletePopupComponent } from './coordenacao-juridica-delete-dialog.component';
-import { ICoordenacaoJuridica } from 'app/shared/model/coordenacao-juridica.model';
 
 @Injectable({ providedIn: 'root' })
-export class CoordenacaoJuridicaResolve implements Resolve<ICoordenacaoJuridica> {
+export class CoordenacaoJuridicaResolve implements Resolve<CoordenacaoJuridica> {
     constructor(private service: CoordenacaoJuridicaService) {}
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
@@ -56,7 +55,7 @@ export const coordenacaoJuridicaRoute: Routes = [
         path: 'coordenacao-juridica/new',
         component: CoordenacaoJuridicaUpdateComponent,
         resolve: {
-            coordenacaoJuridica: CoordenacaoJuridicaResolve
+            model: CoordenacaoJuridicaResolve
         },
         data: {
             authorities: ['ROLE_USER'],
@@ -68,7 +67,7 @@ export const coordenacaoJuridicaRoute: Routes = [
         path: 'coordenacao-juridica/:id/edit',
         component: CoordenacaoJuridicaUpdateComponent,
         resolve: {
-            coordenacaoJuridica: CoordenacaoJuridicaResolve
+            model: CoordenacaoJuridicaResolve
         },
         data: {
             authorities: ['ROLE_USER'],

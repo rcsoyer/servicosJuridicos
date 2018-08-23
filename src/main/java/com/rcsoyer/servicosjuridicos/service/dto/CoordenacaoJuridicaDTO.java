@@ -32,6 +32,7 @@ public class CoordenacaoJuridicaDTO implements Serializable {
   @Size(min = 1, max = 50)
   private String nome;
 
+  @Size(min = 3, max = 3)
   private String centena;
 
   @NotNull

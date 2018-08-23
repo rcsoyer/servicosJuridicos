@@ -1,22 +1,14 @@
-import { IAdvogadoDgCoordenacao } from '../../shared/model//advogado-dg-coordenacao.model';
+import { AdvogadoDgCoordenacao } from '../../shared/model//advogado-dg-coordenacao.model';
 import { Assunto } from '../../shared/model//assunto.model';
+import { BaseEntity } from './base-entity';
 
-export interface ICoordenacaoJuridica {
-    id?: number;
-    sigla?: string;
-    nome?: string;
-    centena?: string;
-    dgAdvogados?: IAdvogadoDgCoordenacao[];
-    assuntos?: Assunto[];
-}
-
-export class CoordenacaoJuridica implements ICoordenacaoJuridica {
+export class CoordenacaoJuridica implements BaseEntity {
     constructor(
         public id?: number,
         public sigla?: string,
         public nome?: string,
         public centena?: string,
-        public dgAdvogados?: IAdvogadoDgCoordenacao[],
+        public dgAdvogados?: AdvogadoDgCoordenacao[],
         public assuntos?: Assunto[]
     ) {}
 }

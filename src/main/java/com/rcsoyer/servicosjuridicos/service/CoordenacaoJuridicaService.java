@@ -1,5 +1,6 @@
 package com.rcsoyer.servicosjuridicos.service;
 
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoJuridicaDTO;
@@ -28,12 +29,19 @@ public interface CoordenacaoJuridicaService {
   Page<CoordenacaoJuridicaDTO> findByParams(CoordenacaoJuridicaDTO dto, Pageable pageable);
 
   /**
+   * Get all the CoordenacaoJuridica with eager load of many-to-many relationships.
+   *
+   * @return the list of entities
+   */
+  Page<CoordenacaoJuridicaDTO> findAllWithEagerRelationships(Pageable pageable);
+
+  /**
    * Get the "id" coordenacaoJuridica.
    *
    * @param id the id of the entity
    * @return the entity
    */
-  CoordenacaoJuridicaDTO findOne(Long id);
+  Optional<CoordenacaoJuridicaDTO> findOne(Long id);
 
   /**
    * Delete the "id" coordenacaoJuridica.
@@ -41,6 +49,4 @@ public interface CoordenacaoJuridicaService {
    * @param id the id of the entity
    */
   void delete(Long id);
-
-  Page<CoordenacaoJuridicaDTO> findAllWithEagerRelationships(CoordenacaoJuridicaDTO dto);
 }

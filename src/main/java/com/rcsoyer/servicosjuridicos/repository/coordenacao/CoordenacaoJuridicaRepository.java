@@ -1,6 +1,8 @@
 package com.rcsoyer.servicosjuridicos.repository.coordenacao;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,14 +20,19 @@ import com.rcsoyer.servicosjuridicos.domain.CoordenacaoJuridica;
 public interface CoordenacaoJuridicaRepository extends JpaRepository<CoordenacaoJuridica, Long>,
     QuerydslPredicateExecutor<CoordenacaoJuridica> {
 
-  @Query("select distinct coordenacao_juridica from CoordenacaoJuridica coordenacao_juridica left join fetch coordenacao_juridica.assuntos left join fetch coordenacao_juridica.dgAdvogados")
+  @Query(
+      value = "select distinct coordenacao_juridica from CoordenacaoJuridica coordenacao_juridica left join fetch coordenacao_juridica.assuntos",
+      countQuery = "select count(distinct coordenacao_juridica) from CoordenacaoJuridica coordenacao_juridica")
+  Page<CoordenacaoJuridica> findAllWithEagerRelationships(Pageable pageable);
+
+  @Query("select distinct coordenacao_juridica from CoordenacaoJuridica coordenacao_juridica left join fetch coordenacao_juridica.assuntos")
   List<CoordenacaoJuridica> findAllWithEagerRelationships();
 
-  @Query("select coordenacao_juridica from CoordenacaoJuridica coordenacao_juridica left join fetch coordenacao_juridica.assuntos left join fetch coordenacao_juridica.dgAdvogados where coordenacao_juridica.id =:id")
-  CoordenacaoJuridica findOneWithEagerRelationships(@Param("id") Long id);
+  @Query("select coordenacao_juridica from CoordenacaoJuridica coordenacao_juridica left join fetch coordenacao_juridica.assuntos where coordenacao_juridica.id =:id")
+  Optional<CoordenacaoJuridica> findOneWithEagerRelationships(@Param("id") Long id);
 
-  default Page<CoordenacaoJuridica> query(CoordenacaoJuridica coordenacao, Pageable pageable) {
-    BooleanExpression restrictions = CoordenacaoRestrictions.getRestrictions(coordenacao);
-    return findAll(restrictions, pageable);
+  default Function<CoordenacaoJuridica, Page<CoordenacaoJuridica>> query(Pageable pageable) {
+    Function<BooleanExpression, Page<CoordenacaoJuridica>> findAll = restrictions -> findAll(restrictions, pageable);
+    return CoordenacaoRestrictions.getRestrictions().andThen(findAll);
   }
 }

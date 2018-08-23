@@ -1,21 +1,31 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-
-import { ServicosJuridicosSharedModule } from 'app/shared';
+import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
+import { TextMaskModule } from 'angular2-text-mask';
+import { ServicosJuridicosSharedModule } from '../../shared';
+import { MultiSelectModule } from '../../shared/util/multiselect/multiselect.module';
+import { WhitespaceModule } from '../../shared/util/whitespace-validator/whitespace.validator.module';
 import {
     CoordenacaoJuridicaComponent,
-    CoordenacaoJuridicaDetailComponent,
-    CoordenacaoJuridicaUpdateComponent,
-    CoordenacaoJuridicaDeletePopupComponent,
     CoordenacaoJuridicaDeleteDialogComponent,
+    CoordenacaoJuridicaDeletePopupComponent,
+    CoordenacaoJuridicaDetailComponent,
+    coordenacaoJuridicaPopupRoute,
     coordenacaoJuridicaRoute,
-    coordenacaoJuridicaPopupRoute
+    CoordenacaoJuridicaUpdateComponent
 } from './';
 
 const ENTITY_STATES = [...coordenacaoJuridicaRoute, ...coordenacaoJuridicaPopupRoute];
 
 @NgModule({
-    imports: [ServicosJuridicosSharedModule, RouterModule.forChild(ENTITY_STATES)],
+    imports: [
+        ServicosJuridicosSharedModule,
+        RouterModule.forChild(ENTITY_STATES),
+        WhitespaceModule,
+        MultiSelectModule,
+        TextMaskModule,
+        MultiselectDropdownModule
+    ],
     declarations: [
         CoordenacaoJuridicaComponent,
         CoordenacaoJuridicaDetailComponent,

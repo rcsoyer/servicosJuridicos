@@ -21,8 +21,8 @@ final class CoordenacaoRestrictions {
     this.qCoordenacao = QCoordenacaoJuridica.coordenacaoJuridica;
   }
 
-  static BooleanExpression getRestrictions(final CoordenacaoJuridica coordenacao) {
-    return new CoordenacaoRestrictions(coordenacao).defineRestrictions();
+  static Function<CoordenacaoJuridica, BooleanExpression> getRestrictions() {
+    return coordenacao -> new CoordenacaoRestrictions(coordenacao).defineRestrictions();
   }
 
   private BooleanExpression defineRestrictions() {
@@ -53,7 +53,7 @@ final class CoordenacaoRestrictions {
   }
 
   private BooleanExpression defineAssuntosRestriction() {
-    return Optional.of(coordenacao.getAssuntos())
+    return Optional.ofNullable(coordenacao.getAssuntos())
                    .filter(CollectionUtils::isNotEmpty)
                    .map(qCoordenacao.assuntos.any()::in)
                    .orElse(null);

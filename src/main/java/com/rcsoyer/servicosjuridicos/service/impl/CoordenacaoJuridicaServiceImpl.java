@@ -1,5 +1,8 @@
 package com.rcsoyer.servicosjuridicos.service.impl;
 
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -20,16 +23,14 @@ import com.rcsoyer.servicosjuridicos.service.mapper.CoordenacaoJuridicaMapper;
 @Transactional
 public class CoordenacaoJuridicaServiceImpl implements CoordenacaoJuridicaService {
 
-  private final Logger log = LoggerFactory.getLogger(CoordenacaoJuridicaServiceImpl.class);
-
-  private final CoordenacaoJuridicaRepository repository;
-
   private final CoordenacaoJuridicaMapper mapper;
+  private final CoordenacaoJuridicaRepository repository;
+  private final Logger log = LoggerFactory.getLogger(CoordenacaoJuridicaServiceImpl.class);
 
   public CoordenacaoJuridicaServiceImpl(CoordenacaoJuridicaRepository coordenacaoJuridicaRepository,
       CoordenacaoJuridicaMapper coordenacaoJuridicaMapper) {
-    this.repository = coordenacaoJuridicaRepository;
     this.mapper = coordenacaoJuridicaMapper;
+    this.repository = coordenacaoJuridicaRepository;
   }
 
   /**
@@ -41,13 +42,16 @@ public class CoordenacaoJuridicaServiceImpl implements CoordenacaoJuridicaServic
   @Override
   public CoordenacaoJuridicaDTO save(CoordenacaoJuridicaDTO coordenacaoJuridicaDTO) {
     log.debug("Request to save CoordenacaoJuridica : {}", coordenacaoJuridicaDTO);
-    CoordenacaoJuridica coordenacaoJuridica = mapper.toEntity(coordenacaoJuridicaDTO);
-    coordenacaoJuridica = repository.save(coordenacaoJuridica);
-    return mapper.toDto(coordenacaoJuridica);
+    Function<CoordenacaoJuridicaDTO, CoordenacaoJuridica> toEntity = mapper::toEntity;
+    UnaryOperator<CoordenacaoJuridica> save = repository::save;
+    Function<CoordenacaoJuridica, CoordenacaoJuridicaDTO> toDto = mapper::toDto;
+    return toEntity.andThen(save)
+                   .andThen(toDto)
+                   .apply(coordenacaoJuridicaDTO);
   }
 
   /**
-   * Get all the coordenacaoJuridicas.
+   * Get all the coordenacoesJuridicas.
    *
    * @param pageable the pagination information
    * @return the list of entities
@@ -56,7 +60,8 @@ public class CoordenacaoJuridicaServiceImpl implements CoordenacaoJuridicaServic
   @Transactional(readOnly = true)
   public Page<CoordenacaoJuridicaDTO> findAll(Pageable pageable) {
     log.debug("Request to get all CoordenacaoJuridicas");
-    return repository.findAll(pageable).map(mapper::toDto);
+    return repository.findAll(pageable)
+                     .map(mapper::toDto);
   }
 
   /**
@@ -67,10 +72,10 @@ public class CoordenacaoJuridicaServiceImpl implements CoordenacaoJuridicaServic
    */
   @Override
   @Transactional(readOnly = true)
-  public CoordenacaoJuridicaDTO findOne(Long id) {
+  public Optional<CoordenacaoJuridicaDTO> findOne(Long id) {
     log.debug("Request to get CoordenacaoJuridica : {}", id);
-    CoordenacaoJuridica coordenacaoJuridica = repository.findOneWithEagerRelationships(id);
-    return mapper.toDto(coordenacaoJuridica);
+    return repository.findById(id)
+                     .map(mapper::toDto);
   }
 
   /**
@@ -88,12 +93,17 @@ public class CoordenacaoJuridicaServiceImpl implements CoordenacaoJuridicaServic
   @Transactional(readOnly = true)
   public Page<CoordenacaoJuridicaDTO> findByParams(final CoordenacaoJuridicaDTO dto,
       final Pageable pageable) {
-    CoordenacaoJuridica coordenacao = mapper.toEntity(dto);
-    return repository.query(coordenacao, pageable).map(mapper::toDto);
+    Function<CoordenacaoJuridicaDTO, CoordenacaoJuridica> toEntity = mapper::toEntity;
+    Function<CoordenacaoJuridica, Page<CoordenacaoJuridica>> query = repository.query(pageable);
+    Function<Page<CoordenacaoJuridica>, Page<CoordenacaoJuridicaDTO>> toPageDTO = page -> page.map(mapper::toDto);
+    return toEntity.andThen(query)
+                   .andThen(toPageDTO)
+                   .apply(dto);
   }
 
   @Override
-  public Page<CoordenacaoJuridicaDTO> findAllWithEagerRelationships(CoordenacaoJuridicaDTO dto) {
-    return null;
+  public Page<CoordenacaoJuridicaDTO> findAllWithEagerRelationships(Pageable pageable) {
+    return repository.findAllWithEagerRelationships(pageable)
+                     .map(mapper::toDto);
   }
 }

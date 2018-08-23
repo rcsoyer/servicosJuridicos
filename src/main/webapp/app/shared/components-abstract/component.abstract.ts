@@ -67,7 +67,7 @@ export abstract class ComponentAbstract<T extends BaseEntity> implements OnDestr
         R.when(previusPageNotEq, changePage)(page);
     }
 
-    protected findResults(): boolean {
+    protected foundResults(): boolean {
         return !_.isEmpty(this.listResultQuery);
     }
 
@@ -134,8 +134,7 @@ export abstract class ComponentAbstract<T extends BaseEntity> implements OnDestr
     }
 
     protected setCurrentAccount(): void {
-        this.principal.identity()
-                      .then(account => (this.currentAccount = account));
+        this.principal.identity().then(account => (this.currentAccount = account));
     }
 
     ngOnDestroy() {
@@ -147,10 +146,10 @@ export abstract class ComponentAbstract<T extends BaseEntity> implements OnDestr
         this.eventSubscriber = this.eventManager.subscribe(listModificationName, onSuccessQuery);
     }
 
-    protected clear(path: string) {
-        this.listResultQuery = null;
+    protected clear(path: string): void {
         this.setPageDefault();
         this.hasMadeQuery = false;
+        this.listResultQuery = null;
         this.router.navigate([path]);
     }
 
