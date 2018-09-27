@@ -1,18 +1,18 @@
-import { HttpResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from 'angular-2-dropdown-multiselect';
+import {HttpResponse} from '@angular/common/http';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
 import * as _ from 'lodash';
-import { JhiAlertService, JhiEventManager, JhiParseLinks } from 'ng-jhipster';
+import {JhiAlertService, JhiEventManager, JhiParseLinks} from 'ng-jhipster';
 import * as R from 'ramda';
-import { Principal } from '../../core';
-import { ComponentAbstract } from '../../shared/components-abstract/component.abstract';
-import { Assunto } from '../../shared/model/assunto.model';
-import { CoordenacaoJuridica } from '../../shared/model/coordenacao-juridica.model';
-import { MultiSelectSettings } from '../../shared/util/multiselect/multiselect.settings';
-import { AssuntoService } from '../assunto';
-import { COORDENACAO_JURIDICA_LIST_MODIFICATION } from './coordenacao-juridica.constants';
-import { CoordenacaoJuridicaService } from './coordenacao-juridica.service';
+import {Principal} from '../../core';
+import {ComponentAbstract} from '../../shared/components-abstract/component.abstract';
+import {Assunto} from '../../shared/model/assunto.model';
+import {CoordenacaoJuridica} from '../../shared/model/coordenacao-juridica.model';
+import {MultiSelectSettings} from '../../shared/util/multiselect/multiselect.settings';
+import {AssuntoService} from '../assunto';
+import {COORDENACAO_JURIDICA_LIST_MODIFICATION} from './coordenacao-juridica.constants';
+import {CoordenacaoJuridicaService} from './coordenacao-juridica.service';
 
 @Component({
     selector: 'coordenacao-juridica',
@@ -55,16 +55,9 @@ export class CoordenacaoJuridicaComponent extends ComponentAbstract<CoordenacaoJ
 
     ngOnInit() {
         super.onInit();
-        this.setAssuntosModel();
         this.setOptionsSettings();
         this.queryAllAssuntos();
         this.registerChangeInCoordenacoes();
-    }
-
-    private setAssuntosModel() {
-        const notEmpty = _.negate(_.isEmpty);
-        const setAssuntos = assuntos => (this.assuntosModel = assuntos.map(assunto => assunto.id));
-        R.when(notEmpty, setAssuntos)(this.assuntos);
     }
 
     private queryAllAssuntos(): void {
