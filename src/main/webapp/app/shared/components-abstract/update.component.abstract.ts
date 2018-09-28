@@ -1,13 +1,14 @@
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
-import { faMinus } from '@fortawesome/free-solid-svg-icons';
+import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
+import {ActivatedRoute} from '@angular/router';
+import {faMinus} from '@fortawesome/free-solid-svg-icons';
 import * as _ from 'lodash';
 import * as R from 'ramda';
-import { Observable } from 'rxjs/Observable';
-import { BaseEntity } from '../model/base-entity';
-import { BasicService } from '../service-commons/basic-service.service';
+import {Observable} from 'rxjs/Observable';
+import {BaseEntity} from '../model/base-entity';
+import {BasicService} from '../service-commons/basic-service.service';
 
 export abstract class UpdateComponentAbastract<T extends BaseEntity> {
+
     public model: T;
     public isSaving: boolean;
     public tituloPagina: string;
@@ -30,7 +31,7 @@ export abstract class UpdateComponentAbastract<T extends BaseEntity> {
     }
 
     private subscribeModelRoute(): void {
-        this.activatedRoute.data.subscribe(({ model }) => (this.model = model));
+        this.activatedRoute.data.subscribe(({model}) => (this.model = model));
     }
 
     previousState() {
@@ -39,7 +40,6 @@ export abstract class UpdateComponentAbastract<T extends BaseEntity> {
 
     save() {
         this.isSaving = true;
-        this.trimInputText();
         const id = this.model.id;
         const create = this.subscribeToCreate();
         const update = this.subscribeToUpdate();
@@ -70,6 +70,4 @@ export abstract class UpdateComponentAbastract<T extends BaseEntity> {
             this.isSaving = false;
         };
     }
-
-    protected abstract trimInputText(): void;
 }

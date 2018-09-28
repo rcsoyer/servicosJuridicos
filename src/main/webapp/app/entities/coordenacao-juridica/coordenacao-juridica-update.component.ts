@@ -46,10 +46,6 @@ export class CoordenacaoJuridicaUpdateComponent extends UpdateComponentAbastract
         return this.assuntosOptions.assuntoSelectOptions;
     }
 
-    protected trimInputText() {
-        this.model.sigla = _.trim(this.model.sigla);
-    }
-
     maskNumero(): Function {
         return this.maskNumberUtils.maskNumero(3);
     }
