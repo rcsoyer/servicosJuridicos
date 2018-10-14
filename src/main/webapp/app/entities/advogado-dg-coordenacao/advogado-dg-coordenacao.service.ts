@@ -4,10 +4,10 @@ import { Observable } from 'rxjs';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
-import { IAdvogadoDgCoordenacao } from 'app/shared/model/advogado-dg-coordenacao.model';
+import { AdvogadoDgCoordenacao } from 'app/shared/model/advogado-dg-coordenacao.model';
 
-type EntityResponseType = HttpResponse<IAdvogadoDgCoordenacao>;
-type EntityArrayResponseType = HttpResponse<IAdvogadoDgCoordenacao[]>;
+type EntityResponseType = HttpResponse<AdvogadoDgCoordenacao>;
+type EntityArrayResponseType = HttpResponse<AdvogadoDgCoordenacao[]>;
 
 @Injectable({ providedIn: 'root' })
 export class AdvogadoDgCoordenacaoService {
@@ -15,21 +15,21 @@ export class AdvogadoDgCoordenacaoService {
 
     constructor(private http: HttpClient) {}
 
-    create(advogadoDgCoordenacao: IAdvogadoDgCoordenacao): Observable<EntityResponseType> {
-        return this.http.post<IAdvogadoDgCoordenacao>(this.resourceUrl, advogadoDgCoordenacao, { observe: 'response' });
+    create(advogadoDgCoordenacao: AdvogadoDgCoordenacao): Observable<EntityResponseType> {
+        return this.http.post<AdvogadoDgCoordenacao>(this.resourceUrl, advogadoDgCoordenacao, { observe: 'response' });
     }
 
-    update(advogadoDgCoordenacao: IAdvogadoDgCoordenacao): Observable<EntityResponseType> {
-        return this.http.put<IAdvogadoDgCoordenacao>(this.resourceUrl, advogadoDgCoordenacao, { observe: 'response' });
+    update(advogadoDgCoordenacao: AdvogadoDgCoordenacao): Observable<EntityResponseType> {
+        return this.http.put<AdvogadoDgCoordenacao>(this.resourceUrl, advogadoDgCoordenacao, { observe: 'response' });
     }
 
     find(id: number): Observable<EntityResponseType> {
-        return this.http.get<IAdvogadoDgCoordenacao>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+        return this.http.get<AdvogadoDgCoordenacao>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
     query(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
-        return this.http.get<IAdvogadoDgCoordenacao[]>(this.resourceUrl, { params: options, observe: 'response' });
+        return this.http.get<AdvogadoDgCoordenacao[]>(this.resourceUrl, { params: options, observe: 'response' });
     }
 
     delete(id: number): Observable<HttpResponse<any>> {

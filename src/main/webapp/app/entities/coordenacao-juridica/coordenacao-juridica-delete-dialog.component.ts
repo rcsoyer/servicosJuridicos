@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { ICoordenacaoJuridica } from 'app/shared/model/coordenacao-juridica.model';
+import { CoordenacaoJuridica } from 'app/shared/model/coordenacao-juridica.model';
 import { CoordenacaoJuridicaService } from './coordenacao-juridica.service';
 
 @Component({
@@ -12,7 +12,7 @@ import { CoordenacaoJuridicaService } from './coordenacao-juridica.service';
     templateUrl: './coordenacao-juridica-delete-dialog.component.html'
 })
 export class CoordenacaoJuridicaDeleteDialogComponent {
-    coordenacaoJuridica: ICoordenacaoJuridica;
+    coordenacaoJuridica: CoordenacaoJuridica;
 
     constructor(
         private coordenacaoJuridicaService: CoordenacaoJuridicaService,

@@ -1,5 +1,14 @@
 package com.rcsoyer.servicosjuridicos.web.rest;
 
+import com.codahale.metrics.annotation.Timed;
+import com.rcsoyer.servicosjuridicos.service.CoordenacaoJuridicaService;
+import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoJuridicaDTO;
+import com.rcsoyer.servicosjuridicos.service.dto.PageableDTO;
+import com.rcsoyer.servicosjuridicos.web.rest.errors.BadRequestAlertException;
+import com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil;
+import com.rcsoyer.servicosjuridicos.web.rest.util.PaginationUtil;
+import io.github.jhipster.web.util.ResponseUtil;
+import io.vavr.control.Option;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -24,14 +33,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.codahale.metrics.annotation.Timed;
-import com.rcsoyer.servicosjuridicos.service.CoordenacaoJuridicaService;
-import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoJuridicaDTO;
-import com.rcsoyer.servicosjuridicos.service.dto.PageableDTO;
-import com.rcsoyer.servicosjuridicos.web.rest.errors.BadRequestAlertException;
-import com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil;
-import com.rcsoyer.servicosjuridicos.web.rest.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing CoordenacaoJuridica.
@@ -135,17 +136,17 @@ public class CoordenacaoJuridicaResource {
   @Timed
   @GetMapping("/coordenacao-juridica")
   public ResponseEntity<List<CoordenacaoJuridicaDTO>> getAllCoordenacaoJuridicas(Pageable pageable,
-      @RequestParam(required = false, defaultValue = "false") boolean eagerload) {
-    log.debug("REST request to get a page of CoordenacaoJuridicas");
-    Page<CoordenacaoJuridicaDTO> page;
-    if (eagerload) {
-        page = service.findAllWithEagerRelationships(pageable);
-    } else {
-        page = service.findAll(pageable);
-    }
-    String baseUrl = String.format("/api/coordenacao-juridicas?eagerload=%b", eagerload);
-    HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, baseUrl);
-    return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+                                                                                 @RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+      log.debug("REST request to get a page of CoordenacaoJuridicas");
+      Supplier<Page<CoordenacaoJuridicaDTO>> allWithEagerRelationships =
+          () -> service.findAllWithEagerRelationships(pageable);
+      Supplier<Page<CoordenacaoJuridicaDTO>> all = () -> service.findAll(pageable);
+      Page<CoordenacaoJuridicaDTO> page =
+          Option.when(eagerload, allWithEagerRelationships)
+                .getOrElse(all);
+      String baseUrl = String.format("/api/coordenacao-juridicas?eagerload=%b", eagerload);
+      HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, baseUrl);
+      return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
   }
 
   @Timed

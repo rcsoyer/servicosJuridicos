@@ -1,8 +1,10 @@
-import { HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import {HttpResponse} from '@angular/common/http';
+import {Observable} from 'rxjs/Observable';
+import {BaseEntity} from 'app/shared/model/base-entity';
 
 /** @author rcsoyer */
-export interface BasicService<M> {
+export interface BasicService<M extends BaseEntity> {
+
     create(model: M): Observable<HttpResponse<M>>;
 
     update(model: M): Observable<HttpResponse<M>>;

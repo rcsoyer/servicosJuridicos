@@ -3,14 +3,12 @@ import {ActivatedRoute} from '@angular/router';
 import {CoordenacaoJuridica} from '../../shared/model/coordenacao-juridica.model';
 import {CoordenacaoJuridicaService} from './coordenacao-juridica.service';
 import {UpdateComponentAbastract} from '../../shared/components-abstract/update.component.abstract';
-import {AssuntoService} from 'app/entities/assunto';
 import {IMultiSelectSettings, IMultiSelectTexts} from 'angular-2-dropdown-multiselect';
 import {MultiSelectSettings} from 'app/shared/util/multiselect/multiselect.settings';
 import {JhiAlertService} from 'ng-jhipster';
 import {AssuntosOptions} from './assuntos-options';
-import * as _ from 'lodash';
 import {MaskNumberUtils} from '../../shared/util/masknumber-utils/masknumber-utils';
-import * as R from 'ramda';
+import {Assunto} from 'app/shared/model/assunto.model';
 
 @Component({
     selector: 'coordenacao-juridica-update',
@@ -23,7 +21,7 @@ export class CoordenacaoJuridicaUpdateComponent extends UpdateComponentAbastract
     optionsSettings: IMultiSelectSettings;
 
     constructor(coordenacaoJuridicaService: CoordenacaoJuridicaService,
-                activatedRoute: ActivatedRoute, private assuntoService: AssuntoService,
+                activatedRoute: ActivatedRoute,
                 private multiSelectSettings: MultiSelectSettings,
                 private jhiAlertService: JhiAlertService, private assuntosOptions: AssuntosOptions,
                 private maskNumberUtils: MaskNumberUtils) {
@@ -56,8 +54,7 @@ export class CoordenacaoJuridicaUpdateComponent extends UpdateComponentAbastract
     }
 
     private setAssuntosFromModel() {
-        const createAssuntosArray = () => this.model.assuntos = [];
-        R.when(_.isEmpty, createAssuntosArray)(this.model.assuntos);
-        this.assuntosModel.forEach(id => this.model.assuntos.push({id}));
+        this.model.assuntos = [];
+        this.assuntosModel.forEach(id => this.model.assuntos.push(new Assunto(id)));
     }
 }

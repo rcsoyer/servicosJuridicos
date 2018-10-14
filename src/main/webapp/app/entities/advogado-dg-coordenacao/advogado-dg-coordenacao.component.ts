@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
-import { IAdvogadoDgCoordenacao } from 'app/shared/model/advogado-dg-coordenacao.model';
+import { AdvogadoDgCoordenacao } from 'app/shared/model/advogado-dg-coordenacao.model';
 import { Principal } from 'app/core';
 
 import { ITEMS_PER_PAGE } from 'app/shared';
@@ -16,7 +16,7 @@ import { AdvogadoDgCoordenacaoService } from './advogado-dg-coordenacao.service'
 })
 export class AdvogadoDgCoordenacaoComponent implements OnInit, OnDestroy {
     currentAccount: any;
-    advogadoDgCoordenacaos: IAdvogadoDgCoordenacao[];
+    advogadoDgCoordenacaos: AdvogadoDgCoordenacao[];
     error: any;
     success: any;
     eventSubscriber: Subscription;
@@ -56,7 +56,7 @@ export class AdvogadoDgCoordenacaoComponent implements OnInit, OnDestroy {
                 sort: this.sort()
             })
             .subscribe(
-                (res: HttpResponse<IAdvogadoDgCoordenacao[]>) => this.paginateAdvogadoDgCoordenacaos(res.body, res.headers),
+                (res: HttpResponse<AdvogadoDgCoordenacao[]>) => this.paginateAdvogadoDgCoordenacaos(res.body, res.headers),
                 (res: HttpErrorResponse) => this.onError(res.message)
             );
     }
@@ -103,7 +103,7 @@ export class AdvogadoDgCoordenacaoComponent implements OnInit, OnDestroy {
         this.eventManager.destroy(this.eventSubscriber);
     }
 
-    trackId(index: number, item: IAdvogadoDgCoordenacao) {
+    trackId(index: number, item: AdvogadoDgCoordenacao) {
         return item.id;
     }
 
@@ -119,7 +119,7 @@ export class AdvogadoDgCoordenacaoComponent implements OnInit, OnDestroy {
         return result;
     }
 
-    private paginateAdvogadoDgCoordenacaos(data: IAdvogadoDgCoordenacao[], headers: HttpHeaders) {
+    private paginateAdvogadoDgCoordenacaos(data: AdvogadoDgCoordenacao[], headers: HttpHeaders) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
         this.queryCount = this.totalItems;

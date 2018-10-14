@@ -4,13 +4,13 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { JhiAlertService } from 'ng-jhipster';
 
-import { IProcessoJudicial } from '../../shared/model/processo-judicial.model';
+import { ProcessoJudicial } from '../../shared/model/processo-judicial.model';
 import { ProcessoJudicialService } from './processo-judicial.service';
 import { Assunto } from '../../shared/model/assunto.model';
 import { AssuntoService } from '../../entities/assunto';
 import { Modalidade } from '../../shared/model/modalidade.model';
 import { ModalidadeService } from '../../entities/modalidade';
-import { IAdvogado } from '../../shared/model/advogado.model';
+import { Advogado } from '../../shared/model/advogado.model';
 import { AdvogadoService } from '../../entities/advogado';
 
 @Component({
@@ -18,14 +18,14 @@ import { AdvogadoService } from '../../entities/advogado';
     templateUrl: './processo-judicial-update.component.html'
 })
 export class ProcessoJudicialUpdateComponent implements OnInit {
-    private _processoJudicial: IProcessoJudicial;
+    private _processoJudicial: ProcessoJudicial;
     isSaving: boolean;
 
     assuntos: Assunto[];
 
     modalidades: Modalidade[];
 
-    advogados: IAdvogado[];
+    advogados: Advogado[];
     prazoFinalDp: any;
     dtAtribuicaoDp: any;
     dtInicioDp: any;
@@ -58,7 +58,7 @@ export class ProcessoJudicialUpdateComponent implements OnInit {
             (res: HttpErrorResponse) => this.onError(res.message)
         );
         this.advogadoService.query().subscribe(
-            (res: HttpResponse<IAdvogado[]>) => {
+            (res: HttpResponse<Advogado[]>) => {
                 this.advogados = res.body;
             },
             (res: HttpErrorResponse) => this.onError(res.message)
@@ -78,8 +78,8 @@ export class ProcessoJudicialUpdateComponent implements OnInit {
         }
     }
 
-    private subscribeToSaveResponse(result: Observable<HttpResponse<IProcessoJudicial>>) {
-        result.subscribe((res: HttpResponse<IProcessoJudicial>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
+    private subscribeToSaveResponse(result: Observable<HttpResponse<ProcessoJudicial>>) {
+        result.subscribe((res: HttpResponse<ProcessoJudicial>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
     }
 
     private onSaveSuccess() {
@@ -103,14 +103,14 @@ export class ProcessoJudicialUpdateComponent implements OnInit {
         return item.id;
     }
 
-    trackAdvogadoById(index: number, item: IAdvogado) {
+    trackAdvogadoById(index: number, item: Advogado) {
         return item.id;
     }
     get processoJudicial() {
         return this._processoJudicial;
     }
 
-    set processoJudicial(processoJudicial: IProcessoJudicial) {
+    set processoJudicial(processoJudicial: ProcessoJudicial) {
         this._processoJudicial = processoJudicial;
     }
 }

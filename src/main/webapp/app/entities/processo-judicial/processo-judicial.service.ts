@@ -7,10 +7,10 @@ import { map } from 'rxjs/operators';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
-import { IProcessoJudicial } from 'app/shared/model/processo-judicial.model';
+import { ProcessoJudicial } from 'app/shared/model/processo-judicial.model';
 
-type EntityResponseType = HttpResponse<IProcessoJudicial>;
-type EntityArrayResponseType = HttpResponse<IProcessoJudicial[]>;
+type EntityResponseType = HttpResponse<ProcessoJudicial>;
+type EntityArrayResponseType = HttpResponse<ProcessoJudicial[]>;
 
 @Injectable({ providedIn: 'root' })
 export class ProcessoJudicialService {
@@ -18,30 +18,30 @@ export class ProcessoJudicialService {
 
     constructor(private http: HttpClient) {}
 
-    create(processoJudicial: IProcessoJudicial): Observable<EntityResponseType> {
+    create(processoJudicial: ProcessoJudicial): Observable<EntityResponseType> {
         const copy = this.convertDateFromClient(processoJudicial);
         return this.http
-            .post<IProcessoJudicial>(this.resourceUrl, copy, { observe: 'response' })
+            .post<ProcessoJudicial>(this.resourceUrl, copy, { observe: 'response' })
             .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
-    update(processoJudicial: IProcessoJudicial): Observable<EntityResponseType> {
+    update(processoJudicial: ProcessoJudicial): Observable<EntityResponseType> {
         const copy = this.convertDateFromClient(processoJudicial);
         return this.http
-            .put<IProcessoJudicial>(this.resourceUrl, copy, { observe: 'response' })
+            .put<ProcessoJudicial>(this.resourceUrl, copy, { observe: 'response' })
             .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
     find(id: number): Observable<EntityResponseType> {
         return this.http
-            .get<IProcessoJudicial>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+            .get<ProcessoJudicial>(`${this.resourceUrl}/${id}`, { observe: 'response' })
             .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
     query(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
         return this.http
-            .get<IProcessoJudicial[]>(this.resourceUrl, { params: options, observe: 'response' })
+            .get<ProcessoJudicial[]>(this.resourceUrl, { params: options, observe: 'response' })
             .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
     }
 
@@ -49,8 +49,8 @@ export class ProcessoJudicialService {
         return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
-    private convertDateFromClient(processoJudicial: IProcessoJudicial): IProcessoJudicial {
-        const copy: IProcessoJudicial = Object.assign({}, processoJudicial, {
+    private convertDateFromClient(processoJudicial: ProcessoJudicial): ProcessoJudicial {
+        const copy: ProcessoJudicial = Object.assign({}, processoJudicial, {
             prazoFinal:
                 processoJudicial.prazoFinal != null && processoJudicial.prazoFinal.isValid()
                     ? processoJudicial.prazoFinal.format(DATE_FORMAT)
@@ -80,7 +80,7 @@ export class ProcessoJudicialService {
     }
 
     private convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
-        res.body.forEach((processoJudicial: IProcessoJudicial) => {
+        res.body.forEach((processoJudicial: ProcessoJudicial) => {
             processoJudicial.prazoFinal = processoJudicial.prazoFinal != null ? moment(processoJudicial.prazoFinal) : null;
             processoJudicial.dtAtribuicao = processoJudicial.dtAtribuicao != null ? moment(processoJudicial.dtAtribuicao) : null;
             processoJudicial.dtInicio = processoJudicial.dtInicio != null ? moment(processoJudicial.dtInicio) : null;

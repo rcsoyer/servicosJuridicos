@@ -1,20 +1,19 @@
-import { Injectable } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-import { JhiPaginationUtil, JhiResolvePagingParams } from 'ng-jhipster';
-import { UserRouteAccessService } from 'app/core';
-import { of } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Advogado } from 'app/shared/model/advogado.model';
-import { AdvogadoService } from './advogado.service';
-import { AdvogadoComponent } from './advogado.component';
-import { AdvogadoDetailComponent } from './advogado-detail.component';
-import { AdvogadoUpdateComponent } from './advogado-update.component';
-import { AdvogadoDeletePopupComponent } from './advogado-delete-dialog.component';
-import { IAdvogado } from 'app/shared/model/advogado.model';
+import {Injectable} from '@angular/core';
+import {HttpResponse} from '@angular/common/http';
+import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot, Routes} from '@angular/router';
+import {JhiResolvePagingParams} from 'ng-jhipster';
+import {UserRouteAccessService} from 'app/core';
+import {of} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {AdvogadoService} from './advogado.service';
+import {AdvogadoComponent} from './advogado.component';
+import {AdvogadoDetailComponent} from './advogado-detail.component';
+import {AdvogadoUpdateComponent} from './advogado-update.component';
+import {AdvogadoDeletePopupComponent} from './advogado-delete-dialog.component';
+import {Advogado} from 'app/shared/model/advogado.model';
 
 @Injectable({ providedIn: 'root' })
-export class AdvogadoResolve implements Resolve<IAdvogado> {
+export class AdvogadoResolve implements Resolve<Advogado> {
     constructor(private service: AdvogadoService) {}
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {

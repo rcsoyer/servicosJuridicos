@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { IProcessoJudicial } from 'app/shared/model/processo-judicial.model';
+import { ProcessoJudicial } from 'app/shared/model/processo-judicial.model';
 import { ProcessoJudicialService } from './processo-judicial.service';
 
 @Component({
@@ -12,7 +12,7 @@ import { ProcessoJudicialService } from './processo-judicial.service';
     templateUrl: './processo-judicial-delete-dialog.component.html'
 })
 export class ProcessoJudicialDeleteDialogComponent {
-    processoJudicial: IProcessoJudicial;
+    processoJudicial: ProcessoJudicial;
 
     constructor(
         private processoJudicialService: ProcessoJudicialService,

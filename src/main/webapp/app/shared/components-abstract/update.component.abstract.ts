@@ -19,7 +19,7 @@ export abstract class UpdateComponentAbastract<T extends BaseEntity> {
         this.isSaving = false;
     }
 
-    protected onInit() {
+    protected onInit(): void {
         this.isSaving = false;
         this.subscribeModelRoute();
     }
@@ -34,11 +34,11 @@ export abstract class UpdateComponentAbastract<T extends BaseEntity> {
         this.activatedRoute.data.subscribe(({model}) => (this.model = model));
     }
 
-    previousState() {
+    previousState(): void {
         window.history.back();
     }
 
-    save() {
+    save(): void {
         this.isSaving = true;
         const id = this.model.id;
         const create = this.subscribeToCreate();

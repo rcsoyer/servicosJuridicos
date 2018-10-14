@@ -1,21 +1,22 @@
-import { Injectable } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-import { JhiPaginationUtil, JhiResolvePagingParams } from 'ng-jhipster';
-import { UserRouteAccessService } from 'app/core';
-import { of } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { FeriasLicenca } from 'app/shared/model/ferias-licenca.model';
-import { FeriasLicencaService } from './ferias-licenca.service';
-import { FeriasLicencaComponent } from './ferias-licenca.component';
-import { FeriasLicencaDetailComponent } from './ferias-licenca-detail.component';
-import { FeriasLicencaUpdateComponent } from './ferias-licenca-update.component';
-import { FeriasLicencaDeletePopupComponent } from './ferias-licenca-delete-dialog.component';
-import { IFeriasLicenca } from 'app/shared/model/ferias-licenca.model';
+import {Injectable} from '@angular/core';
+import {HttpResponse} from '@angular/common/http';
+import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot, Routes} from '@angular/router';
+import {JhiResolvePagingParams} from 'ng-jhipster';
+import {UserRouteAccessService} from 'app/core';
+import {of} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {FeriasLicencaService} from './ferias-licenca.service';
+import {FeriasLicencaComponent} from './ferias-licenca.component';
+import {FeriasLicencaDetailComponent} from './ferias-licenca-detail.component';
+import {FeriasLicencaUpdateComponent} from './ferias-licenca-update.component';
+import {FeriasLicencaDeletePopupComponent} from './ferias-licenca-delete-dialog.component';
+import {FeriasLicenca} from 'app/shared/model/ferias-licenca.model';
 
-@Injectable({ providedIn: 'root' })
-export class FeriasLicencaResolve implements Resolve<IFeriasLicenca> {
-    constructor(private service: FeriasLicencaService) {}
+@Injectable({providedIn: 'root'})
+export class FeriasLicencaResolve implements Resolve<FeriasLicenca> {
+
+    constructor(private service: FeriasLicencaService) {
+    }
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const id = route.params['id'] ? route.params['id'] : null;

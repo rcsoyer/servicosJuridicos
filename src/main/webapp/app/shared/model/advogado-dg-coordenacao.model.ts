@@ -1,19 +1,12 @@
+import {BaseEntity} from 'app/shared/model/base-entity';
+
 export const enum RangeDgCoordenacao {
     INCLUSIVE = 'INCLUSIVE',
     EXCLUSIVE = 'EXCLUSIVE'
 }
 
-export interface IAdvogadoDgCoordenacao {
-    id?: number;
-    dgPessoalInicio?: string;
-    dgPessoalFim?: string;
-    dgDupla?: string;
-    rangeDgCoordenacao?: RangeDgCoordenacao;
-    advogadoId?: number;
-    coordenacaoId?: number;
-}
+export class AdvogadoDgCoordenacao implements BaseEntity {
 
-export class AdvogadoDgCoordenacao implements IAdvogadoDgCoordenacao {
     constructor(
         public id?: number,
         public dgPessoalInicio?: string,
@@ -22,5 +15,6 @@ export class AdvogadoDgCoordenacao implements IAdvogadoDgCoordenacao {
         public rangeDgCoordenacao?: RangeDgCoordenacao,
         public advogadoId?: number,
         public coordenacaoId?: number
-    ) {}
+    ) {
+    }
 }

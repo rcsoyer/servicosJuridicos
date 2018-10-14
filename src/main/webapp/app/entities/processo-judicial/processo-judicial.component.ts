@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
-import { IProcessoJudicial } from 'app/shared/model/processo-judicial.model';
+import { ProcessoJudicial } from 'app/shared/model/processo-judicial.model';
 import { Principal } from 'app/core';
 
 import { ITEMS_PER_PAGE } from 'app/shared';
@@ -16,7 +16,7 @@ import { ProcessoJudicialService } from './processo-judicial.service';
 })
 export class ProcessoJudicialComponent implements OnInit, OnDestroy {
     currentAccount: any;
-    processoJudicials: IProcessoJudicial[];
+    processoJudicials: ProcessoJudicial[];
     error: any;
     success: any;
     eventSubscriber: Subscription;
@@ -56,7 +56,7 @@ export class ProcessoJudicialComponent implements OnInit, OnDestroy {
                 sort: this.sort()
             })
             .subscribe(
-                (res: HttpResponse<IProcessoJudicial[]>) => this.paginateProcessoJudicials(res.body, res.headers),
+                (res: HttpResponse<ProcessoJudicial[]>) => this.paginateProcessoJudicials(res.body, res.headers),
                 (res: HttpErrorResponse) => this.onError(res.message)
             );
     }
@@ -103,7 +103,7 @@ export class ProcessoJudicialComponent implements OnInit, OnDestroy {
         this.eventManager.destroy(this.eventSubscriber);
     }
 
-    trackId(index: number, item: IProcessoJudicial) {
+    trackId(index: number, item: ProcessoJudicial) {
         return item.id;
     }
 
@@ -119,7 +119,7 @@ export class ProcessoJudicialComponent implements OnInit, OnDestroy {
         return result;
     }
 
-    private paginateProcessoJudicials(data: IProcessoJudicial[], headers: HttpHeaders) {
+    private paginateProcessoJudicials(data: ProcessoJudicial[], headers: HttpHeaders) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
         this.queryCount = this.totalItems;

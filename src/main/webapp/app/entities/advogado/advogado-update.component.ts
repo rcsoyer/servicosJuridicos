@@ -1,24 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
-import { IAdvogado } from 'app/shared/model/advogado.model';
-import { AdvogadoService } from './advogado.service';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {Advogado} from 'app/shared/model/advogado.model';
+import {AdvogadoService} from './advogado.service';
 
 @Component({
     selector: 'jhi-advogado-update',
     templateUrl: './advogado-update.component.html'
 })
 export class AdvogadoUpdateComponent implements OnInit {
-    private _advogado: IAdvogado;
+    private _advogado: Advogado;
     isSaving: boolean;
 
-    constructor(private advogadoService: AdvogadoService, private activatedRoute: ActivatedRoute) {}
+    constructor(private advogadoService: AdvogadoService, private activatedRoute: ActivatedRoute) {
+    }
 
     ngOnInit() {
         this.isSaving = false;
-        this.activatedRoute.data.subscribe(({ advogado }) => {
+        this.activatedRoute.data.subscribe(({advogado}) => {
             this.advogado = advogado;
         });
     }
@@ -36,8 +36,8 @@ export class AdvogadoUpdateComponent implements OnInit {
         }
     }
 
-    private subscribeToSaveResponse(result: Observable<HttpResponse<IAdvogado>>) {
-        result.subscribe((res: HttpResponse<IAdvogado>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
+    private subscribeToSaveResponse(result: Observable<HttpResponse<Advogado>>) {
+        result.subscribe((res: HttpResponse<Advogado>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
     }
 
     private onSaveSuccess() {
@@ -48,11 +48,12 @@ export class AdvogadoUpdateComponent implements OnInit {
     private onSaveError() {
         this.isSaving = false;
     }
+
     get advogado() {
         return this._advogado;
     }
 
-    set advogado(advogado: IAdvogado) {
+    set advogado(advogado: Advogado) {
         this._advogado = advogado;
     }
 }

@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { IFeriasLicenca } from 'app/shared/model/ferias-licenca.model';
+import { FeriasLicenca } from 'app/shared/model/ferias-licenca.model';
 
 @Component({
     selector: 'jhi-ferias-licenca-detail',
     templateUrl: './ferias-licenca-detail.component.html'
 })
 export class FeriasLicencaDetailComponent implements OnInit {
-    feriasLicenca: IFeriasLicenca;
+    feriasLicenca: FeriasLicenca;
 
     constructor(private activatedRoute: ActivatedRoute) {}
 

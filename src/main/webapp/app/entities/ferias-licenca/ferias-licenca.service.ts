@@ -7,10 +7,10 @@ import { map } from 'rxjs/operators';
 
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared';
-import { IFeriasLicenca } from 'app/shared/model/ferias-licenca.model';
+import { FeriasLicenca } from 'app/shared/model/ferias-licenca.model';
 
-type EntityResponseType = HttpResponse<IFeriasLicenca>;
-type EntityArrayResponseType = HttpResponse<IFeriasLicenca[]>;
+type EntityResponseType = HttpResponse<FeriasLicenca>;
+type EntityArrayResponseType = HttpResponse<FeriasLicenca[]>;
 
 @Injectable({ providedIn: 'root' })
 export class FeriasLicencaService {
@@ -18,30 +18,30 @@ export class FeriasLicencaService {
 
     constructor(private http: HttpClient) {}
 
-    create(feriasLicenca: IFeriasLicenca): Observable<EntityResponseType> {
+    create(feriasLicenca: FeriasLicenca): Observable<EntityResponseType> {
         const copy = this.convertDateFromClient(feriasLicenca);
         return this.http
-            .post<IFeriasLicenca>(this.resourceUrl, copy, { observe: 'response' })
+            .post<FeriasLicenca>(this.resourceUrl, copy, { observe: 'response' })
             .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
-    update(feriasLicenca: IFeriasLicenca): Observable<EntityResponseType> {
+    update(feriasLicenca: FeriasLicenca): Observable<EntityResponseType> {
         const copy = this.convertDateFromClient(feriasLicenca);
         return this.http
-            .put<IFeriasLicenca>(this.resourceUrl, copy, { observe: 'response' })
+            .put<FeriasLicenca>(this.resourceUrl, copy, { observe: 'response' })
             .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
     find(id: number): Observable<EntityResponseType> {
         return this.http
-            .get<IFeriasLicenca>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+            .get<FeriasLicenca>(`${this.resourceUrl}/${id}`, { observe: 'response' })
             .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
     query(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
         return this.http
-            .get<IFeriasLicenca[]>(this.resourceUrl, { params: options, observe: 'response' })
+            .get<FeriasLicenca[]>(this.resourceUrl, { params: options, observe: 'response' })
             .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
     }
 
@@ -49,8 +49,8 @@ export class FeriasLicencaService {
         return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
     }
 
-    private convertDateFromClient(feriasLicenca: IFeriasLicenca): IFeriasLicenca {
-        const copy: IFeriasLicenca = Object.assign({}, feriasLicenca, {
+    private convertDateFromClient(feriasLicenca: FeriasLicenca): FeriasLicenca {
+        const copy: FeriasLicenca = Object.assign({}, feriasLicenca, {
             dtInicio:
                 feriasLicenca.dtInicio != null && feriasLicenca.dtInicio.isValid() ? feriasLicenca.dtInicio.format(DATE_FORMAT) : null,
             dtFim: feriasLicenca.dtFim != null && feriasLicenca.dtFim.isValid() ? feriasLicenca.dtFim.format(DATE_FORMAT) : null
@@ -65,7 +65,7 @@ export class FeriasLicencaService {
     }
 
     private convertDateArrayFromServer(res: EntityArrayResponseType): EntityArrayResponseType {
-        res.body.forEach((feriasLicenca: IFeriasLicenca) => {
+        res.body.forEach((feriasLicenca: FeriasLicenca) => {
             feriasLicenca.dtInicio = feriasLicenca.dtInicio != null ? moment(feriasLicenca.dtInicio) : null;
             feriasLicenca.dtFim = feriasLicenca.dtFim != null ? moment(feriasLicenca.dtFim) : null;
         });

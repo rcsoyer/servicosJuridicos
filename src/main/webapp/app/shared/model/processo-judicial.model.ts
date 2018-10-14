@@ -1,18 +1,8 @@
-import { Moment } from 'moment';
+import {Moment} from 'moment';
+import {BaseEntity} from 'app/shared/model/base-entity';
 
-export interface IProcessoJudicial {
-    id?: number;
-    numero?: string;
-    prazoFinal?: Moment;
-    dtAtribuicao?: Moment;
-    dtInicio?: Moment;
-    dtConclusao?: Moment;
-    assuntoId?: number;
-    modalidadeId?: number;
-    advogadoId?: number;
-}
+export class ProcessoJudicial implements BaseEntity {
 
-export class ProcessoJudicial implements IProcessoJudicial {
     constructor(
         public id?: number,
         public numero?: string,
@@ -23,5 +13,6 @@ export class ProcessoJudicial implements IProcessoJudicial {
         public assuntoId?: number,
         public modalidadeId?: number,
         public advogadoId?: number
-    ) {}
+    ) {
+    }
 }

@@ -32,7 +32,8 @@ export class AssuntosOptions {
 
     private setAssuntoSelectOptions() {
         const selectOptions = [];
-        this.assuntos.forEach(assunto => selectOptions.push({id: assunto.id, name: assunto.descricao}));
+        const pushSelectOptions = assunto => selectOptions.push({id: assunto.id, name: assunto.descricao});
+        this.assuntos.forEach(pushSelectOptions);
         this._assuntoSelectOptions = selectOptions;
     }
 

@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { IAdvogado } from 'app/shared/model/advogado.model';
+import { Advogado } from 'app/shared/model/advogado.model';
 import { AdvogadoService } from './advogado.service';
 
 @Component({
@@ -12,7 +12,7 @@ import { AdvogadoService } from './advogado.service';
     templateUrl: './advogado-delete-dialog.component.html'
 })
 export class AdvogadoDeleteDialogComponent {
-    advogado: IAdvogado;
+    advogado: Advogado;
 
     constructor(private advogadoService: AdvogadoService, public activeModal: NgbActiveModal, private eventManager: JhiEventManager) {}
 

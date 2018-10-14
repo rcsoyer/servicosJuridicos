@@ -1,21 +1,21 @@
-import { Injectable } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Routes } from '@angular/router';
-import { JhiPaginationUtil, JhiResolvePagingParams } from 'ng-jhipster';
-import { UserRouteAccessService } from 'app/core';
-import { of } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { AdvogadoDgCoordenacao } from 'app/shared/model/advogado-dg-coordenacao.model';
-import { AdvogadoDgCoordenacaoService } from './advogado-dg-coordenacao.service';
-import { AdvogadoDgCoordenacaoComponent } from './advogado-dg-coordenacao.component';
-import { AdvogadoDgCoordenacaoDetailComponent } from './advogado-dg-coordenacao-detail.component';
-import { AdvogadoDgCoordenacaoUpdateComponent } from './advogado-dg-coordenacao-update.component';
-import { AdvogadoDgCoordenacaoDeletePopupComponent } from './advogado-dg-coordenacao-delete-dialog.component';
-import { IAdvogadoDgCoordenacao } from 'app/shared/model/advogado-dg-coordenacao.model';
+import {Injectable} from '@angular/core';
+import {HttpResponse} from '@angular/common/http';
+import {ActivatedRouteSnapshot, Resolve, RouterStateSnapshot, Routes} from '@angular/router';
+import {JhiResolvePagingParams} from 'ng-jhipster';
+import {UserRouteAccessService} from 'app/core';
+import {of} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {AdvogadoDgCoordenacaoService} from './advogado-dg-coordenacao.service';
+import {AdvogadoDgCoordenacaoComponent} from './advogado-dg-coordenacao.component';
+import {AdvogadoDgCoordenacaoDetailComponent} from './advogado-dg-coordenacao-detail.component';
+import {AdvogadoDgCoordenacaoUpdateComponent} from './advogado-dg-coordenacao-update.component';
+import {AdvogadoDgCoordenacaoDeletePopupComponent} from './advogado-dg-coordenacao-delete-dialog.component';
+import {AdvogadoDgCoordenacao} from 'app/shared/model/advogado-dg-coordenacao.model';
 
-@Injectable({ providedIn: 'root' })
-export class AdvogadoDgCoordenacaoResolve implements Resolve<IAdvogadoDgCoordenacao> {
-    constructor(private service: AdvogadoDgCoordenacaoService) {}
+@Injectable({providedIn: 'root'})
+export class AdvogadoDgCoordenacaoResolve implements Resolve<AdvogadoDgCoordenacao> {
+    constructor(private service: AdvogadoDgCoordenacaoService) {
+    }
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const id = route.params['id'] ? route.params['id'] : null;

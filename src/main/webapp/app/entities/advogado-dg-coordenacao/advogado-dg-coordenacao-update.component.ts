@@ -1,27 +1,26 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { JhiAlertService } from 'ng-jhipster';
-
-import { IAdvogadoDgCoordenacao } from 'app/shared/model/advogado-dg-coordenacao.model';
-import { AdvogadoDgCoordenacaoService } from './advogado-dg-coordenacao.service';
-import { IAdvogado } from 'app/shared/model/advogado.model';
-import { AdvogadoService } from 'app/entities/advogado';
-import { ICoordenacaoJuridica } from 'app/shared/model/coordenacao-juridica.model';
-import { CoordenacaoJuridicaService } from 'app/entities/coordenacao-juridica';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {JhiAlertService} from 'ng-jhipster';
+import {AdvogadoDgCoordenacao} from 'app/shared/model/advogado-dg-coordenacao.model';
+import {AdvogadoDgCoordenacaoService} from './advogado-dg-coordenacao.service';
+import {Advogado} from 'app/shared/model/advogado.model';
+import {AdvogadoService} from 'app/entities/advogado';
+import {CoordenacaoJuridica} from 'app/shared/model/coordenacao-juridica.model';
+import {CoordenacaoJuridicaService} from 'app/entities/coordenacao-juridica';
 
 @Component({
     selector: 'jhi-advogado-dg-coordenacao-update',
     templateUrl: './advogado-dg-coordenacao-update.component.html'
 })
 export class AdvogadoDgCoordenacaoUpdateComponent implements OnInit {
-    private _advogadoDgCoordenacao: IAdvogadoDgCoordenacao;
+    private _advogadoDgCoordenacao: AdvogadoDgCoordenacao;
     isSaving: boolean;
 
-    advogados: IAdvogado[];
+    advogados: Advogado[];
 
-    coordenacaojuridicas: ICoordenacaoJuridica[];
+    coordenacaojuridicas: CoordenacaoJuridica[];
 
     constructor(
         private jhiAlertService: JhiAlertService,
@@ -29,21 +28,22 @@ export class AdvogadoDgCoordenacaoUpdateComponent implements OnInit {
         private advogadoService: AdvogadoService,
         private coordenacaoJuridicaService: CoordenacaoJuridicaService,
         private activatedRoute: ActivatedRoute
-    ) {}
+    ) {
+    }
 
     ngOnInit() {
         this.isSaving = false;
-        this.activatedRoute.data.subscribe(({ advogadoDgCoordenacao }) => {
+        this.activatedRoute.data.subscribe(({advogadoDgCoordenacao}) => {
             this.advogadoDgCoordenacao = advogadoDgCoordenacao;
         });
         this.advogadoService.query().subscribe(
-            (res: HttpResponse<IAdvogado[]>) => {
+            (res: HttpResponse<Advogado[]>) => {
                 this.advogados = res.body;
             },
             (res: HttpErrorResponse) => this.onError(res.message)
         );
         this.coordenacaoJuridicaService.query().subscribe(
-            (res: HttpResponse<ICoordenacaoJuridica[]>) => {
+            (res: HttpResponse<CoordenacaoJuridica[]>) => {
                 this.coordenacaojuridicas = res.body;
             },
             (res: HttpErrorResponse) => this.onError(res.message)
@@ -63,9 +63,9 @@ export class AdvogadoDgCoordenacaoUpdateComponent implements OnInit {
         }
     }
 
-    private subscribeToSaveResponse(result: Observable<HttpResponse<IAdvogadoDgCoordenacao>>) {
+    private subscribeToSaveResponse(result: Observable<HttpResponse<AdvogadoDgCoordenacao>>) {
         result.subscribe(
-            (res: HttpResponse<IAdvogadoDgCoordenacao>) => this.onSaveSuccess(),
+            (res: HttpResponse<AdvogadoDgCoordenacao>) => this.onSaveSuccess(),
             (res: HttpErrorResponse) => this.onSaveError()
         );
     }
@@ -83,18 +83,19 @@ export class AdvogadoDgCoordenacaoUpdateComponent implements OnInit {
         this.jhiAlertService.error(errorMessage, null, null);
     }
 
-    trackAdvogadoById(index: number, item: IAdvogado) {
+    trackAdvogadoById(index: number, item: Advogado) {
         return item.id;
     }
 
-    trackCoordenacaoJuridicaById(index: number, item: ICoordenacaoJuridica) {
+    trackCoordenacaoJuridicaById(index: number, item: CoordenacaoJuridica) {
         return item.id;
     }
+
     get advogadoDgCoordenacao() {
         return this._advogadoDgCoordenacao;
     }
 
-    set advogadoDgCoordenacao(advogadoDgCoordenacao: IAdvogadoDgCoordenacao) {
+    set advogadoDgCoordenacao(advogadoDgCoordenacao: AdvogadoDgCoordenacao) {
         this._advogadoDgCoordenacao = advogadoDgCoordenacao;
     }
 }

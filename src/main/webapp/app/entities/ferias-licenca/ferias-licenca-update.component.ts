@@ -4,9 +4,9 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { JhiAlertService } from 'ng-jhipster';
 
-import { IFeriasLicenca } from 'app/shared/model/ferias-licenca.model';
+import { FeriasLicenca } from 'app/shared/model/ferias-licenca.model';
 import { FeriasLicencaService } from './ferias-licenca.service';
-import { IAdvogado } from 'app/shared/model/advogado.model';
+import { Advogado } from 'app/shared/model/advogado.model';
 import { AdvogadoService } from 'app/entities/advogado';
 
 @Component({
@@ -14,10 +14,10 @@ import { AdvogadoService } from 'app/entities/advogado';
     templateUrl: './ferias-licenca-update.component.html'
 })
 export class FeriasLicencaUpdateComponent implements OnInit {
-    private _feriasLicenca: IFeriasLicenca;
+    private _feriasLicenca: FeriasLicenca;
     isSaving: boolean;
 
-    advogados: IAdvogado[];
+    advogados: Advogado[];
     dtInicioDp: any;
     dtFimDp: any;
 
@@ -34,7 +34,7 @@ export class FeriasLicencaUpdateComponent implements OnInit {
             this.feriasLicenca = feriasLicenca;
         });
         this.advogadoService.query().subscribe(
-            (res: HttpResponse<IAdvogado[]>) => {
+            (res: HttpResponse<Advogado[]>) => {
                 this.advogados = res.body;
             },
             (res: HttpErrorResponse) => this.onError(res.message)
@@ -54,8 +54,8 @@ export class FeriasLicencaUpdateComponent implements OnInit {
         }
     }
 
-    private subscribeToSaveResponse(result: Observable<HttpResponse<IFeriasLicenca>>) {
-        result.subscribe((res: HttpResponse<IFeriasLicenca>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
+    private subscribeToSaveResponse(result: Observable<HttpResponse<FeriasLicenca>>) {
+        result.subscribe((res: HttpResponse<FeriasLicenca>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
     }
 
     private onSaveSuccess() {
@@ -71,14 +71,14 @@ export class FeriasLicencaUpdateComponent implements OnInit {
         this.jhiAlertService.error(errorMessage, null, null);
     }
 
-    trackAdvogadoById(index: number, item: IAdvogado) {
+    trackAdvogadoById(index: number, item: Advogado) {
         return item.id;
     }
     get feriasLicenca() {
         return this._feriasLicenca;
     }
 
-    set feriasLicenca(feriasLicenca: IFeriasLicenca) {
+    set feriasLicenca(feriasLicenca: FeriasLicenca) {
         this._feriasLicenca = feriasLicenca;
     }
 }

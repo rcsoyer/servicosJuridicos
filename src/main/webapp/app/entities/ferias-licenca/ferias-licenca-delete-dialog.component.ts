@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { JhiEventManager } from 'ng-jhipster';
 
-import { IFeriasLicenca } from 'app/shared/model/ferias-licenca.model';
+import { FeriasLicenca } from 'app/shared/model/ferias-licenca.model';
 import { FeriasLicencaService } from './ferias-licenca.service';
 
 @Component({
@@ -12,7 +12,7 @@ import { FeriasLicencaService } from './ferias-licenca.service';
     templateUrl: './ferias-licenca-delete-dialog.component.html'
 })
 export class FeriasLicencaDeleteDialogComponent {
-    feriasLicenca: IFeriasLicenca;
+    feriasLicenca: FeriasLicenca;
 
     constructor(
         private feriasLicencaService: FeriasLicencaService,

@@ -1,5 +1,10 @@
 package com.rcsoyer.servicosjuridicos.service.impl;
 
+import com.rcsoyer.servicosjuridicos.domain.CoordenacaoJuridica;
+import com.rcsoyer.servicosjuridicos.repository.coordenacao.CoordenacaoJuridicaRepository;
+import com.rcsoyer.servicosjuridicos.service.CoordenacaoJuridicaService;
+import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoJuridicaDTO;
+import com.rcsoyer.servicosjuridicos.service.mapper.CoordenacaoJuridicaMapper;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
@@ -9,11 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.rcsoyer.servicosjuridicos.domain.CoordenacaoJuridica;
-import com.rcsoyer.servicosjuridicos.repository.coordenacao.CoordenacaoJuridicaRepository;
-import com.rcsoyer.servicosjuridicos.service.CoordenacaoJuridicaService;
-import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoJuridicaDTO;
-import com.rcsoyer.servicosjuridicos.service.mapper.CoordenacaoJuridicaMapper;
 
 
 /**
@@ -95,7 +95,8 @@ public class CoordenacaoJuridicaServiceImpl implements CoordenacaoJuridicaServic
       final Pageable pageable) {
     Function<CoordenacaoJuridicaDTO, CoordenacaoJuridica> toEntity = mapper::toEntity;
     Function<CoordenacaoJuridica, Page<CoordenacaoJuridica>> query = repository.query(pageable);
-    Function<Page<CoordenacaoJuridica>, Page<CoordenacaoJuridicaDTO>> toPageDTO = page -> page.map(mapper::toDto);
+    Function<Page<CoordenacaoJuridica>, Page<CoordenacaoJuridicaDTO>> toPageDTO =
+        page -> page.map(mapper::toDto);
     return toEntity.andThen(query)
                    .andThen(toPageDTO)
                    .apply(dto);

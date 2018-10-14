@@ -104,7 +104,7 @@ export class CoordenacaoJuridicaComponent extends ComponentAbstract<CoordenacaoJ
         const setAssuntosNull = () => (this.modelConsulta.assuntos = null);
         const setAssuntosValues = assuntos => {
             const selecionados: Assunto[] = (this.modelConsulta.assuntos = []);
-            assuntos.forEach(id => selecionados.push({ id }));
+            assuntos.forEach(id => selecionados.push(new Assunto(id)));
         };
         R.ifElse(_.isEmpty, setAssuntosNull, setAssuntosValues)(this.assuntosModel);
     }

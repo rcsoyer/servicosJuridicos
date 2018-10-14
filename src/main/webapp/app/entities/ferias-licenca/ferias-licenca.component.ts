@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
-import { IFeriasLicenca } from 'app/shared/model/ferias-licenca.model';
+import { FeriasLicenca } from 'app/shared/model/ferias-licenca.model';
 import { Principal } from 'app/core';
 
 import { ITEMS_PER_PAGE } from 'app/shared';
@@ -16,7 +16,7 @@ import { FeriasLicencaService } from './ferias-licenca.service';
 })
 export class FeriasLicencaComponent implements OnInit, OnDestroy {
     currentAccount: any;
-    feriasLicencas: IFeriasLicenca[];
+    feriasLicencas: FeriasLicenca[];
     error: any;
     success: any;
     eventSubscriber: Subscription;
@@ -56,7 +56,7 @@ export class FeriasLicencaComponent implements OnInit, OnDestroy {
                 sort: this.sort()
             })
             .subscribe(
-                (res: HttpResponse<IFeriasLicenca[]>) => this.paginateFeriasLicencas(res.body, res.headers),
+                (res: HttpResponse<FeriasLicenca[]>) => this.paginateFeriasLicencas(res.body, res.headers),
                 (res: HttpErrorResponse) => this.onError(res.message)
             );
     }
@@ -103,7 +103,7 @@ export class FeriasLicencaComponent implements OnInit, OnDestroy {
         this.eventManager.destroy(this.eventSubscriber);
     }
 
-    trackId(index: number, item: IFeriasLicenca) {
+    trackId(index: number, item: FeriasLicenca) {
         return item.id;
     }
 
@@ -119,7 +119,7 @@ export class FeriasLicencaComponent implements OnInit, OnDestroy {
         return result;
     }
 
-    private paginateFeriasLicencas(data: IFeriasLicenca[], headers: HttpHeaders) {
+    private paginateFeriasLicencas(data: FeriasLicenca[], headers: HttpHeaders) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
         this.queryCount = this.totalItems;
