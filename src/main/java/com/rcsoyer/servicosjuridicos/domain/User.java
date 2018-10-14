@@ -158,4 +158,9 @@ public class User extends AbstractAuditingEntity implements Serializable {
     public User setKeyDateResetToNull() {
         return setResetKey(null).setResetDate(null);
     }
+    
+    public User addAuthorities(Set<Authority> authorities) {
+        this.authorities.addAll(authorities);
+        return this;
+    }
 }

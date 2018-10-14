@@ -190,6 +190,8 @@ public class UserService {
     public Optional<UserDTO> updateUser(UserDTO userDTO) {
         UnaryOperator<User> setUser = user -> {
             clearUserCaches(user);
+            Set<String> strAuths = userDTO.getAuthorities();
+            Set<Authority> authoritiesFounded = findAuthoritiesByIds(strAuths);
             user.setLogin(userDTO.getLogin())
                 .setFirstName(userDTO.getFirstName())
                 .setLastName(userDTO.getLastName())
@@ -197,10 +199,8 @@ public class UserService {
                 .setImageUrl(userDTO.getImageUrl())
                 .setActivated(userDTO.isActivated())
                 .setLangKey(userDTO.getLangKey())
-                .removeAuthorities();
-            Set<String> strAuths = userDTO.getAuthorities();
-            Set<Authority> authoritiesFounded = findAuthoritiesByIds(strAuths);
-            user.getAuthorities().addAll(authoritiesFounded);
+                .removeAuthorities()
+                .addAuthorities(authoritiesFounded);
             clearUserCaches(user);
             log.debug("Changed Information for User: {}", user);
             return user;
