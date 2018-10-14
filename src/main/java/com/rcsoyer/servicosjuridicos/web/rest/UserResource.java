@@ -1,7 +1,7 @@
 package com.rcsoyer.servicosjuridicos.web.rest;
 
-import com.rcsoyer.servicosjuridicos.config.Constants;
 import com.codahale.metrics.annotation.Timed;
+import com.rcsoyer.servicosjuridicos.config.Constants;
 import com.rcsoyer.servicosjuridicos.domain.User;
 import com.rcsoyer.servicosjuridicos.repository.UserRepository;
 import com.rcsoyer.servicosjuridicos.security.AuthoritiesConstants;
@@ -14,7 +14,11 @@ import com.rcsoyer.servicosjuridicos.web.rest.errors.LoginAlreadyUsedException;
 import com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil;
 import com.rcsoyer.servicosjuridicos.web.rest.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
-
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -23,12 +27,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * REST controller for managing users.
@@ -57,22 +63,18 @@ import java.util.*;
 @RestController
 @RequestMapping("/api")
 public class UserResource {
-
-    private final Logger log = LoggerFactory.getLogger(UserResource.class);
-
+    
     private final UserService userService;
-
     private final UserRepository userRepository;
-
     private final MailService mailService;
-
+    private final Logger log = LoggerFactory.getLogger(UserResource.class);
+    
     public UserResource(UserService userService, UserRepository userRepository, MailService mailService) {
-
         this.userService = userService;
         this.userRepository = userRepository;
         this.mailService = mailService;
     }
-
+    
     /**
      * POST  /users  : Creates a new user.
      * <p>
@@ -82,15 +84,15 @@ public class UserResource {
      *
      * @param userDTO the user to create
      * @return the ResponseEntity with status 201 (Created) and with body the new user, or with status 400 (Bad Request) if the login or email is already in use
-     * @throws URISyntaxException if the Location URI syntax is incorrect
+     * @throws URISyntaxException       if the Location URI syntax is incorrect
      * @throws BadRequestAlertException 400 (Bad Request) if the login or email is already in use
      */
-    @PostMapping("/users")
     @Timed
+    @PostMapping("/users")
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<User> createUser(@Valid @RequestBody UserDTO userDTO) throws URISyntaxException {
         log.debug("REST request to save User : {}", userDTO);
-
+        
         if (userDTO.getId() != null) {
             throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists");
             // Lowercase the user login before comparing with database
@@ -102,11 +104,11 @@ public class UserResource {
             User newUser = userService.createUser(userDTO);
             mailService.sendCreationEmail(newUser);
             return ResponseEntity.created(new URI("/api/users/" + newUser.getLogin()))
-                .headers(HeaderUtil.createAlert( "userManagement.created", newUser.getLogin()))
-                .body(newUser);
+                       .headers(HeaderUtil.createAlert("userManagement.created", newUser.getLogin()))
+                       .body(newUser);
         }
     }
-
+    
     /**
      * PUT /users : Updates an existing User.
      *
@@ -129,11 +131,11 @@ public class UserResource {
             throw new LoginAlreadyUsedException();
         }
         Optional<UserDTO> updatedUser = userService.updateUser(userDTO);
-
+        
         return ResponseUtil.wrapOrNotFound(updatedUser,
             HeaderUtil.createAlert("userManagement.updated", userDTO.getLogin()));
     }
-
+    
     /**
      * GET /users : get all users.
      *
@@ -148,7 +150,7 @@ public class UserResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/users");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
-
+    
     /**
      * @return a string list of the all of the roles
      */
@@ -158,7 +160,7 @@ public class UserResource {
     public List<String> getAuthorities() {
         return userService.getAuthorities();
     }
-
+    
     /**
      * GET /users/:login : get the "login" user.
      *
@@ -173,7 +175,7 @@ public class UserResource {
             userService.getUserWithAuthoritiesByLogin(login)
                 .map(UserDTO::new));
     }
-
+    
     /**
      * DELETE /users/:login : delete the "login" User.
      *
@@ -186,6 +188,6 @@ public class UserResource {
     public ResponseEntity<Void> deleteUser(@PathVariable String login) {
         log.debug("REST request to delete User: {}", login);
         userService.deleteUser(login);
-        return ResponseEntity.ok().headers(HeaderUtil.createAlert( "userManagement.deleted", login)).build();
+        return ResponseEntity.ok().headers(HeaderUtil.createAlert("userManagement.deleted", login)).build();
     }
 }

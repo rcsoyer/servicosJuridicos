@@ -7,7 +7,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  * Mapper for the entity User and its DTO called UserDTO.
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
  * Normal mappers are generated using MapStruct, this one is hand-coded as MapStruct
  * support is still in beta, and requires a manual step with an IDE.
  */
-@Service
+@Component
 public class UserMapper {
     
     public UserDTO userToUserDTO(User user) {
@@ -30,19 +30,18 @@ public class UserMapper {
     }
     
     public User userDTOToUser(UserDTO userDTO) {
-        Function<UserDTO, User> setUser = dto -> {
-            User user = new User()
-                            .setId(dto.getId())
-                            .setLogin(dto.getLogin())
-                            .setFirstName(dto.getFirstName())
-                            .setLastName(dto.getLastName())
-                            .setEmail(dto.getEmail())
-                            .setImageUrl(dto.getImageUrl())
-                            .setLangKey(dto.getLangKey())
-                            .setAuthoritiesFrom(dto.getAuthorities());
-            user.setActivated(dto.isActivated());
-            return user;
-        };
+        Function<UserDTO, User> setUser = dto ->
+                                              new User()
+                                                  .setId(dto.getId())
+                                                  .setLogin(dto.getLogin())
+                                                  .setFirstName(dto.getFirstName())
+                                                  .setLastName(dto.getLastName())
+                                                  .setEmail(dto.getEmail())
+                                                  .setImageUrl(dto.getImageUrl())
+                                                  .setLangKey(dto.getLangKey())
+                                                  .setAuthoritiesFrom(dto.getAuthorities())
+                                                  .setActivated(dto.isActivated());
+        ;
         return Optional.ofNullable(userDTO)
                        .map(setUser)
                        .orElse(null);

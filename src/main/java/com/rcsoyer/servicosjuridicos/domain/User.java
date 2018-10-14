@@ -2,10 +2,12 @@ package com.rcsoyer.servicosjuridicos.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rcsoyer.servicosjuridicos.config.Constants;
+import com.rcsoyer.servicosjuridicos.service.util.RandomUtil;
 import java.io.Serializable;
+import static java.lang.Boolean.FALSE;
 import java.time.Instant;
 import java.util.HashSet;
-import java.util.Optional;
+import static java.util.Optional.ofNullable;
 import java.util.Set;
 import java.util.function.Consumer;
 import static java.util.stream.Collectors.toSet;
@@ -79,10 +81,9 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private String email;
     
     @NotNull
-    @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     @Column(nullable = false)
-    private boolean activated = false;
+    private Boolean activated;
     
     @Size(min = 2, max = 6)
     @Column(name = "lang_key", length = 6)
@@ -115,12 +116,9 @@ public class User extends AbstractAuditingEntity implements Serializable {
         inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
     private Set<Authority> authorities = new HashSet<>(0);
     
-    public boolean getActivated() {
-        return activated;
-    }
-    
-    public void setActivated(boolean activated) {
-        this.activated = activated;
+    public User setActivated(Boolean activated) {
+        this.activated = ofNullable(activated).orElse(FALSE);
+        return this;
     }
     
     public Set<String> getAuthoritiesNames() {
@@ -130,14 +128,34 @@ public class User extends AbstractAuditingEntity implements Serializable {
     }
     
     public User setAuthoritiesFrom(Set<String> strAuthorities) {
-        Optional.ofNullable(strAuthorities)
-                .ifPresent(authoritiesFromStrings());
+        Consumer<Set<String>> extractAndSet =
+            strAuths-> authorities = strAuths.stream()
+                                             .map(new Authority()::setName)
+                                             .collect(toSet());
+        ofNullable(strAuthorities).ifPresent(extractAndSet);
         return this;
     }
     
-    private Consumer<Set<String>> authoritiesFromStrings() {
-        return strAuths -> authorities = strAuths.stream()
-                                                 .map(new Authority()::setName)
-                                                 .collect(toSet());
+    public boolean isResetDateUpToDate() {
+        return resetDate.isAfter(Instant.now().minusSeconds(86400));
+    }
+    
+    public User removeAuthorities() {
+        authorities.clear();
+        return this;
+    }
+    
+    public User setLangKey(String langKey) {
+        this.langKey = ofNullable(langKey).orElse(Constants.DEFAULT_LANGUAGE);
+        return this;
+    }
+    
+    public User setKeyDateResetDefault() {
+        return setResetKey(RandomUtil.generateResetKey())
+               .setResetDate(Instant.now());
+    }
+    
+    public User setKeyDateResetToNull() {
+        return setResetKey(null).setResetDate(null);
     }
 }

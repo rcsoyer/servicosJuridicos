@@ -46,8 +46,7 @@ public class UserDTO {
     private String imageUrl;
     
     @Getter(AccessLevel.NONE)
-    @Setter(AccessLevel.NONE)
-    private boolean activated = false;
+    private Boolean activated = false;
     
     @Size(min = 2, max = 6)
     private String langKey;
@@ -81,11 +80,7 @@ public class UserDTO {
         this.authorities = user.getAuthoritiesNames();
     }
     
-    public boolean isActivated() {
+    public Boolean isActivated() {
         return activated;
-    }
-    
-    public void setActivated(boolean activated) {
-        this.activated = activated;
     }
 }
