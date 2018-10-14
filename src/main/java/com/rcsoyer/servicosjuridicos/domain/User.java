@@ -5,7 +5,9 @@ import com.rcsoyer.servicosjuridicos.config.Constants;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 import static java.util.stream.Collectors.toSet;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -125,5 +127,17 @@ public class User extends AbstractAuditingEntity implements Serializable {
         return authorities.stream()
                           .map(Authority::getName)
                           .collect(toSet());
+    }
+    
+    public User setAuthoritiesFrom(Set<String> strAuthorities) {
+        Optional.ofNullable(strAuthorities)
+                .ifPresent(authoritiesFromStrings());
+        return this;
+    }
+    
+    private Consumer<Set<String>> authoritiesFromStrings() {
+        return strAuths -> authorities = strAuths.stream()
+                                                 .map(new Authority()::setName)
+                                                 .collect(toSet());
     }
 }

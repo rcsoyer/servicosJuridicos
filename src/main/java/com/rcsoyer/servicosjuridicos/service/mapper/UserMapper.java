@@ -1,15 +1,12 @@
 package com.rcsoyer.servicosjuridicos.service.mapper;
 
-import com.rcsoyer.servicosjuridicos.domain.Authority;
 import com.rcsoyer.servicosjuridicos.domain.User;
 import com.rcsoyer.servicosjuridicos.service.dto.UserDTO;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Function;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 import org.springframework.stereotype.Service;
 
 /**
@@ -35,17 +32,15 @@ public class UserMapper {
     public User userDTOToUser(UserDTO userDTO) {
         Function<UserDTO, User> setUser = dto -> {
             User user = new User()
-                            .setId(userDTO.getId())
-                            .setLogin(userDTO.getLogin())
-                            .setFirstName(userDTO.getFirstName())
-                            .setLastName(userDTO.getLastName())
-                            .setEmail(userDTO.getEmail())
-                            .setImageUrl(userDTO.getImageUrl())
-                            .setLangKey(userDTO.getLangKey());
-            user.setActivated(userDTO.isActivated());
-            Set<Authority> authorities = authoritiesFromStrings(userDTO.getAuthorities());
-            Optional.ofNullable(authorities)
-                    .ifPresent(user::setAuthorities);
+                            .setId(dto.getId())
+                            .setLogin(dto.getLogin())
+                            .setFirstName(dto.getFirstName())
+                            .setLastName(dto.getLastName())
+                            .setEmail(dto.getEmail())
+                            .setImageUrl(dto.getImageUrl())
+                            .setLangKey(dto.getLangKey())
+                            .setAuthoritiesFrom(dto.getAuthorities());
+            user.setActivated(dto.isActivated());
             return user;
         };
         return Optional.ofNullable(userDTO)
@@ -64,11 +59,5 @@ public class UserMapper {
         return  Optional.ofNullable(id)
                         .map(new User()::setId)
                         .orElse(null);
-    }
-    
-    public Set<Authority> authoritiesFromStrings(Set<String> strings) {
-        return strings.stream()
-                      .map(new Authority()::setName)
-                      .collect(toSet());
     }
 }
