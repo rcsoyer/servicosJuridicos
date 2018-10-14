@@ -22,8 +22,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode
 @Accessors(chain = true)
-@EqualsAndHashCode(of = "name")
 @Table(name = "jhi_authority")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Authority implements Serializable {

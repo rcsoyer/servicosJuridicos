@@ -101,7 +101,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private String resetKey;
     
     @Column(name = "reset_date")
-    private Instant resetDate = null;
+    private Instant resetDate;
     
     @JsonIgnore
     @ManyToMany
