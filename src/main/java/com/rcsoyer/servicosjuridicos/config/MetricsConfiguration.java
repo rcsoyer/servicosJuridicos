@@ -1,31 +1,40 @@
 package com.rcsoyer.servicosjuridicos.config;
 
-import io.github.jhipster.config.JHipsterProperties;
-
 import com.codahale.metrics.JmxReporter;
 import com.codahale.metrics.JvmAttributeGaugeSet;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.Slf4jReporter;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.codahale.metrics.jcache.JCacheGaugeSet;
-import com.codahale.metrics.jvm.*;
+import com.codahale.metrics.jvm.BufferPoolMetricSet;
+import com.codahale.metrics.jvm.FileDescriptorRatioGauge;
+import com.codahale.metrics.jvm.GarbageCollectorMetricSet;
+import com.codahale.metrics.jvm.MemoryUsageGaugeSet;
+import com.codahale.metrics.jvm.ThreadStatesGaugeSet;
 import com.ryantenney.metrics.spring.config.annotation.EnableMetrics;
 import com.ryantenney.metrics.spring.config.annotation.MetricsConfigurerAdapter;
 import com.zaxxer.hikari.HikariDataSource;
+import io.github.jhipster.config.JHipsterProperties;
+import io.prometheus.client.CollectorRegistry;
+import io.prometheus.client.dropwizard.DropwizardExports;
+import io.prometheus.client.exporter.MetricsServlet;
+import java.lang.management.ManagementFactory;
+import java.util.concurrent.TimeUnit;
+import javax.annotation.PostConstruct;
+import javax.servlet.ServletContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.*;
-
-import javax.annotation.PostConstruct;
-import java.lang.management.ManagementFactory;
-import java.util.concurrent.TimeUnit;
+import org.springframework.boot.web.servlet.ServletContextInitializer;
+import org.springframework.cache.CacheManager;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableMetrics(proxyTargetClass = true)
-public class MetricsConfiguration extends MetricsConfigurerAdapter {
+public class MetricsConfiguration extends MetricsConfigurerAdapter implements ServletContextInitializer {
 
     private static final String PROP_METRIC_REG_JVM_MEMORY = "jvm.memory";
     private static final String PROP_METRIC_REG_JVM_GARBAGE = "jvm.garbage";
@@ -46,7 +55,9 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
 
     private HikariDataSource hikariDataSource;
 
-    public MetricsConfiguration(JHipsterProperties jHipsterProperties) {
+    // The cacheManager is injected here to force its initialization, so the JCacheGaugeSet
+    // will be correctly created below.
+    public MetricsConfiguration(JHipsterProperties jHipsterProperties, CacheManager cacheManager) {
         this.jHipsterProperties = jHipsterProperties;
     }
 
@@ -98,6 +109,21 @@ public class MetricsConfiguration extends MetricsConfigurerAdapter {
                 .convertDurationsTo(TimeUnit.MILLISECONDS)
                 .build();
             reporter.start(jHipsterProperties.getMetrics().getLogs().getReportFrequency(), TimeUnit.SECONDS);
+        }
+    }
+
+    @Override
+    public void onStartup(ServletContext servletContext) {
+
+        if (jHipsterProperties.getMetrics().getPrometheus().isEnabled()) {
+            String endpoint = jHipsterProperties.getMetrics().getPrometheus().getEndpoint();
+
+            log.debug("Initializing prometheus metrics exporting via {}", endpoint);
+
+            CollectorRegistry.defaultRegistry.register(new DropwizardExports(metricRegistry));
+            servletContext
+                .addServlet("prometheusMetrics", new MetricsServlet(CollectorRegistry.defaultRegistry))
+                .addMapping(endpoint);
         }
     }
 }

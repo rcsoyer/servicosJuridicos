@@ -3,7 +3,10 @@ package com.rcsoyer.servicosjuridicos.repository;
 import com.rcsoyer.servicosjuridicos.config.Constants;
 import com.rcsoyer.servicosjuridicos.config.audit.AuditEventConverter;
 import com.rcsoyer.servicosjuridicos.domain.PersistentAuditEvent;
-
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.actuate.audit.AuditEvent;
@@ -11,9 +14,6 @@ import org.springframework.boot.actuate.audit.AuditEventRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.Instant;
-import java.util.*;
 
 /**
  * An implementation of Spring Boot's AuditEventRepository.
@@ -34,7 +34,8 @@ public class CustomAuditEventRepository implements AuditEventRepository {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    public CustomAuditEventRepository(PersistenceAuditEventRepository persistenceAuditEventRepository,
+    public CustomAuditEventRepository(
+        PersistenceAuditEventRepository persistenceAuditEventRepository,
             AuditEventConverter auditEventConverter) {
 
         this.persistenceAuditEventRepository = persistenceAuditEventRepository;

@@ -31,6 +31,8 @@ spring:
         name:
         username:
         password:
+        hikari:
+            auto-commit: false
     jpa:
         database-platform: io.github.jhipster.domain.util.FixedH2Dialect
         database: H2
@@ -43,10 +45,12 @@ spring:
                 implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
         properties:
             hibernate.id.new_generator_mappings: true
+            hibernate.connection.provider_disables_autocommit: true
             hibernate.cache.use_second_level_cache: false
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: true
             hibernate.hbm2ddl.auto: validate
+            hibernate.jdbc.time_zone: UTC
     liquibase:
         contexts: test
     mail:
@@ -58,15 +62,11 @@ spring:
             enabled: false
     thymeleaf:
         mode: HTML
-        
+
 
 server:
     port: 10344
     address: localhost
-
-info:
-    project:
-        version: #project.version#
 
 # ===================================================================
 # JHipster specific properties
@@ -92,7 +92,8 @@ jhipster:
     security:
         authentication:
             jwt:
-                secret: e66eb316130f32a7ecb577cadaa05f6826b81f93
+                # This token must be encoded using Base64 (you can type `echo 'secret-key'|base64` on your command line)
+                base64-secret: YWI4OTYyMDJmMTc5ZWU3ODkxODYwODk2Mjg1ZjU0YTJiNGUxNDcwZTI2YTg0NDA4ZTc1ZDljMGQxNWVjOTMwNDUyY2QzOGFjNjQ5MDQ0ZWZiZDUzYTQxNDIxZWUyYjcxNzEwY2VhZDE4OTkxZGRjM2E4NmI5YjY0NTc3NDMwMGU=
                 # Token is valid 24 hours
                 token-validity-in-seconds: 86400
     metrics: # DropWizard Metrics configuration, used by MetricsConfiguration

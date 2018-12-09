@@ -34,7 +34,7 @@ describe('Component Tests', () => {
                     // GIVEN
                     const entity = new CoordenacaoJuridica(123);
                     spyOn(service, 'update').and.returnValue(of(new HttpResponse({ body: entity })));
-                    comp.coordenacaoJuridica = entity;
+                    comp.model = entity;
                     // WHEN
                     comp.save();
                     tick(); // simulate async
@@ -51,7 +51,7 @@ describe('Component Tests', () => {
                     // GIVEN
                     const entity = new CoordenacaoJuridica();
                     spyOn(service, 'create').and.returnValue(of(new HttpResponse({ body: entity })));
-                    comp.coordenacaoJuridica = entity;
+                    comp.model = entity;
                     // WHEN
                     comp.save();
                     tick(); // simulate async

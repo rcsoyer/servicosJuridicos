@@ -1,17 +1,20 @@
 package com.rcsoyer.servicosjuridicos.web.rest.errors;
 
+import java.util.HashMap;
+import java.util.Map;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.support.MissingServletRequestPartException;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ExceptionTranslatorTestController {
@@ -39,13 +42,11 @@ public class ExceptionTranslatorTestController {
     }
 
     @GetMapping("/test/missing-servlet-request-part")
-    public void missingServletRequestPartException() throws Exception {
-        throw new MissingServletRequestPartException("missing Servlet request part");
+    public void missingServletRequestPartException(@RequestPart String part) {
     }
 
     @GetMapping("/test/missing-servlet-request-parameter")
-    public void missingServletRequestParameterException() throws Exception {
-        throw new MissingServletRequestParameterException("missing Servlet request parameter", "parameter type");
+    public void missingServletRequestParameterException(@RequestParam String param) {
     }
 
     @GetMapping("/test/access-denied")

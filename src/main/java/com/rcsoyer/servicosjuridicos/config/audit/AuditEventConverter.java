@@ -1,12 +1,15 @@
 package com.rcsoyer.servicosjuridicos.config.audit;
 
 import com.rcsoyer.servicosjuridicos.domain.PersistentAuditEvent;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import org.springframework.boot.actuate.audit.AuditEvent;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;
-
-import java.util.*;
 
 @Component
 public class AuditEventConverter {
@@ -17,7 +20,8 @@ public class AuditEventConverter {
      * @param persistentAuditEvents the list to convert
      * @return the converted list.
      */
-    public List<AuditEvent> convertToAuditEvent(Iterable<PersistentAuditEvent> persistentAuditEvents) {
+    public List<AuditEvent> convertToAuditEvent(
+        Iterable<PersistentAuditEvent> persistentAuditEvents) {
         if (persistentAuditEvents == null) {
             return Collections.emptyList();
         }
@@ -38,12 +42,15 @@ public class AuditEventConverter {
         if (persistentAuditEvent == null) {
             return null;
         }
-        return new AuditEvent(persistentAuditEvent.getAuditEventDate(), persistentAuditEvent.getPrincipal(),
-            persistentAuditEvent.getAuditEventType(), convertDataToObjects(persistentAuditEvent.getData()));
+        return new AuditEvent(persistentAuditEvent.getAuditEventDate(),
+            persistentAuditEvent.getPrincipal(),
+            persistentAuditEvent.getAuditEventType(),
+            convertDataToObjects(persistentAuditEvent.getData()));
     }
 
     /**
-     * Internal conversion. This is needed to support the current SpringBoot actuator AuditEventRepository interface
+     * Internal conversion. This is needed to support the current SpringBoot actuator
+     * AuditEventRepository interface
      *
      * @param data the data to convert
      * @return a map of String, Object
@@ -60,8 +67,8 @@ public class AuditEventConverter {
     }
 
     /**
-     * Internal conversion. This method will allow to save additional data.
-     * By default, it will save the object as string
+     * Internal conversion. This method will allow to save additional data. By default, it will save
+     * the object as string
      *
      * @param data the data to convert
      * @return a map of String, String
@@ -73,7 +80,8 @@ public class AuditEventConverter {
             for (Map.Entry<String, Object> entry : data.entrySet()) {
                 // Extract the data that will be saved.
                 if (entry.getValue() instanceof WebAuthenticationDetails) {
-                    WebAuthenticationDetails authenticationDetails = (WebAuthenticationDetails) entry.getValue();
+                    WebAuthenticationDetails authenticationDetails = (WebAuthenticationDetails) entry
+                        .getValue();
                     results.put("remoteAddress", authenticationDetails.getRemoteAddress());
                     results.put("sessionId", authenticationDetails.getSessionId());
                 } else {

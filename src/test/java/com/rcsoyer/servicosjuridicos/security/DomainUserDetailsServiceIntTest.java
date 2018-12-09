@@ -1,9 +1,11 @@
 package com.rcsoyer.servicosjuridicos.security;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.rcsoyer.servicosjuridicos.ServicosJuridicosApp;
 import com.rcsoyer.servicosjuridicos.domain.User;
 import com.rcsoyer.servicosjuridicos.repository.UserRepository;
-
+import java.util.Locale;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,10 +17,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Locale;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Test class for DomainUserDetailsService.

@@ -1,7 +1,6 @@
 package com.rcsoyer.servicosjuridicos.repository;
 
 import com.rcsoyer.servicosjuridicos.domain.Authority;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

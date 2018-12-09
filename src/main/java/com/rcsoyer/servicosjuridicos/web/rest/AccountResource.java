@@ -1,27 +1,35 @@
 package com.rcsoyer.servicosjuridicos.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-
 import com.rcsoyer.servicosjuridicos.domain.User;
 import com.rcsoyer.servicosjuridicos.repository.UserRepository;
 import com.rcsoyer.servicosjuridicos.security.SecurityUtils;
 import com.rcsoyer.servicosjuridicos.service.MailService;
 import com.rcsoyer.servicosjuridicos.service.UserService;
+import com.rcsoyer.servicosjuridicos.service.dto.PasswordChangeDTO;
 import com.rcsoyer.servicosjuridicos.service.dto.UserDTO;
-import com.rcsoyer.servicosjuridicos.web.rest.errors.*;
+import com.rcsoyer.servicosjuridicos.web.rest.errors.EmailAlreadyUsedException;
+import com.rcsoyer.servicosjuridicos.web.rest.errors.EmailNotFoundException;
+import com.rcsoyer.servicosjuridicos.web.rest.errors.InternalServerErrorException;
+import com.rcsoyer.servicosjuridicos.web.rest.errors.InvalidPasswordException;
+import com.rcsoyer.servicosjuridicos.web.rest.errors.LoginAlreadyUsedException;
 import com.rcsoyer.servicosjuridicos.web.rest.vm.KeyAndPasswordVM;
 import com.rcsoyer.servicosjuridicos.web.rest.vm.ManagedUserVM;
-
+import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import com.rcsoyer.servicosjuridicos.service.dto.PasswordChangeDTO;
-import java.util.*;
 
 /**
  * REST controller for managing the current user's account.
@@ -38,7 +46,8 @@ public class AccountResource {
 
     private final MailService mailService;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
+    public AccountResource(
+        UserRepository userRepository, UserService userService, MailService mailService) {
 
         this.userRepository = userRepository;
         this.userService = userService;
@@ -60,8 +69,6 @@ public class AccountResource {
         if (!checkPasswordLength(managedUserVM.getPassword())) {
             throw new InvalidPasswordException();
         }
-        userRepository.findOneByLogin(managedUserVM.getLogin().toLowerCase()).ifPresent(u -> {throw new LoginAlreadyUsedException();});
-        userRepository.findOneByEmailIgnoreCase(managedUserVM.getEmail()).ifPresent(u -> {throw new EmailAlreadyUsedException();});
         User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
         mailService.sendActivationEmail(user);
     }
@@ -118,7 +125,8 @@ public class AccountResource {
     @PostMapping("/account")
     @Timed
     public void saveAccount(@Valid @RequestBody UserDTO userDTO) {
-        final String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new InternalServerErrorException("Current user login not found"));
+        final String userLogin = SecurityUtils
+            .getCurrentUserLogin().orElseThrow(() -> new InternalServerErrorException("Current user login not found"));
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
             throw new EmailAlreadyUsedException();
@@ -129,7 +137,7 @@ public class AccountResource {
         }
         userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
             userDTO.getLangKey(), userDTO.getImageUrl());
-   }
+    }
 
     /**
      * POST  /account/change-password : changes the current user's password
@@ -144,7 +152,7 @@ public class AccountResource {
             throw new InvalidPasswordException();
         }
         userService.changePassword(passwordChangeDto.getCurrentPassword(), passwordChangeDto.getNewPassword());
-   }
+    }
 
     /**
      * POST   /account/reset-password/init : Send an email to reset the password of the user

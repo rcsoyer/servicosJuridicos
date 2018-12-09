@@ -1,11 +1,10 @@
 package com.rcsoyer.servicosjuridicos.config;
 
 import io.github.jhipster.config.JHipsterConstants;
-
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.boot.SpringApplication;
 import org.springframework.core.env.Environment;
-
-import java.util.*;
 
 /**
  * Utility class to load a Spring profile to be used as default

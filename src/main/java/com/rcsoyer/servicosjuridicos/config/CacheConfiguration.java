@@ -16,7 +16,6 @@ import java.time.Duration;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.ExpiryPolicyBuilder;
 import org.ehcache.config.builders.ResourcePoolsBuilder;
-import org.ehcache.expiry.ExpiryPolicy;
 import org.ehcache.jsr107.Eh107Configuration;
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
 import org.springframework.cache.annotation.EnableCaching;
@@ -26,27 +25,23 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @EnableCaching
 public class CacheConfiguration {
-    
+
     private final javax.cache.configuration.Configuration<Object, Object> jcacheConfiguration;
-    
+
     public CacheConfiguration(JHipsterProperties jHipsterProperties) {
-        BeanClassLoaderAwareJCacheRegionFactory.setBeanClassLoader(this.getClass().getClassLoader());
-        JHipsterProperties.Cache.Ehcache ehcache = jHipsterProperties.getCache().getEhcache();
-        ResourcePoolsBuilder heap = ResourcePoolsBuilder.heap(ehcache.getMaxEntries());
-        Duration timeToLive = Duration.ofSeconds(ehcache.getTimeToLiveSeconds());
-        ExpiryPolicy<Object, Object> expiry = ExpiryPolicyBuilder.timeToLiveExpiration(timeToLive);
-        org.ehcache.config.CacheConfiguration<Object, Object> ehcacheConfig =
-            ehCacheConfig(heap, expiry);
-        jcacheConfiguration = Eh107Configuration.fromEhcacheCacheConfiguration(ehcacheConfig);
+        BeanClassLoaderAwareJCacheRegionFactory
+            .setBeanClassLoader(this.getClass().getClassLoader());
+        JHipsterProperties.Cache.Ehcache ehcache =
+            jHipsterProperties.getCache().getEhcache();
+
+        jcacheConfiguration = Eh107Configuration.fromEhcacheCacheConfiguration(
+            CacheConfigurationBuilder.newCacheConfigurationBuilder(Object.class, Object.class,
+                ResourcePoolsBuilder.heap(ehcache.getMaxEntries()))
+                .withExpiry(ExpiryPolicyBuilder
+                    .timeToLiveExpiration(Duration.ofSeconds(ehcache.getTimeToLiveSeconds())))
+                .build());
     }
-    
-    private org.ehcache.config.CacheConfiguration<Object, Object> ehCacheConfig(
-        ResourcePoolsBuilder heap, ExpiryPolicy<Object, Object> expiry) {
-        return CacheConfigurationBuilder.newCacheConfigurationBuilder(Object.class, Object.class, heap)
-                                        .withExpiry(expiry)
-                                        .build();
-    }
-    
+
     @Bean
     public JCacheManagerCustomizer cacheManagerCustomizer() {
         return cacheManager -> {

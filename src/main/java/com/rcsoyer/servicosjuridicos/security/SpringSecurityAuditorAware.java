@@ -1,9 +1,7 @@
 package com.rcsoyer.servicosjuridicos.security;
 
 import com.rcsoyer.servicosjuridicos.config.Constants;
-
 import java.util.Optional;
-
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;
 

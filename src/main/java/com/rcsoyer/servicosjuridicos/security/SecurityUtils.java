@@ -1,10 +1,9 @@
 package com.rcsoyer.servicosjuridicos.security;
 
+import java.util.Optional;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Optional;
 
 /**
  * Utility class for Spring Security.
@@ -54,7 +53,8 @@ public final class SecurityUtils {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
             .map(authentication -> authentication.getAuthorities().stream()
-                .noneMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(AuthoritiesConstants.ANONYMOUS)))
+                .noneMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(
+                    AuthoritiesConstants.ANONYMOUS)))
             .orElse(false);
     }
 
