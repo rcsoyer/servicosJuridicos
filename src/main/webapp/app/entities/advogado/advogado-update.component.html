@@ -1,61 +1,76 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
-            <h2 id="jhi-advogado-heading" jhiTranslate="servicosJuridicosApp.advogado.home.createOrEditLabel">Create or edit a Advogado</h2>
+            <h2 id="jhi-assunto-heading">
+                {{tituloPagina}}
+            </h2>
             <div>
                 <jhi-alert-error></jhi-alert-error>
-                <div class="form-group" [hidden]="!advogado.id">
-                    <label for="id" jhiTranslate="global.field.id">ID</label>
-                    <input type="text" class="form-control" id="id" name="id"
-                        [(ngModel)]="advogado.id" readonly />
-                </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.advogado.nome" for="field_nome">Nome</label>
+                    <label class="form-control-label"
+                           for="field_nome">Nome</label>
                     <input type="text" class="form-control" name="nome" id="field_nome"
-                        [(ngModel)]="advogado.nome" required maxlength="80"/>
-                    <div [hidden]="!(editForm.controls.nome?.dirty && editForm.controls.nome?.invalid)">
+                           [(ngModel)]="model.nome" required maxlength="80" minlength="1"
+                           whitespaceValidator/>
+                    <div
+                        [hidden]="!(editForm.controls.nome?.dirty && editForm.controls.nome?.invalid)">
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.nome?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
+                               [hidden]="!editForm.controls.nome?.errors?.required"
+                               jhiTranslate="entity.validation.required">
+                            This field is required.
                         </small>
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.nome?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 80 }">
-                        This field cannot be longer than 80 characters.
+                               [hidden]="!editForm.controls.nome?.errors?.maxlength"
+                               jhiTranslate="entity.validation.maxlength"
+                               translateValues="{ max: 80 }">
+                            This field cannot be longer than 80 characters.
+                        </small>
+                        <small class="form-text text-danger"
+                               [hidden]="!editForm.controls.nome?.errors?.whitespaceValidator">
+                            Textos vazios n&atilde;o s&atilde;o aceitos.
                         </small>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.advogado.cpf" for="field_cpf">Cpf</label>
+                    <label class="form-control-label" for="field_cpf">CPF</label>
                     <input type="text" class="form-control" name="cpf" id="field_cpf"
-                        [(ngModel)]="advogado.cpf" required minlength="11" maxlength="11"/>
-                    <div [hidden]="!(editForm.controls.cpf?.dirty && editForm.controls.cpf?.invalid)">
+                           [(ngModel)]="model.cpf" required minlength="11"
+                           cpfValidator [textMask]="cpfMaskUtils.maskCPF()"/>
+                    <div
+                        [hidden]="!(editForm.controls.cpf?.dirty && editForm.controls.cpf?.invalid)">
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.cpf?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
+                               [hidden]="!editForm.controls.cpf?.errors?.required"
+                               jhiTranslate="entity.validation.required">
+                            This field is required.
                         </small>
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.cpf?.errors?.minlength" jhiTranslate="entity.validation.minlength" translateValues="{ min: 11 }">
-                        This field is required to be at least 11 characters.
-                        </small>
-                        <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.cpf?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 11 }">
-                        This field cannot be longer than 11 characters.
+                               [hidden]="!editForm.controls.cpf?.errors?.minlength"
+                               jhiTranslate="entity.validation.minlength"
+                               translateValues="{ min: 11 }">
+                            This field is required to be at least 11 characters.
                         </small>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.advogado.ramal" for="field_ramal">Ramal</label>
-                    <input type="number" class="form-control" name="ramal" id="field_ramal"
-                        [(ngModel)]="advogado.ramal" />
+                    <label class="form-control-label"
+                           for="field_ramal">Ramal</label>
+                    <input type="text" class="form-control" name="ramal" id="field_ramal"
+                           [(ngModel)]="model.ramal" [textMask]="{mask: maskRamal()}"/>
                 </div>
 
             </div>
             <div>
-                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
-                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                <button type="button" id="cancel-save" class="btn btn-secondary col-md-1"
+                        (click)="previousState()" title="Cancelar">
+                    <fa-icon [icon]="'ban'"></fa-icon>
                 </button>
-                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
-                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                <button type="reset" class="btn btn-warning col-md-1" title="Limpar">
+                    <fa-icon [icon]="iconFaMinus"></fa-icon>
+                </button>
+                <button type="submit" id="save-entity"
+                        [disabled]="editForm.form.invalid || isSaving"
+                        class="btn btn-primary col-md-1" title="Salvar">
+                    <fa-icon [icon]="'save'"></fa-icon>
                 </button>
             </div>
         </form>

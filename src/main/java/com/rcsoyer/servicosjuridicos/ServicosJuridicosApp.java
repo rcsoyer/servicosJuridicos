@@ -1,16 +1,17 @@
 package com.rcsoyer.servicosjuridicos;
 
+import static io.github.jhipster.config.JHipsterConstants.SPRING_PROFILE_CLOUD;
+import static io.github.jhipster.config.JHipsterConstants.SPRING_PROFILE_DEVELOPMENT;
+import static io.github.jhipster.config.JHipsterConstants.SPRING_PROFILE_PRODUCTION;
+import static java.util.Arrays.asList;
+
 import com.rcsoyer.servicosjuridicos.config.ApplicationProperties;
 import com.rcsoyer.servicosjuridicos.config.DefaultProfileUtil;
-import io.github.jhipster.config.JHipsterConstants;
+import io.vavr.control.Try;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.net.http.HttpClient;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import javax.annotation.PostConstruct;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -21,18 +22,17 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.core.env.Environment;
 
 @SpringBootApplication
-@EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})
 @EnableDiscoveryClient
+@EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})
 public class ServicosJuridicosApp {
-
-    private static final Logger log = LoggerFactory.getLogger(ServicosJuridicosApp.class);
-
+    
     private final Environment env;
-
+    private static final Logger log = LoggerFactory.getLogger(ServicosJuridicosApp.class);
+    
     public ServicosJuridicosApp(Environment env) {
         this.env = env;
     }
-
+    
     /**
      * Initializes servicosJuridicos.
      * <p>
@@ -43,19 +43,22 @@ public class ServicosJuridicosApp {
      */
     @PostConstruct
     public void initApplication() {
-        Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
-        if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles
-            .contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)) {
+        List<String> activeProfiles = asList(env.getActiveProfiles());
+        boolean hasSpringProfileDev = activeProfiles.contains(SPRING_PROFILE_DEVELOPMENT);
+        boolean hasSpringProfileProd = activeProfiles.contains(SPRING_PROFILE_PRODUCTION);
+        boolean hasSpringProfileCloud = activeProfiles.contains(SPRING_PROFILE_CLOUD);
+        
+        if (hasSpringProfileDev && hasSpringProfileProd) {
             log.error("You have misconfigured your application! It should not run " +
                 "with both the 'dev' and 'prod' profiles at the same time.");
         }
-        if (activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) && activeProfiles
-            .contains(JHipsterConstants.SPRING_PROFILE_CLOUD)) {
+        
+        if (hasSpringProfileDev && hasSpringProfileCloud) {
             log.error("You have misconfigured your application! It should not " +
                 "run with both the 'dev' and 'cloud' profiles at the same time.");
         }
     }
-
+    
     /**
      * Main method, used to run the application.
      *
@@ -67,23 +70,20 @@ public class ServicosJuridicosApp {
         Environment env = app.run(args).getEnvironment();
         logApplicationStartup(env);
     }
-
+    
     private static void logApplicationStartup(Environment env) {
-        String protocol = "http";
-        if (env.getProperty("server.ssl.key-store") != null) {
-            protocol = "https";
-        }
+        var protocol = Optional.ofNullable(env.getProperty("server.ssl.key-store"))
+                               .map(keyStore -> "https")
+                               .orElse("http");
         var serverPort = env.getProperty("server.port");
-        String contextPath = env.getProperty("server.servlet.context-path");
-        if (StringUtils.isBlank(contextPath)) {
-            contextPath = "/";
-        }
-        String hostAddress = "localhost";
-        try {
-            hostAddress = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
-            log.warn("The host name could not be determined, using `localhost` as fallback");
-        }
+        var contextPath = Optional.ofNullable(env.getProperty("server.servlet.context-path"))
+                                  .orElse("/");
+        var hostAddress = Try.of(InetAddress::getLocalHost)
+            .map(InetAddress::getHostAddress)
+            .getOrElse(() -> {
+                log.warn("The host name could not be determined, using `localhost` as fallback");
+                return "localhost";
+            });
         log.info("\n----------------------------------------------------------\n\t" +
                 "Application '{}' is running! Access URLs:\n\t" +
                 "Local: \t\t{}://localhost:{}{}\n\t" +
@@ -100,3 +100,4 @@ public class ServicosJuridicosApp {
             env.getActiveProfiles());
     }
 }
+

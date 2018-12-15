@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import * as _ from 'lodash';
 
 @Injectable()
 export class CpfMaskUtils {
+
     removeMask(cpf: string): string {
         return _.replace(cpf, /\D/g, '');
     }

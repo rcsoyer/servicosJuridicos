@@ -771,7 +771,7 @@
                             src/main/resources/config/liquibase/changelog/${maven.build.timestamp}_changelog.xml
                         </diffChangeLogFile>
                         <driver>org.postgresql.Driver</driver>
-                        <url>jdbc:postgresql://localhost:32774/servicosJuridicos</url>
+                        <url>jdbc:postgresql://localhost:32768/servicosJuridicos</url>
                         <defaultSchemaName></defaultSchemaName>
                         <username>servicosJuridicos</username>
                         <password></password>

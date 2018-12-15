@@ -11,17 +11,22 @@ import {AdvogadoDetailComponent} from './advogado-detail.component';
 import {AdvogadoUpdateComponent} from './advogado-update.component';
 import {AdvogadoDeletePopupComponent} from './advogado-delete-dialog.component';
 import {Advogado} from 'app/shared/model/advogado.model';
+import * as R from 'ramda';
+import * as _ from 'lodash';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class AdvogadoResolve implements Resolve<Advogado> {
-    constructor(private service: AdvogadoService) {}
+
+    constructor(private service: AdvogadoService) {
+    }
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        const id = route.params['id'] ? route.params['id'] : null;
-        if (id) {
-            return this.service.find(id).pipe(map((advogado: HttpResponse<Advogado>) => advogado.body));
-        }
-        return of(new Advogado());
+        const id = route.params['id'];
+        const findAdvogadoById = () =>
+            this.service.find(id)
+            .pipe(map((response: HttpResponse<Advogado>) => response.body));
+        const ofNewAdvogado = () => of(new Advogado());
+        return R.ifElse(_.isEmpty, ofNewAdvogado, findAdvogadoById)(id);
     }
 }
 
@@ -43,7 +48,7 @@ export const advogadoRoute: Routes = [
         path: 'advogado/:id/view',
         component: AdvogadoDetailComponent,
         resolve: {
-            advogado: AdvogadoResolve
+            model: AdvogadoResolve
         },
         data: {
             authorities: ['ROLE_USER'],
@@ -55,7 +60,7 @@ export const advogadoRoute: Routes = [
         path: 'advogado/new',
         component: AdvogadoUpdateComponent,
         resolve: {
-            advogado: AdvogadoResolve
+            model: AdvogadoResolve
         },
         data: {
             authorities: ['ROLE_USER'],

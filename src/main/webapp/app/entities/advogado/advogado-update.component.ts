@@ -1,59 +1,33 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
-import {Observable} from 'rxjs';
 import {Advogado} from 'app/shared/model/advogado.model';
 import {AdvogadoService} from './advogado.service';
+import {UpdateComponentAbastract} from '../../shared/components-abstract/update.component.abstract';
+import {CpfMaskUtils} from 'app/shared/util/cpf/cpf-mask-utils';
+import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 
 @Component({
-    selector: 'jhi-advogado-update',
+    selector: 'advogado-update',
     templateUrl: './advogado-update.component.html'
 })
-export class AdvogadoUpdateComponent implements OnInit {
-    private _advogado: Advogado;
-    isSaving: boolean;
+export class AdvogadoUpdateComponent extends UpdateComponentAbastract<Advogado> implements OnInit {
 
-    constructor(private advogadoService: AdvogadoService, private activatedRoute: ActivatedRoute) {
+    constructor(advogadoService: AdvogadoService, activatedRoute: ActivatedRoute,
+                 private cpfMaskUtils: CpfMaskUtils) {
+        super(advogadoService, activatedRoute);
     }
 
     ngOnInit() {
-        this.isSaving = false;
-        this.activatedRoute.data.subscribe(({advogado}) => {
-            this.advogado = advogado;
+        this.onInit();
+        this.defineTituloPagina('Advogado');
+    }
+
+    maskRamal(): Function {
+        return createNumberMask({
+            prefix: '',
+            decimalSymbol: '',
+            integerLimit: 9,
+            thousandsSeparatorSymbol: ''
         });
-    }
-
-    previousState() {
-        window.history.back();
-    }
-
-    save() {
-        this.isSaving = true;
-        if (this.advogado.id !== undefined) {
-            this.subscribeToSaveResponse(this.advogadoService.update(this.advogado));
-        } else {
-            this.subscribeToSaveResponse(this.advogadoService.create(this.advogado));
-        }
-    }
-
-    private subscribeToSaveResponse(result: Observable<HttpResponse<Advogado>>) {
-        result.subscribe((res: HttpResponse<Advogado>) => this.onSaveSuccess(), (res: HttpErrorResponse) => this.onSaveError());
-    }
-
-    private onSaveSuccess() {
-        this.isSaving = false;
-        this.previousState();
-    }
-
-    private onSaveError() {
-        this.isSaving = false;
-    }
-
-    get advogado() {
-        return this._advogado;
-    }
-
-    set advogado(advogado: Advogado) {
-        this._advogado = advogado;
     }
 }
