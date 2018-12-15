@@ -11,7 +11,6 @@ import io.github.jhipster.web.util.ResponseUtil;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Optional;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -133,8 +132,8 @@ public class AdvogadoResource {
     @GetMapping("/advogado/{id}")
     public ResponseEntity<AdvogadoDTO> getAdvogado(@PathVariable Long id) {
         log.debug("REST request to get Advogado : {}", id);
-        AdvogadoDTO advogadoDTO = advogadoService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(advogadoDTO));
+        var advogadoDTO = advogadoService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(advogadoDTO);
     }
     
     /**

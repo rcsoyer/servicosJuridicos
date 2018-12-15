@@ -1,6 +1,5 @@
 package com.rcsoyer.servicosjuridicos.service.dto;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -23,7 +22,7 @@ final class JsonConverter {
      * @param 'String'
      * @param 'Class<T>'
      * @return T
-     * @throws JsonParseException
+     * @throws
      * @throws JsonMappingException
      * @throws IOException
      */

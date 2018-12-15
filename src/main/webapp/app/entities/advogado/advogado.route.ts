@@ -48,7 +48,7 @@ export const advogadoRoute: Routes = [
         path: 'advogado/:id/view',
         component: AdvogadoDetailComponent,
         resolve: {
-            model: AdvogadoResolve
+            advogado: AdvogadoResolve
         },
         data: {
             authorities: ['ROLE_USER'],
@@ -72,7 +72,7 @@ export const advogadoRoute: Routes = [
         path: 'advogado/:id/edit',
         component: AdvogadoUpdateComponent,
         resolve: {
-            advogado: AdvogadoResolve
+            model: AdvogadoResolve
         },
         data: {
             authorities: ['ROLE_USER'],
@@ -87,7 +87,7 @@ export const advogadoPopupRoute: Routes = [
         path: 'advogado/:id/delete',
         component: AdvogadoDeletePopupComponent,
         resolve: {
-            advogado: AdvogadoResolve
+            model: AdvogadoResolve
         },
         data: {
             authorities: ['ROLE_USER'],
