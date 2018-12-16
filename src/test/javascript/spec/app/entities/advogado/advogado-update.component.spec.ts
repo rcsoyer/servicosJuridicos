@@ -1,12 +1,11 @@
 /* tslint:disable max-line-length */
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { HttpResponse } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-
-import { ServicosJuridicosTestModule } from '../../../test.module';
-import { AdvogadoUpdateComponent } from 'app/entities/advogado/advogado-update.component';
-import { AdvogadoService } from 'app/entities/advogado/advogado.service';
-import { Advogado } from 'app/shared/model/advogado.model';
+import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {HttpResponse} from '@angular/common/http';
+import {of} from 'rxjs';
+import {ServicosJuridicosTestModule} from '../../../test.module';
+import {AdvogadoUpdateComponent} from 'app/entities/advogado/advogado-update.component';
+import {AdvogadoService} from 'app/entities/advogado/advogado.service';
+import {Advogado} from 'app/shared/model/advogado.model';
 
 describe('Component Tests', () => {
     describe('Advogado Management Update Component', () => {
@@ -19,8 +18,8 @@ describe('Component Tests', () => {
                 imports: [ServicosJuridicosTestModule],
                 declarations: [AdvogadoUpdateComponent]
             })
-                .overrideTemplate(AdvogadoUpdateComponent, '')
-                .compileComponents();
+            .overrideTemplate(AdvogadoUpdateComponent, '')
+            .compileComponents();
 
             fixture = TestBed.createComponent(AdvogadoUpdateComponent);
             comp = fixture.componentInstance;
@@ -33,8 +32,8 @@ describe('Component Tests', () => {
                 fakeAsync(() => {
                     // GIVEN
                     const entity = new Advogado(123);
-                    spyOn(service, 'update').and.returnValue(of(new HttpResponse({ body: entity })));
-                    comp.advogado = entity;
+                    spyOn(service, 'update').and.returnValue(of(new HttpResponse({body: entity})));
+                    comp.model = entity;
                     // WHEN
                     comp.save();
                     tick(); // simulate async
@@ -50,8 +49,8 @@ describe('Component Tests', () => {
                 fakeAsync(() => {
                     // GIVEN
                     const entity = new Advogado();
-                    spyOn(service, 'create').and.returnValue(of(new HttpResponse({ body: entity })));
-                    comp.advogado = entity;
+                    spyOn(service, 'create').and.returnValue(of(new HttpResponse({body: entity})));
+                    comp.model = entity;
                     // WHEN
                     comp.save();
                     tick(); // simulate async

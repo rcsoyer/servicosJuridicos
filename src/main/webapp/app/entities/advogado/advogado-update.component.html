@@ -35,7 +35,7 @@
                     <label class="form-control-label" for="field_cpf">CPF</label>
                     <input type="text" class="form-control" name="cpf" id="field_cpf"
                            [(ngModel)]="model.cpf" required minlength="11"
-                           cpfValidator [textMask]="cpfMaskUtils.maskCPF()"/>
+                           cpfValidator [textMask]="advogadoUtils.maskCPF()"/>
                     <div
                         [hidden]="!(editForm.controls.cpf?.dirty && editForm.controls.cpf?.invalid)">
                         <small class="form-text text-danger"
@@ -55,9 +55,9 @@
                     <label class="form-control-label"
                            for="field_ramal">Ramal</label>
                     <input type="text" class="form-control" name="ramal" id="field_ramal"
-                           [(ngModel)]="model.ramal" [textMask]="{mask: maskRamal()}"/>
+                           [(ngModel)]="model.ramal"
+                           [textMask]="{mask: advogadoUtils.maskRamal()}"/>
                 </div>
-
             </div>
             <div>
                 <button type="button" id="cancel-save" class="btn btn-secondary col-md-1"

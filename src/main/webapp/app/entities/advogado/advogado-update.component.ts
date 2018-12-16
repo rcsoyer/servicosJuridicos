@@ -3,8 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Advogado} from 'app/shared/model/advogado.model';
 import {AdvogadoService} from './advogado.service';
 import {UpdateComponentAbastract} from '../../shared/components-abstract/update.component.abstract';
-import {CpfMaskUtils} from 'app/shared/util/cpf/cpf-mask-utils';
-import createNumberMask from 'text-mask-addons/dist/createNumberMask';
+import {AdvogadoUtils} from 'app/entities/advogado/advogado-utils';
 
 @Component({
     selector: 'advogado-update',
@@ -13,21 +12,12 @@ import createNumberMask from 'text-mask-addons/dist/createNumberMask';
 export class AdvogadoUpdateComponent extends UpdateComponentAbastract<Advogado> implements OnInit {
 
     constructor(advogadoService: AdvogadoService, activatedRoute: ActivatedRoute,
-                 private cpfMaskUtils: CpfMaskUtils) {
+                private advogadoUtils: AdvogadoUtils) {
         super(advogadoService, activatedRoute);
     }
 
     ngOnInit() {
         this.onInit();
         this.defineTituloPagina('Advogado');
-    }
-
-    maskRamal(): Function {
-        return createNumberMask({
-            prefix: '',
-            decimalSymbol: '',
-            integerLimit: 9,
-            thousandsSeparatorSymbol: ''
-        });
     }
 }

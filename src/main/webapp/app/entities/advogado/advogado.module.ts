@@ -13,6 +13,7 @@ import {
     advogadoRoute,
     AdvogadoUpdateComponent
 } from './';
+import {AdvogadoUtils} from 'app/entities/advogado/advogado-utils';
 
 const ENTITY_STATES = [...advogadoRoute, ...advogadoPopupRoute];
 
@@ -27,7 +28,8 @@ const ENTITY_STATES = [...advogadoRoute, ...advogadoPopupRoute];
         AdvogadoDeletePopupComponent
     ],
     entryComponents: [AdvogadoComponent, AdvogadoUpdateComponent, AdvogadoDeleteDialogComponent, AdvogadoDeletePopupComponent],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    providers: [AdvogadoUtils]
 })
 export class ServicosJuridicosAdvogadoModule {
 }

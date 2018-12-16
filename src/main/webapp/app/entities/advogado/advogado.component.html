@@ -1,66 +1,133 @@
-<div>
-    <h2 id="page-heading">
-        <span jhiTranslate="servicosJuridicosApp.advogado.home.title">Advogados</span>
-        <button id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-advogado" [routerLink]="['/advogado/new']">
+<div class="container-fluid">
+    <h2 id="page-heading" class="text-center">
+        <span>Advogado</span>
+        <button id="jh-create-entity"
+                class="btn btn-primary float-right jh-create-entity create-advogado"
+                [routerLink]="['/advogado/new']" title="Cadastrar Advogado">
             <fa-icon [icon]="'plus'"></fa-icon>
-            <span  jhiTranslate="servicosJuridicosApp.advogado.home.createLabel">
-            Create new Advogado
-            </span>
         </button>
     </h2>
+    <hr/>
     <jhi-alert></jhi-alert>
+    <form name="searchForm" role="form" novalidate #searchForm="ngForm" (ngSubmit)="query()">
+        <div class="container-fluid">
+            <h4>
+                <span>Consulta</span>
+            </h4>
+            <div class="form-group form-row">
+                <label class="col-md-1 col-form-label"
+                       for="field_nome">Nome</label>
+                <input type="text" class="form-control col-md-4" name="nome"
+                       id="field_nome" [(ngModel)]="modelConsulta.nome"
+                       whitespaceValidator #nome="ngModel" (input)="setPageDefault()"/>
+                &nbsp;&nbsp;
+                <div
+                    [hidden]="!(searchForm.controls.nome?.dirty && searchForm.controls.nome?.invalid)">
+                    <small class="form-text text-danger"
+                           [hidden]="!searchForm.controls.nome?.errors?.whitespaceValidator">
+                        Textos vazios n&atilde;o s&atilde;o aceitos.
+                    </small>
+                </div>
+            </div>
+            <div class="form-group form-row">
+                <label class="col-md-1 col-form-label" for="field_cpf">CPF</label>
+                <input type="text" class="form-control col-md-4" name="cpf" id="field_cpf"
+                       [(ngModel)]="modelConsulta.cpf" minlength="11"
+                       cpfValidator [textMask]="advogadoUtils.maskCPF()"/>
+                <div
+                    [hidden]="!(searchForm.controls.cpf?.dirty && searchForm.controls.cpf?.invalid)">
+                    <small class="form-text text-danger"
+                           [hidden]="!searchForm.controls.cpf?.errors?.minlength"
+                           jhiTranslate="entity.validation.minlength"
+                           translateValues="{ min: 11 }">
+                        This field is required to be at least 11 characters.
+                    </small>
+                </div>
+            </div>
+            <div>
+                <label class="col-sm-1 col-form-label"></label>
+                <button type="submit" class="btn btn-outline-primary col-md-1" title="Consultar">
+                    <fa-icon [icon]="'search'"></fa-icon>
+                </button>
+                <button type="reset" class="btn btn-warning col-md-1" title="Limpar"
+                        (click)="clear()">
+                    <fa-icon [icon]="iconFaMinus"></fa-icon>
+                </button>
+            </div>
+        </div>
+    </form>
     <br/>
-    <div class="table-responsive" *ngIf="advogados">
-        <table class="table table-striped">
-            <thead>
-            <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="transition.bind(this)">
-            <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="nome"><span jhiTranslate="servicosJuridicosApp.advogado.nome">Nome</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="cpf"><span jhiTranslate="servicosJuridicosApp.advogado.cpf">Cpf</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th jhiSortBy="ramal"><span jhiTranslate="servicosJuridicosApp.advogado.ramal">Ramal</span> <fa-icon [icon]="'sort'"></fa-icon></th>
-            <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let advogado of advogados ;trackBy: trackId">
-                <td><a [routerLink]="['/advogado', advogado.id, 'view' ]">{{advogado.id}}</a></td>
-                <td>{{advogado.nome}}</td>
-                <td>{{advogado.cpf}}</td>
-                <td>{{advogado.ramal}}</td>
-                <td class="text-right">
-                    <div class="btn-group flex-btn-group-container">
-                        <button type="submit"
-                                [routerLink]="['/advogado', advogado.id, 'view' ]"
-                                class="btn btn-info btn-sm">
-                            <fa-icon [icon]="'eye'"></fa-icon>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
-                        </button>
-                        <button type="submit"
-                                [routerLink]="['/advogado', advogado.id, 'edit']"
-                                class="btn btn-primary btn-sm">
-                            <fa-icon [icon]="'pencil-alt'"></fa-icon>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-                        </button>
-                        <button type="submit"
-                                [routerLink]="['/', { outlets: { popup: 'advogado/'+ advogado.id + '/delete'} }]"
-                                replaceUrl="true"
-                                queryParamsHandling="merge"
-                                class="btn btn-danger btn-sm">
-                            <fa-icon [icon]="'times'"></fa-icon>
-                            <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <div *ngIf="advogados && advogados.length">
-        <div class="row justify-content-center">
-            <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>
+    <div *ngIf="foundResults(); else sem_resultados">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse"
+                    [callback]="transition.bind(this)">
+                    <th jhiSortBy="nome">
+                        <span>Nome</span>
+                        <fa-icon [icon]="'sort'"></fa-icon>
+                    </th>
+                    <th jhiSortBy="cpf">
+                        <span>CPF</span>
+                        <fa-icon [icon]="'sort'"></fa-icon>
+                    </th>
+                    <th jhiSortBy="ramal">
+                        <span>Ramal</span>
+                        <fa-icon [icon]="'sort'"></fa-icon>
+                    </th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let advogado of listResultQuery; trackBy: trackId">
+                    <td>{{advogado.nome}}</td>
+                    <td>{{advogado.cpf}}</td>
+                    <td>{{advogado.ramal}}</td>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <button type="submit"
+                                    [routerLink]="['/advogado', advogado.id, 'view']"
+                                    class="btn btn-info btn-sm" title="Visualizar">
+                                <fa-icon [icon]="'eye'"></fa-icon>
+                            </button>
+                            <button type="submit"
+                                    [routerLink]="['/advogado', advogado.id, 'edit']"
+                                    class="btn btn-primary btn-sm" title="Editar">
+                                <fa-icon [icon]="'pencil-alt'"></fa-icon>
+                            </button>
+                            <button type="submit"
+                                    [routerLink]="['/',
+                                    { outlets: { popup: 'advogado/'+ advogado.id + '/delete'} }]"
+                                    replaceUrl="true"
+                                    queryParamsHandling="merge"
+                                    class="btn btn-danger btn-sm" title="Excluir">
+                                <fa-icon [icon]="'times'"></fa-icon>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-        <div class="row justify-content-center">
-            <ngb-pagination [collectionSize]="totalItems" [(page)]="page" [pageSize]="itemsPerPage" [maxSize]="5" [rotate]="true" [boundaryLinks]="true" (pageChange)="loadPage(page)"></ngb-pagination>
+        <div>
+            <div class="row justify-content-center">
+                <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5"
+                                [itemsPerPage]="itemsPerPage"></jhi-item-count>
+            </div>
+            <div class="row justify-content-center">
+                <ngb-pagination [collectionSize]="totalItems" [(page)]="page"
+                                [pageSize]="itemsPerPage"
+                                [maxSize]="5" [rotate]="true" [boundaryLinks]="true"
+                                (pageChange)="loadPage(page)"></ngb-pagination>
+            </div>
         </div>
     </div>
+    <ng-template #sem_resultados>
+        <div *ngIf="hasMadeQuery">
+            <hr/>
+            <div class="tex-center">
+                <h6>Sem resutados</h6>
+            </div>
+        </div>
+    </ng-template>
 </div>

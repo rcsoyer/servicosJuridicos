@@ -40,7 +40,7 @@ export class AdvogadoService implements BasicService<Advogado> {
     }
 
     queryByInput(advogado: Advogado, pageable?: any): Observable<EntityArrayResponseType> {
-        const path = this.baseApiURL + 'queryAdvogados';
+        const path = this.baseApiURL + 'getAdvogados';
         advogado.cpf = this.cpfMaskUtils.removeMask(advogado.cpf);
         const queryParams = buildQueryParams(advogado, pageable);
         return this.http.get<Advogado[]>(path, {params: queryParams, observe: 'response'});
