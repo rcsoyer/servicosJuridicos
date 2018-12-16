@@ -34,8 +34,7 @@ public class AdvogadoDTO implements Serializable {
     private Integer ramal;
     
     @JsonCreator
-    public static AdvogadoDTO of(String json)
-        throws IOException {
+    public static AdvogadoDTO of(String json) throws IOException {
         return JsonConverter.readValue(json, AdvogadoDTO.class);
     }
 }

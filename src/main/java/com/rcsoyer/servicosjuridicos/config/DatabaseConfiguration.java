@@ -9,10 +9,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
 @Configuration
+@EnableTransactionManagement
 @EnableJpaRepositories("com.rcsoyer.servicosjuridicos.repository")
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
-@EnableTransactionManagement
 public class DatabaseConfiguration {
-
+    
     private final Logger log = LoggerFactory.getLogger(DatabaseConfiguration.class);
 }

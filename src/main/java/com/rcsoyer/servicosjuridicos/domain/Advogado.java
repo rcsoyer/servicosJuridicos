@@ -1,5 +1,7 @@
 package com.rcsoyer.servicosjuridicos.domain;
 
+import static org.apache.commons.lang3.StringUtils.trimToNull;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -13,7 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -21,7 +23,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import static org.apache.commons.lang3.StringUtils.trimToNull;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -45,13 +46,13 @@ public class Advogado implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     private Long id;
     
-    @NotEmpty
+    @NotBlank
     @Size(min = 1, max = 80)
     @Setter(AccessLevel.NONE)
     @Column(length = 80, nullable = false)
     private String nome;
     
-    @NotEmpty
+    @NotBlank
     @Size(min = 11, max = 11)
     @Setter(AccessLevel.NONE)
     @Column(length = 11, nullable = false)

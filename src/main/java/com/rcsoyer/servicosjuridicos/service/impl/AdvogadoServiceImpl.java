@@ -7,8 +7,7 @@ import com.rcsoyer.servicosjuridicos.service.dto.AdvogadoDTO;
 import com.rcsoyer.servicosjuridicos.service.mapper.AdvogadoMapper;
 import java.util.Optional;
 import java.util.function.Function;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,13 +17,13 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Service Implementation for managing Advogado.
  */
+@Slf4j
 @Service
 @Transactional
 public class AdvogadoServiceImpl implements AdvogadoService {
     
     private final AdvogadoMapper mapper;
     private final AdvogadoRepository repository;
-    private final Logger log = LoggerFactory.getLogger(AdvogadoServiceImpl.class);
     
     public AdvogadoServiceImpl(AdvogadoRepository advogadoRepository,
         AdvogadoMapper advogadoMapper) {

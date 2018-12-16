@@ -112,7 +112,7 @@ public class AssuntoResource {
   
   private void throwsBadRequestIfHasNoId(AssuntoDTO assuntoDTO) {
     Supplier<BadRequestAlertException> throwBadRequestExcpetion = () -> {
-      String msgError = "Invalid id";
+      String msgError = "An existing Assunto must have an id";
       BadRequestAlertException badRequestAlertException =
           new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
       log.error(msgError, badRequestAlertException);
