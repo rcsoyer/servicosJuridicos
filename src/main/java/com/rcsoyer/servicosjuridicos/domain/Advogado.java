@@ -34,9 +34,9 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Setter
 @Accessors(chain = true)
 @Table(name = "advogado")
-@EqualsAndHashCode(of = "id")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @ToString(exclude = {"processos", "feriasLicencas", "dgCoordenacoes"})
+@EqualsAndHashCode(exclude = {"processos", "feriasLicencas", "dgCoordenacoes"})
 public class Advogado implements Serializable {
     
     private static final long serialVersionUID = 1619909263889107243L;
