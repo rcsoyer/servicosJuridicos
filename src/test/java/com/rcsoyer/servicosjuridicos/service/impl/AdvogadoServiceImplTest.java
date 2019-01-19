@@ -1,9 +1,5 @@
 package com.rcsoyer.servicosjuridicos.service.impl;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -81,7 +77,7 @@ public class AdvogadoServiceImplTest {
         when(repository.findAll(pageRequest)).thenReturn(new PageImpl<>(advogadosResult));
         when(mapper.toDto(any(Advogado.class))).thenReturn(new AdvogadoDTO());
         var advogadosPage = service.findAll(pageRequest);
-        assertThat(advogadosPage.getContent(), is(not(empty())));
+        assertEquals(advogadosPage.getNumberOfElements(), pageRequest.getPageSize());
         verify(repository, times(1)).findAll(pageRequest);
         verify(mapper, times(2)).toDto(any(Advogado.class));
         verifyNoMoreInteractions(mapper, repository);
