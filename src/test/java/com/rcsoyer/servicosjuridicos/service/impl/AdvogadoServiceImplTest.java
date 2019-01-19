@@ -1,9 +1,10 @@
 package com.rcsoyer.servicosjuridicos.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -37,8 +38,8 @@ public class AdvogadoServiceImplTest {
     private AdvogadoRepository repository;
     
     private Advogado advogado;
-    private AdvogadoDTO advogadoDTO;
     private Advogado savedAdvogado;
+    private AdvogadoDTO advogadoDTO;
     
     
     @BeforeEach
@@ -88,9 +89,19 @@ public class AdvogadoServiceImplTest {
         when(repository.findById(anyLong())).thenReturn(Optional.of(new Advogado()));
         when(mapper.toDto(any(Advogado.class))).thenReturn(new AdvogadoDTO());
         var dtoOptional = service.findOne(anyLong());
-        assertNotNull(dtoOptional.get());
+        assertTrue(dtoOptional.isPresent());
         verify(repository, times(1)).findById(anyLong());
         verify(mapper, times(1)).toDto(any(Advogado.class));
+        verifyNoMoreInteractions(mapper, repository);
+    }
+    
+    @Test
+    public void findOne_NotFound() {
+        when(repository.findById(anyLong())).thenReturn(Optional.empty());
+        var dtoOptional = service.findOne(anyLong());
+        assertTrue(dtoOptional.isEmpty());
+        verify(repository, times(1)).findById(anyLong());
+        verify(mapper, never()).toDto(any(Advogado.class));
         verifyNoMoreInteractions(mapper, repository);
     }
     
