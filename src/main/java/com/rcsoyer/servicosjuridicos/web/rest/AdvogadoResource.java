@@ -166,8 +166,8 @@ public class AdvogadoResource {
     
     private void throwsBadRequestIfHasNoId(AdvogadoDTO advogadoDTO) {
         Supplier<BadRequestAlertException> throwBadRequestExcpetion = () -> {
-            String msgError = "An existing Advogado must have an id";
-            BadRequestAlertException badRequestAlertException =
+            var msgError = "An existing Advogado must have an id";
+            var badRequestAlertException =
                 new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
             log.error(msgError, badRequestAlertException);
             return badRequestAlertException;
