@@ -1,5 +1,7 @@
 package com.rcsoyer.servicosjuridicos.domain;
 
+import static org.apache.commons.lang3.StringUtils.trimToNull;
+
 import com.rcsoyer.servicosjuridicos.domain.enumeration.RangeDgCoordenacao;
 import java.io.Serializable;
 import javax.persistence.Column;
@@ -22,7 +24,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import static org.apache.commons.lang3.StringUtils.trimToNull;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -32,10 +33,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Getter
 @Setter
+@ToString
 @Accessors(chain = true)
-@EqualsAndHashCode(of = "id")
 @Table(name = "advogado_dg_coordenacao")
-@ToString(exclude = {"advogado", "coordenacao"})
+@EqualsAndHashCode(exclude = {"advogado", "coordenacao"})
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class AdvogadoDgCoordenacao implements Serializable {
     
