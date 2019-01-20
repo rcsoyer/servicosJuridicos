@@ -114,14 +114,15 @@ public class AdvogadoServiceImplTest {
     
     @Test
     void findByParams() {
-        var pgAdvogados = new PageImpl<>(List.of(new Advogado(), new Advogado()));
-        when(mapper.toEntity(any(AdvogadoDTO.class))).thenReturn(new Advogado());
-        when(repository.query(any())).thenReturn(advogado -> pgAdvogados);
+        var pageable = PageRequest.of(1, 2);
+        var pgAdvogados = new PageImpl<>(List.of(advogado, savedAdvogado));
+        when(mapper.toEntity(advogadoDTO)).thenReturn(advogado);
+        when(repository.query(advogado, pageable)).thenReturn(pgAdvogados);
         when(mapper.toDto(any(Advogado.class))).thenReturn(new AdvogadoDTO());
-        var seekingResult = service.findByParams(advogadoDTO, any());
+        var seekingResult = service.findByParams(advogadoDTO, pageable);
         assertEquals(seekingResult.getNumberOfElements(), pgAdvogados.getNumberOfElements());
         verify(mapper, times(1)).toEntity(any(AdvogadoDTO.class));
-        verify(repository, times(1)).query(any());
+        verify(repository, times(1)).query(advogado, pageable);
         verify(mapper, times(2)).toDto(any(Advogado.class));
         verifyNoMoreInteractions(mapper, repository);
     }

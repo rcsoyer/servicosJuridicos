@@ -16,10 +16,10 @@ import org.springframework.stereotype.Repository;
 public interface AdvogadoRepository
     extends JpaRepository<Advogado, Long>, QuerydslPredicateExecutor<Advogado> {
     
-    default Function<Advogado, Page<Advogado>> query(Pageable pageable) {
+    default Page<Advogado> query(final Advogado model, final Pageable pageable) {
         Function<Advogado, BooleanExpression> getRestrictions = AdvogadoRestrictions::getRestrictions;
         Function<BooleanExpression, Page<Advogado>> findAll =
             restrictions -> findAll(restrictions, pageable);
-        return getRestrictions.andThen(findAll);
+        return getRestrictions.andThen(findAll).apply(model);
     }
 }

@@ -89,10 +89,11 @@ public class AdvogadoServiceImpl implements AdvogadoService {
     public Page<AdvogadoDTO> findByParams(final AdvogadoDTO dto, final Pageable pageable) {
         log.debug("AdvogadoService mehtod to get Processos Judiciais by params");
         Function<AdvogadoDTO, Advogado> toEntity = mapper::toEntity;
+        Function<Advogado, Page<Advogado>> queryResult =
+            advogado -> repository.query(advogado, pageable);
         Function<Page<Advogado>, Page<AdvogadoDTO>> toPageDto =
             pageEntity -> pageEntity.map(mapper::toDto);
-        Function<Advogado, Page<Advogado>> query = repository.query(pageable);
-        return toEntity.andThen(query)
+        return toEntity.andThen(queryResult)
                        .andThen(toPageDto)
                        .apply(dto);
     }
