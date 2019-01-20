@@ -2,8 +2,8 @@ package com.rcsoyer.servicosjuridicos.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -114,5 +114,15 @@ public class AdvogadoServiceImplTest {
     
     @Test
     void findByParams() {
+        var pgAdvogados = new PageImpl<>(List.of(new Advogado(), new Advogado()));
+        when(mapper.toEntity(any(AdvogadoDTO.class))).thenReturn(new Advogado());
+        when(repository.query(any())).thenReturn(advogado -> pgAdvogados);
+        when(mapper.toDto(any(Advogado.class))).thenReturn(new AdvogadoDTO());
+        var seekingResult = service.findByParams(advogadoDTO, any());
+        assertEquals(seekingResult.getNumberOfElements(), pgAdvogados.getNumberOfElements());
+        verify(mapper, times(1)).toEntity(any(AdvogadoDTO.class));
+        verify(repository, times(1)).query(any());
+        verify(mapper, times(2)).toDto(any(Advogado.class));
+        verifyNoMoreInteractions(mapper, repository);
     }
 }
