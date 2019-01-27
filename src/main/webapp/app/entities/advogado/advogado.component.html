@@ -98,8 +98,7 @@
                             <button type="submit"
                                     [routerLink]="['/',
                                     { outlets: { popup: 'advogado/'+ advogado.id + '/delete'} }]"
-                                    replaceUrl="true"
-                                    queryParamsHandling="merge"
+                                    replaceUrl="true" queryParamsHandling="merge"
                                     class="btn btn-danger btn-sm" title="Excluir">
                                 <fa-icon [icon]="'times'"></fa-icon>
                             </button>

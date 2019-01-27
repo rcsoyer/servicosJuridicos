@@ -22,9 +22,8 @@ export class AdvogadoResolve implements Resolve<Advogado> {
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         const id = route.params['id'];
-        const findAdvogadoById = () =>
-            this.service.find(id)
-            .pipe(map((response: HttpResponse<Advogado>) => response.body));
+        const findAdvogadoById = () => this.service.find(id)
+        .pipe(map((response: HttpResponse<Advogado>) => response.body));
         const ofNewAdvogado = () => of(new Advogado());
         return R.ifElse(_.isEmpty, ofNewAdvogado, findAdvogadoById)(id);
     }

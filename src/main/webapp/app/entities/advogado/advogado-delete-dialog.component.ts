@@ -1,11 +1,11 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import {Component, OnInit, OnDestroy} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 
-import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager } from 'ng-jhipster';
+import {NgbActiveModal, NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
+import {JhiEventManager} from 'ng-jhipster';
 
-import { Advogado } from 'app/shared/model/advogado.model';
-import { AdvogadoService } from './advogado.service';
+import {Advogado} from 'app/shared/model/advogado.model';
+import {AdvogadoService} from './advogado.service';
 
 @Component({
     selector: 'jhi-advogado-delete-dialog',
@@ -14,7 +14,8 @@ import { AdvogadoService } from './advogado.service';
 export class AdvogadoDeleteDialogComponent {
     advogado: Advogado;
 
-    constructor(private advogadoService: AdvogadoService, public activeModal: NgbActiveModal, private eventManager: JhiEventManager) {}
+    constructor(private advogadoService: AdvogadoService, public activeModal: NgbActiveModal, private eventManager: JhiEventManager) {
+    }
 
     clear() {
         this.activeModal.dismiss('cancel');
@@ -38,20 +39,30 @@ export class AdvogadoDeleteDialogComponent {
 export class AdvogadoDeletePopupComponent implements OnInit, OnDestroy {
     private ngbModalRef: NgbModalRef;
 
-    constructor(private activatedRoute: ActivatedRoute, private router: Router, private modalService: NgbModal) {}
+    constructor(private activatedRoute: ActivatedRoute, private router: Router, private modalService: NgbModal) {
+    }
 
     ngOnInit() {
-        this.activatedRoute.data.subscribe(({ advogado }) => {
+        this.activatedRoute.data.subscribe(({model}) => {
             setTimeout(() => {
-                this.ngbModalRef = this.modalService.open(AdvogadoDeleteDialogComponent as Component, { size: 'lg', backdrop: 'static' });
-                this.ngbModalRef.componentInstance.advogado = advogado;
+                this.ngbModalRef = this.modalService.open(AdvogadoDeleteDialogComponent as Component, {
+                    size: 'lg',
+                    backdrop: 'static'
+                });
+                this.ngbModalRef.componentInstance.advogado = model;
                 this.ngbModalRef.result.then(
                     result => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate([{outlets: {popup: null}}], {
+                            replaceUrl: true,
+                            queryParamsHandling: 'merge'
+                        });
                         this.ngbModalRef = null;
                     },
                     reason => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate([{outlets: {popup: null}}], {
+                            replaceUrl: true,
+                            queryParamsHandling: 'merge'
+                        });
                         this.ngbModalRef = null;
                     }
                 );

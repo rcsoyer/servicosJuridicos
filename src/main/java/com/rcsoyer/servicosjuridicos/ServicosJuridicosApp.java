@@ -8,6 +8,8 @@ import static java.util.Arrays.asList;
 import com.rcsoyer.servicosjuridicos.config.ApplicationProperties;
 import com.rcsoyer.servicosjuridicos.config.DefaultProfileUtil;
 import io.vavr.control.Try;
+import java.io.BufferedReader;
+import java.io.Reader;
 import java.net.InetAddress;
 import java.util.List;
 import java.util.Optional;
