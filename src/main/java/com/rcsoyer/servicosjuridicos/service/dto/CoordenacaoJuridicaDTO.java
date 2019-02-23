@@ -12,12 +12,14 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 /**
  * A DTO for the CoordenacaoJuridica entity.
  */
 @Getter
 @Setter
+@Accessors(chain = true)
 @EqualsAndHashCode(of = "id")
 @ToString(exclude = "assuntos")
 public class CoordenacaoJuridicaDTO implements Serializable {
@@ -44,7 +46,6 @@ public class CoordenacaoJuridicaDTO implements Serializable {
     public static CoordenacaoJuridicaDTO of(String json) throws IOException {
         return JsonConverter.readValue(json, CoordenacaoJuridicaDTO.class);
     }
-    
     
     public CoordenacaoJuridicaDTO setCentena(String centena) {
         this.centena = trimToNull(centena);
