@@ -7,11 +7,11 @@
                 "createLabel": "Criar novo Advogado",
                 "createOrEditLabel": "Criar ou editar Advogado"
             },
-            "created": "Um novo Advogado foi criado com o identificador {{ param }}",
-            "updated": "Um Advogado foi atualizado com o identificador {{ param }}",
-            "deleted": "Um Advogado foi deletado com o identificador {{ param }}",
+            "created": "Um novo Advogado foi criado",
+            "updated": "Um Advogado foi atualizado",
+            "deleted": "Um Advogado foi deletado",
             "delete": {
-                "question": "Tem certeza de que deseja excluir Advogado {{ id }}?"
+                "question": "Tem certeza de que deseja excluir o advogado: {{ nome }}?"
             },
             "detail": {
                 "title": "Advogado"
