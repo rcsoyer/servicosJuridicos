@@ -42,11 +42,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class AdvogadoResource {
     
-    private final AdvogadoService advogadoService;
+    private final AdvogadoService service;
     private static final String ENTITY_NAME = "advogado";
     
     public AdvogadoResource(AdvogadoService advogadoService) {
-        this.advogadoService = advogadoService;
+        this.service = advogadoService;
     }
     
     /**
@@ -63,7 +63,7 @@ public class AdvogadoResource {
         throws URISyntaxException {
         log.debug("REST request to save Advogado : {}", advogadoDTO);
         throwsBadRequestIfHasId(advogadoDTO);
-        var createdAdvogado = advogadoService.save(advogadoDTO);
+        var createdAdvogado = service.save(advogadoDTO);
         var resultId = createdAdvogado.getId();
         var location = new URI("/api/advogado/" + resultId);
         var entityCreationAlert = createEntityCreationAlert(ENTITY_NAME, resultId.toString());
@@ -85,7 +85,7 @@ public class AdvogadoResource {
     public ResponseEntity<AdvogadoDTO> updateAdvogado(@Valid @RequestBody AdvogadoDTO advogadoDTO) {
         log.debug("REST request to update Advogado : {}", advogadoDTO);
         throwsBadRequestIfHasNoId(advogadoDTO);
-        var updatedAdvogado = advogadoService.save(advogadoDTO);
+        var updatedAdvogado = service.save(advogadoDTO);
         var entityUpdateAlert = createEntityUpdateAlert(ENTITY_NAME, updatedAdvogado.getId().toString());
         return ResponseEntity.ok()
                              .headers(entityUpdateAlert)
@@ -102,7 +102,7 @@ public class AdvogadoResource {
     @GetMapping("/advogado")
     public ResponseEntity<List<AdvogadoDTO>> getAllAdvogados(Pageable pageable) {
         log.debug("REST request to get a page of Advogados");
-        var page = advogadoService.findAll(pageable);
+        var page = service.findAll(pageable);
         var headers = generatePaginationHttpHeaders(page, "/api/advogado");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -113,7 +113,7 @@ public class AdvogadoResource {
         @RequestParam("pageable") @Valid PageableDTO pageableDTO) {
         log.debug("REST request to get a page of Advogados by input params");
         var pageable = pageableDTO.getPageable();
-        var page = advogadoService.findByParams(dto, pageable);
+        var page = service.findByParams(dto, pageable);
         var headers = generatePaginationHttpHeaders(page, "/api/getAdvogados");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -129,7 +129,7 @@ public class AdvogadoResource {
     @GetMapping("/advogado/{id}")
     public ResponseEntity<AdvogadoDTO> getAdvogado(@PathVariable Long id) {
         log.debug("REST request to get Advogado : {}", id);
-        var advogadoDTO = advogadoService.findOne(id);
+        var advogadoDTO = service.findOne(id);
         return ResponseUtil.wrapOrNotFound(advogadoDTO);
     }
     
@@ -143,7 +143,7 @@ public class AdvogadoResource {
     @DeleteMapping("/advogado/{id}")
     public ResponseEntity<Void> deleteAdvogado(@PathVariable Long id) {
         log.debug("REST request to delete Advogado : {}", id);
-        advogadoService.delete(id);
+        service.delete(id);
         var entityDeletionAlert = createEntityDeletionAlert(ENTITY_NAME, id.toString());
         return ResponseEntity.ok()
                              .headers(entityDeletionAlert)
