@@ -8,14 +8,12 @@ import static java.util.Arrays.asList;
 import com.rcsoyer.servicosjuridicos.config.ApplicationProperties;
 import com.rcsoyer.servicosjuridicos.config.DefaultProfileUtil;
 import io.vavr.control.Try;
-import java.io.BufferedReader;
-import java.io.Reader;
 import java.net.InetAddress;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import javax.annotation.PostConstruct;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
@@ -23,13 +21,13 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.core.env.Environment;
 
+@Slf4j
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})
 public class ServicosJuridicosApp {
     
     private final Environment env;
-    private static final Logger log = LoggerFactory.getLogger(ServicosJuridicosApp.class);
     
     public ServicosJuridicosApp(Environment env) {
         this.env = env;
@@ -45,20 +43,25 @@ public class ServicosJuridicosApp {
      */
     @PostConstruct
     public void initApplication() {
-        List<String> activeProfiles = asList(env.getActiveProfiles());
-        boolean hasSpringProfileDev = activeProfiles.contains(SPRING_PROFILE_DEVELOPMENT);
-        boolean hasSpringProfileProd = activeProfiles.contains(SPRING_PROFILE_PRODUCTION);
-        boolean hasSpringProfileCloud = activeProfiles.contains(SPRING_PROFILE_CLOUD);
-        
-        if (hasSpringProfileDev && hasSpringProfileProd) {
-            log.error("You have misconfigured your application! It should not run " +
-                "with both the 'dev' and 'prod' profiles at the same time.");
-        }
-        
-        if (hasSpringProfileDev && hasSpringProfileCloud) {
-            log.error("You have misconfigured your application! It should not " +
-                "run with both the 'dev' and 'cloud' profiles at the same time.");
-        }
+        var activeProfiles = asList(env.getActiveProfiles());
+        Predicate<List<String>> hasSpringProfileDev =
+            profiles -> profiles.contains(SPRING_PROFILE_DEVELOPMENT);
+        Predicate<List<String>> hasSpringProfileProd =
+            profiles -> profiles.contains(SPRING_PROFILE_PRODUCTION);
+        Predicate<List<String>> hasSpringProfileCloud =
+            profiles -> profiles.contains(SPRING_PROFILE_CLOUD);
+    
+        Optional.of(activeProfiles)
+                .filter(hasSpringProfileDev.and(hasSpringProfileProd))
+                .ifPresent(profiles ->
+                    log.error("You have misconfigured your application! It should not run " +
+                        "with both the 'dev' and 'prod' profiles at the same time."));
+    
+        Optional.of(activeProfiles)
+                .filter(hasSpringProfileDev.and(hasSpringProfileCloud))
+                .ifPresent(profiles ->
+                    log.error("You have misconfigured your application! It should not " +
+                        "run with both the 'dev' and 'cloud' profiles at the same time."));
     }
     
     /**
@@ -73,13 +76,13 @@ public class ServicosJuridicosApp {
         logApplicationStartup(env);
     }
     
-    private static void logApplicationStartup(Environment env) {
+    private static void logApplicationStartup(final Environment env) {
         var protocol = Optional.ofNullable(env.getProperty("server.ssl.key-store"))
                                .map(keyStore -> "https")
                                .orElse("http");
-        var serverPort = env.getProperty("server.port");
         var contextPath = Optional.ofNullable(env.getProperty("server.servlet.context-path"))
                                   .orElse("/");
+        var serverPort = env.getProperty("server.port");
         var hostAddress = Try.of(InetAddress::getLocalHost)
             .map(InetAddress::getHostAddress)
             .getOrElse(() -> {
