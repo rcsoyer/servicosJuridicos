@@ -1,17 +1,16 @@
-
 {
     "servicosJuridicosApp": {
-        "coordenacaoJuridica" : {
+        "coordenacaoJuridica": {
             "home": {
                 "title": "Coordenacao Juridicas",
                 "createLabel": "Criar novo Coordenacao Juridica",
                 "createOrEditLabel": "Criar ou editar Coordenacao Juridica"
             },
-            "created": "Um novo Coordenacao Juridica foi criado com o identificador {{ param }}",
-            "updated": "Um Coordenacao Juridica foi atualizado com o identificador {{ param }}",
-            "deleted": "Um Coordenacao Juridica foi deletado com o identificador {{ param }}",
+            "created": "Coordenação Jurídica criada",
+            "updated": "Coordenação Jurídica atualizada",
+            "deleted": "Coordenação Jurídica excluída: {{ sigla }}",
             "delete": {
-                "question": "Tem certeza de que deseja excluir Coordenacao Juridica {{ id }}?"
+                "question": "Tem certeza de que deseja excluir a Coordenação Jurídica: {{ sigla }}?"
             },
             "detail": {
                 "title": "Coordenacao Juridica"

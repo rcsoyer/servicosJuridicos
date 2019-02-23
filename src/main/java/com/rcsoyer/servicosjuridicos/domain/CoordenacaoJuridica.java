@@ -1,5 +1,8 @@
 package com.rcsoyer.servicosjuridicos.domain;
 
+import static org.apache.commons.lang3.StringUtils.trimToNull;
+import static org.apache.commons.lang3.StringUtils.upperCase;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -25,7 +28,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import static org.apache.commons.lang3.StringUtils.trimToNull;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -85,7 +87,7 @@ public class CoordenacaoJuridica implements Serializable {
     }
     
     public CoordenacaoJuridica setSigla(String sigla) {
-        this.sigla = trimToNull(sigla);
+        this.sigla = trimToNull(upperCase(sigla));
         return this;
     }
     

@@ -7,7 +7,7 @@ import {Observable} from 'rxjs/Observable';
 import {BaseEntity} from '../model/base-entity';
 import {BasicService} from '../service-commons/basic-service.service';
 
-export abstract class UpdateComponentAbastract<T extends BaseEntity> {
+export abstract class UpdateComponentAbstract<T extends BaseEntity> {
 
     public model: T;
     public isSaving: boolean;

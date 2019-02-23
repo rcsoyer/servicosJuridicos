@@ -2,7 +2,7 @@
     <div class="col-8">
         <div *ngIf="assunto">
             <h2>
-                <span>Assunto</span>
+                <span>Assunto - Detalhes</span>
             </h2>
             <hr>
             <jhi-alert-error></jhi-alert-error>
@@ -27,10 +27,13 @@
                 </dd>
             </dl>
             <button type="submit" (click)="previousState()" class="btn btn-info">
-                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back"> Back</span>
+                <fa-icon [icon]="'arrow-left'"></fa-icon>&nbsp;<span
+                jhiTranslate="entity.action.back"> Back</span>
             </button>
-            <button type="button" [routerLink]="['/assunto', assunto.id, 'edit']" class="btn btn-primary">
-                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit"> Edit</span>
+            <button type="button" [routerLink]="['/assunto', assunto.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon>&nbsp;<span
+                jhiTranslate="entity.action.edit"> Edit</span>
             </button>
         </div>
     </div>

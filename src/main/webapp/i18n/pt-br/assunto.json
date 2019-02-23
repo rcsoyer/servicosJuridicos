@@ -6,9 +6,9 @@
                 "createLabel": "Criar novo Assunto",
                 "createOrEditLabel": "Criar ou editar Assunto"
             },
-            "created": "Assunto criado com sucesso",
-            "updated": "Assunto atualizado com sucesso",
-            "deleted": "Assunto excluído com sucesso",
+            "created": "Assunto criado",
+            "updated": "Assunto atualizado",
+            "deleted": "Assunto excluído: {{ descricao }}",
             "delete": {
                 "question": "Tem certeza de que deseja excluir o Assunto: '{{ descricao }}'?"
             },
