@@ -25,9 +25,15 @@ class CoordenacaoJuridicaTest {
     }
     
     @Test
-    void setSigla() {
+    void setSigla_trimToNull() {
         model.setSigla(" ");
         assertNull(model.getSigla());
+    }
+    
+    @Test
+    void setSigla_toTrimUpperCase() {
+        model.setSigla("abc ");
+        assertEquals(model.getSigla(), "ABC");
     }
     
     @Test
