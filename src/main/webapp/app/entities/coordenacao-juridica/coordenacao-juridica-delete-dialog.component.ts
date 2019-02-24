@@ -1,14 +1,15 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 
-import { NgbActiveModal, NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { JhiEventManager } from 'ng-jhipster';
+import {NgbActiveModal, NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
+import {JhiEventManager} from 'ng-jhipster';
 
-import { CoordenacaoJuridica } from 'app/shared/model/coordenacao-juridica.model';
-import { CoordenacaoJuridicaService } from './coordenacao-juridica.service';
+import {CoordenacaoJuridica} from 'app/shared/model/coordenacao-juridica.model';
+import {CoordenacaoJuridicaService} from './coordenacao-juridica.service';
+import {COORDENACAO_JURIDICA_LIST_MODIFICATION} from 'app/entities/coordenacao-juridica/coordenacao-juridica.constants';
 
 @Component({
-    selector: 'jhi-coordenacao-juridica-delete-dialog',
+    selector: 'coordenacao-juridica-delete-dialog',
     templateUrl: './coordenacao-juridica-delete-dialog.component.html'
 })
 export class CoordenacaoJuridicaDeleteDialogComponent {
@@ -18,7 +19,8 @@ export class CoordenacaoJuridicaDeleteDialogComponent {
         private coordenacaoJuridicaService: CoordenacaoJuridicaService,
         public activeModal: NgbActiveModal,
         private eventManager: JhiEventManager
-    ) {}
+    ) {
+    }
 
     clear() {
         this.activeModal.dismiss('cancel');
@@ -27,7 +29,7 @@ export class CoordenacaoJuridicaDeleteDialogComponent {
     confirmDelete(id: number) {
         this.coordenacaoJuridicaService.delete(id).subscribe(response => {
             this.eventManager.broadcast({
-                name: 'coordenacaoJuridicaListModification',
+                name: COORDENACAO_JURIDICA_LIST_MODIFICATION,
                 content: 'Deleted an coordenacaoJuridica'
             });
             this.activeModal.dismiss(true);
@@ -36,16 +38,17 @@ export class CoordenacaoJuridicaDeleteDialogComponent {
 }
 
 @Component({
-    selector: 'jhi-coordenacao-juridica-delete-popup',
+    selector: 'coordenacao-juridica-delete-popup',
     template: ''
 })
 export class CoordenacaoJuridicaDeletePopupComponent implements OnInit, OnDestroy {
     private ngbModalRef: NgbModalRef;
 
-    constructor(private activatedRoute: ActivatedRoute, private router: Router, private modalService: NgbModal) {}
+    constructor(private activatedRoute: ActivatedRoute, private router: Router, private modalService: NgbModal) {
+    }
 
     ngOnInit() {
-        this.activatedRoute.data.subscribe(({ coordenacaoJuridica }) => {
+        this.activatedRoute.data.subscribe(({coordenacaoJuridica}) => {
             setTimeout(() => {
                 this.ngbModalRef = this.modalService.open(CoordenacaoJuridicaDeleteDialogComponent as Component, {
                     size: 'lg',
@@ -54,11 +57,17 @@ export class CoordenacaoJuridicaDeletePopupComponent implements OnInit, OnDestro
                 this.ngbModalRef.componentInstance.coordenacaoJuridica = coordenacaoJuridica;
                 this.ngbModalRef.result.then(
                     result => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate([{outlets: {popup: null}}], {
+                            replaceUrl: true,
+                            queryParamsHandling: 'merge'
+                        });
                         this.ngbModalRef = null;
                     },
                     reason => {
-                        this.router.navigate([{ outlets: { popup: null } }], { replaceUrl: true, queryParamsHandling: 'merge' });
+                        this.router.navigate([{outlets: {popup: null}}], {
+                            replaceUrl: true,
+                            queryParamsHandling: 'merge'
+                        });
                         this.ngbModalRef = null;
                     }
                 );
