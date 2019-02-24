@@ -2,6 +2,7 @@ package com.rcsoyer.servicosjuridicos.repository.advogado;
 
 import static java.util.function.Predicate.not;
 
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.rcsoyer.servicosjuridicos.domain.Advogado;
@@ -22,7 +23,7 @@ final class AdvogadoRestrictions {
         this.qAdvogado = QAdvogado.advogado;
     }
     
-    static BooleanExpression getRestrictions(final Advogado advogado) {
+    static Predicate getRestrictions(final Advogado advogado) {
         return new AdvogadoRestrictions(advogado).defineRestrictions();
     }
     

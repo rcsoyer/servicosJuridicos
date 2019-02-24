@@ -1,15 +1,14 @@
-
 {
     "servicosJuridicosApp": {
-        "advogado" : {
+        "advogado": {
             "home": {
                 "title": "Advogados",
                 "createLabel": "Criar novo Advogado",
                 "createOrEditLabel": "Criar ou editar Advogado"
             },
-            "created": "Um novo Advogado foi criado",
-            "updated": "Um Advogado foi atualizado",
-            "deleted": "Um Advogado foi deletado",
+            "created": "Advogado foi criado",
+            "updated": "Advogado foi atualizado",
+            "deleted": "Advogado foi excluído",
             "delete": {
                 "question": "Tem certeza de que deseja excluir o advogado: {{ nome }}?"
             },
@@ -17,11 +16,11 @@
                 "title": "Advogado"
             },
             "nome": "Nome",
-            "cpf": "Cpf",
+            "cpf": "CPF",
             "ramal": "Ramal",
             "processo": "Processo",
-            "feriasLicenca": "Ferias Licenca",
-            "dgCoordenacao": "Dg Coordenacao"
+            "feriasLicenca": "Férias Licença",
+            "dgCoordenacao": "Dígito Coordenação"
         }
     }
 }

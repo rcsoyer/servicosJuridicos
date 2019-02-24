@@ -20,6 +20,8 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -127,7 +129,7 @@ public class AdvogadoResource {
      */
     @Timed
     @GetMapping("/advogado/{id}")
-    public ResponseEntity<AdvogadoDTO> getAdvogado(@PathVariable Long id) {
+    public ResponseEntity<AdvogadoDTO> getAdvogado(@PathVariable @Valid @Min(1) Long id) {
         log.debug("REST request to get Advogado : {}", id);
         var advogadoDTO = service.findOne(id);
         return ResponseUtil.wrapOrNotFound(advogadoDTO);
@@ -141,7 +143,7 @@ public class AdvogadoResource {
      */
     @Timed
     @DeleteMapping("/advogado/{id}")
-    public ResponseEntity<Void> deleteAdvogado(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteAdvogado(@PathVariable @Valid @Min(1) Long id) {
         log.debug("REST request to delete Advogado : {}", id);
         service.delete(id);
         var entityDeletionAlert = createEntityDeletionAlert(ENTITY_NAME, id.toString());
@@ -164,7 +166,7 @@ public class AdvogadoResource {
                 .orElseThrow(throwBadRequestExcpetion);
     }
     
-    private void throwsBadRequestIfHasNoId(AdvogadoDTO advogadoDTO) {
+    private void throwsBadRequestIfHasNoId(final AdvogadoDTO advogadoDTO) {
         Supplier<BadRequestAlertException> throwBadRequestExcpetion = () -> {
             var msgError = "An existing Advogado must have an id";
             var badRequestAlertException =

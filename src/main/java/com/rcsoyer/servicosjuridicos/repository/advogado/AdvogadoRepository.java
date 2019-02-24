@@ -1,6 +1,6 @@
 package com.rcsoyer.servicosjuridicos.repository.advogado;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.Predicate;
 import com.rcsoyer.servicosjuridicos.domain.Advogado;
 import java.util.function.Function;
 import org.springframework.data.domain.Page;
@@ -17,8 +17,8 @@ public interface AdvogadoRepository
     extends JpaRepository<Advogado, Long>, QuerydslPredicateExecutor<Advogado> {
     
     default Page<Advogado> query(final Advogado model, final Pageable pageable) {
-        Function<Advogado, BooleanExpression> getRestrictions = AdvogadoRestrictions::getRestrictions;
-        Function<BooleanExpression, Page<Advogado>> findAll =
+        Function<Advogado, Predicate> getRestrictions = AdvogadoRestrictions::getRestrictions;
+        Function<Predicate, Page<Advogado>> findAll =
             restrictions -> findAll(restrictions, pageable);
         return getRestrictions.andThen(findAll).apply(model);
     }

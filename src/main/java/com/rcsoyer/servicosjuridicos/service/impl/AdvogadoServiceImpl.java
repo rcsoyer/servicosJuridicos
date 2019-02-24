@@ -39,7 +39,7 @@ public class AdvogadoServiceImpl implements AdvogadoService {
      */
     @Override
     public AdvogadoDTO save(AdvogadoDTO advogadoDTO) {
-        log.debug("Request to save Advogado : {}", advogadoDTO);
+        log.info("Request to save Advogado : {}", advogadoDTO);
         Function<AdvogadoDTO, Advogado> toEntity = mapper::toEntity;
         return toEntity.andThen(repository::save)
                        .andThen(mapper::toDto)
@@ -80,7 +80,7 @@ public class AdvogadoServiceImpl implements AdvogadoService {
      */
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete Advogado : {}", id);
+        log.info("Request to delete Advogado : {}", id);
         repository.deleteById(id);
     }
     

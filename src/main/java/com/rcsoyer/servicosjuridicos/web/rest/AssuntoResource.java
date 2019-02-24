@@ -187,7 +187,7 @@ public class AssuntoResource {
     }
     
     @ResponseStatus(value = HttpStatus.CONFLICT,
-        reason = "Não é possível excluir esse 'Assunto', pois ele está associado a uma ou mais Coordenações Jurídicas")
+        reason = "Não é possível excluir esse 'Assunto', pois ele está associado a uma ou mais 'Coordenações Jurídicas'")
     @ExceptionHandler(DataIntegrityViolationException.class)
     public void conflict(HttpServletRequest httpRequest,
         DataIntegrityViolationException dataIntegrityViolation) {
