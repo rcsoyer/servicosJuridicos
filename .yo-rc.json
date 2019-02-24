@@ -32,7 +32,7 @@
       "protractor"
     ],
     "jhiPrefix": "jhi",
-    "enableTranslation": true,
+    "enableTranslation": false,
     "nativeLanguage": "pt-br",
     "languages": [
       "pt-br"

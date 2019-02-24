@@ -5,6 +5,7 @@ import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.createEntit
 import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.createEntityUpdateAlert;
 
 import com.codahale.metrics.annotation.Timed;
+import com.rcsoyer.servicosjuridicos.domain.CoordenacaoJuridica;
 import com.rcsoyer.servicosjuridicos.service.AssuntoService;
 import com.rcsoyer.servicosjuridicos.service.dto.AssuntoDTO;
 import com.rcsoyer.servicosjuridicos.service.dto.PageableDTO;
@@ -18,12 +19,15 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +35,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -179,5 +184,16 @@ public class AssuntoResource {
         return ResponseEntity.ok()
                              .headers(headerDeletionAlert)
                              .build();
+    }
+    
+    @ResponseStatus(value = HttpStatus.CONFLICT,
+        reason = "Não é possível excluir esse 'Assunto', pois ele está associado a uma ou mais Coordenações Jurídicas")
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public void conflict(HttpServletRequest httpRequest,
+        DataIntegrityViolationException dataIntegrityViolation) {
+        var requestURI = httpRequest.getRequestURI();
+        log.warn(
+            "Attempt to call '{}' failed. 'Assunto' cannot be excluded because is tied to one or more: {}",
+            requestURI, CoordenacaoJuridica.class.getCanonicalName());
     }
 }
