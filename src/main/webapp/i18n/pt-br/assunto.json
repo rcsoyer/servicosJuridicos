@@ -8,7 +8,7 @@
             },
             "created": "Assunto criado",
             "updated": "Assunto atualizado",
-            "deleted": "Assunto excluído: {{ descricao }}",
+            "deleted": "Assunto excluído",
             "delete": {
                 "question": "Tem certeza de que deseja excluir o Assunto: '{{ descricao }}'?"
             },
