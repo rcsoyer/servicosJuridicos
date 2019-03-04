@@ -1,18 +1,19 @@
-import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
-import { OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { IconDefinition } from '@fortawesome/fontawesome-common-types';
-import { faMinus } from '@fortawesome/free-solid-svg-icons';
+import {HttpErrorResponse, HttpResponse} from '@angular/common/http';
+import {OnDestroy} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {IconDefinition} from '@fortawesome/fontawesome-common-types';
+import {faMinus} from '@fortawesome/free-solid-svg-icons';
 import * as _ from 'lodash';
-import { JhiAlertService, JhiEventManager, JhiParseLinks } from 'ng-jhipster';
+import {JhiAlertService, JhiEventManager, JhiParseLinks} from 'ng-jhipster';
 import * as R from 'ramda';
-import { Subscription } from 'rxjs/Subscription';
-import { ITEMS_PER_PAGE } from '..';
-import { Principal } from '../../core';
-import { BaseEntity } from '../model/base-entity';
-import { BasicService } from '../service-commons/basic-service.service';
+import {Subscription} from 'rxjs/Subscription';
+import {ITEMS_PER_PAGE} from '..';
+import {Principal} from 'app/core';
+import {BaseEntity} from '../model/base-entity';
+import {BasicService} from '../service-commons/basic-service.service';
 
 export abstract class ComponentAbstract<T extends BaseEntity> implements OnDestroy {
+
     page: any;
     links: any;
     error: any;
@@ -44,20 +45,6 @@ export abstract class ComponentAbstract<T extends BaseEntity> implements OnDestr
         this.itemsPerPage = ITEMS_PER_PAGE;
     }
 
-    protected onInit(): void {
-        this.createModelConsulta();
-        this.setCurrentAccount();
-    }
-
-    private setRouteData(): void {
-        this.routeData = this.activatedRoute.data.subscribe(({ pagingParams }) => {
-            this.page = pagingParams.page;
-            this.previousPage = pagingParams.page;
-            this.reverse = pagingParams.ascending;
-            this.predicate = pagingParams.predicate;
-        });
-    }
-
     loadPage(page: number) {
         const previusPageNotEq = _.negate(R.equals(this.previousPage));
         const changePage = pg => {
@@ -65,6 +52,21 @@ export abstract class ComponentAbstract<T extends BaseEntity> implements OnDestr
             this.transition();
         };
         R.when(previusPageNotEq, changePage)(page);
+    }
+
+    ngOnDestroy() {
+        this.eventManager.destroy(this.eventSubscriber);
+    }
+
+    trackId(index: number, item: T) {
+        return item.id;
+    }
+
+    abstract transition(): void;
+
+    protected onInit(): void {
+        this.createModelConsulta();
+        this.setCurrentAccount();
     }
 
     protected foundResults(): boolean {
@@ -78,15 +80,6 @@ export abstract class ComponentAbstract<T extends BaseEntity> implements OnDestr
 
     protected setPredicateDefault(): void {
         this.predicate = 'id';
-    }
-
-    private getSort(): any {
-        const order = this.reverse ? 'asc' : 'desc';
-        const result = [this.predicate + ',' + order];
-        const predicateNotEqId = _.negate(R.equals(this.predicate));
-        const resultPushId = () => result.push('id');
-        R.when(predicateNotEqId, resultPushId)('id');
-        return result;
     }
 
     protected getPageable(): any {
@@ -137,10 +130,6 @@ export abstract class ComponentAbstract<T extends BaseEntity> implements OnDestr
         this.principal.identity().then(account => (this.currentAccount = account));
     }
 
-    ngOnDestroy() {
-        this.eventManager.destroy(this.eventSubscriber);
-    }
-
     protected registerChangeInEntidades(listModificationName: string) {
         const onSuccessQuery = response => this.query();
         this.eventSubscriber = this.eventManager.subscribe(listModificationName, onSuccessQuery);
@@ -153,19 +142,32 @@ export abstract class ComponentAbstract<T extends BaseEntity> implements OnDestr
         this.router.navigate([path]);
     }
 
-    trackId(index: number, item: T) {
-        return item.id;
+    protected sanitizeInputValues(): void {
     }
-
-    protected abstract sanitizeInputValues(): void;
 
     protected query(): void {
         this.sanitizeInputValues();
         this.service.queryByInput(this.modelConsulta, this.getPageable())
-                    .subscribe(this.onQuerySuccess(), this.onQueryError());
+        .subscribe(this.onQuerySuccess(), this.onQueryError());
     }
 
-    abstract transition(): void;
-
     protected abstract createModelConsulta(): void;
+
+    private setRouteData(): void {
+        this.routeData = this.activatedRoute.data.subscribe(({pagingParams}) => {
+            this.page = pagingParams.page;
+            this.previousPage = pagingParams.page;
+            this.reverse = pagingParams.ascending;
+            this.predicate = pagingParams.predicate;
+        });
+    }
+
+    private getSort(): any {
+        const order = this.reverse ? 'asc' : 'desc';
+        const result = [this.predicate + ',' + order];
+        const predicateNotEqId = _.negate(R.equals(this.predicate));
+        const resultPushId = () => result.push('id');
+        R.when(predicateNotEqId, resultPushId)('id');
+        return result;
+    }
 }

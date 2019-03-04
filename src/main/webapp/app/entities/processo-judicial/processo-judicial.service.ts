@@ -1,52 +1,55 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpResponse} from '@angular/common/http';
+import {Observable} from 'rxjs';
 import * as moment from 'moment';
-import { DATE_FORMAT } from 'app/shared/constants/input.constants';
-import { map } from 'rxjs/operators';
+import {DATE_FORMAT} from 'app/shared/constants/input.constants';
+import {map} from 'rxjs/operators';
 
-import { SERVER_API_URL } from 'app/app.constants';
-import { createRequestOption } from 'app/shared';
-import { ProcessoJudicial } from 'app/shared/model/processo-judicial.model';
+import {SERVER_API_URL} from 'app/app.constants';
+import {createRequestOption} from 'app/shared';
+import {ProcessoJudicial} from 'app/shared/model/processo-judicial.model';
+import {BasicService} from 'app/shared/service-commons/basic-service.service';
 
 type EntityResponseType = HttpResponse<ProcessoJudicial>;
 type EntityArrayResponseType = HttpResponse<ProcessoJudicial[]>;
 
-@Injectable({ providedIn: 'root' })
-export class ProcessoJudicialService {
+@Injectable({providedIn: 'root'})
+export class ProcessoJudicialService implements BasicService<ProcessoJudicial> {
+
     private resourceUrl = SERVER_API_URL + 'api/processo-judicials';
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) {
+    }
 
     create(processoJudicial: ProcessoJudicial): Observable<EntityResponseType> {
         const copy = this.convertDateFromClient(processoJudicial);
         return this.http
-            .post<ProcessoJudicial>(this.resourceUrl, copy, { observe: 'response' })
-            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+        .post<ProcessoJudicial>(this.resourceUrl, copy, {observe: 'response'})
+        .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
     update(processoJudicial: ProcessoJudicial): Observable<EntityResponseType> {
         const copy = this.convertDateFromClient(processoJudicial);
         return this.http
-            .put<ProcessoJudicial>(this.resourceUrl, copy, { observe: 'response' })
-            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+        .put<ProcessoJudicial>(this.resourceUrl, copy, {observe: 'response'})
+        .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
     find(id: number): Observable<EntityResponseType> {
         return this.http
-            .get<ProcessoJudicial>(`${this.resourceUrl}/${id}`, { observe: 'response' })
-            .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
+        .get<ProcessoJudicial>(`${this.resourceUrl}/${id}`, {observe: 'response'})
+        .pipe(map((res: EntityResponseType) => this.convertDateFromServer(res)));
     }
 
     query(req?: any): Observable<EntityArrayResponseType> {
         const options = createRequestOption(req);
         return this.http
-            .get<ProcessoJudicial[]>(this.resourceUrl, { params: options, observe: 'response' })
-            .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
+        .get<ProcessoJudicial[]>(this.resourceUrl, {params: options, observe: 'response'})
+        .pipe(map((res: EntityArrayResponseType) => this.convertDateArrayFromServer(res)));
     }
 
     delete(id: number): Observable<HttpResponse<any>> {
-        return this.http.delete<any>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+        return this.http.delete<any>(`${this.resourceUrl}/${id}`, {observe: 'response'});
     }
 
     private convertDateFromClient(processoJudicial: ProcessoJudicial): ProcessoJudicial {
@@ -87,5 +90,9 @@ export class ProcessoJudicialService {
             processoJudicial.dtConclusao = processoJudicial.dtConclusao != null ? moment(processoJudicial.dtConclusao) : null;
         });
         return res;
+    }
+
+    queryByInput(model: ProcessoJudicial, pageable: any): Observable<HttpResponse<ProcessoJudicial[]>> {
+        return undefined;
     }
 }

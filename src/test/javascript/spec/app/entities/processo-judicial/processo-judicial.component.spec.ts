@@ -1,13 +1,13 @@
 /* tslint:disable max-line-length */
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Observable, of } from 'rxjs';
-import { HttpHeaders, HttpResponse } from '@angular/common/http';
-import { ActivatedRoute, Data } from '@angular/router';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {of} from 'rxjs';
+import {HttpHeaders, HttpResponse} from '@angular/common/http';
+import {ActivatedRoute, Data} from '@angular/router';
 
-import { ServicosJuridicosTestModule } from '../../../test.module';
-import { ProcessoJudicialComponent } from 'app/entities/processo-judicial/processo-judicial.component';
-import { ProcessoJudicialService } from 'app/entities/processo-judicial/processo-judicial.service';
-import { ProcessoJudicial } from 'app/shared/model/processo-judicial.model';
+import {ServicosJuridicosTestModule} from '../../../test.module';
+import {ProcessoJudicialComponent} from 'app/entities/processo-judicial/processo-judicial.component';
+import {ProcessoJudicialService} from 'app/entities/processo-judicial/processo-judicial.service';
+import {ProcessoJudicial} from 'app/shared/model/processo-judicial.model';
 
 describe('Component Tests', () => {
     describe('ProcessoJudicial Management Component', () => {
@@ -37,8 +37,8 @@ describe('Component Tests', () => {
                     }
                 ]
             })
-                .overrideTemplate(ProcessoJudicialComponent, '')
-                .compileComponents();
+            .overrideTemplate(ProcessoJudicialComponent, '')
+            .compileComponents();
 
             fixture = TestBed.createComponent(ProcessoJudicialComponent);
             comp = fixture.componentInstance;
@@ -62,7 +62,7 @@ describe('Component Tests', () => {
 
             // THEN
             expect(service.query).toHaveBeenCalled();
-            expect(comp.processoJudicials[0]).toEqual(jasmine.objectContaining({ id: 123 }));
+            expect(comp.listResultQuery[0]).toEqual(jasmine.objectContaining({id: 123}));
         });
 
         it('should load a page', () => {
@@ -82,7 +82,7 @@ describe('Component Tests', () => {
 
             // THEN
             expect(service.query).toHaveBeenCalled();
-            expect(comp.processoJudicials[0]).toEqual(jasmine.objectContaining({ id: 123 }));
+            expect(comp.listResultQuery[0]).toEqual(jasmine.objectContaining({id: 123}));
         });
 
         it('should not load a page is the page is the same as the previous page', () => {
@@ -114,25 +114,7 @@ describe('Component Tests', () => {
             // THEN
             expect(comp.page).toEqual(0);
             expect(service.query).toHaveBeenCalledTimes(2);
-            expect(comp.processoJudicials[0]).toEqual(jasmine.objectContaining({ id: 123 }));
-        });
-        it('should calculate the sort attribute for an id', () => {
-            // WHEN
-            const result = comp.sort();
-
-            // THEN
-            expect(result).toEqual(['id,desc']);
-        });
-
-        it('should calculate the sort attribute for a non-id attribute', () => {
-            // GIVEN
-            comp.predicate = 'name';
-
-            // WHEN
-            const result = comp.sort();
-
-            // THEN
-            expect(result).toEqual(['name,desc', 'id']);
+            expect(comp.listResultQuery[0]).toEqual(jasmine.objectContaining({id: 123}));
         });
     });
 });

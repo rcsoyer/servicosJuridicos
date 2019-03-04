@@ -1,132 +1,51 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
-
-import { ProcessoJudicial } from 'app/shared/model/processo-judicial.model';
-import { Principal } from 'app/core';
-
-import { ITEMS_PER_PAGE } from 'app/shared';
-import { ProcessoJudicialService } from './processo-judicial.service';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {JhiAlertService, JhiEventManager, JhiParseLinks} from 'ng-jhipster';
+import {ProcessoJudicial} from 'app/shared/model/processo-judicial.model';
+import {Principal} from 'app/core';
+import {ProcessoJudicialService} from './processo-judicial.service';
+import {ComponentAbstract} from 'app/shared/components-abstract/component.abstract';
+import {PROCESSO_JUDICIAL_LIST_MODIFICATION} from 'app/entities/processo-judicial/processo-judicial.constants';
 
 @Component({
-    selector: 'jhi-processo-judicial',
+    selector: 'processo-judicial',
     templateUrl: './processo-judicial.component.html'
 })
-export class ProcessoJudicialComponent implements OnInit, OnDestroy {
-    currentAccount: any;
-    processoJudicials: ProcessoJudicial[];
-    error: any;
-    success: any;
-    eventSubscriber: Subscription;
-    routeData: any;
-    links: any;
-    totalItems: any;
-    queryCount: any;
-    itemsPerPage: any;
-    page: any;
-    predicate: any;
-    previousPage: any;
-    reverse: any;
+export class ProcessoJudicialComponent extends ComponentAbstract<ProcessoJudicial> implements OnInit {
+
+    private readonly path = '/processo-judicial';
 
     constructor(
-        private processoJudicialService: ProcessoJudicialService,
-        private parseLinks: JhiParseLinks,
-        private jhiAlertService: JhiAlertService,
-        private principal: Principal,
-        private activatedRoute: ActivatedRoute,
-        private router: Router,
-        private eventManager: JhiEventManager
+        processoJudicialService: ProcessoJudicialService,
+        principal: Principal,
+        activatedRoute: ActivatedRoute,
+        router: Router,
+        eventManager: JhiEventManager,
+        parseLinks: JhiParseLinks,
+        jhiAlertService: JhiAlertService
     ) {
-        this.itemsPerPage = ITEMS_PER_PAGE;
-        this.routeData = this.activatedRoute.data.subscribe(data => {
-            this.page = data.pagingParams.page;
-            this.previousPage = data.pagingParams.page;
-            this.reverse = data.pagingParams.ascending;
-            this.predicate = data.pagingParams.predicate;
-        });
+        super(processoJudicialService, parseLinks, router, jhiAlertService, principal,
+            activatedRoute, eventManager);
     }
 
-    loadAll() {
-        this.processoJudicialService
-            .query({
-                page: this.page - 1,
-                size: this.itemsPerPage,
-                sort: this.sort()
-            })
-            .subscribe(
-                (res: HttpResponse<ProcessoJudicial[]>) => this.paginateProcessoJudicials(res.body, res.headers),
-                (res: HttpErrorResponse) => this.onError(res.message)
-            );
+    ngOnInit(): void {
+        super.onInit();
+        this.registerChangeInProcessosJudiciais();
     }
 
-    loadPage(page: number) {
-        if (page !== this.previousPage) {
-            this.previousPage = page;
-            this.transition();
-        }
-    }
-
-    transition() {
-        this.router.navigate(['/processo-judicial'], {
-            queryParams: {
-                page: this.page,
-                size: this.itemsPerPage,
-                sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-            }
-        });
-        this.loadAll();
+    transition(): void {
+        super.basicTransition(this.path);
     }
 
     clear() {
-        this.page = 0;
-        this.router.navigate([
-            '/processo-judicial',
-            {
-                page: this.page,
-                sort: this.predicate + ',' + (this.reverse ? 'asc' : 'desc')
-            }
-        ]);
-        this.loadAll();
+        super.clear(this.path);
     }
 
-    ngOnInit() {
-        this.loadAll();
-        this.principal.identity().then(account => {
-            this.currentAccount = account;
-        });
-        this.registerChangeInProcessoJudicials();
+    protected createModelConsulta(): void {
+        this.modelConsulta = new ProcessoJudicial();
     }
 
-    ngOnDestroy() {
-        this.eventManager.destroy(this.eventSubscriber);
-    }
-
-    trackId(index: number, item: ProcessoJudicial) {
-        return item.id;
-    }
-
-    registerChangeInProcessoJudicials() {
-        this.eventSubscriber = this.eventManager.subscribe('processoJudicialListModification', response => this.loadAll());
-    }
-
-    sort() {
-        const result = [this.predicate + ',' + (this.reverse ? 'asc' : 'desc')];
-        if (this.predicate !== 'id') {
-            result.push('id');
-        }
-        return result;
-    }
-
-    private paginateProcessoJudicials(data: ProcessoJudicial[], headers: HttpHeaders) {
-        this.links = this.parseLinks.parse(headers.get('link'));
-        this.totalItems = parseInt(headers.get('X-Total-Count'), 10);
-        this.queryCount = this.totalItems;
-        this.processoJudicials = data;
-    }
-
-    private onError(errorMessage: string) {
-        this.jhiAlertService.error(errorMessage, null, null);
+    private registerChangeInProcessosJudiciais() {
+        this.registerChangeInEntidades(PROCESSO_JUDICIAL_LIST_MODIFICATION);
     }
 }

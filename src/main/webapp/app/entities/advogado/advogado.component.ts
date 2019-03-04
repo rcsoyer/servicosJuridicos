@@ -7,7 +7,6 @@ import {AdvogadoService} from './advogado.service';
 import {ComponentAbstract} from '../../shared/components-abstract/component.abstract';
 import {ADVOGADO_LIST_MODIFICATION} from 'app/entities/advogado/advogado.constants';
 import * as _ from 'lodash';
-import * as R from 'ramda';
 import {AdvogadoUtils} from 'app/entities/advogado/advogado-utils';
 
 @Component({
@@ -55,7 +54,5 @@ export class AdvogadoComponent extends ComponentAbstract<Advogado> implements On
 
     protected sanitizeInputValues(): void {
         this.modelConsulta.nome = _.trim(this.modelConsulta.nome);
-        const setNomeNull = () => (this.modelConsulta.nome = null);
-        R.when(_.isEmpty, setNomeNull)(this.modelConsulta.nome);
     }
 }
