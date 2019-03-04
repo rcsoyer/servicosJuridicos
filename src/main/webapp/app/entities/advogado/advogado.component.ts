@@ -4,7 +4,7 @@ import {JhiAlertService, JhiEventManager, JhiParseLinks} from 'ng-jhipster';
 import {Advogado} from 'app/shared/model/advogado.model';
 import {Principal} from 'app/core';
 import {AdvogadoService} from './advogado.service';
-import {ComponentAbstract} from '../../shared/components-abstract/component.abstract';
+import {ComponentAbstract} from 'app/shared/components-abstract/component.abstract';
 import {ADVOGADO_LIST_MODIFICATION} from 'app/entities/advogado/advogado.constants';
 import * as _ from 'lodash';
 import {AdvogadoUtils} from 'app/entities/advogado/advogado-utils';

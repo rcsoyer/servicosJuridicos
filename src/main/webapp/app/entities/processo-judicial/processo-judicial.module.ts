@@ -1,21 +1,22 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { RouterModule } from '@angular/router';
-
-import { ServicosJuridicosSharedModule } from 'app/shared';
+import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
+import {RouterModule} from '@angular/router';
+import {WhitespaceModule} from 'app/shared/util/whitespace-validator/whitespace.validator.module';
+import {TextMaskModule} from 'angular2-text-mask';
+import {ServicosJuridicosSharedModule} from 'app/shared';
 import {
     ProcessoJudicialComponent,
-    ProcessoJudicialDetailComponent,
-    ProcessoJudicialUpdateComponent,
-    ProcessoJudicialDeletePopupComponent,
     ProcessoJudicialDeleteDialogComponent,
+    ProcessoJudicialDeletePopupComponent,
+    ProcessoJudicialDetailComponent,
+    processoJudicialPopupRoute,
     processoJudicialRoute,
-    processoJudicialPopupRoute
+    ProcessoJudicialUpdateComponent
 } from './';
 
 const ENTITY_STATES = [...processoJudicialRoute, ...processoJudicialPopupRoute];
 
 @NgModule({
-    imports: [ServicosJuridicosSharedModule, RouterModule.forChild(ENTITY_STATES)],
+    imports: [ServicosJuridicosSharedModule, RouterModule.forChild(ENTITY_STATES), WhitespaceModule, TextMaskModule],
     declarations: [
         ProcessoJudicialComponent,
         ProcessoJudicialDetailComponent,
@@ -31,4 +32,5 @@ const ENTITY_STATES = [...processoJudicialRoute, ...processoJudicialPopupRoute];
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class ServicosJuridicosProcessoJudicialModule {}
+export class ServicosJuridicosProcessoJudicialModule {
+}

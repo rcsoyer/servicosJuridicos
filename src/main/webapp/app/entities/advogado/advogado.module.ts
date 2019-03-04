@@ -1,8 +1,8 @@
 import {CUSTOM_ELEMENTS_SCHEMA, NgModule} from '@angular/core';
 import {RouterModule} from '@angular/router';
 import {ServicosJuridicosSharedModule} from 'app/shared';
-import {CpfValidatorModule} from '../../shared/util/cpf/cpf.module';
-import {WhitespaceModule} from '../../shared/util/whitespace-validator/whitespace.validator.module';
+import {CpfValidatorModule} from 'app/shared/util/cpf/cpf.module';
+import {WhitespaceModule} from 'app/shared/util/whitespace-validator/whitespace.validator.module';
 import {TextMaskModule} from 'angular2-text-mask';
 import {
     AdvogadoComponent,

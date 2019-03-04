@@ -6,6 +6,7 @@ import {Principal} from 'app/core';
 import {ProcessoJudicialService} from './processo-judicial.service';
 import {ComponentAbstract} from 'app/shared/components-abstract/component.abstract';
 import {PROCESSO_JUDICIAL_LIST_MODIFICATION} from 'app/entities/processo-judicial/processo-judicial.constants';
+import {maskNumeroProcesso} from 'app/entities/processo-judicial/mask-numero-processo';
 
 @Component({
     selector: 'processo-judicial',
@@ -39,6 +40,10 @@ export class ProcessoJudicialComponent extends ComponentAbstract<ProcessoJudicia
 
     clear() {
         super.clear(this.path);
+    }
+
+    maskProcessoNumero() {
+        return maskNumeroProcesso();
     }
 
     protected createModelConsulta(): void {

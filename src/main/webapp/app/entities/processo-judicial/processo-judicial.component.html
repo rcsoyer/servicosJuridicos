@@ -9,6 +9,168 @@
     </h2>
     <hr/>
     <jhi-alert></jhi-alert>
+    <form name="searchForm" role="form" novalidate #searchForm="ngForm" (ngSubmit)="query()">
+        <div class="container-fluid">
+            <h4>
+                <span>Consulta</span>
+            </h4>
+            <div class="form-group form-row">
+                <label class="col-md-1 col-form-label"
+                       for="field_numero">Número</label>
+                <input type="text" class="form-control col-md-4" name="numero" id="field_numero"
+                       [(ngModel)]="modelConsulta.numero" minlength="20"
+                       [textMask]="maskProcessoNumero()"/>
+                <div
+                    [hidden]="!(searchForm.controls.numero?.dirty && searchForm.controls.numero?.invalid)">
+                    <small class="form-text text-danger"
+                           [hidden]="!searchForm.controls.numero?.errors?.minlength"
+                           jhiTranslate="entity.validation.minlength"
+                           translateValues="{ min: 20 }">
+                        This field is required to be at least 20 characters.
+                    </small>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-control-label"
+                       for="field_prazoFinal">Prazo Final</label>
+                <div class="input-group">
+                    <input id="field_prazoFinal" type="text" class="form-control col-md-4"
+                           name="prazoFinal" ngbDatepicker #prazoFinalDp="ngbDatepicker"
+                           [(ngModel)]="processoJudicial.prazoFinal"
+                           required/>
+                    <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary"
+                                    (click)="prazoFinalDp.toggle()"><fa-icon
+                                [icon]="'calendar-alt'"></fa-icon></button>
+                        </span>
+                </div>
+                <div
+                    [hidden]="!(searchForm.controls.prazoFinal?.dirty && searchForm.controls.prazoFinal?.invalid)">
+                    <small class="form-text text-danger"
+                           [hidden]="!searchForm.controls.prazoFinal?.errors?.required"
+                           jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-control-label"
+                       jhiTranslate="servicosJuridicosApp.processoJudicial.dtAtribuicao"
+                       for="field_dtAtribuicao">Dt Atribuicao</label>
+                <div class="input-group">
+                    <input id="field_dtAtribuicao" type="text" class="form-control"
+                           name="dtAtribuicao" ngbDatepicker #dtAtribuicaoDp="ngbDatepicker"
+                           [(ngModel)]="processoJudicial.dtAtribuicao"
+                           required/>
+                    <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary"
+                                    (click)="dtAtribuicaoDp.toggle()"><fa-icon
+                                [icon]="'calendar-alt'"></fa-icon></button>
+                        </span>
+                </div>
+                <div
+                    [hidden]="!(searchForm.controls.dtAtribuicao?.dirty && searchForm.controls.dtAtribuicao?.invalid)">
+                    <small class="form-text text-danger"
+                           [hidden]="!searchForm.controls.dtAtribuicao?.errors?.required"
+                           jhiTranslate="entity.validation.required">
+                        This field is required.
+                    </small>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-control-label"
+                       jhiTranslate="servicosJuridicosApp.processoJudicial.dtInicio"
+                       for="field_dtInicio">Dt Inicio</label>
+                <div class="input-group">
+                    <input id="field_dtInicio" type="text" class="form-control" name="dtInicio"
+                           ngbDatepicker #dtInicioDp="ngbDatepicker"
+                           [(ngModel)]="processoJudicial.dtInicio"
+                    />
+                    <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary"
+                                    (click)="dtInicioDp.toggle()"><fa-icon
+                                [icon]="'calendar-alt'"></fa-icon></button>
+                        </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-control-label"
+                       jhiTranslate="servicosJuridicosApp.processoJudicial.dtConclusao"
+                       for="field_dtConclusao">Dt Conclusao</label>
+                <div class="input-group">
+                    <input id="field_dtConclusao" type="text" class="form-control"
+                           name="dtConclusao" ngbDatepicker #dtConclusaoDp="ngbDatepicker"
+                           [(ngModel)]="processoJudicial.dtConclusao"
+                    />
+                    <span class="input-group-append">
+                            <button type="button" class="btn btn-secondary"
+                                    (click)="dtConclusaoDp.toggle()"><fa-icon
+                                [icon]="'calendar-alt'"></fa-icon></button>
+                        </span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-control-label"
+                       jhiTranslate="servicosJuridicosApp.processoJudicial.assunto"
+                       for="field_assunto">Assunto</label>
+                <select class="form-control" id="field_assunto" name="assunto"
+                        [(ngModel)]="processoJudicial.assuntoId" required>
+                    <option *ngIf="!searchForm.value.assunto" [ngValue]="null" selected></option>
+                    <option [ngValue]="assuntoOption.id"
+                            *ngFor="let assuntoOption of assuntos; trackBy: trackAssuntoById">{{assuntoOption.id}}</option>
+                </select>
+            </div>
+            <div
+                [hidden]="!(searchForm.controls.assunto?.dirty && searchForm.controls.assunto?.invalid)">
+                <small class="form-text text-danger"
+                       [hidden]="!searchForm.controls.assunto?.errors?.required"
+                       jhiTranslate="entity.validation.required">
+                    This field is required.
+                </small>
+            </div>
+            <div class="form-group">
+                <label class="form-control-label"
+                       jhiTranslate="servicosJuridicosApp.processoJudicial.modalidade"
+                       for="field_modalidade">Modalidade</label>
+                <select class="form-control" id="field_modalidade" name="modalidade"
+                        [(ngModel)]="processoJudicial.modalidadeId" required>
+                    <option *ngIf="!searchForm.value.modalidade" [ngValue]="null"
+                            selected></option>
+                    <option [ngValue]="modalidadeOption.id"
+                            *ngFor="let modalidadeOption of modalidades; trackBy: trackModalidadeById">{{modalidadeOption.id}}</option>
+                </select>
+            </div>
+            <div
+                [hidden]="!(searchForm.controls.modalidade?.dirty && searchForm.controls.modalidade?.invalid)">
+                <small class="form-text text-danger"
+                       [hidden]="!searchForm.controls.modalidade?.errors?.required"
+                       jhiTranslate="entity.validation.required">
+                    This field is required.
+                </small>
+            </div>
+            <div class="form-group">
+                <label class="form-control-label"
+                       jhiTranslate="servicosJuridicosApp.processoJudicial.advogado"
+                       for="field_advogado">Advogado</label>
+                <select class="form-control" id="field_advogado" name="advogado"
+                        [(ngModel)]="processoJudicial.advogadoId" required>
+                    <option *ngIf="!searchForm.value.advogado" [ngValue]="null" selected></option>
+                    <option [ngValue]="advogadoOption.id"
+                            *ngFor="let advogadoOption of advogados; trackBy: trackAdvogadoById">{{advogadoOption.id}}</option>
+                </select>
+            </div>
+            <div
+                [hidden]="!(searchForm.controls.advogado?.dirty && searchForm.controls.advogado?.invalid)">
+                <small class="form-text text-danger"
+                       [hidden]="!searchForm.controls.advogado?.errors?.required"
+                       jhiTranslate="entity.validation.required">
+                    This field is required.
+                </small>
+            </div>
+        </div>
+    </form>
+    <br/>
     <div class="table-responsive" *ngIf="processoJudicials">
         <table class="table table-striped">
             <thead>

@@ -1,132 +1,194 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
-            <h2 id="jhi-processo-judicial-heading" jhiTranslate="servicosJuridicosApp.processoJudicial.home.createOrEditLabel">Create or edit a Processo Judicial</h2>
+            <h2 id="jhi-processo-judicial-heading"
+                jhiTranslate="servicosJuridicosApp.processoJudicial.home.createOrEditLabel">Create
+                or edit a Processo Judicial</h2>
             <div>
                 <jhi-alert-error></jhi-alert-error>
                 <div class="form-group" [hidden]="!processoJudicial.id">
                     <label for="id" jhiTranslate="global.field.id">ID</label>
                     <input type="text" class="form-control" id="id" name="id"
-                        [(ngModel)]="processoJudicial.id" readonly />
+                           [(ngModel)]="processoJudicial.id" readonly/>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.processoJudicial.numero" for="field_numero">Numero</label>
+                    <label class="form-control-label"
+                           jhiTranslate="servicosJuridicosApp.processoJudicial.numero"
+                           for="field_numero">Numero</label>
                     <input type="text" class="form-control" name="numero" id="field_numero"
-                        [(ngModel)]="processoJudicial.numero" required minlength="20" maxlength="20"/>
-                    <div [hidden]="!(editForm.controls.numero?.dirty && editForm.controls.numero?.invalid)">
+                           [(ngModel)]="processoJudicial.numero" required minlength="20"
+                           maxlength="20"/>
+                    <div
+                        [hidden]="!(editForm.controls.numero?.dirty && editForm.controls.numero?.invalid)">
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.numero?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
+                               [hidden]="!editForm.controls.numero?.errors?.required"
+                               jhiTranslate="entity.validation.required">
+                            This field is required.
                         </small>
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.numero?.errors?.minlength" jhiTranslate="entity.validation.minlength" translateValues="{ min: 20 }">
-                        This field is required to be at least 20 characters.
+                               [hidden]="!editForm.controls.numero?.errors?.minlength"
+                               jhiTranslate="entity.validation.minlength"
+                               translateValues="{ min: 20 }">
+                            This field is required to be at least 20 characters.
                         </small>
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.numero?.errors?.maxlength" jhiTranslate="entity.validation.maxlength" translateValues="{ max: 20 }">
-                        This field cannot be longer than 20 characters.
+                               [hidden]="!editForm.controls.numero?.errors?.maxlength"
+                               jhiTranslate="entity.validation.maxlength"
+                               translateValues="{ max: 20 }">
+                            This field cannot be longer than 20 characters.
                         </small>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.processoJudicial.prazoFinal" for="field_prazoFinal">Prazo Final</label>
+                    <label class="form-control-label"
+                           jhiTranslate="servicosJuridicosApp.processoJudicial.prazoFinal"
+                           for="field_prazoFinal">Prazo Final</label>
                     <div class="input-group">
-                        <input id="field_prazoFinal" type="text" class="form-control" name="prazoFinal" ngbDatepicker  #prazoFinalDp="ngbDatepicker" [(ngModel)]="processoJudicial.prazoFinal"
-                        required/>
+                        <input id="field_prazoFinal" type="text" class="form-control"
+                               name="prazoFinal" ngbDatepicker #prazoFinalDp="ngbDatepicker"
+                               [(ngModel)]="processoJudicial.prazoFinal"
+                               required/>
                         <span class="input-group-append">
-                            <button type="button" class="btn btn-secondary" (click)="prazoFinalDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                            <button type="button" class="btn btn-secondary"
+                                    (click)="prazoFinalDp.toggle()"><fa-icon
+                                [icon]="'calendar-alt'"></fa-icon></button>
                         </span>
                     </div>
-                    <div [hidden]="!(editForm.controls.prazoFinal?.dirty && editForm.controls.prazoFinal?.invalid)">
+                    <div
+                        [hidden]="!(editForm.controls.prazoFinal?.dirty && editForm.controls.prazoFinal?.invalid)">
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.prazoFinal?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
+                               [hidden]="!editForm.controls.prazoFinal?.errors?.required"
+                               jhiTranslate="entity.validation.required">
+                            This field is required.
                         </small>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.processoJudicial.dtAtribuicao" for="field_dtAtribuicao">Dt Atribuicao</label>
+                    <label class="form-control-label"
+                           jhiTranslate="servicosJuridicosApp.processoJudicial.dtAtribuicao"
+                           for="field_dtAtribuicao">Dt Atribuicao</label>
                     <div class="input-group">
-                        <input id="field_dtAtribuicao" type="text" class="form-control" name="dtAtribuicao" ngbDatepicker  #dtAtribuicaoDp="ngbDatepicker" [(ngModel)]="processoJudicial.dtAtribuicao"
-                        required/>
+                        <input id="field_dtAtribuicao" type="text" class="form-control"
+                               name="dtAtribuicao" ngbDatepicker #dtAtribuicaoDp="ngbDatepicker"
+                               [(ngModel)]="processoJudicial.dtAtribuicao"
+                               required/>
                         <span class="input-group-append">
-                            <button type="button" class="btn btn-secondary" (click)="dtAtribuicaoDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                            <button type="button" class="btn btn-secondary"
+                                    (click)="dtAtribuicaoDp.toggle()"><fa-icon
+                                [icon]="'calendar-alt'"></fa-icon></button>
                         </span>
                     </div>
-                    <div [hidden]="!(editForm.controls.dtAtribuicao?.dirty && editForm.controls.dtAtribuicao?.invalid)">
+                    <div
+                        [hidden]="!(editForm.controls.dtAtribuicao?.dirty && editForm.controls.dtAtribuicao?.invalid)">
                         <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.dtAtribuicao?.errors?.required" jhiTranslate="entity.validation.required">
-                        This field is required.
+                               [hidden]="!editForm.controls.dtAtribuicao?.errors?.required"
+                               jhiTranslate="entity.validation.required">
+                            This field is required.
                         </small>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.processoJudicial.dtInicio" for="field_dtInicio">Dt Inicio</label>
+                    <label class="form-control-label"
+                           jhiTranslate="servicosJuridicosApp.processoJudicial.dtInicio"
+                           for="field_dtInicio">Dt Inicio</label>
                     <div class="input-group">
-                        <input id="field_dtInicio" type="text" class="form-control" name="dtInicio" ngbDatepicker  #dtInicioDp="ngbDatepicker" [(ngModel)]="processoJudicial.dtInicio"
+                        <input id="field_dtInicio" type="text" class="form-control" name="dtInicio"
+                               ngbDatepicker #dtInicioDp="ngbDatepicker"
+                               [(ngModel)]="processoJudicial.dtInicio"
                         />
                         <span class="input-group-append">
-                            <button type="button" class="btn btn-secondary" (click)="dtInicioDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                            <button type="button" class="btn btn-secondary"
+                                    (click)="dtInicioDp.toggle()"><fa-icon
+                                [icon]="'calendar-alt'"></fa-icon></button>
                         </span>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.processoJudicial.dtConclusao" for="field_dtConclusao">Dt Conclusao</label>
+                    <label class="form-control-label"
+                           jhiTranslate="servicosJuridicosApp.processoJudicial.dtConclusao"
+                           for="field_dtConclusao">Dt Conclusao</label>
                     <div class="input-group">
-                        <input id="field_dtConclusao" type="text" class="form-control" name="dtConclusao" ngbDatepicker  #dtConclusaoDp="ngbDatepicker" [(ngModel)]="processoJudicial.dtConclusao"
+                        <input id="field_dtConclusao" type="text" class="form-control"
+                               name="dtConclusao" ngbDatepicker #dtConclusaoDp="ngbDatepicker"
+                               [(ngModel)]="processoJudicial.dtConclusao"
                         />
                         <span class="input-group-append">
-                            <button type="button" class="btn btn-secondary" (click)="dtConclusaoDp.toggle()"><fa-icon [icon]="'calendar-alt'"></fa-icon></button>
+                            <button type="button" class="btn btn-secondary"
+                                    (click)="dtConclusaoDp.toggle()"><fa-icon
+                                [icon]="'calendar-alt'"></fa-icon></button>
                         </span>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.processoJudicial.assunto" for="field_assunto">Assunto</label>
-                    <select class="form-control" id="field_assunto" name="assunto" [(ngModel)]="processoJudicial.assuntoId"  required>
+                    <label class="form-control-label"
+                           jhiTranslate="servicosJuridicosApp.processoJudicial.assunto"
+                           for="field_assunto">Assunto</label>
+                    <select class="form-control" id="field_assunto" name="assunto"
+                            [(ngModel)]="processoJudicial.assuntoId" required>
                         <option *ngIf="!editForm.value.assunto" [ngValue]="null" selected></option>
-                        <option [ngValue]="assuntoOption.id" *ngFor="let assuntoOption of assuntos; trackBy: trackAssuntoById">{{assuntoOption.id}}</option>
+                        <option [ngValue]="assuntoOption.id"
+                                *ngFor="let assuntoOption of assuntos; trackBy: trackAssuntoById">{{assuntoOption.id}}</option>
                     </select>
                 </div>
-                <div [hidden]="!(editForm.controls.assunto?.dirty && editForm.controls.assunto?.invalid)">
+                <div
+                    [hidden]="!(editForm.controls.assunto?.dirty && editForm.controls.assunto?.invalid)">
                     <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.assunto?.errors?.required" jhiTranslate="entity.validation.required">
+                           [hidden]="!editForm.controls.assunto?.errors?.required"
+                           jhiTranslate="entity.validation.required">
                         This field is required.
                     </small>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.processoJudicial.modalidade" for="field_modalidade">Modalidade</label>
-                    <select class="form-control" id="field_modalidade" name="modalidade" [(ngModel)]="processoJudicial.modalidadeId"  required>
-                        <option *ngIf="!editForm.value.modalidade" [ngValue]="null" selected></option>
-                        <option [ngValue]="modalidadeOption.id" *ngFor="let modalidadeOption of modalidades; trackBy: trackModalidadeById">{{modalidadeOption.id}}</option>
+                    <label class="form-control-label"
+                           jhiTranslate="servicosJuridicosApp.processoJudicial.modalidade"
+                           for="field_modalidade">Modalidade</label>
+                    <select class="form-control" id="field_modalidade" name="modalidade"
+                            [(ngModel)]="processoJudicial.modalidadeId" required>
+                        <option *ngIf="!editForm.value.modalidade" [ngValue]="null"
+                                selected></option>
+                        <option [ngValue]="modalidadeOption.id"
+                                *ngFor="let modalidadeOption of modalidades; trackBy: trackModalidadeById">{{modalidadeOption.id}}</option>
                     </select>
                 </div>
-                <div [hidden]="!(editForm.controls.modalidade?.dirty && editForm.controls.modalidade?.invalid)">
+                <div
+                    [hidden]="!(editForm.controls.modalidade?.dirty && editForm.controls.modalidade?.invalid)">
                     <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.modalidade?.errors?.required" jhiTranslate="entity.validation.required">
+                           [hidden]="!editForm.controls.modalidade?.errors?.required"
+                           jhiTranslate="entity.validation.required">
                         This field is required.
                     </small>
                 </div>
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="servicosJuridicosApp.processoJudicial.advogado" for="field_advogado">Advogado</label>
-                    <select class="form-control" id="field_advogado" name="advogado" [(ngModel)]="processoJudicial.advogadoId"  required>
+                    <label class="form-control-label"
+                           jhiTranslate="servicosJuridicosApp.processoJudicial.advogado"
+                           for="field_advogado">Advogado</label>
+                    <select class="form-control" id="field_advogado" name="advogado"
+                            [(ngModel)]="processoJudicial.advogadoId" required>
                         <option *ngIf="!editForm.value.advogado" [ngValue]="null" selected></option>
-                        <option [ngValue]="advogadoOption.id" *ngFor="let advogadoOption of advogados; trackBy: trackAdvogadoById">{{advogadoOption.id}}</option>
+                        <option [ngValue]="advogadoOption.id"
+                                *ngFor="let advogadoOption of advogados; trackBy: trackAdvogadoById">{{advogadoOption.id}}</option>
                     </select>
                 </div>
-                <div [hidden]="!(editForm.controls.advogado?.dirty && editForm.controls.advogado?.invalid)">
+                <div
+                    [hidden]="!(editForm.controls.advogado?.dirty && editForm.controls.advogado?.invalid)">
                     <small class="form-text text-danger"
-                        [hidden]="!editForm.controls.advogado?.errors?.required" jhiTranslate="entity.validation.required">
+                           [hidden]="!editForm.controls.advogado?.errors?.required"
+                           jhiTranslate="entity.validation.required">
                         This field is required.
                     </small>
                 </div>
             </div>
             <div>
-                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
-                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+                <button type="button" id="cancel-save" class="btn btn-secondary"
+                        (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon>&nbsp;<span
+                    jhiTranslate="entity.action.cancel">Cancel</span>
                 </button>
-                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
-                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+                <button type="submit" id="save-entity"
+                        [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon>&nbsp;<span
+                    jhiTranslate="entity.action.save">Save</span>
                 </button>
             </div>
         </form>
