@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -34,9 +35,9 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Setter
 @Accessors(chain = true)
 @Table(name = "advogado")
+@EqualsAndHashCode(of = {"id", "cpf"})
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @ToString(exclude = {"processos", "feriasLicencas", "dgCoordenacoes"})
-@EqualsAndHashCode(exclude = {"processos", "feriasLicencas", "dgCoordenacoes"})
 public class Advogado implements Serializable {
     
     private static final long serialVersionUID = 1619909263889107243L;
@@ -47,7 +48,7 @@ public class Advogado implements Serializable {
     private Long id;
     
     @NotBlank
-    @Size(min = 1, max = 80)
+    @Size(max = 80)
     @Setter(AccessLevel.NONE)
     @Column(length = 80, nullable = false)
     private String nome;
@@ -55,7 +56,7 @@ public class Advogado implements Serializable {
     @NotBlank
     @Size(min = 11, max = 11)
     @Setter(AccessLevel.NONE)
-    @Column(length = 11, nullable = false)
+    @Column(length = 11, nullable = false, unique = true)
     private String cpf;
     
     @Column
@@ -67,8 +68,8 @@ public class Advogado implements Serializable {
     private Set<ProcessoJudicial> processos = new HashSet<>(0);
     
     @JsonIgnore
-    @OneToMany(mappedBy = "advogado", fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @OneToMany(mappedBy = "advogado", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<FeriasLicenca> feriasLicencas = new HashSet<>(0);
     
     @JsonIgnore

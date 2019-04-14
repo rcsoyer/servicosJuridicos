@@ -14,24 +14,25 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @SpringBootTest(classes = ServicosJuridicosApp.class)
 @ExtendWith(SpringExtension.class)
-public class AdvogadoRepositoryTest {
+class AdvogadoRepositoryTest {
     
     @Autowired
     private AdvogadoRepository repository;
     
+    private Advogado advogado;
+    
     @BeforeEach
-    public void setUp() {
-        var advogado = new Advogado().setId(1L)
-            .setCpf("98734512365")
-            .setNome("Bruce Banner")
-            .setRamal(3242);
-        repository.save(advogado);
+    void setUp() {
+        advogado = new Advogado().setId(1L)
+                                 .setCpf("98734512365")
+                                 .setNome("Bruce Banner")
+                                 .setRamal(3242);
+        advogado = repository.save(advogado);
     }
     
     @Test
-    public void query() {
-        var advogado = new Advogado();
-        var pageable = PageRequest.of(1, 2);
+    void query() {
+        var pageable = PageRequest.of(0, 10);
         var result = repository.query(advogado, pageable);
         assertEquals(result.getContent().get(0), advogado);
     }

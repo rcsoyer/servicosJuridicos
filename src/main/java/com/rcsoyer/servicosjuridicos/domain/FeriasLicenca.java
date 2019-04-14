@@ -39,6 +39,7 @@ public class FeriasLicenca implements Serializable {
     private static final long serialVersionUID = 8831667760716620943L;
     
     @Id
+    @Column(updatable = false)
     @SequenceGenerator(name = "sequenceGenerator")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     private Long id;

@@ -25,9 +25,9 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode
 @Accessors(chain = true)
 @Table(name = "modalidade")
-@EqualsAndHashCode(of = "id")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class Modalidade implements Serializable {
     
@@ -40,7 +40,7 @@ public class Modalidade implements Serializable {
     
     @NotEmpty
     @Size(min = 1, max = 60)
-    @Column(length = 60, nullable = false)
+    @Column(length = 60, nullable = false, unique = true)
     private String descricao;
     
 }
