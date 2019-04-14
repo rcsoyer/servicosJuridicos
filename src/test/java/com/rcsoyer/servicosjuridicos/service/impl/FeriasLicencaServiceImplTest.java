@@ -42,13 +42,12 @@ class FeriasLicencaServiceImplTest {
     @BeforeEach
     void setUp() {
         dto = new FeriasLicencaDTO().setId(1L);
-        domain = new FeriasLicenca();
+        domain = new FeriasLicenca().setId(1L);
     }
     
     @Test
     void save() {
         when(mapper.toEntity(dto)).thenReturn(domain);
-        domain.setId(1L);
         when(repository.save(domain)).thenReturn(domain);
         when(mapper.toDto(domain)).thenReturn(dto.setId(1L));
         service.save(dto);
