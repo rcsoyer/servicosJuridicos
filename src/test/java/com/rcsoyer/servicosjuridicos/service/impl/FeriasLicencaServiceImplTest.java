@@ -9,6 +9,7 @@ import com.rcsoyer.servicosjuridicos.domain.FeriasLicenca;
 import com.rcsoyer.servicosjuridicos.repository.FeriasLicencaRepository;
 import com.rcsoyer.servicosjuridicos.service.dto.FeriasLicencaDTO;
 import com.rcsoyer.servicosjuridicos.service.mapper.FeriasLicencaMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,10 +28,17 @@ class FeriasLicencaServiceImplTest {
     @InjectMocks
     private FeriasLicencaServiceImpl service;
     
+    private FeriasLicenca domain;
+    private FeriasLicencaDTO dto;
+    
+    @BeforeEach
+    void setUp() {
+        dto = new FeriasLicencaDTO().setId(1L);
+        domain = new FeriasLicenca();
+    }
+    
     @Test
     void save() {
-        var dto = new FeriasLicencaDTO().setId(1L);
-        var domain = new FeriasLicenca();
         when(mapper.toEntity(dto)).thenReturn(domain);
         domain.setId(1L);
         when(repository.save(domain)).thenReturn(domain);
@@ -42,6 +50,9 @@ class FeriasLicencaServiceImplTest {
     
     @Test
     void findAll() {
+        var dto = new FeriasLicencaDTO().setId(1L);
+        var domain = new FeriasLicenca();
+        when(mapper.toEntity(dto)).thenReturn(domain);
     }
     
     @Test
