@@ -1,6 +1,7 @@
 package com.rcsoyer.servicosjuridicos.service.impl;
 
 import static java.util.Collections.emptyList;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -11,6 +12,7 @@ import com.rcsoyer.servicosjuridicos.domain.FeriasLicenca;
 import com.rcsoyer.servicosjuridicos.repository.FeriasLicencaRepository;
 import com.rcsoyer.servicosjuridicos.service.dto.FeriasLicencaDTO;
 import com.rcsoyer.servicosjuridicos.service.mapper.FeriasLicencaMapper;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -62,10 +64,21 @@ class FeriasLicencaServiceImplTest {
         when(mapper.toDto(any(FeriasLicenca.class))).thenReturn(dto);
         service.findAll(pageable);
         verify(repository, times(1)).findAll(pageable);
+        verifyNoMoreInteractions(repository, mapper);
     }
     
     @Test
     void findOne() {
+        long numberOfTheBeast = 666L;
+        var dto = Optional.of(new FeriasLicencaDTO().setId(numberOfTheBeast));
+        var feriasLicenca = Optional.of(new FeriasLicenca().setId(numberOfTheBeast));
+        when(repository.findById(numberOfTheBeast)).thenReturn(feriasLicenca);
+        when(mapper.toDto(feriasLicenca.get())).thenReturn(dto.get());
+        Optional<FeriasLicencaDTO> oneFounnded = service.findOne(numberOfTheBeast);
+        verify(repository, times(1)).findById(numberOfTheBeast);
+        verify(mapper, times(1)).toDto(feriasLicenca.get());
+        verifyNoMoreInteractions(mapper, repository);
+        assertEquals(feriasLicenca.get().getId().longValue(), oneFounnded.get().getId().longValue());
     }
     
     @Test

@@ -5,6 +5,7 @@ import com.rcsoyer.servicosjuridicos.repository.FeriasLicencaRepository;
 import com.rcsoyer.servicosjuridicos.service.FeriasLicencaService;
 import com.rcsoyer.servicosjuridicos.service.dto.FeriasLicencaDTO;
 import com.rcsoyer.servicosjuridicos.service.mapper.FeriasLicencaMapper;
+import java.util.Optional;
 import java.util.function.Function;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -67,9 +68,10 @@ public class FeriasLicencaServiceImpl implements FeriasLicencaService {
      */
     @Override
     @Transactional(readOnly = true)
-    public FeriasLicencaDTO findOne(Long id) {
+    public Optional<FeriasLicencaDTO> findOne(Long id) {
         log.debug("Request to get FeriasLicenca : {}", id);
-        return null;
+        return repository.findById(id)
+                         .map(mapper::toDto);
     }
     
     /**
@@ -81,5 +83,10 @@ public class FeriasLicencaServiceImpl implements FeriasLicencaService {
     public void delete(Long id) {
         log.debug("Request to delete FeriasLicenca : {}", id);
         repository.deleteById(id);
+    }
+    
+    public Page<FeriasLicencaDTO> findByParams(final FeriasLicencaDTO dto, final Pageable pageable) {
+        return repository.query(mapper.toEntity(dto), pageable)
+                         .map(mapper::toDto);
     }
 }

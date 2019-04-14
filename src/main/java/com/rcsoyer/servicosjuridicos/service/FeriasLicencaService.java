@@ -1,6 +1,7 @@
 package com.rcsoyer.servicosjuridicos.service;
 
 import com.rcsoyer.servicosjuridicos.service.dto.FeriasLicencaDTO;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -31,7 +32,7 @@ public interface FeriasLicencaService {
      * @param id the id of the entity
      * @return the entity
      */
-    FeriasLicencaDTO findOne(Long id);
+    Optional<FeriasLicencaDTO> findOne(Long id);
     
     /**
      * Delete the "id" feriasLicenca.
