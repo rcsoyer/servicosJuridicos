@@ -34,15 +34,14 @@ class FeriasLicencaRepositoryTest {
     
     @BeforeEach
     void setUp() {
-        Advogado advogado = new Advogado().setNome("Matt Murdock")
-                                          .setCpf("42390876145");
-        advogadoRepository.saveAndFlush(advogado);
+        var advogado = new Advogado().setNome("Matt Murdock").setCpf("42390876145");
+        advogadoRepository.save(advogado);
         this.dtFim = LocalDate.ofEpochDay(32342342342L);
         this.feriasLicenca = new FeriasLicenca().setTipo(FERIAS)
                                                 .setDtInicio(LocalDate.now())
-                                                .setDtFim(LocalDate.ofEpochDay(32342342342L))
+                                                .setDtFim(dtFim)
                                                 .setAdvogado(advogado);
-        repository.saveAndFlush(feriasLicenca);
+        repository.save(feriasLicenca);
     }
     
     @Test
