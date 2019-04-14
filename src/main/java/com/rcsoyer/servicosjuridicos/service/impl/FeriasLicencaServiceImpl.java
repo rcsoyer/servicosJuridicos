@@ -85,6 +85,7 @@ public class FeriasLicencaServiceImpl implements FeriasLicencaService {
         repository.deleteById(id);
     }
     
+    @Override
     public Page<FeriasLicencaDTO> findByParams(final FeriasLicencaDTO dto, final Pageable pageable) {
         return repository.query(mapper.toEntity(dto), pageable)
                          .map(mapper::toDto);

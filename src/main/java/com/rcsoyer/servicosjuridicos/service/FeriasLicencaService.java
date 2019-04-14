@@ -40,4 +40,6 @@ public interface FeriasLicencaService {
      * @param id the id of the entity
      */
     void delete(Long id);
+    
+    Page<FeriasLicencaDTO> findByParams(FeriasLicencaDTO dto, Pageable pageable);
 }

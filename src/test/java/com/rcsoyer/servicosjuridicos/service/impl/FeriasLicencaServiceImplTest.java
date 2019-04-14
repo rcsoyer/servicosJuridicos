@@ -1,6 +1,7 @@
 package com.rcsoyer.servicosjuridicos.service.impl;
 
 import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
@@ -79,7 +80,7 @@ class FeriasLicencaServiceImplTest {
         verify(repository, times(1)).findById(numberOfTheBeast);
         verify(mapper, times(1)).toDto(optFeriasLicenca.get());
         verifyNoMoreInteractions(mapper, repository);
-            assertEquals(optFeriasLicenca.get().getId().longValue(), oneFounnded.get().getId().longValue());
+        assertEquals(optFeriasLicenca.get().getId().longValue(), oneFounnded.get().getId().longValue());
     }
     
     @Test
@@ -89,5 +90,21 @@ class FeriasLicencaServiceImplTest {
         verify(repository, times(1)).deleteById(numberOfTheBeast);
         verifyZeroInteractions(mapper);
         verifyNoMoreInteractions(repository);
+    }
+    
+    @Test
+    void findByParams() {
+        var pageable = PageRequest.of(0, 10);
+        var dtoPage = new PageImpl<>(singletonList(dto));
+        var feriasLicencaPage = new PageImpl<>(singletonList(domain));
+        when(mapper.toEntity(dto)).thenReturn(domain);
+        when(repository.query(domain, pageable)).thenReturn(feriasLicencaPage);
+        service.findByParams(dto, pageable);
+        assertEquals(feriasLicencaPage.getSize(), dtoPage.getSize());
+        assertEquals(feriasLicencaPage.getContent().get(0).getId(), feriasLicencaPage.getContent().get(0).getId());
+        verify(mapper, times(1)).toEntity(dto);
+        verify(repository, times(1)).query(domain, pageable);
+        verify(mapper, times(1)).toDto(domain);
+        verifyNoMoreInteractions(repository, mapper);
     }
 }
