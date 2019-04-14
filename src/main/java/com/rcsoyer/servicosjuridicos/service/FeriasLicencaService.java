@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
  * Service Interface for managing FeriasLicenca.
  */
 public interface FeriasLicencaService {
-
+    
     /**
      * Save a feriasLicenca.
      *
@@ -16,7 +16,7 @@ public interface FeriasLicencaService {
      * @return the persisted entity
      */
     FeriasLicencaDTO save(FeriasLicencaDTO feriasLicencaDTO);
-
+    
     /**
      * Get all the feriasLicencas.
      *
@@ -24,7 +24,7 @@ public interface FeriasLicencaService {
      * @return the list of entities
      */
     Page<FeriasLicencaDTO> findAll(Pageable pageable);
-
+    
     /**
      * Get the "id" feriasLicenca.
      *
@@ -32,7 +32,7 @@ public interface FeriasLicencaService {
      * @return the entity
      */
     FeriasLicencaDTO findOne(Long id);
-
+    
     /**
      * Delete the "id" feriasLicenca.
      *
