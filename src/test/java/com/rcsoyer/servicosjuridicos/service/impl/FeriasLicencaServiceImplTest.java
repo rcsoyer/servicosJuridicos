@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import com.rcsoyer.servicosjuridicos.domain.FeriasLicenca;
@@ -70,18 +71,23 @@ class FeriasLicencaServiceImplTest {
     @Test
     void findOne() {
         long numberOfTheBeast = 666L;
-        var dto = Optional.of(new FeriasLicencaDTO().setId(numberOfTheBeast));
-        var feriasLicenca = Optional.of(new FeriasLicenca().setId(numberOfTheBeast));
-        when(repository.findById(numberOfTheBeast)).thenReturn(feriasLicenca);
-        when(mapper.toDto(feriasLicenca.get())).thenReturn(dto.get());
+        var optDto = Optional.of(new FeriasLicencaDTO().setId(numberOfTheBeast));
+        var optFeriasLicenca = Optional.of(new FeriasLicenca().setId(numberOfTheBeast));
+        when(repository.findById(numberOfTheBeast)).thenReturn(optFeriasLicenca);
+        when(mapper.toDto(optFeriasLicenca.get())).thenReturn(optDto.get());
         Optional<FeriasLicencaDTO> oneFounnded = service.findOne(numberOfTheBeast);
         verify(repository, times(1)).findById(numberOfTheBeast);
-        verify(mapper, times(1)).toDto(feriasLicenca.get());
+        verify(mapper, times(1)).toDto(optFeriasLicenca.get());
         verifyNoMoreInteractions(mapper, repository);
-        assertEquals(feriasLicenca.get().getId().longValue(), oneFounnded.get().getId().longValue());
+            assertEquals(optFeriasLicenca.get().getId().longValue(), oneFounnded.get().getId().longValue());
     }
     
     @Test
     void delete() {
+        long numberOfTheBeast = 666L;
+        service.delete(numberOfTheBeast);
+        verify(repository, times(1)).deleteById(numberOfTheBeast);
+        verifyZeroInteractions(mapper);
+        verifyNoMoreInteractions(repository);
     }
 }
