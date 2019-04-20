@@ -15,7 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -43,19 +43,21 @@ public class AdvogadoDgCoordenacao implements Serializable {
     private static final long serialVersionUID = 5655625437095215917L;
     
     @Id
+    @Column(updatable = false, nullable = false)
     @SequenceGenerator(name = "sequenceGenerator")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     private Long id;
     
-    @NotEmpty
-    @Size(min = 1, max = 1)
+    @NotBlank
+    @Size(max = 1)
     @Setter(AccessLevel.NONE)
     @Column(name = "dg_pessoal_inicio", length = 1, nullable = false)
     private String dgPessoalInicio;
     
-    @Size(min = 1, max = 1)
+    @NotBlank
+    @Size(max = 1)
     @Setter(AccessLevel.NONE)
-    @Column(name = "dg_pessoal_fim", length = 1)
+    @Column(name = "dg_pessoal_fim", length = 1, nullable = false)
     private String dgPessoalFim;
     
     @Size(min = 1, max = 1)

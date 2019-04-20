@@ -3,8 +3,10 @@ package com.rcsoyer.servicosjuridicos.domain;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.collect.ImmutableSet;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -18,7 +20,6 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,40 +27,41 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.validator.constraints.br.CPF;
 
 /**
  * A Advogado.
  */
 @Entity
 @Getter
-@Setter
 @Accessors(chain = true)
 @Table(name = "advogado")
 @EqualsAndHashCode(of = {"id", "cpf"})
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @ToString(exclude = {"processos", "feriasLicencas", "dgCoordenacoes"})
-public class Advogado implements Serializable {
+public final class Advogado implements Serializable {
     
     private static final long serialVersionUID = 1619909263889107243L;
     
     @Id
+    @Setter
+    @Column(updatable = false, nullable = false)
     @SequenceGenerator(name = "sequenceGenerator")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     private Long id;
     
     @NotBlank
     @Size(max = 80)
-    @Setter(AccessLevel.NONE)
     @Column(length = 80, nullable = false)
     private String nome;
     
+    @CPF
     @NotBlank
-    @Size(min = 11, max = 11)
-    @Setter(AccessLevel.NONE)
     @Column(length = 11, nullable = false, unique = true)
     private String cpf;
     
     @Column
+    @Setter
     private Integer ramal;
     
     @JsonIgnore
@@ -73,9 +75,30 @@ public class Advogado implements Serializable {
     private Set<FeriasLicenca> feriasLicencas = new HashSet<>(0);
     
     @JsonIgnore
-    @OneToMany(mappedBy = "advogado", fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @OneToMany(mappedBy = "advogado", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<AdvogadoDgCoordenacao> dgCoordenacoes = new HashSet<>(0);
+    
+    public Advogado setProcessos(final Set<ProcessoJudicial> processos) {
+        this.processos = Optional.ofNullable(processos)
+                                 .map(HashSet::new)
+                                 .orElseGet(() -> new HashSet<>(0));
+        return this;
+    }
+    
+    public Advogado setFeriasLicencas(final Set<FeriasLicenca> feriasLicencas) {
+        this.feriasLicencas = Optional.ofNullable(feriasLicencas)
+                                      .map(HashSet::new)
+                                      .orElseGet(() -> new HashSet<>(0));
+        return this;
+    }
+    
+    public Advogado setDgCoordenacoes(final Set<AdvogadoDgCoordenacao> dgCoordenacoes) {
+        this.dgCoordenacoes = Optional.ofNullable(dgCoordenacoes)
+                                      .map(HashSet::new)
+                                      .orElseGet(() -> new HashSet<>(0));
+        return this;
+    }
     
     public Advogado setNome(String nome) {
         this.nome = trimToNull(nome);
@@ -85,6 +108,27 @@ public class Advogado implements Serializable {
     public Advogado setCpf(String cpf) {
         this.cpf = trimToNull(cpf);
         return this;
+    }
+    
+    /**
+     * Unmodifiable view of these processos
+     */
+    public Set<ProcessoJudicial> getProcessos() {
+        return ImmutableSet.copyOf(processos);
+    }
+    
+    /**
+     * Unmodifiable view of these feriasLicencas
+     */
+    public Set<FeriasLicenca> getFeriasLicencas() {
+        return ImmutableSet.copyOf(feriasLicencas);
+    }
+    
+    /**
+     * Unmodifiable view of these dgCoordenacoes
+     */
+    public Set<AdvogadoDgCoordenacao> getDgCoordenacoes() {
+        return ImmutableSet.copyOf(dgCoordenacoes);
     }
     
     public Advogado addProcesso(ProcessoJudicial processoJudicial) {
