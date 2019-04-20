@@ -33,7 +33,6 @@ import org.hibernate.validator.constraints.br.CPF;
  * A Advogado.
  */
 @Entity
-@Getter
 @Accessors(chain = true)
 @Table(name = "advogado")
 @EqualsAndHashCode(of = {"id", "cpf"})
@@ -44,23 +43,27 @@ public final class Advogado implements Serializable {
     private static final long serialVersionUID = 1619909263889107243L;
     
     @Id
+    @Getter
     @Setter
     @Column(updatable = false, nullable = false)
     @SequenceGenerator(name = "sequenceGenerator")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     private Long id;
     
+    @Getter
     @NotBlank
     @Size(max = 80)
     @Column(length = 80, nullable = false)
     private String nome;
     
+    @Getter
     @NotBlank
     @CPF(message = "CPF inválido")
     @Column(length = 11, nullable = false, unique = true)
     private String cpf;
     
     @Column
+    @Getter
     @Setter
     private Integer ramal;
     
