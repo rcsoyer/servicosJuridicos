@@ -55,8 +55,8 @@ public final class Advogado implements Serializable {
     @Column(length = 80, nullable = false)
     private String nome;
     
-    @CPF
     @NotBlank
+    @CPF(message = "CPF inválido")
     @Column(length = 11, nullable = false, unique = true)
     private String cpf;
     

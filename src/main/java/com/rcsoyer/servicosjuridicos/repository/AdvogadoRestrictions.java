@@ -8,7 +8,6 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.rcsoyer.servicosjuridicos.domain.Advogado;
 import com.rcsoyer.servicosjuridicos.domain.QAdvogado;
 import java.util.Optional;
-import java.util.function.Function;
 
 /**
  * @author rcsoyer
@@ -32,11 +31,9 @@ final class AdvogadoRestrictions {
     }
     
     private BooleanExpression nomeRestriction() {
-        Function<String, BooleanExpression> createNomeRestriction =
-            nome -> qAdvogado.nome.likeIgnoreCase("%" + nome + "%");
         return Optional.ofNullable(advogado.getNome())
                        .filter(not(String::isBlank))
-                       .map(createNomeRestriction)
+                       .map(nome -> qAdvogado.nome.likeIgnoreCase("%" + nome + "%"))
                        .orElse(null);
     }
     
