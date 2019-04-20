@@ -21,7 +21,6 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -55,8 +54,8 @@ public class AdvogadoResource {
      * POST /advogados : Create a new advogado.
      *
      * @param advogadoDTO the advogadoDTO to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new advogadoDTO, or with
-     * status 400 (Bad Request) if the advogado has already an ID
+     * @return the ResponseEntity with status 201 (Created) and with body the new advogadoDTO, or with status 400 (Bad
+     * Request) if the advogado has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @Timed
@@ -78,9 +77,9 @@ public class AdvogadoResource {
      * PUT /advogados : Updates an existing advogado.
      *
      * @param advogadoDTO the advogadoDTO to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated advogadoDTO, or with
-     * status 400 (Bad Request) if the advogadoDTO is not valid, or with status 500 (Internal
-     * Server Error) if the advogadoDTO couldn't be updated
+     * @return the ResponseEntity with status 200 (OK) and with body the updated advogadoDTO, or with status 400 (Bad
+     * Request) if the advogadoDTO is not valid, or with status 500 (Internal Server Error) if the advogadoDTO couldn't
+     * be updated
      */
     @Timed
     @PutMapping("/advogado")
@@ -112,7 +111,7 @@ public class AdvogadoResource {
     @Timed
     @GetMapping("/getAdvogados")
     public ResponseEntity<List<AdvogadoDTO>> getAdvogados(@RequestParam("dto") AdvogadoDTO dto,
-        @RequestParam("pageable") @Valid PageableDTO pageableDTO) {
+                                                          @RequestParam("pageable") @Valid PageableDTO pageableDTO) {
         log.debug("REST request to get a page of Advogados by input params");
         var pageable = pageableDTO.getPageable();
         var page = service.findByParams(dto, pageable);
@@ -124,8 +123,7 @@ public class AdvogadoResource {
      * GET /advogados/:id : get the "id" advogado.
      *
      * @param id the id of the advogadoDTO to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the advogadoDTO, or with status
-     * 404 (Not Found)
+     * @return the ResponseEntity with status 200 (OK) and with body the advogadoDTO, or with status 404 (Not Found)
      */
     @Timed
     @GetMapping("/advogado/{id}")
