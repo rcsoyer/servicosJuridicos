@@ -2,6 +2,7 @@ package com.rcsoyer.servicosjuridicos.domain;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -26,7 +27,7 @@ class AdvogadoTest {
     }
     
     @Test
-    void setProcessos_unmodifiable() {
+    void setProcessos_notTheSameList() {
         ProcessoJudicial processoJudicial1 = new ProcessoJudicial().setId(1L);
         var processsos = new HashSet<ProcessoJudicial>(3);
         processsos.add(processoJudicial1);
@@ -35,7 +36,6 @@ class AdvogadoTest {
         advogado.setProcessos(processsos);
         processsos.remove(processoJudicial1);
         assertFalse(processsos.containsAll(advogado.getProcessos()));
-        assertThrows(UnsupportedOperationException.class, () -> advogado.getProcessos().remove(processoJudicial1));
     }
     
     @Test
@@ -46,7 +46,7 @@ class AdvogadoTest {
     }
     
     @Test
-    void setFeriasLicencas_unmodiafiable() {
+    void setFeriasLicencas_notTheSameList() {
         FeriasLicenca feriasLicenca1 = new FeriasLicenca().setId(1L);
         var feriasLicencas = new HashSet<FeriasLicenca>(3);
         feriasLicencas.add(feriasLicenca1);
@@ -55,7 +55,6 @@ class AdvogadoTest {
         advogado.setFeriasLicencas(feriasLicencas);
         feriasLicencas.remove(feriasLicenca1);
         assertFalse(feriasLicencas.containsAll(advogado.getFeriasLicencas()));
-        assertThrows(UnsupportedOperationException.class, () -> advogado.getFeriasLicencas().remove(feriasLicenca1));
     }
     
     @Test
@@ -66,7 +65,7 @@ class AdvogadoTest {
     }
     
     @Test
-    void setDgCoordenacoes_unmodiafiable() {
+    void setDgCoordenacoes_notTheSameList() {
         var dgCoordenacao1 = new AdvogadoDgCoordenacao().setId(1L);
         var dgCoordenacoes = new HashSet<AdvogadoDgCoordenacao>(3);
         dgCoordenacoes.add(dgCoordenacao1);
@@ -75,27 +74,36 @@ class AdvogadoTest {
         advogado.setDgCoordenacoes(dgCoordenacoes);
         dgCoordenacoes.remove(dgCoordenacao1);
         assertFalse(dgCoordenacoes.containsAll(advogado.getDgCoordenacoes()));
-        assertThrows(UnsupportedOperationException.class, () -> advogado.getDgCoordenacoes().remove(dgCoordenacao1));
     }
     
     @Test
     void setNome() {
+        advogado.setNome("          ");
+        assertNull(advogado.getNome());
     }
     
     @Test
     void setCpf() {
+        advogado.setCpf("     ");
+        assertNull(advogado.getCpf());
     }
     
     @Test
     void getProcessos() {
+        assertThrows(UnsupportedOperationException.class,
+                     () -> advogado.getProcessos().remove(new ProcessoJudicial().setId(1L)));
     }
     
     @Test
     void getFeriasLicencas() {
+        assertThrows(UnsupportedOperationException.class,
+                     () -> advogado.getFeriasLicencas().remove(new FeriasLicenca().setId(1L)));
     }
     
     @Test
     void getDgCoordenacoes() {
+        assertThrows(UnsupportedOperationException.class,
+                     () -> advogado.getDgCoordenacoes().remove(new AdvogadoDgCoordenacao().setId(1L)));
     }
     
     @Test
