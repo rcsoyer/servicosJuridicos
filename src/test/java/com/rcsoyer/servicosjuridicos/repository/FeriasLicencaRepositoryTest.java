@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.rcsoyer.servicosjuridicos.ServicosJuridicosApp;
 import com.rcsoyer.servicosjuridicos.domain.Advogado;
 import com.rcsoyer.servicosjuridicos.domain.FeriasLicenca;
-import com.rcsoyer.servicosjuridicos.repository.advogado.AdvogadoRepository;
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

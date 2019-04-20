@@ -1,7 +1,7 @@
 package com.rcsoyer.servicosjuridicos.service.impl;
 
 import com.rcsoyer.servicosjuridicos.domain.Advogado;
-import com.rcsoyer.servicosjuridicos.repository.advogado.AdvogadoRepository;
+import com.rcsoyer.servicosjuridicos.repository.AdvogadoRepository;
 import com.rcsoyer.servicosjuridicos.service.AdvogadoService;
 import com.rcsoyer.servicosjuridicos.service.dto.AdvogadoDTO;
 import com.rcsoyer.servicosjuridicos.service.mapper.AdvogadoMapper;

@@ -1,5 +1,6 @@
 package com.rcsoyer.servicosjuridicos.domain;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -16,7 +17,7 @@ class AdvogadoTest {
     
     @BeforeEach
     void setUp() {
-        this.advogado = new Advogado();
+        this.advogado = new Advogado().setId(1L);
     }
     
     @Test
@@ -28,7 +29,7 @@ class AdvogadoTest {
     
     @Test
     void setProcessos_notTheSameList() {
-        ProcessoJudicial processoJudicial1 = new ProcessoJudicial().setId(1L);
+        var processoJudicial1 = new ProcessoJudicial().setId(1L);
         var processsos = new HashSet<ProcessoJudicial>(3);
         processsos.add(processoJudicial1);
         processsos.add(new ProcessoJudicial().setId(2L));
@@ -47,7 +48,7 @@ class AdvogadoTest {
     
     @Test
     void setFeriasLicencas_notTheSameList() {
-        FeriasLicenca feriasLicenca1 = new FeriasLicenca().setId(1L);
+        var feriasLicenca1 = new FeriasLicenca().setId(1L);
         var feriasLicencas = new HashSet<FeriasLicenca>(3);
         feriasLicencas.add(feriasLicenca1);
         feriasLicencas.add(new FeriasLicenca().setId(2L));
@@ -108,25 +109,52 @@ class AdvogadoTest {
     
     @Test
     void addProcesso() {
+        var processo = new ProcessoJudicial().setId(1L);
+        advogado.addProcesso(processo);
+        assertTrue(advogado.getProcessos().contains(processo));
+        assertEquals(advogado, processo.getAdvogado());
     }
     
     @Test
     void removeProcesso() {
+        var processo = new ProcessoJudicial().setId(1L);
+        advogado.addProcesso(processo);
+        advogado.removeProcesso(processo);
+        assertFalse(advogado.getProcessos().contains(processo));
+        assertNull(processo.getAdvogado());
     }
     
     @Test
     void addFeriasLicenca() {
+        var feriasLicenca = new FeriasLicenca().setId(1L);
+        advogado.addFeriasLicenca(feriasLicenca);
+        assertTrue(advogado.getFeriasLicencas().contains(feriasLicenca));
+        assertEquals(advogado, feriasLicenca.getAdvogado());
     }
     
     @Test
     void removeFeriasLicenca() {
+        var feriasLicenca = new FeriasLicenca().setId(1L);
+        advogado.addFeriasLicenca(feriasLicenca);
+        advogado.removeFeriasLicenca(feriasLicenca);
+        assertFalse(advogado.getFeriasLicencas().contains(feriasLicenca));
+        assertNull(feriasLicenca.getAdvogado());
     }
     
     @Test
     void addDgCoordenacao() {
+        var dgCoordenacao = new AdvogadoDgCoordenacao().setId(1L);
+        advogado.addDgCoordenacao(dgCoordenacao);
+        assertTrue(advogado.getDgCoordenacoes().contains(dgCoordenacao));
+        assertEquals(advogado, dgCoordenacao.getAdvogado());
     }
     
     @Test
     void removeDgCoordenacao() {
+        var dgCoordenacao = new AdvogadoDgCoordenacao().setId(1L);
+        advogado.addDgCoordenacao(dgCoordenacao);
+        advogado.removeDgCoordenacao(dgCoordenacao);
+        assertFalse(advogado.getDgCoordenacoes().contains(dgCoordenacao));
+        assertNull(dgCoordenacao.getAdvogado());
     }
 }

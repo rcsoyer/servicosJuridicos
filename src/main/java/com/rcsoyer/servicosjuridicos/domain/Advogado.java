@@ -131,9 +131,9 @@ public final class Advogado implements Serializable {
         return ImmutableSet.copyOf(dgCoordenacoes);
     }
     
-    public Advogado addProcesso(ProcessoJudicial processoJudicial) {
-        processos.add(processoJudicial);
-        processoJudicial.setAdvogado(this);
+    public Advogado addProcesso(final ProcessoJudicial processo) {
+        processos.add(processo);
+        processo.setAdvogado(this);
         return this;
     }
     

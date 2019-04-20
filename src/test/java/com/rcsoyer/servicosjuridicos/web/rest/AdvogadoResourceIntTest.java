@@ -27,7 +27,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import com.rcsoyer.servicosjuridicos.ServicosJuridicosApp;
 import com.rcsoyer.servicosjuridicos.domain.Advogado;
-import com.rcsoyer.servicosjuridicos.repository.advogado.AdvogadoRepository;
+import com.rcsoyer.servicosjuridicos.repository.AdvogadoRepository;
 import com.rcsoyer.servicosjuridicos.service.AdvogadoService;
 import com.rcsoyer.servicosjuridicos.service.dto.AdvogadoDTO;
 import com.rcsoyer.servicosjuridicos.service.mapper.AdvogadoMapper;

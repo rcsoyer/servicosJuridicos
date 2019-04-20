@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.rcsoyer.servicosjuridicos.domain.Advogado;
 import com.rcsoyer.servicosjuridicos.domain.ProcessoJudicial;
-import com.rcsoyer.servicosjuridicos.repository.advogado.AdvogadoRepository;
+import com.rcsoyer.servicosjuridicos.repository.AdvogadoRepository;
 import com.rcsoyer.servicosjuridicos.repository.processo.ProcessoJudicialRepository;
 import com.rcsoyer.servicosjuridicos.service.ProcessoJudicialService;
 import com.rcsoyer.servicosjuridicos.service.dto.ProcessoJudicialDTO;

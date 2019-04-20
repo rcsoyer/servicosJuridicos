@@ -11,7 +11,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import com.rcsoyer.servicosjuridicos.domain.Advogado;
-import com.rcsoyer.servicosjuridicos.repository.advogado.AdvogadoRepository;
+import com.rcsoyer.servicosjuridicos.repository.AdvogadoRepository;
 import com.rcsoyer.servicosjuridicos.service.dto.AdvogadoDTO;
 import com.rcsoyer.servicosjuridicos.service.mapper.AdvogadoMapper;
 import java.util.List;

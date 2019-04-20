@@ -1,4 +1,4 @@
-package com.rcsoyer.servicosjuridicos.repository.advogado;
+package com.rcsoyer.servicosjuridicos.repository;
 
 import static java.util.function.Predicate.not;
 
@@ -24,27 +24,23 @@ final class AdvogadoRestrictions {
     }
     
     static Predicate getRestrictions(final Advogado advogado) {
-        return new AdvogadoRestrictions(advogado).defineRestrictions();
+        return new AdvogadoRestrictions(advogado).define();
     }
     
-    private BooleanExpression defineRestrictions() {
-        var nomeRestriction = defineNomeRestriction();
-        var cpfRestriction = defineCpfRestriction();
-        return Expressions.allOf(nomeRestriction, cpfRestriction);
+    private BooleanExpression define() {
+        return Expressions.allOf(nomeRestriction(), cpfRestriction());
     }
     
-    private BooleanExpression defineNomeRestriction() {
+    private BooleanExpression nomeRestriction() {
+        Function<String, BooleanExpression> createNomeRestriction =
+            nome -> qAdvogado.nome.likeIgnoreCase("%" + nome + "%");
         return Optional.ofNullable(advogado.getNome())
                        .filter(not(String::isBlank))
-                       .map(createNomeRestriction())
+                       .map(createNomeRestriction)
                        .orElse(null);
     }
     
-    private Function<String, BooleanExpression> createNomeRestriction() {
-        return nome -> qAdvogado.nome.likeIgnoreCase("%" + nome + "%");
-    }
-    
-    private BooleanExpression defineCpfRestriction() {
+    private BooleanExpression cpfRestriction() {
         return Optional.ofNullable(advogado.getCpf())
                        .filter(not(String::isBlank))
                        .map(qAdvogado.cpf::eq)
