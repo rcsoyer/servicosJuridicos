@@ -22,32 +22,41 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="dg_pessoal_inicio" type="varchar(1)">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
 
             <column name="dg_pessoal_fim" type="varchar(1)">
-                <constraints nullable="true" />
+                <constraints nullable="true"/>
             </column>
 
             <column name="dg_dupla" type="varchar(1)">
-                <constraints nullable="true" />
+                <constraints nullable="true"/>
             </column>
 
             <column name="range_dg_coordenacao" type="varchar(255)">
-                <constraints nullable="true" />
+                <constraints nullable="true"/>
             </column>
 
             <column name="advogado_id" type="bigint">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
 
             <column name="coordenacao_id" type="bigint">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
 
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
-        
+
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
+
+    <changeSet id="20180812192921-2" author="rcsoyer">
+        <modifyDataType tableName="advogado_dg_coordenacao" columnName="dg_pessoal_inicio"
+            newDataType="int"/>
+        <modifyDataType tableName="advogado_dg_coordenacao" columnName="dg_pessoal_fim"
+            newDataType="int"/>
+        <modifyDataType tableName="advogado_dg_coordenacao" columnName="dg_dupla"
+            newDataType="int"/>
+    </changeSet>
 </databaseChangeLog>

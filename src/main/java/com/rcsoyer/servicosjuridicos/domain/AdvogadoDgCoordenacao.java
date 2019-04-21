@@ -1,7 +1,5 @@
 package com.rcsoyer.servicosjuridicos.domain;
 
-import static org.apache.commons.lang3.StringUtils.trimToNull;
-
 import com.rcsoyer.servicosjuridicos.domain.enumeration.RangeDgCoordenacao;
 import java.io.Serializable;
 import javax.persistence.Column;
@@ -15,10 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,22 +45,22 @@ public class AdvogadoDgCoordenacao implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     private Long id;
     
-    @NotBlank
-    @Size(max = 1)
-    @Setter(AccessLevel.NONE)
-    @Column(name = "dg_pessoal_inicio", length = 1, nullable = false)
-    private String dgPessoalInicio;
+    @Min(0)
+    @Max(9)
+    @NotNull
+    @Column(name = "dg_pessoal_inicio", nullable = false)
+    private Integer dgPessoalInicio;
     
-    @NotBlank
-    @Size(max = 1)
-    @Setter(AccessLevel.NONE)
-    @Column(name = "dg_pessoal_fim", length = 1, nullable = false)
-    private String dgPessoalFim;
+    @Min(0)
+    @Max(9)
+    @NotNull
+    @Column(name = "dg_pessoal_fim", nullable = false)
+    private Integer dgPessoalFim;
     
-    @Size(min = 1, max = 1)
-    @Setter(AccessLevel.NONE)
-    @Column(name = "dg_dupla", length = 1)
-    private String dgDupla;
+    @Min(0)
+    @Max(9)
+    @Column(name = "dg_dupla")
+    private Integer dgDupla;
     
     @Enumerated(EnumType.STRING)
     @Column(name = "range_dg_coordenacao")
@@ -77,19 +74,4 @@ public class AdvogadoDgCoordenacao implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private CoordenacaoJuridica coordenacao;
     
-    
-    public AdvogadoDgCoordenacao setDgPessoalInicio(String dgPessoalInicio) {
-        this.dgPessoalInicio = trimToNull(dgPessoalInicio);
-        return this;
-    }
-    
-    public AdvogadoDgCoordenacao setDgPessoalFim(String dgPessoalFim) {
-        this.dgPessoalFim = trimToNull(dgPessoalFim);
-        return this;
-    }
-    
-    public AdvogadoDgCoordenacao setDgDupla(String dgDupla) {
-        this.dgDupla = trimToNull(dgDupla);
-        return this;
-    }
 }

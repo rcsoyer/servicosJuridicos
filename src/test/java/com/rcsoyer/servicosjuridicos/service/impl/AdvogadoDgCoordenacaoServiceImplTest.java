@@ -49,23 +49,23 @@ class AdvogadoDgCoordenacaoServiceImplTest {
         this.model = new AdvogadoDgCoordenacao().setId(1L)
                                                 .setAdvogado(new Advogado())
                                                 .setCoordenacao(new CoordenacaoJuridica())
-                                                .setDgPessoalInicio("0")
-                                                .setDgDupla("1")
-                                                .setDgPessoalFim("2")
+                                                .setDgPessoalInicio(0)
+                                                .setDgDupla(1)
+                                                .setDgPessoalFim(2)
                                                 .setRangeDgCoordenacao(INCLUSIVE);
         this.savedAdvogado = new AdvogadoDgCoordenacao().setId(1L)
                                                         .setAdvogado(new Advogado())
                                                         .setCoordenacao(new CoordenacaoJuridica())
-                                                        .setDgPessoalInicio("0")
-                                                        .setDgDupla("1")
-                                                        .setDgPessoalFim("2")
+                                                        .setDgPessoalInicio(0)
+                                                        .setDgDupla(1)
+                                                        .setDgPessoalFim(2)
                                                         .setRangeDgCoordenacao(INCLUSIVE);
         this.dto = new AdvogadoDgCoordenacaoDTO().setId(1L)
                                                  .setAdvogadoId(1L)
                                                  .setCoordenacaoId(1L)
-                                                 .setDgDupla("0")
-                                                 .setDgPessoalFim("1")
-                                                 .setDgPessoalInicio("2")
+                                                 .setDgDupla(0)
+                                                 .setDgPessoalFim(1)
+                                                 .setDgPessoalInicio(2)
                                                  .setRangeDgCoordenacao(INCLUSIVE);
     }
     

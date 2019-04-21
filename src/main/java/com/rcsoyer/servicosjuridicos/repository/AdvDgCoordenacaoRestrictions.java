@@ -30,21 +30,18 @@ final class AdvDgCoordenacaoRestrictions {
     
     private BooleanExpression dgPessoalInicioRestriction() {
         return Optional.ofNullable(dgCoordenacao.getDgPessoalInicio())
-                       .filter(not(String::isBlank))
                        .map(qDgCoordenacao.dgPessoalInicio::eq)
                        .orElse(null);
     }
     
     private BooleanExpression dgPessoalFimRestriction() {
         return Optional.ofNullable(dgCoordenacao.getDgPessoalFim())
-                       .filter(not(String::isBlank))
                        .map(qDgCoordenacao.dgPessoalFim::eq)
                        .orElse(null);
     }
     
     private BooleanExpression dgDuplaRestriction() {
         return Optional.ofNullable(dgCoordenacao.getDgDupla())
-                       .filter(not(String::isBlank))
                        .map(qDgCoordenacao.dgDupla::eq)
                        .orElse(null);
     }

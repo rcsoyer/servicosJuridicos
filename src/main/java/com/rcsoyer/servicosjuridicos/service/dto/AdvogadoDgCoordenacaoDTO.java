@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.rcsoyer.servicosjuridicos.domain.enumeration.RangeDgCoordenacao;
 import java.io.IOException;
 import java.io.Serializable;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,16 +27,19 @@ public class AdvogadoDgCoordenacaoDTO implements Serializable {
     
     private Long id;
     
-    @NotBlank
-    @Size(max = 1)
-    private String dgPessoalInicio;
+    @Min(0)
+    @Max(9)
+    @NotNull
+    private Integer dgPessoalInicio;
     
-    @NotBlank
-    @Size(max = 1)
-    private String dgPessoalFim;
+    @Min(0)
+    @Max(9)
+    @NotNull
+    private Integer dgPessoalFim;
     
-    @Size(min = 1, max = 1)
-    private String dgDupla;
+    @Min(0)
+    @Max(9)
+    private Integer dgDupla;
     
     private RangeDgCoordenacao rangeDgCoordenacao;
     
