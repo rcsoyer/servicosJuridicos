@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.rcsoyer.servicosjuridicos.domain.enumeration.RangeDgCoordenacao;
 import java.io.IOException;
 import java.io.Serializable;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
@@ -19,18 +20,19 @@ import lombok.experimental.Accessors;
 @Setter
 @ToString
 @Accessors(chain = true)
-@EqualsAndHashCode(exclude = {"advogadoId", "coordenacaoId"})
+@EqualsAndHashCode(of = "id")
 public class AdvogadoDgCoordenacaoDTO implements Serializable {
     
     private static final long serialVersionUID = 7110673865104666877L;
     
     private Long id;
     
-    @NotNull
-    @Size(min = 1, max = 1)
+    @NotBlank
+    @Size(max = 1)
     private String dgPessoalInicio;
     
-    @Size(min = 1, max = 1)
+    @NotBlank
+    @Size(max = 1)
     private String dgPessoalFim;
     
     @Size(min = 1, max = 1)

@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
+import org.hibernate.validator.constraints.br.CPF;
 
 /**
  * A DTO for the Advogado entity.
@@ -18,7 +19,7 @@ import lombok.experimental.Accessors;
 @Setter
 @ToString
 @Accessors(chain = true)
-@EqualsAndHashCode(of = {"id", "nome"})
+@EqualsAndHashCode(of = {"id", "cpf"})
 public class AdvogadoDTO implements Serializable {
     
     private static final long serialVersionUID = 185125590770954216L;
@@ -30,7 +31,7 @@ public class AdvogadoDTO implements Serializable {
     private String nome;
     
     @NotBlank
-    @Size(min = 11, max = 11)
+    @CPF(message = "CPF inválido")
     private String cpf;
     
     private Integer ramal;

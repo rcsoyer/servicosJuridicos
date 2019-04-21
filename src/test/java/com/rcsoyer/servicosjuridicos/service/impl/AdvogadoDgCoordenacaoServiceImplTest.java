@@ -47,26 +47,26 @@ class AdvogadoDgCoordenacaoServiceImplTest {
     @BeforeEach
     void setUp() {
         this.model = new AdvogadoDgCoordenacao().setId(1L)
-            .setAdvogado(new Advogado())
-            .setCoordenacao(new CoordenacaoJuridica())
-            .setDgPessoalInicio("0")
-            .setDgDupla("1")
-            .setDgPessoalFim("2")
-            .setRangeDgCoordenacao(INCLUSIVE);
+                                                .setAdvogado(new Advogado())
+                                                .setCoordenacao(new CoordenacaoJuridica())
+                                                .setDgPessoalInicio("0")
+                                                .setDgDupla("1")
+                                                .setDgPessoalFim("2")
+                                                .setRangeDgCoordenacao(INCLUSIVE);
         this.savedAdvogado = new AdvogadoDgCoordenacao().setId(1L)
-            .setAdvogado(new Advogado())
-            .setCoordenacao(new CoordenacaoJuridica())
-            .setDgPessoalInicio("0")
-            .setDgDupla("1")
-            .setDgPessoalFim("2")
-            .setRangeDgCoordenacao(INCLUSIVE);
+                                                        .setAdvogado(new Advogado())
+                                                        .setCoordenacao(new CoordenacaoJuridica())
+                                                        .setDgPessoalInicio("0")
+                                                        .setDgDupla("1")
+                                                        .setDgPessoalFim("2")
+                                                        .setRangeDgCoordenacao(INCLUSIVE);
         this.dto = new AdvogadoDgCoordenacaoDTO().setId(1L)
-            .setAdvogadoId(1L)
-            .setCoordenacaoId(1L)
-            .setDgDupla("0")
-            .setDgPessoalFim("1")
-            .setDgPessoalInicio("2")
-            .setRangeDgCoordenacao(INCLUSIVE);
+                                                 .setAdvogadoId(1L)
+                                                 .setCoordenacaoId(1L)
+                                                 .setDgDupla("0")
+                                                 .setDgPessoalFim("1")
+                                                 .setDgPessoalInicio("2")
+                                                 .setRangeDgCoordenacao(INCLUSIVE);
     }
     
     @Test
@@ -83,10 +83,10 @@ class AdvogadoDgCoordenacaoServiceImplTest {
     }
     
     @Test
-    public void findAll() {
+    void findAll() {
         var pageRequest = PageRequest.of(1, 2);
         List<AdvogadoDgCoordenacao> advogadosResult = List
-            .of(new AdvogadoDgCoordenacao(), new AdvogadoDgCoordenacao());
+                                                          .of(new AdvogadoDgCoordenacao(), new AdvogadoDgCoordenacao());
         when(repository.findAll(pageRequest)).thenReturn(new PageImpl<>(advogadosResult));
         when(mapper.toDto(any(AdvogadoDgCoordenacao.class)))
             .thenReturn(new AdvogadoDgCoordenacaoDTO());
@@ -98,7 +98,7 @@ class AdvogadoDgCoordenacaoServiceImplTest {
     }
     
     @Test
-    public void findOne() {
+    void findOne() {
         when(repository.findById(anyLong())).thenReturn(Optional.of(new AdvogadoDgCoordenacao()));
         when(mapper.toDto(any(AdvogadoDgCoordenacao.class)))
             .thenReturn(new AdvogadoDgCoordenacaoDTO());
@@ -110,7 +110,7 @@ class AdvogadoDgCoordenacaoServiceImplTest {
     }
     
     @Test
-    public void findOne_NotFound() {
+    void findOne_NotFound() {
         when(repository.findById(anyLong())).thenReturn(Optional.empty());
         var dtoOptional = service.findOne(anyLong());
         assertTrue(dtoOptional.isEmpty());
@@ -120,7 +120,7 @@ class AdvogadoDgCoordenacaoServiceImplTest {
     }
     
     @Test
-    public void delete() {
+    void delete() {
         service.delete(anyLong());
         verify(repository, times(1)).deleteById(anyLong());
         verifyNoMoreInteractions(repository);
