@@ -1,6 +1,7 @@
 package com.rcsoyer.servicosjuridicos.repository;
 
 import static java.util.Collections.singleton;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.rcsoyer.servicosjuridicos.ServicosJuridicosApp;
@@ -10,6 +11,7 @@ import com.rcsoyer.servicosjuridicos.domain.Assunto;
 import com.rcsoyer.servicosjuridicos.domain.CoordenacaoJuridica;
 import com.rcsoyer.servicosjuridicos.repository.assunto.AssuntoRepository;
 import com.rcsoyer.servicosjuridicos.repository.coordenacao.CoordenacaoJuridicaRepository;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -61,6 +63,8 @@ class AdvogadoDgCoordenacaoRepositoryTest {
     @Test
     void query() {
         Page<AdvogadoDgCoordenacao> result = dgCoordenacaoRepository.query(dgCoordenacao, PageRequest.of(0, 10));
+        List<AdvogadoDgCoordenacao> content = result.getContent();
         assertTrue(result.hasContent());
+        assertEquals(dgCoordenacao, content.get(0));
     }
 }
