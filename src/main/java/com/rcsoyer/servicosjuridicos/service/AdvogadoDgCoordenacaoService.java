@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
  * Service Interface for managing AdvogadoDgCoordenacao.
  */
 public interface AdvogadoDgCoordenacaoService {
-
+    
     /**
      * Save a advogadoDgCoordenacao.
      *
@@ -17,7 +17,7 @@ public interface AdvogadoDgCoordenacaoService {
      * @return the persisted entity
      */
     AdvogadoDgCoordenacaoDTO save(AdvogadoDgCoordenacaoDTO advogadoDgCoordenacaoDTO);
-
+    
     /**
      * Get all the advogadoDgCoordenacaos.
      *
@@ -25,7 +25,7 @@ public interface AdvogadoDgCoordenacaoService {
      * @return the list of entities
      */
     Page<AdvogadoDgCoordenacaoDTO> findAll(Pageable pageable);
-
+    
     /**
      * Get the "id" advogadoDgCoordenacao.
      *
@@ -33,7 +33,7 @@ public interface AdvogadoDgCoordenacaoService {
      * @return the entity
      */
     Optional<AdvogadoDgCoordenacaoDTO> findOne(Long id);
-
+    
     /**
      * Delete the "id" advogadoDgCoordenacao.
      *

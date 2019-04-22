@@ -1,6 +1,7 @@
 package com.rcsoyer.servicosjuridicos.service.impl;
 
 import static com.rcsoyer.servicosjuridicos.domain.enumeration.RangeDgCoordenacao.INCLUSIVE;
+import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -25,6 +26,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
@@ -124,5 +126,19 @@ class AdvogadoDgCoordenacaoServiceImplTest {
         service.delete(anyLong());
         verify(repository, times(1)).deleteById(anyLong());
         verifyNoMoreInteractions(repository);
+    }
+    
+    @Test
+    void findByParams() {
+        var dgCoordenacoes = new PageImpl<>(singletonList(savedAdvogado));
+        PageRequest pageable = PageRequest.of(0, 10);
+        when(mapper.toEntity(dto)).thenReturn(savedAdvogado);
+        when(repository.query(savedAdvogado, pageable)).thenReturn(dgCoordenacoes);
+        when(mapper.toDto(any(AdvogadoDgCoordenacao.class))).thenReturn(any(AdvogadoDgCoordenacaoDTO.class));
+        Page<AdvogadoDgCoordenacaoDTO> page = service.findByParams(dto, pageable);
+        verify(mapper, times(1)).toEntity(dto);
+        verify(repository, times(1)).query(savedAdvogado, pageable);
+        verify(mapper, times(1)).toDto(any(AdvogadoDgCoordenacao.class));
+        verifyNoMoreInteractions(repository, mapper);
     }
 }

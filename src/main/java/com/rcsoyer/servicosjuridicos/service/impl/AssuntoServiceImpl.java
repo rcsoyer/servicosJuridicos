@@ -10,7 +10,6 @@ import java.util.function.Function;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -93,7 +92,7 @@ public class AssuntoServiceImpl implements AssuntoService {
         Function<Assunto, Page<Assunto>> query = repository.query(pageable);
         Function<Page<Assunto>, Page<AssuntoDTO>> toPageDTO = page -> page.map(mapper::toDto);
         return toEntity.andThen(query)
-            .andThen(toPageDTO)
-            .apply(dto);
+                       .andThen(toPageDTO)
+                       .apply(dto);
     }
 }

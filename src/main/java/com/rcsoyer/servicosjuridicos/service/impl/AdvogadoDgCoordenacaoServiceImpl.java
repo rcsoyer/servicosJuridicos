@@ -3,6 +3,7 @@ package com.rcsoyer.servicosjuridicos.service.impl;
 import com.rcsoyer.servicosjuridicos.domain.AdvogadoDgCoordenacao;
 import com.rcsoyer.servicosjuridicos.repository.AdvogadoDgCoordenacaoRepository;
 import com.rcsoyer.servicosjuridicos.service.AdvogadoDgCoordenacaoService;
+import com.rcsoyer.servicosjuridicos.service.QueryParams;
 import com.rcsoyer.servicosjuridicos.service.dto.AdvogadoDgCoordenacaoDTO;
 import com.rcsoyer.servicosjuridicos.service.mapper.AdvogadoDgCoordenacaoMapper;
 import java.util.Optional;
@@ -20,15 +21,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @Transactional
-public class AdvogadoDgCoordenacaoServiceImpl implements AdvogadoDgCoordenacaoService {
+public class AdvogadoDgCoordenacaoServiceImpl implements AdvogadoDgCoordenacaoService,
+                                                         QueryParams<AdvogadoDgCoordenacaoDTO> {
     
     private final AdvogadoDgCoordenacaoMapper mapper;
     private final AdvogadoDgCoordenacaoRepository repository;
     
-    public AdvogadoDgCoordenacaoServiceImpl(AdvogadoDgCoordenacaoRepository repository,
-        AdvogadoDgCoordenacaoMapper mapper) {
-        this.repository = repository;
+    public AdvogadoDgCoordenacaoServiceImpl(final AdvogadoDgCoordenacaoRepository repository,
+                                            final AdvogadoDgCoordenacaoMapper mapper) {
         this.mapper = mapper;
+        this.repository = repository;
     }
     
     /**
@@ -70,8 +72,8 @@ public class AdvogadoDgCoordenacaoServiceImpl implements AdvogadoDgCoordenacaoSe
     @Transactional(readOnly = true)
     public Optional<AdvogadoDgCoordenacaoDTO> findOne(Long id) {
         log.debug("Request to get AdvogadoDgCoordenacao : {}", id);
-       return repository.findById(id)
-                        .map(mapper::toDto);
+        return repository.findById(id)
+                         .map(mapper::toDto);
     }
     
     /**
@@ -84,4 +86,18 @@ public class AdvogadoDgCoordenacaoServiceImpl implements AdvogadoDgCoordenacaoSe
         log.debug("Request to delete AdvogadoDgCoordenacao : {}", id);
         repository.deleteById(id);
     }
+    
+    @Override
+    public Page<AdvogadoDgCoordenacaoDTO> findByParams(final AdvogadoDgCoordenacaoDTO dto,
+                                                       final Pageable pageable) {
+        Function<AdvogadoDgCoordenacaoDTO, AdvogadoDgCoordenacao> toEntiy = mapper::toEntity;
+        Function<AdvogadoDgCoordenacao, Page<AdvogadoDgCoordenacao>> queryBy =
+            dgCoordenacao -> repository.query(dgCoordenacao, pageable);
+        Function<Page<AdvogadoDgCoordenacao>, Page<AdvogadoDgCoordenacaoDTO>> toPageDto =
+            pageEntiy -> pageEntiy.map(mapper::toDto);
+        return toEntiy.andThen(queryBy)
+                      .andThen(toPageDto)
+                      .apply(dto);
+    }
+    
 }

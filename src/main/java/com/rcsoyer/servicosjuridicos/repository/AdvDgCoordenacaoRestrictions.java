@@ -1,7 +1,5 @@
 package com.rcsoyer.servicosjuridicos.repository;
 
-import static java.util.function.Predicate.not;
-
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;

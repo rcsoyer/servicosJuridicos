@@ -19,36 +19,36 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = {"id", "descricao"})
 public class AssuntoDTO implements Serializable {
-
+    
     private static final long serialVersionUID = -3670483173597422016L;
-
+    
     private Long id;
-
+    
     @NotBlank
-    @Size(min = 1, max = 70)
+    @Size(max = 70)
     @Setter(AccessLevel.NONE)
     private String descricao;
-
+    
     @NotNull
     @Getter(value = AccessLevel.NONE)
     private Boolean ativo;
-
+    
     @NotNull
     @Min(value = 1)
     @Max(value = 5)
     private Integer peso;
-
+    
     public Boolean isAtivo() {
         return ativo;
     }
-
+    
     @JsonCreator
     public static AssuntoDTO of(String json) throws IOException {
         return JsonConverter.readValue(json, AssuntoDTO.class);
     }
-
+    
     public AssuntoDTO setDescricao(String descricao) {
         this.descricao = trimToNull(descricao);
         return this;
