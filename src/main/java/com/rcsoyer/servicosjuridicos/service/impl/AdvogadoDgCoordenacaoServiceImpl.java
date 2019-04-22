@@ -94,7 +94,7 @@ public class AdvogadoDgCoordenacaoServiceImpl implements AdvogadoDgCoordenacaoSe
         Function<AdvogadoDgCoordenacao, Page<AdvogadoDgCoordenacao>> queryBy =
             dgCoordenacao -> repository.query(dgCoordenacao, pageable);
         Function<Page<AdvogadoDgCoordenacao>, Page<AdvogadoDgCoordenacaoDTO>> toPageDto =
-            pageEntiy -> pageEntiy.map(mapper::toDto);
+            pageEntity -> pageEntity.map(mapper::toDto);
         return toEntiy.andThen(queryBy)
                       .andThen(toPageDto)
                       .apply(dto);
