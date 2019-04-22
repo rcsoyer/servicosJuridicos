@@ -19,7 +19,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.AccessLevel;
@@ -47,24 +47,25 @@ public class CoordenacaoJuridica implements Serializable {
     private static final long serialVersionUID = 7821224258437788453L;
     
     @Id
+    @Column(updatable = false, nullable = false)
     @SequenceGenerator(name = "sequenceGenerator")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     private Long id;
     
-    @NotEmpty
-    @Size(min = 1, max = 6)
+    @NotBlank
+    @Size(max = 6)
     @Setter(AccessLevel.NONE)
     @Column(length = 6, nullable = false)
     private String sigla;
     
-    @NotEmpty
-    @Size(min = 1, max = 50)
+    @NotBlank
+    @Size(max = 50)
     @Setter(AccessLevel.NONE)
     @Column(length = 50, nullable = false)
     private String nome;
     
     @Column(length = 3)
-    @Size(min = 3, max = 3)
+    @Size(min = 1, max = 3)
     @Setter(AccessLevel.NONE)
     private String centena;
     

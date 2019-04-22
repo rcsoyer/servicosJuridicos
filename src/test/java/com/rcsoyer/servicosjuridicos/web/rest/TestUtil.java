@@ -20,31 +20,31 @@ import org.springframework.http.MediaType;
  * Utility class for testing REST controllers.
  */
 public class TestUtil {
-
-    /** MediaType for JSON UTF8 */
+    
+    /**
+     * MediaType for JSON UTF8
+     */
     public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(
-            MediaType.APPLICATION_JSON.getType(),
-            MediaType.APPLICATION_JSON.getSubtype(), StandardCharsets.UTF_8);
-
+        MediaType.APPLICATION_JSON.getType(),
+        MediaType.APPLICATION_JSON.getSubtype(), StandardCharsets.UTF_8);
+    
     /**
      * Convert an object to JSON byte array.
      *
-     * @param object
-     *            the object to convert
+     * @param object the object to convert
      * @return the JSON byte array
-     * @throws IOException
      */
     public static byte[] convertObjectToJsonBytes(Object object)
-            throws IOException {
+        throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-
+        
         JavaTimeModule module = new JavaTimeModule();
         mapper.registerModule(module);
-
+        
         return mapper.writeValueAsBytes(object);
     }
-
+    
     /**
      * Create a byte array with a specific size filled with specified data.
      *
@@ -59,18 +59,18 @@ public class TestUtil {
         }
         return byteArray;
     }
-
+    
     /**
      * A matcher that tests that the examined string represents the same instant as the reference datetime.
      */
     public static class ZonedDateTimeMatcher extends TypeSafeDiagnosingMatcher<String> {
-
+        
         private final ZonedDateTime date;
-
+        
         public ZonedDateTimeMatcher(ZonedDateTime date) {
             this.date = date;
         }
-
+        
         @Override
         protected boolean matchesSafely(String item, Description mismatchDescription) {
             try {
@@ -81,26 +81,27 @@ public class TestUtil {
                 return true;
             } catch (DateTimeParseException e) {
                 mismatchDescription.appendText("was ").appendValue(item)
-                    .appendText(", which could not be parsed as a ZonedDateTime");
+                                   .appendText(", which could not be parsed as a ZonedDateTime");
                 return false;
             }
-
+            
         }
-
+        
         @Override
         public void describeTo(Description description) {
             description.appendText("a String representing the same Instant as ").appendValue(date);
         }
     }
-
+    
     /**
      * Creates a matcher that matches when the examined string reprensents the same instant as the reference datetime
+     *
      * @param date the reference datetime against which the examined string is checked
      */
     public static ZonedDateTimeMatcher sameInstant(ZonedDateTime date) {
         return new ZonedDateTimeMatcher(date);
     }
-
+    
     /**
      * Verifies the equals/hashcode contract on the domain object.
      */
@@ -119,13 +120,14 @@ public class TestUtil {
         // HashCodes are equals because the objects are not persisted yet
         assertThat(domainObject1.hashCode()).isEqualTo(domainObject2.hashCode());
     }
-
+    
     /**
      * Create a FormattingConversionService which use ISO date format, instead of the localized one.
+     *
      * @return the FormattingConversionService
      */
     public static FormattingConversionService createFormattingConversionService() {
-        DefaultFormattingConversionService dfcs = new DefaultFormattingConversionService ();
+        DefaultFormattingConversionService dfcs = new DefaultFormattingConversionService();
         DateTimeFormatterRegistrar registrar = new DateTimeFormatterRegistrar();
         registrar.setUseIsoFormat(true);
         registrar.registerFormatters(dfcs);

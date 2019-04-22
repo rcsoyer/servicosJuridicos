@@ -1,5 +1,6 @@
 package com.rcsoyer.servicosjuridicos.web.rest;
 
+import static com.rcsoyer.servicosjuridicos.web.rest.TestUtil.convertObjectToJsonBytes;
 import static com.rcsoyer.servicosjuridicos.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -136,7 +137,7 @@ public class AdvogadoDgCoordenacaoResourceIntTest {
         restAdvogadoDgCoordenacaoMockMvc.perform(post("/api/advogado-dg-coordenacaos")
                                                      .contentType(TestUtil.APPLICATION_JSON_UTF8)
                                                      .content(
-                                                         TestUtil.convertObjectToJsonBytes(advogadoDgCoordenacaoDTO)))
+                                                         convertObjectToJsonBytes(advogadoDgCoordenacaoDTO)))
                                         .andExpect(status().isCreated());
         
         // Validate the AdvogadoDgCoordenacao in the database
@@ -163,7 +164,7 @@ public class AdvogadoDgCoordenacaoResourceIntTest {
         restAdvogadoDgCoordenacaoMockMvc.perform(post("/api/advogado-dg-coordenacaos")
                                                      .contentType(TestUtil.APPLICATION_JSON_UTF8)
                                                      .content(
-                                                         TestUtil.convertObjectToJsonBytes(advogadoDgCoordenacaoDTO)))
+                                                         convertObjectToJsonBytes(advogadoDgCoordenacaoDTO)))
                                         .andExpect(status().isBadRequest());
         
         // Validate the AdvogadoDgCoordenacao in the database
@@ -184,7 +185,7 @@ public class AdvogadoDgCoordenacaoResourceIntTest {
         restAdvogadoDgCoordenacaoMockMvc.perform(post("/api/advogado-dg-coordenacaos")
                                                      .contentType(TestUtil.APPLICATION_JSON_UTF8)
                                                      .content(
-                                                         TestUtil.convertObjectToJsonBytes(advogadoDgCoordenacaoDTO)))
+                                                         convertObjectToJsonBytes(advogadoDgCoordenacaoDTO)))
                                         .andExpect(status().isBadRequest());
         
         List<AdvogadoDgCoordenacao> advogadoDgCoordenacaoList = advogadoDgCoordenacaoRepository.findAll();
@@ -264,7 +265,7 @@ public class AdvogadoDgCoordenacaoResourceIntTest {
         restAdvogadoDgCoordenacaoMockMvc.perform(put("/api/advogado-dg-coordenacaos")
                                                      .contentType(TestUtil.APPLICATION_JSON_UTF8)
                                                      .content(
-                                                         TestUtil.convertObjectToJsonBytes(advogadoDgCoordenacaoDTO)))
+                                                         convertObjectToJsonBytes(advogadoDgCoordenacaoDTO)))
                                         .andExpect(status().isOk());
         
         // Validate the AdvogadoDgCoordenacao in the database
@@ -290,7 +291,7 @@ public class AdvogadoDgCoordenacaoResourceIntTest {
         restAdvogadoDgCoordenacaoMockMvc.perform(put("/api/advogado-dg-coordenacaos")
                                                      .contentType(TestUtil.APPLICATION_JSON_UTF8)
                                                      .content(
-                                                         TestUtil.convertObjectToJsonBytes(advogadoDgCoordenacaoDTO)))
+                                                         convertObjectToJsonBytes(advogadoDgCoordenacaoDTO)))
                                         .andExpect(status().isBadRequest());
         
         // Validate the AdvogadoDgCoordenacao in the database
