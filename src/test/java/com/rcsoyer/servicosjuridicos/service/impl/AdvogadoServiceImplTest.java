@@ -26,7 +26,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 @ExtendWith(MockitoExtension.class)
-public class AdvogadoServiceImplTest {
+class AdvogadoServiceImplTest {
     
     @Mock
     private AdvogadoMapper mapper;
@@ -43,23 +43,23 @@ public class AdvogadoServiceImplTest {
     
     
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.advogadoDTO = new AdvogadoDTO().setId(1L)
-            .setCpf("02376543289")
-            .setNome("Banner")
-            .setRamal(3423423);
+                                            .setCpf("02376543289")
+                                            .setNome("Banner")
+                                            .setRamal(3423423);
         this.advogado = new Advogado().setId(1L)
-            .setCpf("02376543289")
-            .setNome("Banner")
-            .setRamal(3423423);
+                                      .setCpf("02376543289")
+                                      .setNome("Banner")
+                                      .setRamal(3423423);
         this.savedAdvogado = new Advogado().setId(1L)
-            .setCpf("02376543289")
-            .setNome("Banner")
-            .setRamal(3423423);
+                                           .setCpf("02376543289")
+                                           .setNome("Banner")
+                                           .setRamal(3423423);
     }
     
     @Test
-    public void save() {
+    void save() {
         when(mapper.toEntity(advogadoDTO)).thenReturn(advogado);
         when(repository.save(advogado)).thenReturn(savedAdvogado);
         when(mapper.toDto(savedAdvogado)).thenReturn(advogadoDTO);
@@ -72,7 +72,7 @@ public class AdvogadoServiceImplTest {
     }
     
     @Test
-    public void findAll() {
+    void findAll() {
         var pageRequest = PageRequest.of(1, 2);
         List<Advogado> advogadosResult = List.of(new Advogado(), new Advogado());
         when(repository.findAll(pageRequest)).thenReturn(new PageImpl<>(advogadosResult));
@@ -85,7 +85,7 @@ public class AdvogadoServiceImplTest {
     }
     
     @Test
-    public void findOne() {
+    void findOne() {
         when(repository.findById(anyLong())).thenReturn(Optional.of(new Advogado()));
         when(mapper.toDto(any(Advogado.class))).thenReturn(new AdvogadoDTO());
         var dtoOptional = service.findOne(anyLong());
@@ -96,7 +96,7 @@ public class AdvogadoServiceImplTest {
     }
     
     @Test
-    public void findOne_NotFound() {
+    void findOne_NotFound() {
         when(repository.findById(anyLong())).thenReturn(Optional.empty());
         var dtoOptional = service.findOne(anyLong());
         assertTrue(dtoOptional.isEmpty());
@@ -106,7 +106,7 @@ public class AdvogadoServiceImplTest {
     }
     
     @Test
-    public void delete() {
+    void delete() {
         service.delete(anyLong());
         verify(repository, times(1)).deleteById(anyLong());
         verifyNoMoreInteractions(repository);
