@@ -63,7 +63,7 @@ public class FeriasLicencaResource {
         }
         FeriasLicencaDTO result = service.save(feriasLicencaDTO);
         return ResponseEntity.created(new URI("/api/ferias-licencas/" + result.getId()))
-                             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                             .headers(HeaderUtil.entityCreationAlert(ENTITY_NAME, result.getId().toString()))
                              .body(result);
     }
     
@@ -87,7 +87,7 @@ public class FeriasLicencaResource {
         FeriasLicencaDTO result = service.save(feriasLicencaDTO);
         return ResponseEntity.ok()
                              .headers(
-                                 HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, feriasLicencaDTO.getId().toString()))
+                                 HeaderUtil.entityUpdateAlert(ENTITY_NAME, feriasLicencaDTO.getId().toString()))
                              .body(result);
     }
     
@@ -131,6 +131,6 @@ public class FeriasLicencaResource {
     public ResponseEntity<Void> deleteFeriasLicenca(@PathVariable Long id) {
         log.debug("REST request to delete FeriasLicenca : {}", id);
         service.delete(id);
-        return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.ok().headers(HeaderUtil.entityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 }

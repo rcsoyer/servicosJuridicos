@@ -61,7 +61,7 @@ public class ProcessoJudicialResource {
     log.debug("REST request to save ProcessoJudicial : {}", dto);
     ProcessoJudicialDTO result = processoJudicialService.save(dto);
     return ResponseEntity.created(new URI("/api/processo-judicials/" + result.getId()))
-        .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
+        .headers(HeaderUtil.entityCreationAlert(ENTITY_NAME, result.getId().toString()))
         .body(result);
   }
 
@@ -83,7 +83,7 @@ public class ProcessoJudicialResource {
     ProcessoJudicialDTO result = processoJudicialService.save(processoJudicialDTO);
     return ResponseEntity.ok()
         .headers(
-            HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, processoJudicialDTO.getId().toString()))
+            HeaderUtil.entityUpdateAlert(ENTITY_NAME, processoJudicialDTO.getId().toString()))
         .body(result);
   }
 
@@ -143,6 +143,6 @@ public class ProcessoJudicialResource {
     log.debug("REST request to delete ProcessoJudicial : {}", id);
     processoJudicialService.delete(id);
     return ResponseEntity.ok()
-        .headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+                         .headers(HeaderUtil.entityDeletionAlert(ENTITY_NAME, id.toString())).build();
   }
 }

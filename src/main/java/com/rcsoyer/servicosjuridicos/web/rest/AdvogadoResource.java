@@ -1,8 +1,8 @@
 package com.rcsoyer.servicosjuridicos.web.rest;
 
-import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.createEntityCreationAlert;
-import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.createEntityDeletionAlert;
-import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.createEntityUpdateAlert;
+import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityCreationAlert;
+import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityDeletionAlert;
+import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityUpdateAlert;
 import static com.rcsoyer.servicosjuridicos.web.rest.util.PaginationUtil.generatePaginationHttpHeaders;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -67,7 +67,7 @@ public class AdvogadoResource {
         var createdAdvogado = service.save(advogadoDTO);
         var resultId = createdAdvogado.getId();
         var location = new URI("/api/advogado/" + resultId);
-        var entityCreationAlert = createEntityCreationAlert(ENTITY_NAME, resultId.toString());
+        var entityCreationAlert = entityCreationAlert(ENTITY_NAME, resultId.toString());
         return ResponseEntity.created(location)
                              .headers(entityCreationAlert)
                              .body(createdAdvogado);
@@ -87,7 +87,7 @@ public class AdvogadoResource {
         log.debug("REST request to update Advogado : {}", advogadoDTO);
         throwsBadRequestIfHasNoId(advogadoDTO);
         var updatedAdvogado = service.save(advogadoDTO);
-        var entityUpdateAlert = createEntityUpdateAlert(ENTITY_NAME, updatedAdvogado.getId().toString());
+        var entityUpdateAlert = entityUpdateAlert(ENTITY_NAME, updatedAdvogado.getId().toString());
         return ResponseEntity.ok()
                              .headers(entityUpdateAlert)
                              .body(updatedAdvogado);
@@ -144,7 +144,7 @@ public class AdvogadoResource {
     public ResponseEntity<Void> deleteAdvogado(@PathVariable @Valid @Min(1) Long id) {
         log.debug("REST request to delete Advogado : {}", id);
         service.delete(id);
-        var entityDeletionAlert = createEntityDeletionAlert(ENTITY_NAME, id.toString());
+        var entityDeletionAlert = entityDeletionAlert(ENTITY_NAME, id.toString());
         return ResponseEntity.ok()
                              .headers(entityDeletionAlert)
                              .build();

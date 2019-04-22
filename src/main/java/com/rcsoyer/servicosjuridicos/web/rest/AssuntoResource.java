@@ -1,8 +1,8 @@
 package com.rcsoyer.servicosjuridicos.web.rest;
 
-import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.createEntityCreationAlert;
-import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.createEntityDeletionAlert;
-import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.createEntityUpdateAlert;
+import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityCreationAlert;
+import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityDeletionAlert;
+import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityUpdateAlert;
 
 import com.codahale.metrics.annotation.Timed;
 import com.rcsoyer.servicosjuridicos.domain.CoordenacaoJuridica;
@@ -69,7 +69,7 @@ public class AssuntoResource {
         throwsBadRequestIfHasId(assuntoDTO);
         var result = assuntoService.save(assuntoDTO);
         var resultId = result.getId();
-        var headerCreationAlert = createEntityCreationAlert(ENTITY_NAME, resultId.toString());
+        var headerCreationAlert = entityCreationAlert(ENTITY_NAME, resultId.toString());
         var uriCreate = new URI("/api/assuntos/" + resultId);
         return ResponseEntity.created(uriCreate)
                              .headers(headerCreationAlert)
@@ -107,7 +107,7 @@ public class AssuntoResource {
         throwsBadRequestIfHasNoId(assuntoDTO);
         var result = assuntoService.save(assuntoDTO);
         var idString = assuntoDTO.getId().toString();
-        var headerUpdateAlert = createEntityUpdateAlert(ENTITY_NAME, idString);
+        var headerUpdateAlert = entityUpdateAlert(ENTITY_NAME, idString);
         return ResponseEntity.ok()
                              .headers(headerUpdateAlert)
                              .body(result);
@@ -180,7 +180,7 @@ public class AssuntoResource {
     public ResponseEntity<Void> deleteAssunto(@PathVariable Long id) {
         log.debug("REST request to delete Assunto : {}", id);
         assuntoService.delete(id);
-        var headerDeletionAlert = createEntityDeletionAlert(ENTITY_NAME, id.toString());
+        var headerDeletionAlert = entityDeletionAlert(ENTITY_NAME, id.toString());
         return ResponseEntity.ok()
                              .headers(headerDeletionAlert)
                              .build();

@@ -67,7 +67,7 @@ public class CoordenacaoJuridicaResource {
     CoordenacaoJuridicaDTO result = service.save(dto);
     Long resultId = result.getId();
     URI uriCreate = new URI("/api/coordenacao-juridicas/" + resultId);
-    HttpHeaders headerCreationAlert = HeaderUtil.createEntityCreationAlert(ENTITY_NAME, resultId.toString());
+    HttpHeaders headerCreationAlert = HeaderUtil.entityCreationAlert(ENTITY_NAME, resultId.toString());
     return ResponseEntity.created(uriCreate)
                          .headers(headerCreationAlert)
                          .body(result);
@@ -105,7 +105,7 @@ public class CoordenacaoJuridicaResource {
     throwsBadRequestIfHasNoId(dto);
     CoordenacaoJuridicaDTO result = service.save(dto);
     String idString = dto.getId().toString();
-    HttpHeaders headerUpdateAlert = HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, idString);
+    HttpHeaders headerUpdateAlert = HeaderUtil.entityUpdateAlert(ENTITY_NAME, idString);
     return ResponseEntity.ok()
                          .headers(headerUpdateAlert)
                          .body(result);
@@ -189,6 +189,6 @@ public class CoordenacaoJuridicaResource {
     log.debug("REST request to delete CoordenacaoJuridica : {}", id);
     service.delete(id);
     return ResponseEntity.ok()
-        .headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+                         .headers(HeaderUtil.entityDeletionAlert(ENTITY_NAME, id.toString())).build();
   }
 }

@@ -1,22 +1,25 @@
 package com.rcsoyer.servicosjuridicos.web.rest;
 
+import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityCreationAlert;
+import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityDeletionAlert;
+import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityUpdateAlert;
+import static com.rcsoyer.servicosjuridicos.web.rest.util.PaginationUtil.generatePaginationHttpHeaders;
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
+
 import com.codahale.metrics.annotation.Timed;
 import com.rcsoyer.servicosjuridicos.service.AdvogadoDgCoordenacaoService;
 import com.rcsoyer.servicosjuridicos.service.dto.AdvogadoDgCoordenacaoDTO;
 import com.rcsoyer.servicosjuridicos.web.rest.errors.BadRequestAlertException;
-import com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil;
-import com.rcsoyer.servicosjuridicos.web.rest.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import javax.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,71 +33,57 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * REST controller for managing AdvogadoDgCoordenacao.
  */
+@Slf4j
 @RestController
 @RequestMapping("/api")
 public class AdvogadoDgCoordenacaoResource {
     
-    private final Logger log = LoggerFactory.getLogger(AdvogadoDgCoordenacaoResource.class);
-    
     private static final String ENTITY_NAME = "advogadoDgCoordenacao";
     
-    private final AdvogadoDgCoordenacaoService advogadoDgCoordenacaoService;
+    private final AdvogadoDgCoordenacaoService dgCoordenacaoService;
     
-    public AdvogadoDgCoordenacaoResource(
-        AdvogadoDgCoordenacaoService advogadoDgCoordenacaoService) {
-        this.advogadoDgCoordenacaoService = advogadoDgCoordenacaoService;
+    public AdvogadoDgCoordenacaoResource(final AdvogadoDgCoordenacaoService advogadoDgCoordenacaoService) {
+        this.dgCoordenacaoService = advogadoDgCoordenacaoService;
     }
     
     /**
      * POST  /advogado-dg-coordenacaos : Create a new advogadoDgCoordenacao.
      *
-     * @param advogadoDgCoordenacaoDTO the advogadoDgCoordenacaoDTO to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new
-     * advogadoDgCoordenacaoDTO, or with status 400 (Bad Request) if the advogadoDgCoordenacao has
-     * already an ID
+     * @param dto the advogadoDgCoordenacaoDTO to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new advogadoDgCoordenacaoDTO, or with
+     * status 400 (Bad Request) if the advogadoDgCoordenacao has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
-    @PostMapping("/advogado-dg-coordenacaos")
     @Timed
+    @PostMapping("/advogado-dg-coordenacaos")
     public ResponseEntity<AdvogadoDgCoordenacaoDTO> createAdvogadoDgCoordenacao(
-        @Valid @RequestBody AdvogadoDgCoordenacaoDTO advogadoDgCoordenacaoDTO)
-        throws URISyntaxException {
-        log.debug("REST request to save AdvogadoDgCoordenacao : {}", advogadoDgCoordenacaoDTO);
-        if (advogadoDgCoordenacaoDTO.getId() != null) {
-            throw new BadRequestAlertException(
-                "A new advogadoDgCoordenacao cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        AdvogadoDgCoordenacaoDTO result = advogadoDgCoordenacaoService
-            .save(advogadoDgCoordenacaoDTO);
+        @Valid @RequestBody AdvogadoDgCoordenacaoDTO dto) throws URISyntaxException {
+        log.info("REST request to save AdvogadoDgCoordenacao : {}", dto);
+        throwsBadRequestIfHasId(dto);
+        AdvogadoDgCoordenacaoDTO result = dgCoordenacaoService.save(dto);
         return ResponseEntity.created(new URI("/api/advogado-dg-coordenacaos/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
-            .body(result);
+                             .headers(entityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                             .body(result);
     }
     
     /**
      * PUT  /advogado-dg-coordenacaos : Updates an existing advogadoDgCoordenacao.
      *
-     * @param advogadoDgCoordenacaoDTO the advogadoDgCoordenacaoDTO to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated advogadoDgCoordenacaoDTO,
-     * or with status 400 (Bad Request) if the advogadoDgCoordenacaoDTO is not valid,
-     * or with status 500 (Internal Server Error) if the advogadoDgCoordenacaoDTO couldn't be updated
-     * @throws URISyntaxException if the Location URI syntax is incorrect
+     * @param dto the advogadoDgCoordenacaoDTO to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated advogadoDgCoordenacaoDTO, or with
+     * status 400 (Bad Request) if the advogadoDgCoordenacaoDTO is not valid, or with status 500 (Internal Server Error)
+     * if the advogadoDgCoordenacaoDTO couldn't be updated
      */
-    @PutMapping("/advogado-dg-coordenacaos")
     @Timed
+    @PutMapping("/advogado-dg-coordenacaos")
     public ResponseEntity<AdvogadoDgCoordenacaoDTO> updateAdvogadoDgCoordenacao(
-        @Valid @RequestBody AdvogadoDgCoordenacaoDTO advogadoDgCoordenacaoDTO)
-        throws URISyntaxException {
-        log.debug("REST request to update AdvogadoDgCoordenacao : {}", advogadoDgCoordenacaoDTO);
-        if (advogadoDgCoordenacaoDTO.getId() == null) {
-            return createAdvogadoDgCoordenacao(advogadoDgCoordenacaoDTO);
-        }
-        AdvogadoDgCoordenacaoDTO result = advogadoDgCoordenacaoService
-            .save(advogadoDgCoordenacaoDTO);
+        @Valid @RequestBody AdvogadoDgCoordenacaoDTO dto) {
+        log.info("REST request to update AdvogadoDgCoordenacao : {}", dto);
+        throwsBadRequestIfHasNoId(dto);
+        AdvogadoDgCoordenacaoDTO result = dgCoordenacaoService.save(dto);
         return ResponseEntity.ok()
-            .headers(HeaderUtil
-                .createEntityUpdateAlert(ENTITY_NAME, advogadoDgCoordenacaoDTO.getId().toString()))
-            .body(result);
+                             .headers(entityUpdateAlert(ENTITY_NAME, dto.getId().toString()))
+                             .body(result);
     }
     
     /**
@@ -103,31 +92,30 @@ public class AdvogadoDgCoordenacaoResource {
      * @param pageable the pagination information
      * @return the ResponseEntity with status 200 (OK) and the list of advogadoDgCoordenacaos in body
      */
-    @GetMapping("/advogado-dg-coordenacaos")
     @Timed
+    @GetMapping("/advogado-dg-coordenacaos")
     public ResponseEntity<List<AdvogadoDgCoordenacaoDTO>> getAllAdvogadoDgCoordenacaos(
         Pageable pageable) {
         log.debug("REST request to get a page of AdvogadoDgCoordenacaos");
-        Page<AdvogadoDgCoordenacaoDTO> page = advogadoDgCoordenacaoService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil
-            .generatePaginationHttpHeaders(page, "/api/advogado-dg-coordenacaos");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        Page<AdvogadoDgCoordenacaoDTO> page = dgCoordenacaoService.findAll(pageable);
+        HttpHeaders headers = generatePaginationHttpHeaders(page, "/api/advogado-dg-coordenacaos");
+        return ResponseEntity.ok()
+                             .headers(headers)
+                             .body(page.getContent());
     }
     
     /**
      * GET  /advogado-dg-coordenacaos/:id : get the "id" advogadoDgCoordenacao.
      *
      * @param id the id of the advogadoDgCoordenacaoDTO to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the advogadoDgCoordenacaoDTO, or
-     * with status 404 (Not Found)
+     * @return the ResponseEntity with status 200 (OK) and with body the advogadoDgCoordenacaoDTO, or with status 404
+     * (Not Found)
      */
-    @GetMapping("/advogado-dg-coordenacaos/{id}")
     @Timed
-    public ResponseEntity<AdvogadoDgCoordenacaoDTO> getAdvogadoDgCoordenacao(
-        @PathVariable Long id) {
-        log.debug("REST request to get AdvogadoDgCoordenacao : {}", id);
-        var advogadoDgCoordenacaoDTO = advogadoDgCoordenacaoService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(advogadoDgCoordenacaoDTO);
+    @GetMapping("/advogado-dg-coordenacaos/{id}")
+    public ResponseEntity<AdvogadoDgCoordenacaoDTO> getAdvogadoDgCoordenacao(@PathVariable Long id) {
+        log.info("REST request to get AdvogadoDgCoordenacao : {}", id);
+        return ResponseUtil.wrapOrNotFound(dgCoordenacaoService.findOne(id));
     }
     
     /**
@@ -136,12 +124,27 @@ public class AdvogadoDgCoordenacaoResource {
      * @param id the id of the advogadoDgCoordenacaoDTO to delete
      * @return the ResponseEntity with status 200 (OK)
      */
-    @DeleteMapping("/advogado-dg-coordenacaos/{id}")
     @Timed
+    @DeleteMapping("/advogado-dg-coordenacaos/{id}")
     public ResponseEntity<Void> deleteAdvogadoDgCoordenacao(@PathVariable Long id) {
-        log.debug("REST request to delete AdvogadoDgCoordenacao : {}", id);
-        advogadoDgCoordenacaoService.delete(id);
+        log.info("REST request to delete AdvogadoDgCoordenacao : {}", id);
+        dgCoordenacaoService.delete(id);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+                             .headers(entityDeletionAlert(ENTITY_NAME, id.toString()))
+                             .build();
+    }
+    
+    private void throwsBadRequestIfHasId(final AdvogadoDgCoordenacaoDTO dto) {
+        if (nonNull(dto.getId())) {
+            var msgError = "A new AdvogadoDgCoordenacao cannot already have an ID";
+            throw new BadRequestAlertException(msgError, ENTITY_NAME, "idexists");
+        }
+    }
+    
+    private void throwsBadRequestIfHasNoId(final AdvogadoDgCoordenacaoDTO dto) {
+        if (isNull(dto.getId())) {
+            var errorMsg = "A existing AdvogadoDgCoordenacao must have an ID";
+            throw new BadRequestAlertException(errorMsg, ENTITY_NAME, "idnull");
+        }
     }
 }

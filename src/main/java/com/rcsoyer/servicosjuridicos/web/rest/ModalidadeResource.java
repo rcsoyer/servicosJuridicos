@@ -64,7 +64,7 @@ public class ModalidadeResource {
     throwsBadRequestIfHasId(modalidadeDTO);
     ModalidadeDTO result = modalidadeService.save(modalidadeDTO);
     Long resultId = result.getId();
-    HttpHeaders headerCreationAlert = HeaderUtil.createEntityCreationAlert(ENTITY_NAME, resultId.toString());
+    HttpHeaders headerCreationAlert = HeaderUtil.entityCreationAlert(ENTITY_NAME, resultId.toString());
     URI uriCreate = new URI("/api/modalidades/" + resultId);
     return ResponseEntity.created(uriCreate)
                          .headers(headerCreationAlert)
@@ -102,7 +102,7 @@ public class ModalidadeResource {
     throwsBadRequestIfHasNoId(modalidadeDTO);
     ModalidadeDTO result = modalidadeService.save(modalidadeDTO);
     String idString = modalidadeDTO.getId().toString();
-    HttpHeaders headerUpdateAlert = HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, idString);
+    HttpHeaders headerUpdateAlert = HeaderUtil.entityUpdateAlert(ENTITY_NAME, idString);
     return ResponseEntity.ok()
                          .headers(headerUpdateAlert)
                          .body(result);
@@ -174,7 +174,7 @@ public class ModalidadeResource {
   public ResponseEntity<Void> deleteModalidade(@PathVariable Long id) {
     log.debug("REST request to delete Modalidade : {}", id);
     modalidadeService.delete(id);
-    HttpHeaders headerDeletionAlert = HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString());
+    HttpHeaders headerDeletionAlert = HeaderUtil.entityDeletionAlert(ENTITY_NAME, id.toString());
     return ResponseEntity.ok()
                          .headers(headerDeletionAlert)
                          .build();
