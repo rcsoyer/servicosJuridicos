@@ -7,25 +7,22 @@ import com.rcsoyer.servicosjuridicos.service.dto.AssuntoDTO;
 import com.rcsoyer.servicosjuridicos.service.mapper.AssuntoMapper;
 import java.util.Optional;
 import java.util.function.Function;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Service
 @Transactional
 public class AssuntoServiceImpl implements AssuntoService {
     
     private final AssuntoMapper mapper;
-    
     private final AssuntoRepository repository;
     
-    private final Logger log = LoggerFactory.getLogger(AssuntoServiceImpl.class);
-    
-    public AssuntoServiceImpl(AssuntoRepository assuntoRepository, AssuntoMapper assuntoMapper) {
+    public AssuntoServiceImpl(final AssuntoRepository assuntoRepository, final AssuntoMapper assuntoMapper) {
         this.mapper = assuntoMapper;
         this.repository = assuntoRepository;
     }
@@ -37,10 +34,12 @@ public class AssuntoServiceImpl implements AssuntoService {
      * @return the persisted entity
      */
     @Override
-    public AssuntoDTO save(AssuntoDTO dto) {
+    public AssuntoDTO save(final AssuntoDTO dto) {
         log.debug("Request to save Assunto : {}", dto);
         Function<AssuntoDTO, Assunto> toEntity = mapper::toEntity;
-        return toEntity.andThen(repository::save).andThen(mapper::toDto).apply(dto);
+        return toEntity.andThen(repository::save)
+                       .andThen(mapper::toDto)
+                       .apply(dto);
     }
     
     /**
@@ -51,9 +50,12 @@ public class AssuntoServiceImpl implements AssuntoService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<AssuntoDTO> findAll(Pageable pageable) {
+    public Page<AssuntoDTO> findAll(final Pageable pageable) {
         log.debug("Request to get all Assuntos");
-        return repository.findAll(pageable).map(mapper::toDto);
+        return repository.findAll(pageable)
+                         .map(dto -> {
+                             return mapper.toDto(dto);
+                         });
     }
     
     /**
@@ -66,7 +68,8 @@ public class AssuntoServiceImpl implements AssuntoService {
     @Transactional(readOnly = true)
     public Optional<AssuntoDTO> findOne(Long id) {
         log.debug("Request to get Assunto : {}", id);
-        return repository.findById(id).map(mapper::toDto);
+        return repository.findById(id)
+                         .map(mapper::toDto);
     }
     
     /**
@@ -87,10 +90,10 @@ public class AssuntoServiceImpl implements AssuntoService {
     @Override
     @Transactional(readOnly = true)
     public Page<AssuntoDTO> findByParams(final AssuntoDTO dto, final Pageable pageable) {
-        log.debug("Request to get Processos Judiciais by params");
+        log.debug("Request to get Assuntos page by params: {}, {} ", dto, pageable);
         Function<AssuntoDTO, Assunto> toEntity = mapper::toEntity;
-        Function<Assunto, Page<Assunto>> query = repository.query(pageable);
-        Function<Page<Assunto>, Page<AssuntoDTO>> toPageDTO = page -> page.map(mapper::toDto);
+        Function<Assunto, Page<Assunto>> query = assunto -> repository.query(assunto, pageable);
+        Function<Page<Assunto>, Page<AssuntoDTO>> toPageDTO = pageEntity -> pageEntity.map(mapper::toDto);
         return toEntity.andThen(query)
                        .andThen(toPageDTO)
                        .apply(dto);

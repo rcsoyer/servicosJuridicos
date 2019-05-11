@@ -123,7 +123,7 @@ public class AssuntoResourceIntTest {
     assertThat(assuntoList).hasSize(databaseSizeBeforeCreate + 1);
     Assunto testAssunto = assuntoList.get(assuntoList.size() - 1);
     assertThat(testAssunto.getDescricao()).isEqualTo(DEFAULT_DESCRICAO);
-    assertThat(testAssunto.isAtivo()).isEqualTo(DEFAULT_ATIVO);
+    assertThat(testAssunto.getAtivo()).isEqualTo(DEFAULT_ATIVO);
     assertThat(testAssunto.getPeso()).isEqualTo(DEFAULT_PESO);
   }
 
@@ -267,7 +267,7 @@ public class AssuntoResourceIntTest {
     assertThat(assuntoList).hasSize(databaseSizeBeforeUpdate);
     Assunto testAssunto = assuntoList.get(assuntoList.size() - 1);
     assertThat(testAssunto.getDescricao()).isEqualTo(UPDATED_DESCRICAO);
-    assertThat(testAssunto.isAtivo()).isEqualTo(UPDATED_ATIVO);
+    assertThat(testAssunto.getAtivo()).isEqualTo(UPDATED_ATIVO);
     assertThat(testAssunto.getPeso()).isEqualTo(UPDATED_PESO);
   }
 

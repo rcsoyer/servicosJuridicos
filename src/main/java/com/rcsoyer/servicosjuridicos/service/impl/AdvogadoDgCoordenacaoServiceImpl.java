@@ -90,6 +90,7 @@ public class AdvogadoDgCoordenacaoServiceImpl implements AdvogadoDgCoordenacaoSe
     @Override
     public Page<AdvogadoDgCoordenacaoDTO> findByParams(final AdvogadoDgCoordenacaoDTO dto,
                                                        final Pageable pageable) {
+        log.debug("Query by the values in the DTO and the Pageable: {}, {}", dto, pageable);
         Function<AdvogadoDgCoordenacaoDTO, AdvogadoDgCoordenacao> toEntiy = mapper::toEntity;
         Function<AdvogadoDgCoordenacao, Page<AdvogadoDgCoordenacao>> queryBy =
             dgCoordenacao -> repository.query(dgCoordenacao, pageable);

@@ -49,7 +49,6 @@ public class Assunto implements Serializable {
     private String descricao;
     
     @NotNull
-    @Getter(value = AccessLevel.NONE)
     @Column(nullable = false)
     private Boolean ativo;
     
@@ -58,10 +57,6 @@ public class Assunto implements Serializable {
     @Max(5)
     @Column(nullable = false)
     private Integer peso;
-    
-    public Boolean isAtivo() {
-        return ativo;
-    }
     
     public Assunto setDescricao(String descricao) {
         this.descricao = trimToNull(descricao);
