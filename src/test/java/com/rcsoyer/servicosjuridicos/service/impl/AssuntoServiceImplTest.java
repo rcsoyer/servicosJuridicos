@@ -22,6 +22,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -68,22 +70,29 @@ class AssuntoServiceImplTest {
     }
     
     @Test
+    @MockitoSettings(strictness = Strictness.LENIENT)
     void findAll() {
-        var assunto1 = new Assunto().setId(1L).setDescricao("1");
-        var assunto2 = new Assunto().setId(2L).setDescricao("2");
         var dto1 = new AssuntoDTO().setId(1L).setDescricao("1");
+        var assunto1 = new Assunto().setId(1L).setDescricao("1");
+        
+        when(mapper.toDto(assunto1)).thenReturn(dto1);
+        
+        var assunto2 = new Assunto().setId(2L).setDescricao("2");
         var dto2 = new AssuntoDTO().setId(2L).setDescricao("2");
+        
+        when(mapper.toDto(assunto2)).thenReturn(dto2);
+        
         var pageable = PageRequest.of(0, 10);
         var assuntos = new PageImpl<>(asList(assunto1, assunto2));
         
         when(repository.findAll(pageable)).thenReturn(assuntos);
-        when(mapper.toDto(assunto1)).thenReturn(dto1);
-        // when(mapper.toDto(assunto2)).thenReturn(dto2);
+        
         Page<AssuntoDTO> page = service.findAll(pageable);
+        
         assertEquals(assuntos.getContent().get(0).getId(), page.getContent().get(0).getId());
         assertEquals(assuntos.getContent().get(0).getDescricao(), page.getContent().get(0).getDescricao());
-        //assertEquals(assuntos.getContent().get(1).getId(), page.getContent().get(1).getId());
-        //assertEquals(assuntos.getContent().get(1).getDescricao(), page.getContent().get(1).getDescricao());
+        assertEquals(assuntos.getContent().get(1).getId(), page.getContent().get(1).getId());
+        assertEquals(assuntos.getContent().get(1).getDescricao(), page.getContent().get(1).getDescricao());
     }
     
     @Test
