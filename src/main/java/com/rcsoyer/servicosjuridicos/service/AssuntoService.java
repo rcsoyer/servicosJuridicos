@@ -41,5 +41,5 @@ public interface AssuntoService {
    */
   void delete(Long id);
 
-  Page<AssuntoDTO> findByParams(AssuntoDTO dto, Pageable pageable);
+  Page<AssuntoDTO> seekByParams(AssuntoDTO dto, Pageable pageable);
 }

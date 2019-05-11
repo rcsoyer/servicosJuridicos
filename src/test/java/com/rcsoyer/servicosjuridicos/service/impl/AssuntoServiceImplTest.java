@@ -107,7 +107,7 @@ class AssuntoServiceImplTest {
     }
     
     @Test
-    void findByParams() {
+    void seekByParams() {
         var assunto = new Assunto().setId(1L);
         var dto = new AssuntoDTO().setId(1L);
         
@@ -115,14 +115,14 @@ class AssuntoServiceImplTest {
         
         var pageable = PageRequest.of(0, 10);
         
-        when(repository.query(assunto, pageable)).thenReturn(new PageImpl<>(singletonList(assunto)));
+        when(repository.findByAssunto(assunto, pageable)).thenReturn(new PageImpl<>(singletonList(assunto)));
         when(mapper.toDto(assunto)).thenReturn(dto.setDescricao("assunto 1"));
         
-        Page<AssuntoDTO> result = service.findByParams(dto, pageable);
+        Page<AssuntoDTO> result = service.seekByParams(dto, pageable);
         
         assertTrue(result.getContent().contains(dto));
         verify(mapper, times(1)).toEntity(dto);
-        verify(repository, times(1)).query(assunto, pageable);
+        verify(repository, times(1)).findByAssunto(assunto, pageable);
         verify(mapper, times(1)).toEntity(dto);
         verifyNoMoreInteractions(repository, mapper);
     }

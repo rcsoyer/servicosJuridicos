@@ -89,10 +89,10 @@ public class AssuntoServiceImpl implements AssuntoService {
     
     @Override
     @Transactional(readOnly = true)
-    public Page<AssuntoDTO> findByParams(final AssuntoDTO dto, final Pageable pageable) {
+    public Page<AssuntoDTO> seekByParams(final AssuntoDTO dto, final Pageable pageable) {
         log.debug("Request to get Assuntos page by params: {}, {} ", dto, pageable);
         Function<AssuntoDTO, Assunto> toEntity = mapper::toEntity;
-        Function<Assunto, Page<Assunto>> query = assunto -> repository.query(assunto, pageable);
+        Function<Assunto, Page<Assunto>> query = assunto -> repository.findByAssunto(assunto, pageable);
         Function<Page<Assunto>, Page<AssuntoDTO>> toPageDTO = pageEntity -> pageEntity.map(mapper::toDto);
         return toEntity.andThen(query)
                        .andThen(toPageDTO)

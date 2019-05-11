@@ -148,7 +148,7 @@ public class AssuntoResource {
         @RequestParam("pageable") PageableDTO pageableDTO) {
         log.debug("REST request to get a page of Assuntos");
         var pageable = pageableDTO.getPageable();
-        var page = assuntoService.findByParams(dto, pageable);
+        var page = assuntoService.seekByParams(dto, pageable);
         var headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/queryAssuntos");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

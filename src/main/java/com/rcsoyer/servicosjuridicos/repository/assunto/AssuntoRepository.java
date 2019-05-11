@@ -13,7 +13,7 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
  */
 public interface AssuntoRepository extends JpaRepository<Assunto, Long>, QuerydslPredicateExecutor<Assunto> {
     
-    default Page<Assunto> query(final Assunto assunto, final Pageable pageable) {
+    default Page<Assunto> findByAssunto(final Assunto assunto, final Pageable pageable) {
         Function<Assunto, Predicate> expressions = AssuntoRestrictions::getRestrictions;
         return expressions.andThen(predicate -> findAll(predicate, pageable))
                           .apply(assunto);
