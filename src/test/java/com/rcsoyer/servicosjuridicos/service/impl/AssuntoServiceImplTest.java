@@ -4,7 +4,6 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -16,7 +15,6 @@ import com.rcsoyer.servicosjuridicos.repository.assunto.AssuntoRepository;
 import com.rcsoyer.servicosjuridicos.service.dto.AssuntoDTO;
 import com.rcsoyer.servicosjuridicos.service.mapper.AssuntoMapper;
 import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,9 +30,6 @@ import org.springframework.data.domain.PageRequest;
 @ExtendWith(MockitoExtension.class)
 class AssuntoServiceImplTest {
     
-    private Assunto assunto;
-    private AssuntoDTO dto;
-    
     @Mock
     private AssuntoMapper mapper;
     
@@ -44,28 +39,34 @@ class AssuntoServiceImplTest {
     @InjectMocks
     private AssuntoServiceImpl service;
     
-    @BeforeEach
-    void setUp() {
-        this.assunto = new Assunto().setAtivo(true)
-                                    .setDescricao("the dark side of the moon")
-                                    .setPeso(1);
-        this.dto = new AssuntoDTO().setAtivo(true)
-                                   .setDescricao("the dark side of the moon")
-                                   .setPeso(1);
-    }
-    
     @Test
     void save() {
+        var assunto = new Assunto().setAtivo(true)
+                                   .setDescricao("the dark side of the moon")
+                                   .setPeso(1);
+        var dto = new AssuntoDTO().setAtivo(true)
+                                  .setDescricao("the dark side of the moon")
+                                  .setPeso(1);
+        
         when(mapper.toEntity(dto)).thenReturn(assunto);
-        when(repository.save(assunto)).thenReturn(assunto.setId(1L));
-        when(mapper.toDto(assunto)).thenReturn(dto.setId(1L));
         
-        var savedDto = service.save(dto);
+        var savedAssunto = new Assunto().setId(1L)
+                                        .setAtivo(true)
+                                        .setDescricao("the dark side of the moon")
+                                        .setPeso(1);
         
-        assertEquals(savedDto, dto);
-        verify(mapper, times(1)).toDto(any(Assunto.class));
-        verify(repository, times(1)).save(any());
-        verify(mapper, times(1)).toEntity(any(AssuntoDTO.class));
+        when(repository.save(assunto)).thenReturn(savedAssunto);
+        
+        var savedDto = new AssuntoDTO().setAtivo(true)
+                                       .setDescricao("the dark side of the moon")
+                                       .setPeso(1);
+        
+        when(mapper.toDto(savedAssunto)).thenReturn(savedDto);
+        
+        assertEquals(service.save(dto), savedDto);
+        verify(mapper, times(1)).toEntity(dto);
+        verify(repository, times(1)).save(assunto);
+        verify(mapper, times(1)).toDto(assunto.setId(1L));
         verifyNoMoreInteractions(mapper, repository);
     }
     
