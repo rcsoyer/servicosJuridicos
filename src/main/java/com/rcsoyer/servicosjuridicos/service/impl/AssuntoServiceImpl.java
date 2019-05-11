@@ -8,7 +8,6 @@ import com.rcsoyer.servicosjuridicos.service.mapper.AssuntoMapper;
 import java.util.Optional;
 import java.util.function.Function;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -53,9 +52,7 @@ public class AssuntoServiceImpl implements AssuntoService {
     public Page<AssuntoDTO> findAll(final Pageable pageable) {
         log.debug("Request to get all Assuntos");
         return repository.findAll(pageable)
-                         .map(dto -> {
-                             return mapper.toDto(dto);
-                         });
+                         .map(mapper::toDto);
     }
     
     /**
@@ -79,14 +76,12 @@ public class AssuntoServiceImpl implements AssuntoService {
      */
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete Assunto : {}", id);
-        try {
-            repository.deleteById(id);
-        } catch (ConstraintViolationException dataIntegrityViolation) {
-            throw new IllegalStateException("Nao pode", dataIntegrityViolation);
-        }
+        repository.deleteById(id);
     }
     
+    /**
+     * Get a page of Assunto based on the param values from the dto and the pagination information
+     */
     @Override
     @Transactional(readOnly = true)
     public Page<AssuntoDTO> seekByParams(final AssuntoDTO dto, final Pageable pageable) {
