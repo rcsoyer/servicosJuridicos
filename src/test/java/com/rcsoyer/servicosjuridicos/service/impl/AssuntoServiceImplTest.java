@@ -11,7 +11,7 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import com.rcsoyer.servicosjuridicos.domain.Assunto;
-import com.rcsoyer.servicosjuridicos.repository.assunto.AssuntoRepository;
+import com.rcsoyer.servicosjuridicos.repository.AssuntoRepository;
 import com.rcsoyer.servicosjuridicos.service.dto.AssuntoDTO;
 import com.rcsoyer.servicosjuridicos.service.mapper.AssuntoMapper;
 import java.util.Optional;

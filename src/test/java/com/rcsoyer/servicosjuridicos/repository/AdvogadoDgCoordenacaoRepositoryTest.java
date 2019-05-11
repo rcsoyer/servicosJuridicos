@@ -9,7 +9,6 @@ import com.rcsoyer.servicosjuridicos.domain.Advogado;
 import com.rcsoyer.servicosjuridicos.domain.AdvogadoDgCoordenacao;
 import com.rcsoyer.servicosjuridicos.domain.Assunto;
 import com.rcsoyer.servicosjuridicos.domain.CoordenacaoJuridica;
-import com.rcsoyer.servicosjuridicos.repository.assunto.AssuntoRepository;
 import com.rcsoyer.servicosjuridicos.repository.coordenacao.CoordenacaoJuridicaRepository;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;

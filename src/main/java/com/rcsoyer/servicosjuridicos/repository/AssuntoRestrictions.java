@@ -1,4 +1,4 @@
-package com.rcsoyer.servicosjuridicos.repository.assunto;
+package com.rcsoyer.servicosjuridicos.repository;
 
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -22,11 +22,11 @@ final class AssuntoRestrictions {
     }
     
     static Predicate getRestrictions(final Assunto assunto) {
-        return new AssuntoRestrictions(assunto).defineRestrictions();
+        return new AssuntoRestrictions(assunto).get();
     }
     
-    private BooleanExpression defineRestrictions() {
-        return Expressions.allOf(pesoRestriction(), ativoRestriction(), descricacaoRestriction());
+    private BooleanExpression get() {
+        return Expressions.allOf(descricacaoRestriction(), pesoRestriction(), ativoRestriction());
     }
     
     private BooleanExpression descricacaoRestriction() {
