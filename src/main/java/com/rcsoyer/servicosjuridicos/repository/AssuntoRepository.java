@@ -16,8 +16,8 @@ import org.springframework.stereotype.Repository;
 public interface AssuntoRepository extends JpaRepository<Assunto, Long>, QuerydslPredicateExecutor<Assunto> {
     
     default Page<Assunto> findByAssunto(final Assunto assunto, final Pageable pageable) {
-        Function<Assunto, Predicate> expressions = AssuntoRestrictions::getRestrictions;
-        return expressions.andThen(predicate -> findAll(predicate, pageable))
-                          .apply(assunto);
+        Function<Assunto, Predicate> getRestrictions = AssuntoRestrictions::getRestrictions;
+        return getRestrictions.andThen(predicate -> findAll(predicate, pageable))
+                              .apply(assunto);
     }
 }
