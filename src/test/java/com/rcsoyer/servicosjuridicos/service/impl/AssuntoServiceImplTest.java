@@ -57,7 +57,9 @@ class AssuntoServiceImplTest {
         when(mapper.toEntity(dto)).thenReturn(assunto);
         when(repository.save(assunto)).thenReturn(assunto.setId(1L));
         when(mapper.toDto(assunto)).thenReturn(dto.setId(1L));
+        
         var savedDto = service.save(dto);
+        
         assertEquals(savedDto, dto);
         verify(mapper, times(1)).toDto(any(Assunto.class));
         verify(repository, times(1)).save(any());
@@ -73,6 +75,7 @@ class AssuntoServiceImplTest {
         var dto2 = new AssuntoDTO().setId(2L).setDescricao("2");
         var pageable = PageRequest.of(0, 10);
         var assuntos = new PageImpl<>(asList(assunto1, assunto2));
+        
         when(repository.findAll(pageable)).thenReturn(assuntos);
         when(mapper.toDto(assunto1)).thenReturn(dto1);
         // when(mapper.toDto(assunto2)).thenReturn(dto2);
@@ -101,6 +104,7 @@ class AssuntoServiceImplTest {
     @Test
     void delete() {
         service.delete(1L);
+        
         verify(repository, times(1)).deleteById(1L);
         verifyNoMoreInteractions(repository);
         verifyZeroInteractions(mapper);
