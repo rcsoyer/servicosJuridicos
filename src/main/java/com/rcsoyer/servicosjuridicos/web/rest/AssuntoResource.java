@@ -3,7 +3,6 @@ package com.rcsoyer.servicosjuridicos.web.rest;
 import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityDeletionAlert;
 import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityUpdateAlert;
 import static com.rcsoyer.servicosjuridicos.web.rest.util.PaginationUtil.generatePaginationHttpHeaders;
-import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 import com.codahale.metrics.annotation.Timed;
@@ -17,6 +16,8 @@ import io.swagger.annotations.ApiResponses;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -76,11 +77,13 @@ public class AssuntoResource {
     })
     public ResponseEntity<AssuntoDTO> updateAssunto(@Valid @RequestBody AssuntoDTO dto) {
         log.info("REST request to update Assunto : {}", dto);
-        throwsBadRequestIfHasNoId(dto);
-        AssuntoDTO result = assuntoService.save(dto);
-        return ResponseEntity.ok()
-                             .headers(entityUpdateAlert(ENTITY_NAME, result.getId().toString()))
-                             .body(result);
+        return Optional.of(dto)
+                       .filter(assunto -> nonNull(assunto.getId()))
+                       .map(assuntoService::save)
+                       .map(result -> ResponseEntity.ok()
+                                                    .headers(entityUpdateAlert(ENTITY_NAME, result.getId().toString()))
+                                                    .body(result))
+                       .orElseThrow(badRequestHasNoId());
     }
     
     @Timed
@@ -128,12 +131,12 @@ public class AssuntoResource {
         }
     }
     
-    private void throwsBadRequestIfHasNoId(final AssuntoDTO dto) {
-        if (isNull(dto.getId())) {
+    private Supplier<BadRequestAlertException> badRequestHasNoId() {
+        return () -> {
             var msgError = "An existing Assunto must have an id";
             var badRequestAlertException = new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
             log.error(msgError, badRequestAlertException);
-            throw badRequestAlertException;
-        }
+            return badRequestAlertException;
+        };
     }
 }
