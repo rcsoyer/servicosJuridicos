@@ -1,5 +1,6 @@
 package com.rcsoyer.servicosjuridicos.web.rest;
 
+import static com.rcsoyer.servicosjuridicos.web.rest.TestUtil.convertObjectToJsonBytes;
 import static com.rcsoyer.servicosjuridicos.web.rest.TestUtil.createFormattingConversionService;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -116,7 +117,7 @@ public class AdvogadoResourceIntTest {
         AdvogadoDTO advogadoDTO = advogadoMapper.toDto(advogado);
         restAdvogadoMockMvc
             .perform(post("/api/advogados").contentType(TestUtil.APPLICATION_JSON_UTF8)
-                                           .content(TestUtil.convertObjectToJsonBytes(advogadoDTO)))
+                                           .content(convertObjectToJsonBytes(advogadoDTO)))
             .andExpect(status().isCreated());
         
         // Validate the Advogado in the database
@@ -140,7 +141,7 @@ public class AdvogadoResourceIntTest {
         // An entity with an existing ID cannot be created, so this API call must fail
         restAdvogadoMockMvc
             .perform(post("/api/advogados").contentType(TestUtil.APPLICATION_JSON_UTF8)
-                                           .content(TestUtil.convertObjectToJsonBytes(advogadoDTO)))
+                                           .content(convertObjectToJsonBytes(advogadoDTO)))
             .andExpect(status().isBadRequest());
         
         // Validate the Advogado in the database
@@ -160,7 +161,7 @@ public class AdvogadoResourceIntTest {
         
         restAdvogadoMockMvc
             .perform(post("/api/advogados").contentType(TestUtil.APPLICATION_JSON_UTF8)
-                                           .content(TestUtil.convertObjectToJsonBytes(advogadoDTO)))
+                                           .content(convertObjectToJsonBytes(advogadoDTO)))
             .andExpect(status().isBadRequest());
         
         List<Advogado> advogadoList = advogadoRepository.findAll();
@@ -179,7 +180,7 @@ public class AdvogadoResourceIntTest {
         
         restAdvogadoMockMvc
             .perform(post("/api/advogados").contentType(TestUtil.APPLICATION_JSON_UTF8)
-                                           .content(TestUtil.convertObjectToJsonBytes(advogadoDTO)))
+                                           .content(convertObjectToJsonBytes(advogadoDTO)))
             .andExpect(status().isBadRequest());
         
         List<Advogado> advogadoList = advogadoRepository.findAll();
@@ -242,7 +243,7 @@ public class AdvogadoResourceIntTest {
         AdvogadoDTO advogadoDTO = advogadoMapper.toDto(updatedAdvogado);
         
         restAdvogadoMockMvc.perform(put("/api/advogados").contentType(TestUtil.APPLICATION_JSON_UTF8)
-                                                         .content(TestUtil.convertObjectToJsonBytes(advogadoDTO)))
+                                                         .content(convertObjectToJsonBytes(advogadoDTO)))
                            .andExpect(status().isOk());
         
         // Validate the Advogado in the database
@@ -265,7 +266,7 @@ public class AdvogadoResourceIntTest {
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restAdvogadoMockMvc
             .perform(put("/api/advogados").contentType(TestUtil.APPLICATION_JSON_UTF8)
-                                          .content(TestUtil.convertObjectToJsonBytes(advogadoDTO)))
+                                          .content(convertObjectToJsonBytes(advogadoDTO)))
             .andExpect(status().isBadRequest());
         
         // Validate the Advogado in the database
