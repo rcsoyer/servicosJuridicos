@@ -135,9 +135,9 @@ class AssuntoResourceIntTest extends ApiConfigTest {
     }
     
     private AssuntoDTO assuntoDto2() {
-        return assuntoService.save(new AssuntoDTO().setPeso(2)
-                                                   .setDescricao("assunto 2")
-                                                   .setAtivo(Boolean.FALSE));
+        return new AssuntoDTO().setPeso(2)
+                               .setDescricao("assunto 2")
+                               .setAtivo(Boolean.FALSE);
     }
     
 }
