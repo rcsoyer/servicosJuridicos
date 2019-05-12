@@ -72,17 +72,14 @@ public class AssuntoResource {
                              .body(result);
     }
     
-    /**
-     * PUT /assuntos : Updates an existing assunto.
-     *
-     * @param dto the assuntoDTO to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated assuntoDTO, or with status 400 (Bad
-     * Request) if the assuntoDTO is not valid, or with status 500 (Internal Server Error) if the assuntoDTO couldn't be
-     * updated
-     * @throws URISyntaxException if the Location URI syntax is incorrect
-     */
     @Timed
     @PutMapping
+    @ApiOperation(value = "Update an existing assunto", response = AssuntoDTO.class)
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "Assunto created"),
+        @ApiResponse(code = 400, message = "An existing Assunto must have an ID"),
+        @ApiResponse(code = 500, message = "Assunto couldn't be update")
+    })
     public ResponseEntity<AssuntoDTO> updateAssunto(@Valid @RequestBody AssuntoDTO dto) {
         log.debug("REST request to update Assunto : {}", dto);
         throwsBadRequestIfHasNoId(dto);

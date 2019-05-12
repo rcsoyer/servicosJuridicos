@@ -5,18 +5,19 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.rcsoyer.servicosjuridicos.service.AssuntoService;
 import com.rcsoyer.servicosjuridicos.service.dto.AssuntoDTO;
 import com.rcsoyer.servicosjuridicos.web.rest.AssuntoResource;
-import com.rcsoyer.servicosjuridicos.web.rest.TestUtil;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -39,15 +40,41 @@ class AssuntoResourceIntTest extends ApiConfigTest {
     }
     
     @Test
-    void createAssunto() throws Exception {
+    void createAssunto_ok() throws Exception {
         var assunto = assuntoDto();
         
         mockMvc.perform(
             post("/api/assunto")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(assunto)))
                .andExpect(status().isCreated())
                .andExpect(jsonPath("$.id").isNumber())
+               .andExpect(jsonPath("$.ativo", equalTo(assunto.isAtivo())))
+               .andExpect(jsonPath("$.descricao", equalTo(assunto.getDescricao())))
+               .andExpect(jsonPath("$.peso", equalTo(assunto.getPeso())));
+    }
+    
+    @Test
+    void createAssunto_alreadyHaveID() throws Exception {
+        var assunto = assuntoDto().setId(666L);
+        
+        mockMvc.perform(
+            post("/api/assunto")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(convertObjectToJsonBytes(assunto)))
+               .andExpect(status().isBadRequest());
+    }
+    
+    @Test
+    void updateAssunto_ok() throws Exception {
+        var assunto = assuntoService.save(assuntoDto());
+        
+        mockMvc.perform(
+            put("/api/assunto")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(convertObjectToJsonBytes(assunto)))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.id", equalTo(assunto.getId().intValue())))
                .andExpect(jsonPath("$.ativo", equalTo(assunto.isAtivo())))
                .andExpect(jsonPath("$.descricao", equalTo(assunto.getDescricao())))
                .andExpect(jsonPath("$.peso", equalTo(assunto.getPeso())));

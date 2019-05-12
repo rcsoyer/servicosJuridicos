@@ -37,7 +37,6 @@ public class Assunto implements Serializable {
     private static final long serialVersionUID = 5969365551210317302L;
     
     @Id
-    @Column(updatable = false, nullable = false)
     @SequenceGenerator(name = "sequenceGenerator")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     private Long id;
