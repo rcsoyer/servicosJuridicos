@@ -27,6 +27,8 @@ class AdvogadoRepositoryTest extends RepositoryConfigTest {
         advogadoRepository.save(advogado);
         Page<Advogado> advogados = advogadoRepository.query(advogado, PageRequest.of(0, 10));
         Advogado advFromDB = advogados.getContent().get(0);
+        
+        assertEquals(1, advogados.getNumberOfElements());
         assertEquals(advogado, advFromDB);
         assertEquals(advogado.getCpf(), advFromDB.getCpf());
     }
