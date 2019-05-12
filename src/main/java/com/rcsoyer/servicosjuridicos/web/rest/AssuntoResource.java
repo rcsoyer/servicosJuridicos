@@ -3,6 +3,7 @@ package com.rcsoyer.servicosjuridicos.web.rest;
 import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityDeletionAlert;
 import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityUpdateAlert;
 import static com.rcsoyer.servicosjuridicos.web.rest.util.PaginationUtil.generatePaginationHttpHeaders;
+import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 import com.codahale.metrics.annotation.Timed;
@@ -14,7 +15,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -46,9 +46,6 @@ public class AssuntoResource {
         this.assuntoService = assuntoService;
     }
     
-    /**
-     * @throws URISyntaxException if the Location URI syntax is incorrect
-     */
     @Timed
     @PostMapping
     @ApiOperation(value = "Create a new assunto", response = AssuntoDTO.class)
@@ -56,15 +53,14 @@ public class AssuntoResource {
         @ApiResponse(code = 201, message = "Assunto created"),
         @ApiResponse(code = 400, message = "Assunto already has and ID")
     })
-    public ResponseEntity<AssuntoDTO> createAssunto(@Valid @RequestBody AssuntoDTO dto)
-        throws URISyntaxException {
+    public ResponseEntity<AssuntoDTO> createAssunto(@Valid @RequestBody AssuntoDTO dto) {
         log.info("REST request to save Assunto : {}", dto);
-        throwsBadRequestIfHasId(dto);
-        AssuntoDTO result = assuntoService.save(dto);
-        var resultId = result.getId();
-        var uriCreate = new URI("/api/assunto/" + resultId);
-        return ResponseEntity.created(uriCreate)
-                             .body(result);
+        return Optional.of(dto)
+                       .filter(assunto -> isNull(assunto.getId()))
+                       .map(assuntoService::save)
+                       .map(result -> ResponseEntity.created(URI.create("/api/assunto/" + result.getId()))
+                                                    .body(result))
+                       .orElseThrow(badRequestHasId());
     }
     
     @Timed
@@ -122,13 +118,13 @@ public class AssuntoResource {
                              .build();
     }
     
-    private void throwsBadRequestIfHasId(final AssuntoDTO dto) {
-        if (nonNull(dto.getId())) {
+    private Supplier<BadRequestAlertException> badRequestHasId() {
+        return () -> {
             var msgError = "A new assunto cannot already have an ID";
             var badRequestAlertException = new BadRequestAlertException(msgError, ENTITY_NAME, "idexists");
             log.error(msgError, badRequestAlertException);
-            throw badRequestAlertException;
-        }
+            return badRequestAlertException;
+        };
     }
     
     private Supplier<BadRequestAlertException> badRequestHasNoId() {
