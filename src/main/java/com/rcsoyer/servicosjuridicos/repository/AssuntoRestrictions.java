@@ -26,12 +26,12 @@ final class AssuntoRestrictions {
     }
     
     private BooleanExpression get() {
-        return Expressions.allOf(descricacaoRestriction(), pesoRestriction(), ativoRestriction());
+        return Expressions.allOf(descricaoRestriction(), pesoRestriction(), ativoRestriction());
     }
     
-    private BooleanExpression descricacaoRestriction() {
+    private BooleanExpression descricaoRestriction() {
         Function<String, BooleanExpression> createExpression =
-            descricacao -> qAssunto.descricao.likeIgnoreCase("%" + descricacao + "%");
+            descricao -> qAssunto.descricao.likeIgnoreCase("%" + descricao + "%");
         return Optional.ofNullable(assunto.getDescricao())
                        .map(createExpression)
                        .orElse(null);
