@@ -88,9 +88,8 @@ public class AssuntoResource {
     public ResponseEntity<List<AssuntoDTO>> getAssuntos(AssuntoDTO dto, Pageable pageable) {
         log.info("REST request to get a page of Assuntos with following params: {}, {}", dto, pageable);
         var page = assuntoService.seekByParams(dto, pageable);
-        var headers = generatePaginationHttpHeaders(page, "/api/assunto");
         return ResponseEntity.ok()
-                             .headers(headers)
+                             .headers(generatePaginationHttpHeaders(page, "/api/assunto"))
                              .body(page.getContent());
     }
     
