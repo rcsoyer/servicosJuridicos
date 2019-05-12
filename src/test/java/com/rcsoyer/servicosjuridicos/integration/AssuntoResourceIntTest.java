@@ -81,6 +81,17 @@ class AssuntoResourceIntTest extends ApiConfigTest {
     }
     
     @Test
+    void updateAssunto_dontHaveID() throws Exception {
+        var assunto = assuntoDto();
+        
+        mockMvc.perform(
+            put("/api/assunto")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .content(convertObjectToJsonBytes(assunto)))
+               .andExpect(status().isBadRequest());
+    }
+    
+    @Test
     void getAssuntos() throws Exception {
         var assunto = assuntoService.save(assuntoDto());
         
