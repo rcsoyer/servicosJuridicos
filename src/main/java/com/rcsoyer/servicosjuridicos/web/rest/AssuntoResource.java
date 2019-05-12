@@ -57,7 +57,7 @@ public class AssuntoResource {
     })
     public ResponseEntity<AssuntoDTO> createAssunto(@Valid @RequestBody AssuntoDTO dto)
         throws URISyntaxException {
-        log.debug("REST request to save Assunto : {}", dto);
+        log.info("REST request to save Assunto : {}", dto);
         throwsBadRequestIfHasId(dto);
         AssuntoDTO result = assuntoService.save(dto);
         var resultId = result.getId();
@@ -75,7 +75,7 @@ public class AssuntoResource {
         @ApiResponse(code = 500, message = "Assunto couldn't be update")
     })
     public ResponseEntity<AssuntoDTO> updateAssunto(@Valid @RequestBody AssuntoDTO dto) {
-        log.debug("REST request to update Assunto : {}", dto);
+        log.info("REST request to update Assunto : {}", dto);
         throwsBadRequestIfHasNoId(dto);
         AssuntoDTO result = assuntoService.save(dto);
         return ResponseEntity.ok()
@@ -87,7 +87,7 @@ public class AssuntoResource {
     @GetMapping
     @ApiOperation("Get a paginated list of Assunto matching the supplied query parameters and pagination information")
     public ResponseEntity<List<AssuntoDTO>> getAssuntos(AssuntoDTO dto, Pageable pageable) {
-        log.debug("REST request to get a page of Assuntos with following params: {}, {}", dto, pageable);
+        log.info("REST request to get a page of Assuntos with following params: {}, {}", dto, pageable);
         var page = assuntoService.seekByParams(dto, pageable);
         var headers = generatePaginationHttpHeaders(page, "/api/assunto");
         return ResponseEntity.ok()
@@ -103,7 +103,7 @@ public class AssuntoResource {
         @ApiResponse(code = 404, message = "No Assunto found with the given id")
     })
     public ResponseEntity<AssuntoDTO> getAssunto(@PathVariable Long id) {
-        log.debug("REST request to get Assunto : {}", id);
+        log.info("REST request to get Assunto : {}", id);
         var assuntoFounded = assuntoService.findOne(id);
         return ResponseUtil.wrapOrNotFound(assuntoFounded);
     }
@@ -112,7 +112,7 @@ public class AssuntoResource {
     @DeleteMapping("/{id}")
     @ApiOperation("Delete an Assunto matching the given id")
     public ResponseEntity<Void> deleteAssunto(@PathVariable Long id) {
-        log.debug("REST request to delete Assunto : {}", id);
+        log.info("REST request to delete Assunto : {}", id);
         assuntoService.delete(id);
         return ResponseEntity.ok()
                              .headers(entityDeletionAlert(ENTITY_NAME, id.toString()))
