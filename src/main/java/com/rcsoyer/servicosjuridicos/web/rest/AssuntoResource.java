@@ -112,6 +112,11 @@ public class AssuntoResource {
      */
     @Timed
     @GetMapping("/{id}")
+    @ApiOperation("Get an Assunto matching the given id")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "Assunto founded matching the given id"),
+        @ApiResponse(code = 404, message = "No Assunto found with the given id")
+    })
     public ResponseEntity<AssuntoDTO> getAssunto(@PathVariable Long id) {
         log.debug("REST request to get Assunto : {}", id);
         var assuntoFounded = assuntoService.findOne(id);
