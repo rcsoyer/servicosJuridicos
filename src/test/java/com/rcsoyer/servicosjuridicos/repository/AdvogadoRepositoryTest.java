@@ -2,20 +2,14 @@ package com.rcsoyer.servicosjuridicos.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.rcsoyer.servicosjuridicos.ServicosJuridicosApp;
 import com.rcsoyer.servicosjuridicos.domain.Advogado;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = ServicosJuridicosApp.class)
-class AdvogadoRepositoryTest {
+class AdvogadoRepositoryTest extends RepositoryConfigTest {
     
     private Advogado advogado;
     

@@ -4,23 +4,16 @@ import static com.rcsoyer.servicosjuridicos.domain.enumeration.FeriasLicensaTipo
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.rcsoyer.servicosjuridicos.ServicosJuridicosApp;
 import com.rcsoyer.servicosjuridicos.domain.Advogado;
 import com.rcsoyer.servicosjuridicos.domain.FeriasLicenca;
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = ServicosJuridicosApp.class)
-class FeriasLicencaRepositoryTest {
+class FeriasLicencaRepositoryTest extends RepositoryConfigTest {
     
     @Autowired
     private FeriasLicencaRepository repository;
@@ -33,7 +26,7 @@ class FeriasLicencaRepositoryTest {
     
     @BeforeEach
     void setUp() {
-        var advogado = new Advogado().setNome("Matt Murdock").setCpf("42390876145");
+        var advogado = new Advogado().setNome("Matt Murdock").setCpf("64831122203");
         advogadoRepository.save(advogado);
         this.dtFim = LocalDate.ofEpochDay(32342342342L);
         this.feriasLicenca = new FeriasLicenca().setTipo(FERIAS)
