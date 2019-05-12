@@ -5,28 +5,26 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.rcsoyer.servicosjuridicos.domain.Assunto;
-import com.rcsoyer.servicosjuridicos.repository.AssuntoRepository;
 import com.rcsoyer.servicosjuridicos.service.AssuntoService;
 import com.rcsoyer.servicosjuridicos.service.dto.AssuntoDTO;
 import com.rcsoyer.servicosjuridicos.web.rest.AssuntoResource;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+@TestInstance(Lifecycle.PER_CLASS)
 class AssuntoResourceIntTest extends AppConfigTest {
-    
-    @Autowired
-    private AssuntoRepository assuntoRepository;
     
     @Autowired
     private AssuntoService assuntoService;
     
     private MockMvc mockMvc;
     
-    @BeforeEach
+    @BeforeAll
     void setUp() {
         var assuntoResource = new AssuntoResource(assuntoService);
         this.mockMvc = MockMvcBuilders.standaloneSetup(assuntoResource)
@@ -38,14 +36,11 @@ class AssuntoResourceIntTest extends AppConfigTest {
     
     @Test
     void createAssunto() throws Exception {
-        var savedAssunto = assuntoRepository.save(new Assunto().setPeso(1)
+        var savedAssunto = assuntoService.save(new AssuntoDTO().setPeso(1)
                                                                .setAtivo(Boolean.TRUE)
                                                                .setDescricao("assunto 1"));
-        var dto = new AssuntoDTO().setPeso(1)
-                                  .setAtivo(Boolean.TRUE)
-                                  .setDescricao("assunto 1");
         
-        mockMvc.perform(get("/api/assunto").param("peso", dto.getPeso().toString()))
+        mockMvc.perform(get("/api/assunto").param("peso", savedAssunto.getPeso().toString()))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$.[0].id", equalTo(savedAssunto.getId().intValue())));
         
