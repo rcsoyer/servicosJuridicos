@@ -3,6 +3,7 @@ package com.rcsoyer.servicosjuridicos.integration;
 import static com.rcsoyer.servicosjuridicos.web.rest.TestUtil.convertObjectToJsonBytes;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -143,6 +144,15 @@ class AssuntoResourceIntTest extends ApiConfigTest {
         mockMvc.perform(
             get("/api/assunto/{id}", 666L))
                .andExpect(status().isNotFound());
+    }
+    
+    @Test
+    void deleteAssunto() throws Exception {
+        var assunto = assuntoService.save(assuntoDto1());
+        
+        mockMvc.perform(
+            delete("/api/assunto/{id}", assunto.getId()))
+               .andExpect(status().isOk());
     }
     
     private AssuntoDTO assuntoDto1() {

@@ -7,7 +7,6 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 import com.codahale.metrics.annotation.Timed;
-import com.rcsoyer.servicosjuridicos.domain.CoordenacaoJuridica;
 import com.rcsoyer.servicosjuridicos.service.AssuntoService;
 import com.rcsoyer.servicosjuridicos.service.dto.AssuntoDTO;
 import com.rcsoyer.servicosjuridicos.web.rest.errors.BadRequestAlertException;
@@ -18,22 +17,17 @@ import io.swagger.annotations.ApiResponses;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -83,11 +77,9 @@ public class AssuntoResource {
     public ResponseEntity<AssuntoDTO> updateAssunto(@Valid @RequestBody AssuntoDTO dto) {
         log.debug("REST request to update Assunto : {}", dto);
         throwsBadRequestIfHasNoId(dto);
-        var result = assuntoService.save(dto);
-        var idString = dto.getId().toString();
-        var headerUpdateAlert = entityUpdateAlert(ENTITY_NAME, idString);
+        AssuntoDTO result = assuntoService.save(dto);
         return ResponseEntity.ok()
-                             .headers(headerUpdateAlert)
+                             .headers(entityUpdateAlert(ENTITY_NAME, result.getId().toString()))
                              .body(result);
     }
     
@@ -103,13 +95,6 @@ public class AssuntoResource {
                              .body(page.getContent());
     }
     
-    
-    /**
-     * GET /assuntos/:id : get the "id" assunto.
-     *
-     * @param id the id of the assuntoDTO to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the assuntoDTO, or with status 404 (Not Found)
-     */
     @Timed
     @GetMapping("/{id}")
     @ApiOperation("Get an Assunto matching the given id")
@@ -123,32 +108,15 @@ public class AssuntoResource {
         return ResponseUtil.wrapOrNotFound(assuntoFounded);
     }
     
-    /**
-     * DELETE /assuntos/:id : delete the "id" assunto.
-     *
-     * @param id the id of the assuntoDTO to delete
-     * @return the ResponseEntity with status 200 (OK)
-     */
     @Timed
     @DeleteMapping("/{id}")
+    @ApiOperation("Delete an Assunto matching the given id")
     public ResponseEntity<Void> deleteAssunto(@PathVariable Long id) {
         log.debug("REST request to delete Assunto : {}", id);
         assuntoService.delete(id);
-        var headerDeletionAlert = entityDeletionAlert(ENTITY_NAME, id.toString());
         return ResponseEntity.ok()
-                             .headers(headerDeletionAlert)
+                             .headers(entityDeletionAlert(ENTITY_NAME, id.toString()))
                              .build();
-    }
-    
-    @ResponseStatus(value = HttpStatus.CONFLICT,
-        reason = "Não é possível excluir esse 'Assunto', pois ele está associado a uma ou mais 'Coordenações Jurídicas'")
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public void conflict(HttpServletRequest httpRequest,
-                         DataIntegrityViolationException dataIntegrityViolation) {
-        var requestURI = httpRequest.getRequestURI();
-        log.warn(
-            "Attempt to call '{}' failed. 'Assunto' cannot be excluded because is tied to one or more: {}",
-            requestURI, CoordenacaoJuridica.class.getCanonicalName());
     }
     
     private void throwsBadRequestIfHasId(final AssuntoDTO dto) {
