@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity CoordenacaoJuridica.
+    -->
+    <changeSet id="20180812192916-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="coordenacao_juridicas_id"
+                                 baseTableName="coordenacao_juridica_assunto"
+                                 constraintName="fk_coordenacao_juridica_assunto_coordenacao_juridicas_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="coordenacao_juridica"/>
+        <addForeignKeyConstraint baseColumnNames="assuntos_id"
+                                 baseTableName="coordenacao_juridica_assunto"
+                                 constraintName="fk_coordenacao_juridica_assunto_assuntos_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="assunto"/>
+        
+    </changeSet>
+</databaseChangeLog>

@@ -54,6 +54,7 @@ spring:
             hibernate.enable_lazy_load_no_trans: true
     liquibase:
         contexts: test
+        change-log: classpath:/config/liquibase/master.xml
     mail:
         host: localhost
     messages:

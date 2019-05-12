@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <!--
+        Added the constraints for entity ProcessoJudicial.
+    -->
+    <changeSet id="20180812192918-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="assunto_id"
+                                 baseTableName="processo_judicial"
+                                 constraintName="fk_processo_judicial_assunto_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="assunto"/>
+
+        <addForeignKeyConstraint baseColumnNames="modalidade_id"
+                                 baseTableName="processo_judicial"
+                                 constraintName="fk_processo_judicial_modalidade_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="modalidade"/>
+
+        <addForeignKeyConstraint baseColumnNames="advogado_id"
+                                 baseTableName="processo_judicial"
+                                 constraintName="fk_processo_judicial_advogado_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="advogado"/>
+
+    </changeSet>
+</databaseChangeLog>
