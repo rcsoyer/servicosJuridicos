@@ -129,13 +129,20 @@ class AssuntoResourceIntTest extends ApiConfigTest {
     }
     
     @Test
-    void getAssunto() throws Exception {
+    void getAssunto_found() throws Exception {
         var assunto = assuntoService.save(assuntoDto1());
         
         mockMvc.perform(
             get("/api/assunto/{id}", assunto.getId()))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$.id", equalTo(assunto.getId().intValue())));
+    }
+    
+    @Test
+    void getAssunto_notFound() throws Exception {
+        mockMvc.perform(
+            get("/api/assunto/{id}", 666L))
+               .andExpect(status().isNotFound());
     }
     
     private AssuntoDTO assuntoDto1() {
