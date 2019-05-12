@@ -1,9 +1,5 @@
 package com.rcsoyer.servicosjuridicos.service.dto;
 
-import static org.apache.commons.lang3.StringUtils.trimToNull;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import java.io.IOException;
 import java.io.Serializable;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -30,7 +26,6 @@ public class AssuntoDTO implements Serializable {
     
     @NotBlank
     @Size(max = 70)
-    @Setter(AccessLevel.NONE)
     private String descricao;
     
     @NotNull
@@ -44,15 +39,5 @@ public class AssuntoDTO implements Serializable {
     
     public Boolean isAtivo() {
         return ativo;
-    }
-    
-    @JsonCreator
-    public static AssuntoDTO of(String json) throws IOException {
-        return JsonConverter.readValue(json, AssuntoDTO.class);
-    }
-    
-    public AssuntoDTO setDescricao(String descricao) {
-        this.descricao = trimToNull(descricao);
-        return this;
     }
 }

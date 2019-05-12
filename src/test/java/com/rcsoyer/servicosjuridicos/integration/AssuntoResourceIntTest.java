@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rcsoyer.servicosjuridicos.service.AssuntoService;
 import com.rcsoyer.servicosjuridicos.service.dto.AssuntoDTO;
 import com.rcsoyer.servicosjuridicos.web.rest.AssuntoResource;
@@ -22,13 +21,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @TestInstance(Lifecycle.PER_CLASS)
-class AssuntoResourceIntTest extends AppConfigTest {
+class AssuntoResourceIntTest extends ApiConfigTest {
     
     @Autowired
     private AssuntoService assuntoService;
-    
-    @Autowired
-    private ObjectMapper objectMapper;
     
     private MockMvc mockMvc;
     
@@ -51,15 +47,18 @@ class AssuntoResourceIntTest extends AppConfigTest {
                 .contentType(TestUtil.APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(assunto)))
                .andExpect(status().isCreated())
-               .andExpect(jsonPath("$.id").isNumber());
+               .andExpect(jsonPath("$.id").isNumber())
+               .andExpect(jsonPath("$.ativo", equalTo(assunto.isAtivo())))
+               .andExpect(jsonPath("$.descricao", equalTo(assunto.getDescricao())))
+               .andExpect(jsonPath("$.peso", equalTo(assunto.getPeso())));
     }
     
     @Test
     void getAssuntos() throws Exception {
-        var assunto = assuntoDto();
+        var assunto = assuntoService.save(assuntoDto());
         
         mockMvc.perform(
-            get("/api/assunto")
+            get("/api/assunto/by-params")
                 .param("peso", assunto.getPeso().toString())
                 .param("ativo", assunto.isAtivo().toString())
                 .param("descricao", assunto.getDescricao()))
@@ -67,7 +66,8 @@ class AssuntoResourceIntTest extends AppConfigTest {
                .andExpect(jsonPath("$", hasSize(1)))
                .andExpect(jsonPath("$.[0].id", equalTo(assunto.getId().intValue())))
                .andExpect(jsonPath("$.[0].ativo", equalTo(assunto.isAtivo())))
-               .andExpect(jsonPath("$.[0].descricao", equalTo(assunto.getDescricao())));
+               .andExpect(jsonPath("$.[0].descricao", equalTo(assunto.getDescricao())))
+               .andExpect(jsonPath("$.[0].peso", equalTo(assunto.getPeso())));
     }
     
     private AssuntoDTO assuntoDto() {

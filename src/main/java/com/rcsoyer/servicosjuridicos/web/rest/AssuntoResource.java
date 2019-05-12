@@ -9,7 +9,6 @@ import com.codahale.metrics.annotation.Timed;
 import com.rcsoyer.servicosjuridicos.domain.CoordenacaoJuridica;
 import com.rcsoyer.servicosjuridicos.service.AssuntoService;
 import com.rcsoyer.servicosjuridicos.service.dto.AssuntoDTO;
-import com.rcsoyer.servicosjuridicos.service.dto.PageableDTO;
 import com.rcsoyer.servicosjuridicos.web.rest.errors.BadRequestAlertException;
 import com.rcsoyer.servicosjuridicos.web.rest.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -34,7 +33,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -112,14 +110,14 @@ public class AssuntoResource {
     }
     
     @Timed
-    @GetMapping("/queryAssuntos")
-    public ResponseEntity<List<AssuntoDTO>> getAssuntos(@RequestParam("dto") AssuntoDTO dto,
-                                                        @RequestParam("pageable") PageableDTO pageableDTO) {
-        log.debug("REST request to get a page of Assuntos");
-        var pageable = pageableDTO.getPageable();
+    @GetMapping("/by-params")
+    public ResponseEntity<List<AssuntoDTO>> getAssuntos(AssuntoDTO dto, Pageable pageable) {
+        log.debug("REST request to get a page of Assuntos with following params: {}, {}", dto, pageable);
         var page = assuntoService.seekByParams(dto, pageable);
-        var headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/queryAssuntos");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        var headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/by-params");
+        return ResponseEntity.ok()
+                             .headers(headers)
+                             .body(page.getContent());
     }
     
     
