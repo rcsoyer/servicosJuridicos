@@ -102,8 +102,7 @@ public class AssuntoResource {
     })
     public ResponseEntity<AssuntoDTO> getAssunto(@PathVariable Long id) {
         log.info("REST request to get Assunto : {}", id);
-        var assuntoFounded = assuntoService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(assuntoFounded);
+        return ResponseUtil.wrapOrNotFound(assuntoService.findOne(id));
     }
     
     @Timed
