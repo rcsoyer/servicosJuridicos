@@ -96,10 +96,7 @@ class AssuntoResourceIntTest extends ApiConfigTest {
         var assunto = assuntoService.save(assuntoDto());
         
         mockMvc.perform(
-            get("/api/assunto/by-params")
-                .param("peso", assunto.getPeso().toString())
-                .param("ativo", assunto.isAtivo().toString())
-                .param("descricao", assunto.getDescricao()))
+            get("/api/assunto"))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$", hasSize(1)))
                .andExpect(jsonPath("$.[0].id", equalTo(assunto.getId().intValue())))

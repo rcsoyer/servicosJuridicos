@@ -2,6 +2,7 @@ package com.rcsoyer.servicosjuridicos.web.rest;
 
 import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityDeletionAlert;
 import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityUpdateAlert;
+import static com.rcsoyer.servicosjuridicos.web.rest.util.PaginationUtil.generatePaginationHttpHeaders;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -10,7 +11,6 @@ import com.rcsoyer.servicosjuridicos.domain.CoordenacaoJuridica;
 import com.rcsoyer.servicosjuridicos.service.AssuntoService;
 import com.rcsoyer.servicosjuridicos.service.dto.AssuntoDTO;
 import com.rcsoyer.servicosjuridicos.web.rest.errors.BadRequestAlertException;
-import com.rcsoyer.servicosjuridicos.web.rest.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -91,27 +91,13 @@ public class AssuntoResource {
                              .body(result);
     }
     
-    /**
-     * GET /assuntos : get all the assuntos.
-     *
-     * @param pageable the pagination information
-     * @return the ResponseEntity with status 200 (OK) and the list of assuntos in body
-     */
     @Timed
     @GetMapping
-    public ResponseEntity<List<AssuntoDTO>> getAllAssuntos(Pageable pageable) {
-        log.debug("REST request to get a page of Assuntos");
-        var page = assuntoService.findAll(pageable);
-        var headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/assunto");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-    }
-    
-    @Timed
-    @GetMapping("/by-params")
+    @ApiOperation("Get a paginated list of Assunto matching the supplied query parameters and pagination information")
     public ResponseEntity<List<AssuntoDTO>> getAssuntos(AssuntoDTO dto, Pageable pageable) {
         log.debug("REST request to get a page of Assuntos with following params: {}, {}", dto, pageable);
         var page = assuntoService.seekByParams(dto, pageable);
-        var headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/by-params");
+        var headers = generatePaginationHttpHeaders(page, "/api/assunto");
         return ResponseEntity.ok()
                              .headers(headers)
                              .body(page.getContent());
