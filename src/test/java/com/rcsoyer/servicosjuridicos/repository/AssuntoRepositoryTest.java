@@ -18,7 +18,6 @@ class AssuntoRepositoryTest extends RepositoryConfigTest {
         repository.save(new Assunto().setDescricao("one thousand generations living here now")
                                      .setAtivo(Boolean.TRUE)
                                      .setPeso(1));
-        
         Assunto queryParams = new Assunto().setDescricao("one thousand generations living here now")
                                            .setAtivo(Boolean.TRUE)
                                            .setPeso(1);
