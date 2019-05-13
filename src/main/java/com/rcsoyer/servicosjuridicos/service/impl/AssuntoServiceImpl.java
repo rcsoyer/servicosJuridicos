@@ -1,12 +1,10 @@
 package com.rcsoyer.servicosjuridicos.service.impl;
 
-import com.rcsoyer.servicosjuridicos.domain.Assunto;
 import com.rcsoyer.servicosjuridicos.repository.AssuntoRepository;
 import com.rcsoyer.servicosjuridicos.service.AssuntoService;
 import com.rcsoyer.servicosjuridicos.service.dto.AssuntoDTO;
 import com.rcsoyer.servicosjuridicos.service.mapper.AssuntoMapper;
 import java.util.Optional;
-import java.util.function.Function;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +25,7 @@ public class AssuntoServiceImpl implements AssuntoService {
     }
     
     /**
-     * Save a assunto.
+     * Save a assunto. ps: read from the right to the left
      *
      * @param dto the entity to save
      * @return the persisted entity
@@ -35,10 +33,7 @@ public class AssuntoServiceImpl implements AssuntoService {
     @Override
     public AssuntoDTO save(final AssuntoDTO dto) {
         log.debug("Request to save Assunto : {}", dto);
-        Function<AssuntoDTO, Assunto> toEntity = mapper::toEntity;
-        return toEntity.andThen(repository::save)
-                       .andThen(mapper::toDto)
-                       .apply(dto);
+        return mapper.toDto(repository.save(mapper.toEntity(dto)));
     }
     
     /**
@@ -85,12 +80,8 @@ public class AssuntoServiceImpl implements AssuntoService {
     @Override
     @Transactional(readOnly = true)
     public Page<AssuntoDTO> seekByParams(final AssuntoDTO dto, final Pageable pageable) {
-        log.debug("Request to get Assuntos page by params: {}, {} ", dto, pageable);
-        Function<AssuntoDTO, Assunto> toEntity = mapper::toEntity;
-        Function<Assunto, Page<Assunto>> query = assunto -> repository.findByAssunto(assunto, pageable);
-        Function<Page<Assunto>, Page<AssuntoDTO>> toPageDTO = pageEntity -> pageEntity.map(mapper::toDto);
-        return toEntity.andThen(query)
-                       .andThen(toPageDTO)
-                       .apply(dto);
+        log.debug("Passing throw the seekParams to get Assuntos page by params: {}, {} ", dto, pageable);
+        return repository.findByAssunto(mapper.toEntity(dto), pageable)
+                         .map(mapper::toDto);
     }
 }
