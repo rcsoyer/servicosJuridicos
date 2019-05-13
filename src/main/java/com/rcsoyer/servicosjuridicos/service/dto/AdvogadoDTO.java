@@ -1,7 +1,5 @@
 package com.rcsoyer.servicosjuridicos.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import java.io.IOException;
 import java.io.Serializable;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -35,10 +33,5 @@ public class AdvogadoDTO implements Serializable {
     private String cpf;
     
     private Integer ramal;
-    
-    @JsonCreator
-    public static AdvogadoDTO of(String json) throws IOException {
-        return JsonConverter.readValue(json, AdvogadoDTO.class);
-    }
 }
 

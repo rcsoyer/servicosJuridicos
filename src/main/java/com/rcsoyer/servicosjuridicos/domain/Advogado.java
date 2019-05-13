@@ -45,7 +45,6 @@ public final class Advogado implements Serializable {
     @Id
     @Getter
     @Setter
-    @Column(updatable = false, nullable = false)
     @SequenceGenerator(name = "sequenceGenerator")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     private Long id;

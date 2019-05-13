@@ -23,6 +23,7 @@ class AdvogadoTest {
     @Test
     void setProcessos_noNull() {
         advogado.setProcessos(null);
+        
         assertNotNull(advogado.getProcessos());
         assertTrue(advogado.getProcessos().isEmpty());
     }
@@ -36,12 +37,14 @@ class AdvogadoTest {
         processsos.add(new ProcessoJudicial().setId(3L));
         advogado.setProcessos(processsos);
         processsos.remove(processoJudicial1);
+        
         assertFalse(processsos.containsAll(advogado.getProcessos()));
     }
     
     @Test
     void setFeriasLicencas_notNull() {
         advogado.setFeriasLicencas(null);
+        
         assertNotNull(advogado.getFeriasLicencas());
         assertTrue(advogado.getFeriasLicencas().isEmpty());
     }
@@ -55,12 +58,14 @@ class AdvogadoTest {
         feriasLicencas.add(new FeriasLicenca().setId(3L));
         advogado.setFeriasLicencas(feriasLicencas);
         feriasLicencas.remove(feriasLicenca1);
+        
         assertFalse(feriasLicencas.containsAll(advogado.getFeriasLicencas()));
     }
     
     @Test
     void setDgCoordenacoes_notNull() {
         advogado.setDgCoordenacoes(null);
+        
         assertNotNull(advogado.getDgCoordenacoes());
         assertTrue(advogado.getDgCoordenacoes().isEmpty());
     }
@@ -74,18 +79,21 @@ class AdvogadoTest {
         dgCoordenacoes.add(new AdvogadoDgCoordenacao().setId(3L));
         advogado.setDgCoordenacoes(dgCoordenacoes);
         dgCoordenacoes.remove(dgCoordenacao1);
+        
         assertFalse(dgCoordenacoes.containsAll(advogado.getDgCoordenacoes()));
     }
     
     @Test
     void setNome() {
         advogado.setNome("          ");
+        
         assertNull(advogado.getNome());
     }
     
     @Test
     void setCpf() {
         advogado.setCpf("     ");
+        
         assertNull(advogado.getCpf());
     }
     
@@ -111,6 +119,7 @@ class AdvogadoTest {
     void addProcesso() {
         var processo = new ProcessoJudicial().setId(1L);
         advogado.addProcesso(processo);
+        
         assertTrue(advogado.getProcessos().contains(processo));
         assertEquals(advogado, processo.getAdvogado());
     }
@@ -120,6 +129,7 @@ class AdvogadoTest {
         var processo = new ProcessoJudicial().setId(1L);
         advogado.addProcesso(processo);
         advogado.removeProcesso(processo);
+        
         assertFalse(advogado.getProcessos().contains(processo));
         assertNull(processo.getAdvogado());
     }
@@ -128,6 +138,7 @@ class AdvogadoTest {
     void addFeriasLicenca() {
         var feriasLicenca = new FeriasLicenca().setId(1L);
         advogado.addFeriasLicenca(feriasLicenca);
+        
         assertTrue(advogado.getFeriasLicencas().contains(feriasLicenca));
         assertEquals(advogado, feriasLicenca.getAdvogado());
     }
@@ -137,6 +148,7 @@ class AdvogadoTest {
         var feriasLicenca = new FeriasLicenca().setId(1L);
         advogado.addFeriasLicenca(feriasLicenca);
         advogado.removeFeriasLicenca(feriasLicenca);
+        
         assertFalse(advogado.getFeriasLicencas().contains(feriasLicenca));
         assertNull(feriasLicenca.getAdvogado());
     }
@@ -145,6 +157,7 @@ class AdvogadoTest {
     void addDgCoordenacao() {
         var dgCoordenacao = new AdvogadoDgCoordenacao().setId(1L);
         advogado.addDgCoordenacao(dgCoordenacao);
+        
         assertTrue(advogado.getDgCoordenacoes().contains(dgCoordenacao));
         assertEquals(advogado, dgCoordenacao.getAdvogado());
     }
@@ -154,6 +167,7 @@ class AdvogadoTest {
         var dgCoordenacao = new AdvogadoDgCoordenacao().setId(1L);
         advogado.addDgCoordenacao(dgCoordenacao);
         advogado.removeDgCoordenacao(dgCoordenacao);
+        
         assertFalse(advogado.getDgCoordenacoes().contains(dgCoordenacao));
         assertNull(dgCoordenacao.getAdvogado());
     }
