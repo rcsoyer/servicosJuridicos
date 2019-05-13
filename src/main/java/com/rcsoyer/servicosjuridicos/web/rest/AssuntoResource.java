@@ -60,7 +60,7 @@ public class AssuntoResource {
                        .map(assuntoService::save)
                        .map(result -> ResponseEntity.created(URI.create("/api/assunto/" + result.getId()))
                                                     .body(result))
-                       .orElseThrow(badRequestHasId());
+                       .orElseThrow(hasIdBadRequest());
     }
     
     @Timed
@@ -79,7 +79,7 @@ public class AssuntoResource {
                        .map(result -> ResponseEntity.ok()
                                                     .headers(entityUpdateAlert(ENTITY_NAME, result.getId().toString()))
                                                     .body(result))
-                       .orElseThrow(badRequestHasNoId());
+                       .orElseThrow(hasNoIdBadRequest());
     }
     
     @Timed
@@ -116,7 +116,7 @@ public class AssuntoResource {
                              .build();
     }
     
-    private Supplier<BadRequestAlertException> badRequestHasId() {
+    private Supplier<BadRequestAlertException> hasIdBadRequest() {
         return () -> {
             var msgError = "A new assunto cannot already have an ID";
             var badRequestAlertException = new BadRequestAlertException(msgError, ENTITY_NAME, "idexists");
@@ -125,7 +125,7 @@ public class AssuntoResource {
         };
     }
     
-    private Supplier<BadRequestAlertException> badRequestHasNoId() {
+    private Supplier<BadRequestAlertException> hasNoIdBadRequest() {
         return () -> {
             var msgError = "An existing Assunto must have an id";
             var badRequestAlertException = new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
