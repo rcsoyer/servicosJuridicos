@@ -1,10 +1,12 @@
 package com.rcsoyer.servicosjuridicos.service.impl;
 
+import com.rcsoyer.servicosjuridicos.domain.Assunto;
 import com.rcsoyer.servicosjuridicos.repository.AssuntoRepository;
 import com.rcsoyer.servicosjuridicos.service.AssuntoService;
 import com.rcsoyer.servicosjuridicos.service.dto.AssuntoDTO;
 import com.rcsoyer.servicosjuridicos.service.mapper.AssuntoMapper;
 import java.util.Optional;
+import java.util.function.Function;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,7 +35,10 @@ public class AssuntoServiceImpl implements AssuntoService {
     @Override
     public AssuntoDTO save(final AssuntoDTO dto) {
         log.debug("Request to save Assunto : {}", dto);
-        return mapper.toDto(repository.save(mapper.toEntity(dto)));
+        Function<AssuntoDTO, Assunto> toEntity = mapper::toEntity;
+        return toEntity.andThen(repository::save)
+                       .andThen(mapper::toDto)
+                       .apply(dto);
     }
     
     /**
