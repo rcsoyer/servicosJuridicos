@@ -1,4 +1,4 @@
-package com.rcsoyer.servicosjuridicos.integration;
+package com.rcsoyer.servicosjuridicos.web.rest.integration;
 
 import static com.rcsoyer.servicosjuridicos.web.rest.TestUtil.convertObjectToJsonBytes;
 import static org.hamcrest.Matchers.equalTo;

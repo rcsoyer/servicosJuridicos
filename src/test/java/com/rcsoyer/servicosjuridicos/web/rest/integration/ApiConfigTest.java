@@ -1,4 +1,4 @@
-package com.rcsoyer.servicosjuridicos.integration;
+package com.rcsoyer.servicosjuridicos.web.rest.integration;
 
 import com.rcsoyer.servicosjuridicos.ServicosJuridicosApp;
 import com.rcsoyer.servicosjuridicos.web.rest.errors.ExceptionTranslator;

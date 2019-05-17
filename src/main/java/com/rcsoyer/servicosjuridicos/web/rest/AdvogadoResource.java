@@ -60,7 +60,7 @@ public class AdvogadoResource {
      */
     @Timed
     @PostMapping("/advogado")
-    public ResponseEntity<AdvogadoDTO> createAdvogado(@Valid @RequestBody AdvogadoDTO advogadoDTO)
+    public ResponseEntity<AdvogadoDTO> create(@Valid @RequestBody AdvogadoDTO advogadoDTO)
         throws URISyntaxException {
         log.debug("REST request to save Advogado : {}", advogadoDTO);
         throwsBadRequestIfHasId(advogadoDTO);
