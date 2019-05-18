@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -31,8 +32,11 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Setter
 @ToString
 @Accessors(chain = true)
-@EqualsAndHashCode(of = "id")
-@Table(name = "advogado_dg_coordenacao")
+@EqualsAndHashCode(of = {"id", "advogado", "coordenacao"})
+@Table(name = "advogado_dg_coordenacao", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"dgPessoalInicio", "dgPessoalFim", "coordenacao"}),
+    @UniqueConstraint(columnNames = {"advogado", "coordenacao"})
+})
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class AdvogadoDgCoordenacao implements Serializable {
     
