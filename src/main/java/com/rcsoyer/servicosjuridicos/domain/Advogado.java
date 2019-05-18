@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.ImmutableSet;
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -30,7 +29,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.br.CPF;
 
 /**
- * A Advogado.
+ * A Advogado
  */
 @Entity
 @Accessors(chain = true)
@@ -80,27 +79,6 @@ public final class Advogado implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @OneToMany(mappedBy = "advogado", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<AdvogadoDgCoordenacao> dgCoordenacoes = new HashSet<>(0);
-    
-    public Advogado setProcessos(final Set<ProcessoJudicial> processos) {
-        this.processos = Optional.ofNullable(processos)
-                                 .map(HashSet::new)
-                                 .orElseGet(() -> new HashSet<>(0));
-        return this;
-    }
-    
-    public Advogado setFeriasLicencas(final Set<FeriasLicenca> feriasLicencas) {
-        this.feriasLicencas = Optional.ofNullable(feriasLicencas)
-                                      .map(HashSet::new)
-                                      .orElseGet(() -> new HashSet<>(0));
-        return this;
-    }
-    
-    public Advogado setDgCoordenacoes(final Set<AdvogadoDgCoordenacao> dgCoordenacoes) {
-        this.dgCoordenacoes = Optional.ofNullable(dgCoordenacoes)
-                                      .map(HashSet::new)
-                                      .orElseGet(() -> new HashSet<>(0));
-        return this;
-    }
     
     public Advogado setNome(String nome) {
         this.nome = trimToNull(nome);

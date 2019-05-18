@@ -2,7 +2,6 @@ package com.rcsoyer.servicosjuridicos.domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -21,32 +20,18 @@ class AdvogadoTest {
     }
     
     @Test
-    void setProcessos_noNull() {
-        advogado.setProcessos(null);
-        
-        assertNotNull(advogado.getProcessos());
-        assertTrue(advogado.getProcessos().isEmpty());
-    }
-    
-    @Test
     void setProcessos_notTheSameList() {
         var processoJudicial1 = new ProcessoJudicial().setId(1L);
         var processsos = new HashSet<ProcessoJudicial>(3);
         processsos.add(processoJudicial1);
         processsos.add(new ProcessoJudicial().setId(2L));
         processsos.add(new ProcessoJudicial().setId(3L));
-        advogado.setProcessos(processsos);
+        
+        processsos.forEach(advogado::addProcesso);
+        
         processsos.remove(processoJudicial1);
         
         assertFalse(processsos.containsAll(advogado.getProcessos()));
-    }
-    
-    @Test
-    void setFeriasLicencas_notNull() {
-        advogado.setFeriasLicencas(null);
-        
-        assertNotNull(advogado.getFeriasLicencas());
-        assertTrue(advogado.getFeriasLicencas().isEmpty());
     }
     
     @Test
@@ -56,18 +41,12 @@ class AdvogadoTest {
         feriasLicencas.add(feriasLicenca1);
         feriasLicencas.add(new FeriasLicenca().setId(2L));
         feriasLicencas.add(new FeriasLicenca().setId(3L));
-        advogado.setFeriasLicencas(feriasLicencas);
+        
+        feriasLicencas.forEach(advogado::addFeriasLicenca);
+        
         feriasLicencas.remove(feriasLicenca1);
         
         assertFalse(feriasLicencas.containsAll(advogado.getFeriasLicencas()));
-    }
-    
-    @Test
-    void setDgCoordenacoes_notNull() {
-        advogado.setDgCoordenacoes(null);
-        
-        assertNotNull(advogado.getDgCoordenacoes());
-        assertTrue(advogado.getDgCoordenacoes().isEmpty());
     }
     
     @Test
@@ -77,7 +56,9 @@ class AdvogadoTest {
         dgCoordenacoes.add(dgCoordenacao1);
         dgCoordenacoes.add(new AdvogadoDgCoordenacao().setId(2L));
         dgCoordenacoes.add(new AdvogadoDgCoordenacao().setId(3L));
-        advogado.setDgCoordenacoes(dgCoordenacoes);
+        
+        dgCoordenacoes.forEach(advogado::addDgCoordenacao);
+        
         dgCoordenacoes.remove(dgCoordenacao1);
         
         assertFalse(dgCoordenacoes.containsAll(advogado.getDgCoordenacoes()));
