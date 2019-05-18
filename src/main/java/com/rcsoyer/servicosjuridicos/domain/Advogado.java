@@ -17,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
@@ -60,6 +61,7 @@ public final class Advogado implements Serializable {
     @Column(length = 11, nullable = false, unique = true)
     private String cpf;
     
+    @Min(1)
     @Column
     @Getter
     @Setter
@@ -68,17 +70,23 @@ public final class Advogado implements Serializable {
     @JsonIgnore
     @OneToMany(mappedBy = "advogado", fetch = FetchType.LAZY)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<ProcessoJudicial> processos = new HashSet<>(0);
+    private final Set<ProcessoJudicial> processos;
     
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @OneToMany(mappedBy = "advogado", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private Set<FeriasLicenca> feriasLicencas = new HashSet<>(0);
+    private final Set<FeriasLicenca> feriasLicencas;
     
     @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @OneToMany(mappedBy = "advogado", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private Set<AdvogadoDgCoordenacao> dgCoordenacoes = new HashSet<>(0);
+    private final Set<AdvogadoDgCoordenacao> dgCoordenacoes;
+    
+    public Advogado() {
+        this.processos = new HashSet<>(0);
+        this.dgCoordenacoes = new HashSet<>(0);
+        this.feriasLicencas = new HashSet<>(0);
+    }
     
     public Advogado setNome(String nome) {
         this.nome = trimToNull(nome);
