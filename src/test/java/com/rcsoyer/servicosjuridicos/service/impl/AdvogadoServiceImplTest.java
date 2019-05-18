@@ -63,7 +63,9 @@ class AdvogadoServiceImplTest {
         when(mapper.toEntity(advogadoDTO)).thenReturn(advogado);
         when(repository.save(advogado)).thenReturn(savedAdvogado);
         when(mapper.toDto(savedAdvogado)).thenReturn(advogadoDTO);
+        
         var savedDto = service.save(advogadoDTO);
+        
         assertEquals(savedDto, advogadoDTO);
         verify(mapper, times(1)).toDto(any(Advogado.class));
         verify(repository, times(1)).save(any());
@@ -72,23 +74,12 @@ class AdvogadoServiceImplTest {
     }
     
     @Test
-    void findAll() {
-        var pageRequest = PageRequest.of(1, 2);
-        List<Advogado> advogadosResult = List.of(new Advogado(), new Advogado());
-        when(repository.findAll(pageRequest)).thenReturn(new PageImpl<>(advogadosResult));
-        when(mapper.toDto(any(Advogado.class))).thenReturn(new AdvogadoDTO());
-        var advogadosPage = service.findAll(pageRequest);
-        assertEquals(advogadosPage.getNumberOfElements(), pageRequest.getPageSize());
-        verify(repository, times(1)).findAll(pageRequest);
-        verify(mapper, times(2)).toDto(any(Advogado.class));
-        verifyNoMoreInteractions(mapper, repository);
-    }
-    
-    @Test
     void findOne() {
         when(repository.findById(anyLong())).thenReturn(Optional.of(new Advogado()));
         when(mapper.toDto(any(Advogado.class))).thenReturn(new AdvogadoDTO());
+        
         var dtoOptional = service.findOne(anyLong());
+        
         assertTrue(dtoOptional.isPresent());
         verify(repository, times(1)).findById(anyLong());
         verify(mapper, times(1)).toDto(any(Advogado.class));
@@ -98,7 +89,9 @@ class AdvogadoServiceImplTest {
     @Test
     void findOne_NotFound() {
         when(repository.findById(anyLong())).thenReturn(Optional.empty());
+        
         var dtoOptional = service.findOne(anyLong());
+        
         assertTrue(dtoOptional.isEmpty());
         verify(repository, times(1)).findById(anyLong());
         verify(mapper, never()).toDto(any(Advogado.class));
@@ -108,6 +101,7 @@ class AdvogadoServiceImplTest {
     @Test
     void delete() {
         service.delete(anyLong());
+        
         verify(repository, times(1)).deleteById(anyLong());
         verifyNoMoreInteractions(repository);
     }
@@ -116,10 +110,13 @@ class AdvogadoServiceImplTest {
     void findByParams() {
         var pageable = PageRequest.of(1, 2);
         var pgAdvogados = new PageImpl<>(List.of(advogado, savedAdvogado));
+        
         when(mapper.toEntity(advogadoDTO)).thenReturn(advogado);
         when(repository.query(advogado, pageable)).thenReturn(pgAdvogados);
         when(mapper.toDto(any(Advogado.class))).thenReturn(new AdvogadoDTO());
-        var seekingResult = service.findByParams(advogadoDTO, pageable);
+        
+        var seekingResult = service.seekByParams(advogadoDTO, pageable);
+        
         assertEquals(seekingResult.getNumberOfElements(), pgAdvogados.getNumberOfElements());
         verify(mapper, times(1)).toEntity(any(AdvogadoDTO.class));
         verify(repository, times(1)).query(advogado, pageable);

@@ -89,7 +89,7 @@ public class AdvogadoResource {
     @ApiOperation("Get a paginated list of Advogado matching the supplied query parameters and pagination information")
     public ResponseEntity<List<AdvogadoDTO>> getAdvogados(final AdvogadoDTO dto, final Pageable pageable) {
         log.debug("REST request to get a page of Advogados by input params");
-        final var page = service.findByParams(dto, pageable);
+        final var page = service.seekByParams(dto, pageable);
         return ResponseEntity.ok()
                              .headers(generatePaginationHttpHeaders(page, "/api/advogado"))
                              .body(page.getContent());

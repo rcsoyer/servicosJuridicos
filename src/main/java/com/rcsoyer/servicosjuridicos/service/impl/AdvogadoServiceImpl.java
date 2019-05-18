@@ -25,76 +25,40 @@ public class AdvogadoServiceImpl implements AdvogadoService {
     private final AdvogadoMapper mapper;
     private final AdvogadoRepository repository;
     
-    public AdvogadoServiceImpl(AdvogadoRepository advogadoRepository,
-        AdvogadoMapper advogadoMapper) {
+    public AdvogadoServiceImpl(final AdvogadoRepository advogadoRepository, final AdvogadoMapper advogadoMapper) {
         this.mapper = advogadoMapper;
         this.repository = advogadoRepository;
     }
     
-    /**
-     * Save a advogado.
-     *
-     * @param advogadoDTO the entity to save
-     * @return the persisted entity
-     */
     @Override
-    public AdvogadoDTO save(AdvogadoDTO advogadoDTO) {
-        log.info("Request to save Advogado : {}", advogadoDTO);
+    public AdvogadoDTO save(final AdvogadoDTO advogadoDTO) {
+        log.info("Call to service layer to save Advogado: {}", advogadoDTO);
         Function<AdvogadoDTO, Advogado> toEntity = mapper::toEntity;
         return toEntity.andThen(repository::save)
                        .andThen(mapper::toDto)
                        .apply(advogadoDTO);
     }
     
-    
-    /**
-     * Get all the advogados.
-     *
-     * @param pageable the pagination information
-     * @return the list of entities
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public Page<AdvogadoDTO> findAll(Pageable pageable) {
-        log.debug("Request to get all Advogados");
-        return repository.findAll(pageable).map(mapper::toDto);
-    }
-    
-    /**
-     * Get one advogado by id.
-     *
-     * @param id the id of the entity
-     * @return the entity
-     */
     @Override
     @Transactional(readOnly = true)
     public Optional<AdvogadoDTO> findOne(Long id) {
-        log.debug("Request to get Advogado : {}", id);
-        return repository.findById(id).map(mapper::toDto);
+        log.debug("Call to service layer to find an Advogado by id={}", id);
+        return repository.findById(id)
+                         .map(mapper::toDto);
     }
     
-    /**
-     * Delete the advogado by id.
-     *
-     * @param id the id of the entity
-     */
     @Override
     public void delete(Long id) {
-        log.info("Request to delete Advogado : {}", id);
+        log.info("Call to service layer to delete Advogado by id={}", id);
         repository.deleteById(id);
     }
     
     @Override
     @Transactional(readOnly = true)
-    public Page<AdvogadoDTO> findByParams(final AdvogadoDTO dto, final Pageable pageable) {
-        log.debug("AdvogadoService mehtod to get Processos Judiciais by params");
-        Function<AdvogadoDTO, Advogado> toEntity = mapper::toEntity;
-        Function<Advogado, Page<Advogado>> queryResult =
-            advogado -> repository.query(advogado, pageable);
-        Function<Page<Advogado>, Page<AdvogadoDTO>> toPageDto =
-            pageEntity -> pageEntity.map(mapper::toDto);
-        return toEntity.andThen(queryResult)
-                       .andThen(toPageDto)
-                       .apply(dto);
+    public Page<AdvogadoDTO> seekByParams(final AdvogadoDTO dto, final Pageable pageable) {
+        log.debug("Call to service layer to get a Page of Advogados by the given params: queryParams={}, pagination={}",
+                  dto, pageable);
+        return repository.query(mapper.toEntity(dto), pageable)
+                         .map(mapper::toDto);
     }
 }

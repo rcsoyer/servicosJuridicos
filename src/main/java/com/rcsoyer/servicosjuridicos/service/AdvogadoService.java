@@ -19,14 +19,6 @@ public interface AdvogadoService {
     AdvogadoDTO save(AdvogadoDTO advogadoDTO);
     
     /**
-     * Get all the advogados.
-     *
-     * @param pageable the pagination information
-     * @return the list of entities
-     */
-    Page<AdvogadoDTO> findAll(Pageable pageable);
-    
-    /**
      * Get the "id" advogado.
      *
      * @param id the id of the entity
@@ -41,5 +33,8 @@ public interface AdvogadoService {
      */
     void delete(Long id);
     
-    Page<AdvogadoDTO> findByParams(AdvogadoDTO dto, Pageable pageable);
+    /**
+     * Gets a page of {@link AdvogadoDTO} matching the given params and pagination information
+     */
+    Page<AdvogadoDTO> seekByParams(AdvogadoDTO dto, Pageable pageable);
 }

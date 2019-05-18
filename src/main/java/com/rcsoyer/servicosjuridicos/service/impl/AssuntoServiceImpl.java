@@ -42,20 +42,6 @@ public class AssuntoServiceImpl implements AssuntoService {
     }
     
     /**
-     * Get all the assuntos.
-     *
-     * @param pageable the pagination information
-     * @return the list of entities
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public Page<AssuntoDTO> findAll(final Pageable pageable) {
-        log.debug("Request to get all Assuntos");
-        return repository.findAll(pageable)
-                         .map(mapper::toDto);
-    }
-    
-    /**
      * Get one assunto by id.
      *
      * @param id the id of the entity
