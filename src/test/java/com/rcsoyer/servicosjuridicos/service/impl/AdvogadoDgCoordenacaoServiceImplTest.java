@@ -25,7 +25,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
@@ -129,7 +128,7 @@ class AdvogadoDgCoordenacaoServiceImplTest {
         when(repository.query(savedAdvogado, pageable)).thenReturn(dgCoordenacoes);
         when(mapper.toDto(any(AdvogadoDgCoordenacao.class))).thenReturn(any(AdvogadoDgCoordenacaoDTO.class));
         
-        Page<AdvogadoDgCoordenacaoDTO> page = service.findByParams(dto, pageable);
+        service.seekByParams(dto, pageable);
         
         verify(mapper, times(1)).toEntity(dto);
         verify(repository, times(1)).query(savedAdvogado, pageable);

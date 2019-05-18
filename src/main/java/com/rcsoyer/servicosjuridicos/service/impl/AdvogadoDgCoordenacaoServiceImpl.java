@@ -3,7 +3,6 @@ package com.rcsoyer.servicosjuridicos.service.impl;
 import com.rcsoyer.servicosjuridicos.domain.AdvogadoDgCoordenacao;
 import com.rcsoyer.servicosjuridicos.repository.AdvogadoDgCoordenacaoRepository;
 import com.rcsoyer.servicosjuridicos.service.AdvogadoDgCoordenacaoService;
-import com.rcsoyer.servicosjuridicos.service.QueryParams;
 import com.rcsoyer.servicosjuridicos.service.dto.AdvogadoDgCoordenacaoDTO;
 import com.rcsoyer.servicosjuridicos.service.mapper.AdvogadoDgCoordenacaoMapper;
 import java.util.Optional;
@@ -21,16 +20,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @Transactional
-public class AdvogadoDgCoordenacaoServiceImpl implements AdvogadoDgCoordenacaoService,
-                                                         QueryParams<AdvogadoDgCoordenacaoDTO> {
+public class AdvogadoDgCoordenacaoServiceImpl implements AdvogadoDgCoordenacaoService {
     
     private final AdvogadoDgCoordenacaoMapper mapper;
     private final AdvogadoDgCoordenacaoRepository repository;
     
-    public AdvogadoDgCoordenacaoServiceImpl(final AdvogadoDgCoordenacaoRepository repository,
-                                            final AdvogadoDgCoordenacaoMapper mapper) {
-        this.mapper = mapper;
-        this.repository = repository;
+    public AdvogadoDgCoordenacaoServiceImpl(final AdvogadoDgCoordenacaoRepository dgCoordenacaoRepository,
+                                            final AdvogadoDgCoordenacaoMapper dgCoordenacaoMapper) {
+        this.mapper = dgCoordenacaoMapper;
+        this.repository = dgCoordenacaoRepository;
     }
     
     @Override
@@ -58,7 +56,7 @@ public class AdvogadoDgCoordenacaoServiceImpl implements AdvogadoDgCoordenacaoSe
     
     @Override
     @Transactional(readOnly = true)
-    public Page<AdvogadoDgCoordenacaoDTO> findByParams(final AdvogadoDgCoordenacaoDTO dto,
+    public Page<AdvogadoDgCoordenacaoDTO> seekByParams(final AdvogadoDgCoordenacaoDTO dto,
                                                        final Pageable pageable) {
         log.debug("Call to service layer to get a page of Advogado by: searchParams={}, pageable={}", dto, pageable);
         return repository.query(mapper.toEntity(dto), pageable)

@@ -32,4 +32,9 @@ public interface AdvogadoDgCoordenacaoService {
      * @param id the id of the entity
      */
     void delete(Long id);
+    
+    /**
+     * Will get a page of Advogados matching the given search parameters and pagination information
+     */
+    Page<AdvogadoDgCoordenacaoDTO> seekByParams(AdvogadoDgCoordenacaoDTO advogadoDgCoordenacaoDTO, Pageable pageable);
 }
