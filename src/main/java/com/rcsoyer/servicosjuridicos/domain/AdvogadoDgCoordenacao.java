@@ -6,7 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -40,7 +39,6 @@ public class AdvogadoDgCoordenacao implements Serializable {
     private static final long serialVersionUID = 5655625437095215917L;
     
     @Id
-    @Column(updatable = false, nullable = false)
     @SequenceGenerator(name = "sequenceGenerator")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     private Long id;
@@ -67,11 +65,11 @@ public class AdvogadoDgCoordenacao implements Serializable {
     private RangeDgCoordenacao rangeDgCoordenacao;
     
     @NotNull
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     private Advogado advogado;
     
     @NotNull
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     private CoordenacaoJuridica coordenacao;
     
 }
