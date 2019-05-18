@@ -49,7 +49,7 @@ public class AdvogadoServiceImpl implements AdvogadoService {
     
     @Override
     public void delete(Long id) {
-        log.info("Call to service layer to delete Advogado by id={}", id);
+        log.debug("Call to service layer to delete Advogado by id={}", id);
         repository.deleteById(id);
     }
     

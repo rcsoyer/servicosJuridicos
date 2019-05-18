@@ -26,48 +26,29 @@ public class AssuntoServiceImpl implements AssuntoService {
         this.repository = assuntoRepository;
     }
     
-    /**
-     * Save a assunto. ps: read from the right to the left
-     *
-     * @param dto the entity to save
-     * @return the persisted entity
-     */
     @Override
     public AssuntoDTO save(final AssuntoDTO dto) {
-        log.debug("Request to save Assunto : {}", dto);
+        log.debug("Call to service layer to save Assunto: {}", dto);
         Function<AssuntoDTO, Assunto> toEntity = mapper::toEntity;
         return toEntity.andThen(repository::save)
                        .andThen(mapper::toDto)
                        .apply(dto);
     }
     
-    /**
-     * Get one assunto by id.
-     *
-     * @param id the id of the entity
-     * @return the entity
-     */
     @Override
     @Transactional(readOnly = true)
     public Optional<AssuntoDTO> findOne(Long id) {
-        log.debug("Request to get Assunto : {}", id);
+        log.debug("Call to service layer to find an Assunto by id={}", id);
         return repository.findById(id)
                          .map(mapper::toDto);
     }
     
-    /**
-     * Delete the assunto by id.
-     *
-     * @param id the id of the entity
-     */
     @Override
     public void delete(Long id) {
+        log.debug("Call to service layer to delete Assunto by id={}", id);
         repository.deleteById(id);
     }
     
-    /**
-     * Get a page of Assunto based on the param values from the dto and the pagination information
-     */
     @Override
     @Transactional(readOnly = true)
     public Page<AssuntoDTO> seekByParams(final AssuntoDTO dto, final Pageable pageable) {

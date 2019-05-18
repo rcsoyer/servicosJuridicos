@@ -107,7 +107,7 @@ class AdvogadoServiceImplTest {
     }
     
     @Test
-    void findByParams() {
+    void seekByParams() {
         var pageable = PageRequest.of(1, 2);
         var pgAdvogados = new PageImpl<>(List.of(advogado, savedAdvogado));
         
