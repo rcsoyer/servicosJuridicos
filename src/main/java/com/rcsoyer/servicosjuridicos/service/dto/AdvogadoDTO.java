@@ -1,6 +1,7 @@
 package com.rcsoyer.servicosjuridicos.service.dto;
 
 import java.io.Serializable;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
@@ -32,6 +33,7 @@ public class AdvogadoDTO implements Serializable {
     @CPF(message = "CPF inválido")
     private String cpf;
     
+    @Min(1)
     private Integer ramal;
 }
 
