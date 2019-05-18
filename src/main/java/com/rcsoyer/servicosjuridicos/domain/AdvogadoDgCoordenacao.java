@@ -9,6 +9,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -34,8 +35,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Accessors(chain = true)
 @EqualsAndHashCode(of = {"id", "advogado", "coordenacao"})
 @Table(name = "advogado_dg_coordenacao", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"dgPessoalInicio", "dgPessoalFim", "coordenacao"}),
-    @UniqueConstraint(columnNames = {"advogado", "coordenacao"})
+    @UniqueConstraint(columnNames = {"dg_pessoal_inicio", "dg_pessoal_fim", "coordenacaoId"}),
+    @UniqueConstraint(columnNames = {"advogadoId", "coordenacaoId"})
 })
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public final class AdvogadoDgCoordenacao implements Serializable {
@@ -71,10 +72,12 @@ public final class AdvogadoDgCoordenacao implements Serializable {
     
     @NotNull
     @ManyToOne(optional = false)
+    @JoinColumn(name = "advogadoId")
     private Advogado advogado;
     
     @NotNull
     @ManyToOne(optional = false)
+    @JoinColumn(name = "coordenacaoId")
     private CoordenacaoJuridica coordenacao;
     
 }

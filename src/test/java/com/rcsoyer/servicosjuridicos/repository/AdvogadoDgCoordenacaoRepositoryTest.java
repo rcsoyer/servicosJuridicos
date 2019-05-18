@@ -1,5 +1,6 @@
 package com.rcsoyer.servicosjuridicos.repository;
 
+import static com.rcsoyer.servicosjuridicos.domain.enumeration.RangeDgCoordenacao.INCLUSIVE;
 import static java.util.Collections.singleton;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -8,6 +9,7 @@ import com.rcsoyer.servicosjuridicos.domain.Advogado;
 import com.rcsoyer.servicosjuridicos.domain.AdvogadoDgCoordenacao;
 import com.rcsoyer.servicosjuridicos.domain.Assunto;
 import com.rcsoyer.servicosjuridicos.domain.CoordenacaoJuridica;
+import com.rcsoyer.servicosjuridicos.domain.enumeration.RangeDgCoordenacao;
 import com.rcsoyer.servicosjuridicos.repository.coordenacao.CoordenacaoJuridicaRepository;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,7 +48,8 @@ class AdvogadoDgCoordenacaoRepositoryTest extends RepositoryConfigTest {
         this.dgCoordenacao = new AdvogadoDgCoordenacao().setAdvogado(advogado)
                                                         .setCoordenacao(coordenacaoJuridica)
                                                         .setDgPessoalInicio(2)
-                                                        .setDgPessoalFim(3);
+                                                        .setDgPessoalFim(3)
+                                                        .setRangeDgCoordenacao(INCLUSIVE);
         assuntoRepository.save(assunto);
         advogadoRepository.save(advogado);
         coordenacaoJuridicaRepository.save(coordenacaoJuridica);

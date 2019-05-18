@@ -7,7 +7,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,10 +28,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Getter
 @Setter
+@ToString
 @Accessors(chain = true)
 @EqualsAndHashCode(of = "id")
 @Table(name = "ferias_licenca")
-@ToString(exclude = "advogado")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class FeriasLicenca implements Serializable {
     
@@ -58,7 +57,7 @@ public class FeriasLicenca implements Serializable {
     private FeriasLicensaTipo tipo;
     
     @NotNull
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     private Advogado advogado;
     
 }

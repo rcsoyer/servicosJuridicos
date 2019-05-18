@@ -18,10 +18,10 @@ final class AdvDgCoordenacaoRestrictions {
     }
     
     static Predicate getRestrictions(final AdvogadoDgCoordenacao dgCoordenacao) {
-        return new AdvDgCoordenacaoRestrictions(dgCoordenacao).define();
+        return new AdvDgCoordenacaoRestrictions(dgCoordenacao).extractPredicate();
     }
     
-    private BooleanExpression define() {
+    private BooleanExpression extractPredicate() {
         return Expressions.allOf(dgPessoalInicioRestriction(), dgPessoalFimRestriction(), dgDuplaRestriction(),
                                  rangeDgCoordenacaoRestriction(), advogadoRestriction(), coordenacaoRestriction());
     }
