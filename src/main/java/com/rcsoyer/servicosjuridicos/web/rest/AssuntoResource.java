@@ -51,7 +51,7 @@ public class AssuntoResource {
     @ApiOperation(value = "Create a new assunto", response = AssuntoDTO.class)
     @ApiResponses({
         @ApiResponse(code = 201, message = "Assunto created"),
-        @ApiResponse(code = 400, message = "Assunto already has and ID")
+        @ApiResponse(code = 400, message = "A new Assunto must not have and ID")
     })
     public ResponseEntity<AssuntoDTO> createAssunto(@Valid @RequestBody AssuntoDTO dto) {
         log.info("REST request to save Assunto : {}", dto);
@@ -68,8 +68,7 @@ public class AssuntoResource {
     @ApiOperation(value = "Update an existing assunto", response = AssuntoDTO.class)
     @ApiResponses({
         @ApiResponse(code = 200, message = "Assunto created"),
-        @ApiResponse(code = 400, message = "An existing Assunto must have an ID"),
-        @ApiResponse(code = 500, message = "Assunto couldn't be update")
+        @ApiResponse(code = 400, message = "An existing Assunto must have an ID")
     })
     public ResponseEntity<AssuntoDTO> updateAssunto(@Valid @RequestBody AssuntoDTO dto) {
         log.info("REST request to update Assunto : {}", dto);
