@@ -11,6 +11,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import com.rcsoyer.servicosjuridicos.domain.Advogado;
@@ -129,6 +130,7 @@ class AdvogadoDgCoordenacaoServiceImplTest {
         
         verify(repository, times(1)).deleteById(anyLong());
         verifyNoMoreInteractions(repository);
+        verifyZeroInteractions(mapper);
     }
     
     @Test
