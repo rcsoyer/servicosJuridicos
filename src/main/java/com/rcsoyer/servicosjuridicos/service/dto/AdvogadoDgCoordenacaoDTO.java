@@ -1,8 +1,6 @@
 package com.rcsoyer.servicosjuridicos.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.rcsoyer.servicosjuridicos.domain.enumeration.RangeDgCoordenacao;
-import java.io.IOException;
 import java.io.Serializable;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -20,7 +18,7 @@ import lombok.experimental.Accessors;
 @Setter
 @ToString
 @Accessors(chain = true)
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = {"id", "advogado", "coordenacao"})
 public class AdvogadoDgCoordenacaoDTO implements Serializable {
     
     private static final long serialVersionUID = 7110673865104666877L;
@@ -41,16 +39,15 @@ public class AdvogadoDgCoordenacaoDTO implements Serializable {
     @Max(9)
     private Integer dgDupla;
     
+    @NotNull
     private RangeDgCoordenacao rangeDgCoordenacao;
     
+    @Min(1)
     @NotNull
-    private Long advogadoId;
+    private Long advogado;
     
+    @Min(1)
     @NotNull
-    private Long coordenacaoId;
+    private Long coordenacao;
     
-    @JsonCreator
-    public static AdvogadoDgCoordenacaoDTO of(String json) throws IOException {
-        return JsonConverter.readValue(json, AdvogadoDgCoordenacaoDTO.class);
-    }
 }

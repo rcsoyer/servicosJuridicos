@@ -63,8 +63,8 @@ class AdvogadoDgCoordenacaoServiceImplTest {
                                                         .setDgPessoalFim(2)
                                                         .setRangeDgCoordenacao(INCLUSIVE);
         this.dto = new AdvogadoDgCoordenacaoDTO().setId(1L)
-                                                 .setAdvogadoId(1L)
-                                                 .setCoordenacaoId(1L)
+                                                 .setAdvogado(1L)
+                                                 .setCoordenacao(1L)
                                                  .setDgDupla(0)
                                                  .setDgPessoalFim(1)
                                                  .setDgPessoalInicio(2)

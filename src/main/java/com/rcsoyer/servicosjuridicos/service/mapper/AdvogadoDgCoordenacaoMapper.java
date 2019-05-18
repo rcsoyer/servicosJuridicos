@@ -12,12 +12,12 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = {AdvogadoMapper.class, CoordenacaoJuridicaMapper.class})
 public interface AdvogadoDgCoordenacaoMapper extends EntityMapper<AdvogadoDgCoordenacaoDTO, AdvogadoDgCoordenacao> {
     
-    @Mapping(source = "advogado.id", target = "advogadoId")
-    @Mapping(source = "coordenacao.id", target = "coordenacaoId")
+    @Mapping(source = "advogado.id", target = "advogado")
+    @Mapping(source = "coordenacao.id", target = "coordenacao")
     AdvogadoDgCoordenacaoDTO toDto(AdvogadoDgCoordenacao advogadoDgCoordenacao);
     
-    @Mapping(source = "advogadoId", target = "advogado")
-    @Mapping(source = "coordenacaoId", target = "coordenacao")
+    @Mapping(source = "advogado", target = "advogado")
+    @Mapping(source = "coordenacao", target = "coordenacao")
     AdvogadoDgCoordenacao toEntity(AdvogadoDgCoordenacaoDTO advogadoDgCoordenacaoDTO);
     
     default AdvogadoDgCoordenacao fromId(Long id) {

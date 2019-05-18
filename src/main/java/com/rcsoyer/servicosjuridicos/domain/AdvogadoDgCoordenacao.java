@@ -38,7 +38,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
     @UniqueConstraint(columnNames = {"advogado", "coordenacao"})
 })
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class AdvogadoDgCoordenacao implements Serializable {
+public final class AdvogadoDgCoordenacao implements Serializable {
     
     private static final long serialVersionUID = 5655625437095215917L;
     
@@ -64,6 +64,7 @@ public class AdvogadoDgCoordenacao implements Serializable {
     @Column(name = "dg_dupla")
     private Integer dgDupla;
     
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "range_dg_coordenacao")
     private RangeDgCoordenacao rangeDgCoordenacao;
