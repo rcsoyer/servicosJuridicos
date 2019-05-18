@@ -34,6 +34,7 @@ public class AdvogadoDgCoordenacaoServiceImpl implements AdvogadoDgCoordenacaoSe
     @Override
     public AdvogadoDgCoordenacaoDTO save(final AdvogadoDgCoordenacaoDTO dto) {
         log.debug("Call to service layer to create Advogado: {}", dto);
+        checkMaxAdvogadosWithOneDgDupla(dto.getDgDupla());
         Function<AdvogadoDgCoordenacaoDTO, AdvogadoDgCoordenacao> toEntity = mapper::toEntity;
         return toEntity.andThen(repository::save)
                        .andThen(mapper::toDto)
@@ -61,6 +62,26 @@ public class AdvogadoDgCoordenacaoServiceImpl implements AdvogadoDgCoordenacaoSe
         log.debug("Call to service layer to get a page of Advogado by: searchParams={}, pageable={}", dto, pageable);
         return repository.query(mapper.toEntity(dto), pageable)
                          .map(mapper::toDto);
+    }
+    
+    /**
+     * Count the AdvogadoDgCoordenacao table to check the number of advogados registered with the passed digitoDupla.
+     * The max number of advogados using the same digitoDupla at one time is always 2.
+     *
+     * @throws IllegalStateException if there's already 2 advogados using the passed digitoDupla
+     */
+    private void checkMaxAdvogadosWithOneDgDupla(Integer dgDupla) {
+        Optional.ofNullable(dgDupla)
+                .ifPresent(digitoDupla -> {
+                    int numberOfAdvogadosWithDgDupla = repository.countByDgDuplaEquals(digitoDupla);
+            
+                    if (numberOfAdvogadosWithDgDupla == 2) {
+                        final var illegalState =
+                            new IllegalStateException("Máximo número de advogados usando mesmo dígito dupla é 2");
+                        log.error("Error ao tentar registrar esse dígito dupla: {}", digitoDupla, illegalState);
+                        throw illegalState;
+                    }
+                });
     }
     
 }

@@ -11,12 +11,15 @@ import com.rcsoyer.servicosjuridicos.domain.Assunto;
 import com.rcsoyer.servicosjuridicos.domain.CoordenacaoJuridica;
 import com.rcsoyer.servicosjuridicos.repository.coordenacao.CoordenacaoJuridicaRepository;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+@TestInstance(Lifecycle.PER_CLASS)
 class AdvogadoDgCoordenacaoRepositoryTest extends RepositoryConfigTest {
     
     private Assunto assunto;
@@ -36,11 +39,11 @@ class AdvogadoDgCoordenacaoRepositoryTest extends RepositoryConfigTest {
     @Autowired
     private CoordenacaoJuridicaRepository coordenacaoJuridicaRepository;
     
-    @BeforeEach
+    @BeforeAll
     void setUp() {
         this.assunto = new Assunto().setPeso(2).setDescricao("magic and dark entries").setAtivo(true);
         this.advogado = new Advogado().setCpf("74726571583").setNome("Matt Murdock");
-        this.coordenacaoJuridica = new CoordenacaoJuridica().setNome("seven thrones of hell")
+        this.coordenacaoJuridica = new CoordenacaoJuridica().setNome("Seven thrones of hell")
                                                             .setSigla("FLOYD")
                                                             .setCentena("424")
                                                             .setAssuntos(singleton(assunto));
@@ -48,6 +51,7 @@ class AdvogadoDgCoordenacaoRepositoryTest extends RepositoryConfigTest {
                                                         .setCoordenacao(coordenacaoJuridica)
                                                         .setDgPessoalInicio(2)
                                                         .setDgPessoalFim(3)
+                                                        .setDgDupla(4)
                                                         .setRangeDgCoordenacao(INCLUSIVE);
         assuntoRepository.save(assunto);
         advogadoRepository.save(advogado);
@@ -62,5 +66,12 @@ class AdvogadoDgCoordenacaoRepositoryTest extends RepositoryConfigTest {
         
         assertTrue(result.hasContent());
         assertEquals(dgCoordenacao, content.get(0));
+    }
+    
+    @Test
+    void countByDgDuplaEquals() {
+        int numberOfAdvogadosWithDgDupla = dgCoordenacaoRepository.countByDgDuplaEquals(dgCoordenacao.getDgDupla());
+        
+        assertEquals(1, numberOfAdvogadosWithDgDupla);
     }
 }

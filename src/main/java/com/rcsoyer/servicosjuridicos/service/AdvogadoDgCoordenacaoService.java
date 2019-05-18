@@ -11,10 +11,11 @@ import org.springframework.data.domain.Pageable;
 public interface AdvogadoDgCoordenacaoService {
     
     /**
-     * Save a advogadoDgCoordenacao.
+     * Save an AdvogAdvogadoDgCoordenacao applying the following business rules: count the AdvogadoDgCoordenacao table
+     * to check the number of advogados registered with the passed digitoDupla. The max number of advogados using the
+     * same digitoDupla at one time is always 2.
      *
-     * @param advogadoDgCoordenacaoDTO the entity to save
-     * @return the persisted entity
+     * @throws IllegalStateException if there's already 2 advogados using the passed digitoDupla
      */
     AdvogadoDgCoordenacaoDTO save(AdvogadoDgCoordenacaoDTO advogadoDgCoordenacaoDTO);
     

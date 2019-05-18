@@ -3,6 +3,7 @@ package com.rcsoyer.servicosjuridicos.service.impl;
 import static com.rcsoyer.servicosjuridicos.domain.enumeration.RangeDgCoordenacao.INCLUSIVE;
 import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -25,6 +26,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
@@ -40,48 +43,58 @@ class AdvogadoDgCoordenacaoServiceImplTest {
     @InjectMocks
     private AdvogadoDgCoordenacaoServiceImpl service;
     
-    private AdvogadoDgCoordenacao model;
     private AdvogadoDgCoordenacaoDTO dto;
-    private AdvogadoDgCoordenacao savedAdvogado;
+    private AdvogadoDgCoordenacao advDgCoordenacao;
+    private AdvogadoDgCoordenacao savedAdDgCoordenacao;
     
     @BeforeEach
     void setUp() {
-        this.model = new AdvogadoDgCoordenacao().setId(1L)
-                                                .setAdvogado(new Advogado())
-                                                .setCoordenacao(new CoordenacaoJuridica())
-                                                .setDgPessoalInicio(0)
-                                                .setDgDupla(1)
-                                                .setDgPessoalFim(2)
-                                                .setRangeDgCoordenacao(INCLUSIVE);
-        this.savedAdvogado = new AdvogadoDgCoordenacao().setId(1L)
-                                                        .setAdvogado(new Advogado())
-                                                        .setCoordenacao(new CoordenacaoJuridica())
-                                                        .setDgPessoalInicio(0)
-                                                        .setDgDupla(1)
-                                                        .setDgPessoalFim(2)
-                                                        .setRangeDgCoordenacao(INCLUSIVE);
-        this.dto = new AdvogadoDgCoordenacaoDTO().setId(1L)
-                                                 .setAdvogado(1L)
+        final var advogado = new Advogado().setId(1L);
+        final var coordenacao = new CoordenacaoJuridica().setId(1L);
+        this.advDgCoordenacao = new AdvogadoDgCoordenacao().setAdvogado(advogado)
+                                                           .setCoordenacao(coordenacao)
+                                                           .setDgPessoalInicio(0)
+                                                           .setDgPessoalFim(1)
+                                                           .setRangeDgCoordenacao(INCLUSIVE);
+        this.savedAdDgCoordenacao = new AdvogadoDgCoordenacao().setId(1L)
+                                                               .setAdvogado(advogado)
+                                                               .setCoordenacao(coordenacao)
+                                                               .setDgPessoalInicio(0)
+                                                               .setDgPessoalFim(1)
+                                                               .setRangeDgCoordenacao(INCLUSIVE);
+        this.dto = new AdvogadoDgCoordenacaoDTO().setAdvogado(1L)
                                                  .setCoordenacao(1L)
-                                                 .setDgDupla(0)
                                                  .setDgPessoalFim(1)
                                                  .setDgPessoalInicio(2)
                                                  .setRangeDgCoordenacao(INCLUSIVE);
     }
     
     @Test
-    void save() {
-        when(mapper.toEntity(dto)).thenReturn(model);
-        when(repository.save(model)).thenReturn(savedAdvogado);
-        when(mapper.toDto(savedAdvogado)).thenReturn(dto);
+    void save_withoutDgDupla() {
+        when(mapper.toEntity(dto)).thenReturn(advDgCoordenacao);
+        when(repository.save(advDgCoordenacao)).thenReturn(savedAdDgCoordenacao);
+        when(mapper.toDto(savedAdDgCoordenacao)).thenReturn(dto);
         
-        var savedDto = service.save(dto);
+        var savedDto = service.save(dto).setId(1L);
         
         assertEquals(savedDto, dto);
         verify(mapper, times(1)).toDto(any(AdvogadoDgCoordenacao.class));
         verify(repository, times(1)).save(any());
         verify(mapper, times(1)).toEntity(any(AdvogadoDgCoordenacaoDTO.class));
         verifyNoMoreInteractions(mapper, repository);
+    }
+    
+    @Test
+    @MockitoSettings(strictness = Strictness.LENIENT)
+    void save_errorMaxNumberOfAdvogadosByDgDupla() {
+        when(mapper.toEntity(dto)).thenReturn(advDgCoordenacao);
+        when(repository.save(advDgCoordenacao)).thenReturn(savedAdDgCoordenacao);
+        when(mapper.toDto(savedAdDgCoordenacao)).thenReturn(dto);
+        
+        dto.setDgDupla(4);
+        when(repository.countByDgDuplaEquals(dto.getDgDupla())).thenReturn(2);
+        
+        assertThrows(IllegalStateException.class, () -> service.save(dto));
     }
     
     @Test
@@ -120,18 +133,18 @@ class AdvogadoDgCoordenacaoServiceImplTest {
     
     @Test
     void findByParams() {
-        var dgCoordenacoes = new PageImpl<>(singletonList(savedAdvogado));
+        var dgCoordenacoes = new PageImpl<>(singletonList(savedAdDgCoordenacao));
         
         PageRequest pageable = PageRequest.of(0, 10);
         
-        when(mapper.toEntity(dto)).thenReturn(savedAdvogado);
-        when(repository.query(savedAdvogado, pageable)).thenReturn(dgCoordenacoes);
+        when(mapper.toEntity(dto)).thenReturn(savedAdDgCoordenacao);
+        when(repository.query(savedAdDgCoordenacao, pageable)).thenReturn(dgCoordenacoes);
         when(mapper.toDto(any(AdvogadoDgCoordenacao.class))).thenReturn(any(AdvogadoDgCoordenacaoDTO.class));
         
         service.seekByParams(dto, pageable);
         
         verify(mapper, times(1)).toEntity(dto);
-        verify(repository, times(1)).query(savedAdvogado, pageable);
+        verify(repository, times(1)).query(savedAdDgCoordenacao, pageable);
         verify(mapper, times(1)).toDto(any(AdvogadoDgCoordenacao.class));
         verifyNoMoreInteractions(repository, mapper);
     }

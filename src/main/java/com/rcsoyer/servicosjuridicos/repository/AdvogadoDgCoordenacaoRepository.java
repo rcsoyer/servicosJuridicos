@@ -17,6 +17,8 @@ import org.springframework.stereotype.Repository;
 public interface AdvogadoDgCoordenacaoRepository extends JpaRepository<AdvogadoDgCoordenacao, Long>,
                                                          QuerydslPredicateExecutor<AdvogadoDgCoordenacao> {
     
+    int countByDgDuplaEquals(Integer digitoDupla);
+    
     default Page<AdvogadoDgCoordenacao> query(final AdvogadoDgCoordenacao dgCoordenacao, final Pageable pageable) {
         return findAll(getRestrictions(dgCoordenacao), pageable);
     }
