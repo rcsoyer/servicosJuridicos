@@ -95,34 +95,26 @@ public class AdvogadoResource {
                              .body(page.getContent());
     }
     
-    /**
-     * GET /advogados/:id : get the "id" advogado.
-     *
-     * @param id the id of the advogadoDTO to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the advogadoDTO, or with status 404 (Not Found)
-     */
     @Timed
     @GetMapping("/{id}")
+    @ApiOperation(value = "Get an Advgado matching the given ID", response = AdvogadoDTO.class)
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "Advogado created"),
+        @ApiResponse(code = 404, message = "No Advogado found matching the given ID")
+    })
     public ResponseEntity<AdvogadoDTO> getAdvogado(@PathVariable @Valid @Min(1) Long id) {
-        log.debug("REST request to get Advogado : {}", id);
-        var advogadoDTO = service.findOne(id);
-        return ResponseUtil.wrapOrNotFound(advogadoDTO);
+        log.debug("REST request to get Advogado matching: id={}", id);
+        return ResponseUtil.wrapOrNotFound(service.findOne(id));
     }
     
-    /**
-     * DELETE /advogados/:id : delete the "id" advogado.
-     *
-     * @param id the id of the advogadoDTO to delete
-     * @return the ResponseEntity with status 200 (OK)
-     */
     @Timed
     @DeleteMapping("/{id}")
+    @ApiOperation("Delete an Advogado matching the given id")
     public ResponseEntity<Void> delete(@PathVariable @Valid @Min(1) Long id) {
         log.debug("REST request to delete Advogado : {}", id);
         service.delete(id);
-        var entityDeletionAlert = entityDeletionAlert(ENTITY_NAME, id.toString());
         return ResponseEntity.ok()
-                             .headers(entityDeletionAlert)
+                             .headers(entityDeletionAlert(ENTITY_NAME, id.toString()))
                              .build();
     }
     
