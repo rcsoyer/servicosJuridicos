@@ -1,5 +1,6 @@
 package com.rcsoyer.servicosjuridicos.web.rest;
 
+import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityCreationAlert;
 import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityDeletionAlert;
 import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityUpdateAlert;
 import static com.rcsoyer.servicosjuridicos.web.rest.util.PaginationUtil.generatePaginationHttpHeaders;
@@ -53,14 +54,15 @@ public class AssuntoResource {
         @ApiResponse(code = 201, message = "Assunto created"),
         @ApiResponse(code = 400, message = "A new Assunto must not have and ID")
     })
-    public ResponseEntity<AssuntoDTO> createAssunto(@Valid @RequestBody AssuntoDTO dto) {
-        log.info("REST request to save Assunto : {}", dto);
-        return Optional.of(dto)
+    public ResponseEntity<AssuntoDTO> createAssunto(@Valid @RequestBody AssuntoDTO assuntoDTO) {
+        log.info("REST request to save Assunto : {}", assuntoDTO);
+        return Optional.of(assuntoDTO)
                        .filter(assunto -> isNull(assunto.getId()))
                        .map(assuntoService::save)
-                       .map(result -> ResponseEntity.created(URI.create("/api/assunto/" + result.getId()))
-                                                    .body(result))
-                       .orElseThrow(hasIdBadRequest());
+                       .map(dto -> ResponseEntity.created(URI.create("/api/assunto/" + dto.getId()))
+                                                 .headers(entityCreationAlert(ENTITY_NAME, dto.getId().toString()))
+                                                 .body(dto))
+                       .orElseThrow(hasIdOnCreationBadRequest());
     }
     
     @Timed
@@ -78,7 +80,7 @@ public class AssuntoResource {
                        .map(result -> ResponseEntity.ok()
                                                     .headers(entityUpdateAlert(ENTITY_NAME, result.getId().toString()))
                                                     .body(result))
-                       .orElseThrow(hasNoIdBadRequest());
+                       .orElseThrow(hasNoIdOnUpdateBadRequest());
     }
     
     @Timed
@@ -115,7 +117,7 @@ public class AssuntoResource {
                              .build();
     }
     
-    private Supplier<BadRequestAlertException> hasIdBadRequest() {
+    private Supplier<BadRequestAlertException> hasIdOnCreationBadRequest() {
         return () -> {
             var msgError = "A new assunto cannot already have an ID";
             var badRequestAlertException = new BadRequestAlertException(msgError, ENTITY_NAME, "idexists");
@@ -124,7 +126,7 @@ public class AssuntoResource {
         };
     }
     
-    private Supplier<BadRequestAlertException> hasNoIdBadRequest() {
+    private Supplier<BadRequestAlertException> hasNoIdOnUpdateBadRequest() {
         return () -> {
             var msgError = "An existing Assunto must have an id";
             var badRequestAlertException = new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
