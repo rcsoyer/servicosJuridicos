@@ -33,72 +33,36 @@ public class AdvogadoDgCoordenacaoServiceImpl implements AdvogadoDgCoordenacaoSe
         this.repository = repository;
     }
     
-    /**
-     * Save a advogadoDgCoordenacao.
-     *
-     * @param dto the entity to save
-     * @return the persisted entity
-     */
     @Override
     public AdvogadoDgCoordenacaoDTO save(final AdvogadoDgCoordenacaoDTO dto) {
-        log.debug("Request to save AdvogadoDgCoordenacao : {}", dto);
+        log.debug("Call to service layer to create Advogado: {}", dto);
         Function<AdvogadoDgCoordenacaoDTO, AdvogadoDgCoordenacao> toEntity = mapper::toEntity;
         return toEntity.andThen(repository::save)
                        .andThen(mapper::toDto)
                        .apply(dto);
     }
     
-    /**
-     * Get all the advogadoDgCoordenacaos.
-     *
-     * @param pageable the pagination information
-     * @return the list of entities
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public Page<AdvogadoDgCoordenacaoDTO> findAll(Pageable pageable) {
-        log.debug("Request to get all AdvogadoDgCoordenacaos");
-        return repository.findAll(pageable)
-                         .map(mapper::toDto);
-    }
-    
-    /**
-     * Get one advogadoDgCoordenacao by id.
-     *
-     * @param id the id of the entity
-     * @return the entity
-     */
     @Override
     @Transactional(readOnly = true)
     public Optional<AdvogadoDgCoordenacaoDTO> findOne(Long id) {
-        log.debug("Request to get AdvogadoDgCoordenacao : {}", id);
+        log.debug("Call to service layer to get Advogado by id={}", id);
         return repository.findById(id)
                          .map(mapper::toDto);
     }
     
-    /**
-     * Delete the advogadoDgCoordenacao by id.
-     *
-     * @param id the id of the entity
-     */
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete AdvogadoDgCoordenacao : {}", id);
+        log.debug("Access to service layer to delete Advogado by id={}", id);
         repository.deleteById(id);
     }
     
     @Override
+    @Transactional(readOnly = true)
     public Page<AdvogadoDgCoordenacaoDTO> findByParams(final AdvogadoDgCoordenacaoDTO dto,
                                                        final Pageable pageable) {
-        log.debug("Query by the values in the DTO and the Pageable: {}, {}", dto, pageable);
-        Function<AdvogadoDgCoordenacaoDTO, AdvogadoDgCoordenacao> toEntiy = mapper::toEntity;
-        Function<AdvogadoDgCoordenacao, Page<AdvogadoDgCoordenacao>> queryBy =
-            dgCoordenacao -> repository.query(dgCoordenacao, pageable);
-        Function<Page<AdvogadoDgCoordenacao>, Page<AdvogadoDgCoordenacaoDTO>> toPageDto =
-            pageEntity -> pageEntity.map(mapper::toDto);
-        return toEntiy.andThen(queryBy)
-                      .andThen(toPageDto)
-                      .apply(dto);
+        log.debug("Call to service layer to get a page of Advogado by: searchParams={}, pageable={}", dto, pageable);
+        return repository.query(mapper.toEntity(dto), pageable)
+                         .map(mapper::toDto);
     }
     
 }

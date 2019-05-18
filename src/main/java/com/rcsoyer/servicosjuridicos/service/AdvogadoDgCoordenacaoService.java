@@ -19,14 +19,6 @@ public interface AdvogadoDgCoordenacaoService {
     AdvogadoDgCoordenacaoDTO save(AdvogadoDgCoordenacaoDTO advogadoDgCoordenacaoDTO);
     
     /**
-     * Get all the advogadoDgCoordenacaos.
-     *
-     * @param pageable the pagination information
-     * @return the list of entities
-     */
-    Page<AdvogadoDgCoordenacaoDTO> findAll(Pageable pageable);
-    
-    /**
      * Get the "id" advogadoDgCoordenacao.
      *
      * @param id the id of the entity

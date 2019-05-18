@@ -3,7 +3,6 @@ package com.rcsoyer.servicosjuridicos.web.rest;
 import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityCreationAlert;
 import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityDeletionAlert;
 import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityUpdateAlert;
-import static com.rcsoyer.servicosjuridicos.web.rest.util.PaginationUtil.generatePaginationHttpHeaders;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -14,12 +13,8 @@ import com.rcsoyer.servicosjuridicos.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.web.util.ResponseUtil;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -84,24 +79,6 @@ public class AdvogadoDgCoordenacaoResource {
         return ResponseEntity.ok()
                              .headers(entityUpdateAlert(ENTITY_NAME, dto.getId().toString()))
                              .body(result);
-    }
-    
-    /**
-     * GET  /advogado-dg-coordenacaos : get all the advogadoDgCoordenacaos.
-     *
-     * @param pageable the pagination information
-     * @return the ResponseEntity with status 200 (OK) and the list of advogadoDgCoordenacaos in body
-     */
-    @Timed
-    @GetMapping("/advogado-dg-coordenacaos")
-    public ResponseEntity<List<AdvogadoDgCoordenacaoDTO>> getAllAdvogadoDgCoordenacaos(
-        Pageable pageable) {
-        log.debug("REST request to get a page of AdvogadoDgCoordenacaos");
-        Page<AdvogadoDgCoordenacaoDTO> page = dgCoordenacaoService.findAll(pageable);
-        HttpHeaders headers = generatePaginationHttpHeaders(page, "/api/advogado-dg-coordenacaos");
-        return ResponseEntity.ok()
-                             .headers(headers)
-                             .body(page.getContent());
     }
     
     /**

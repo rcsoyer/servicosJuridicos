@@ -18,7 +18,6 @@ import com.rcsoyer.servicosjuridicos.domain.CoordenacaoJuridica;
 import com.rcsoyer.servicosjuridicos.repository.AdvogadoDgCoordenacaoRepository;
 import com.rcsoyer.servicosjuridicos.service.dto.AdvogadoDgCoordenacaoDTO;
 import com.rcsoyer.servicosjuridicos.service.mapper.AdvogadoDgCoordenacaoMapper;
-import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -76,7 +75,9 @@ class AdvogadoDgCoordenacaoServiceImplTest {
         when(mapper.toEntity(dto)).thenReturn(model);
         when(repository.save(model)).thenReturn(savedAdvogado);
         when(mapper.toDto(savedAdvogado)).thenReturn(dto);
+        
         var savedDto = service.save(dto);
+        
         assertEquals(savedDto, dto);
         verify(mapper, times(1)).toDto(any(AdvogadoDgCoordenacao.class));
         verify(repository, times(1)).save(any());
@@ -85,26 +86,13 @@ class AdvogadoDgCoordenacaoServiceImplTest {
     }
     
     @Test
-    void findAll() {
-        var pageRequest = PageRequest.of(1, 2);
-        List<AdvogadoDgCoordenacao> advogadosResult = List
-                                                          .of(new AdvogadoDgCoordenacao(), new AdvogadoDgCoordenacao());
-        when(repository.findAll(pageRequest)).thenReturn(new PageImpl<>(advogadosResult));
-        when(mapper.toDto(any(AdvogadoDgCoordenacao.class)))
-            .thenReturn(new AdvogadoDgCoordenacaoDTO());
-        var advogadosPage = service.findAll(pageRequest);
-        assertEquals(advogadosPage.getNumberOfElements(), pageRequest.getPageSize());
-        verify(repository, times(1)).findAll(pageRequest);
-        verify(mapper, times(2)).toDto(any(AdvogadoDgCoordenacao.class));
-        verifyNoMoreInteractions(mapper, repository);
-    }
-    
-    @Test
     void findOne() {
         when(repository.findById(anyLong())).thenReturn(Optional.of(new AdvogadoDgCoordenacao()));
         when(mapper.toDto(any(AdvogadoDgCoordenacao.class)))
             .thenReturn(new AdvogadoDgCoordenacaoDTO());
+        
         var dtoOptional = service.findOne(anyLong());
+        
         assertTrue(dtoOptional.isPresent());
         verify(repository, times(1)).findById(anyLong());
         verify(mapper, times(1)).toDto(any(AdvogadoDgCoordenacao.class));
@@ -114,7 +102,9 @@ class AdvogadoDgCoordenacaoServiceImplTest {
     @Test
     void findOne_NotFound() {
         when(repository.findById(anyLong())).thenReturn(Optional.empty());
+        
         var dtoOptional = service.findOne(anyLong());
+        
         assertTrue(dtoOptional.isEmpty());
         verify(repository, times(1)).findById(anyLong());
         verify(mapper, never()).toDto(any(AdvogadoDgCoordenacao.class));
@@ -124,6 +114,7 @@ class AdvogadoDgCoordenacaoServiceImplTest {
     @Test
     void delete() {
         service.delete(anyLong());
+        
         verify(repository, times(1)).deleteById(anyLong());
         verifyNoMoreInteractions(repository);
     }
@@ -131,11 +122,15 @@ class AdvogadoDgCoordenacaoServiceImplTest {
     @Test
     void findByParams() {
         var dgCoordenacoes = new PageImpl<>(singletonList(savedAdvogado));
+        
         PageRequest pageable = PageRequest.of(0, 10);
+        
         when(mapper.toEntity(dto)).thenReturn(savedAdvogado);
         when(repository.query(savedAdvogado, pageable)).thenReturn(dgCoordenacoes);
         when(mapper.toDto(any(AdvogadoDgCoordenacao.class))).thenReturn(any(AdvogadoDgCoordenacaoDTO.class));
+        
         Page<AdvogadoDgCoordenacaoDTO> page = service.findByParams(dto, pageable);
+        
         verify(mapper, times(1)).toEntity(dto);
         verify(repository, times(1)).query(savedAdvogado, pageable);
         verify(mapper, times(1)).toDto(any(AdvogadoDgCoordenacao.class));

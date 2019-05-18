@@ -9,7 +9,6 @@ import com.rcsoyer.servicosjuridicos.domain.Advogado;
 import com.rcsoyer.servicosjuridicos.domain.AdvogadoDgCoordenacao;
 import com.rcsoyer.servicosjuridicos.domain.Assunto;
 import com.rcsoyer.servicosjuridicos.domain.CoordenacaoJuridica;
-import com.rcsoyer.servicosjuridicos.domain.enumeration.RangeDgCoordenacao;
 import com.rcsoyer.servicosjuridicos.repository.coordenacao.CoordenacaoJuridicaRepository;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,6 +59,7 @@ class AdvogadoDgCoordenacaoRepositoryTest extends RepositoryConfigTest {
     void query() {
         Page<AdvogadoDgCoordenacao> result = dgCoordenacaoRepository.query(dgCoordenacao, PageRequest.of(0, 10));
         List<AdvogadoDgCoordenacao> content = result.getContent();
+        
         assertTrue(result.hasContent());
         assertEquals(dgCoordenacao, content.get(0));
     }
