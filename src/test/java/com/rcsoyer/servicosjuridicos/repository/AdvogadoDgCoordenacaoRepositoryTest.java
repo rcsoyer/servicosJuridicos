@@ -1,7 +1,6 @@
 package com.rcsoyer.servicosjuridicos.repository;
 
 import static com.rcsoyer.servicosjuridicos.domain.enumeration.RangeDgCoordenacao.INCLUSIVE;
-import static java.util.Collections.singleton;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -46,7 +45,7 @@ class AdvogadoDgCoordenacaoRepositoryTest extends RepositoryConfigTest {
         this.coordenacaoJuridica = new CoordenacaoJuridica().setNome("Seven thrones of hell")
                                                             .setSigla("FLOYD")
                                                             .setCentena("424")
-                                                            .setAssuntos(singleton(assunto));
+                                                            .addAssunto(assunto);
         this.dgCoordenacao = new AdvogadoDgCoordenacao().setAdvogado(advogado)
                                                         .setCoordenacao(coordenacaoJuridica)
                                                         .setDgPessoalInicio(2)

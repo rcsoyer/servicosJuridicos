@@ -104,8 +104,8 @@ public class CoordenacaoJuridica implements Serializable {
     }
     
     public CoordenacaoJuridica addDgAdvogado(final AdvogadoDgCoordenacao advogadoDgCoordenacao) {
-        dgAdvogados.add(advogadoDgCoordenacao);
         advogadoDgCoordenacao.setCoordenacao(this);
+        dgAdvogados.add(advogadoDgCoordenacao);
         return this;
     }
     

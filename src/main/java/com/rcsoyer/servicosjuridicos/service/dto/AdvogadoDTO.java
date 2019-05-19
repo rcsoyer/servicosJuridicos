@@ -19,7 +19,7 @@ import org.hibernate.validator.constraints.br.CPF;
 @ToString
 @Accessors(chain = true)
 @EqualsAndHashCode(of = {"id", "cpf"})
-public class AdvogadoDTO implements Serializable {
+public final class AdvogadoDTO implements Serializable {
     
     private static final long serialVersionUID = 185125590770954216L;
     

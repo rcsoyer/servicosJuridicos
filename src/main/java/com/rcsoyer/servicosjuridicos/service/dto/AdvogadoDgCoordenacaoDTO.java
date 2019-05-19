@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @ToString
 @Accessors(chain = true)
 @EqualsAndHashCode(of = {"id", "advogado", "coordenacao"})
-public class AdvogadoDgCoordenacaoDTO implements Serializable {
+public final class AdvogadoDgCoordenacaoDTO implements Serializable {
     
     private static final long serialVersionUID = 7110673865104666877L;
     
@@ -42,11 +42,11 @@ public class AdvogadoDgCoordenacaoDTO implements Serializable {
     @NotNull
     private RangeDgCoordenacao rangeDgCoordenacao;
     
-    @Min(1)
+    @Min(1L)
     @NotNull
     private Long advogado;
     
-    @Min(1)
+    @Min(1L)
     @NotNull
     private Long coordenacao;
     

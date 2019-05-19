@@ -52,10 +52,18 @@ class CoordenacaoJuridicaTest {
     
     @Test
     void removeDgAdvogado() {
-        var advogadoDgCoordenacao = addGetAdvogadoDgCoordenacao();
-        model.removeDgAdvogado(advogadoDgCoordenacao);
-        assertThat(model.getDgAdvogados(), not(hasItem(advogadoDgCoordenacao)));
-        assertNull(advogadoDgCoordenacao.getCoordenacao());
+        final var advogado = new Advogado().setId(1L)
+                                           .setCpf("04287724634");
+        final var dgCoordenacao = new AdvogadoDgCoordenacao().setId(1L)
+                                                             .setAdvogado(advogado);
+        final var coordenacao = new CoordenacaoJuridica().setId(1L)
+                                                         .setSigla("FUK")
+                                                         .setNome("Jorel da casa El")
+                                                         .addDgAdvogado(dgCoordenacao);
+        
+        coordenacao.removeDgAdvogado(dgCoordenacao);
+        
+        assertThat(coordenacao.getDgAdvogados(), not(hasItem(dgCoordenacao)));
     }
     
     @Test
