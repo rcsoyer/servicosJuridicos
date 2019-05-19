@@ -4,6 +4,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 import static org.apache.commons.lang3.StringUtils.upperCase;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.collect.ImmutableSet;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -37,7 +38,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @Entity
 @Getter
-@Setter
 @Accessors(chain = true)
 @Table(name = "coordenacao_juridica")
 @EqualsAndHashCode(of = {"id", "sigla", "nome"})
@@ -48,40 +48,45 @@ public class CoordenacaoJuridica implements Serializable {
     private static final long serialVersionUID = 7821224258437788453L;
     
     @Id
+    @Setter
     @SequenceGenerator(name = "sequenceGenerator")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     private Long id;
     
     @NotBlank
     @Size(max = 6)
-    @Setter(AccessLevel.NONE)
     @Column(length = 6, nullable = false, unique = true)
     private String sigla;
     
     @NotBlank
     @Size(max = 50)
-    @Setter(AccessLevel.NONE)
     @Column(length = 50, nullable = false, unique = true)
     private String nome;
     
     @NotBlank
     @Column(length = 3)
-    @Setter(AccessLevel.NONE)
     @Pattern(regexp = "[\\d]{3}")
     private String centena;
     
     @JsonIgnore
+    @Getter(AccessLevel.NONE)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @OneToMany(mappedBy = "coordenacao", cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private Set<AdvogadoDgCoordenacao> dgAdvogados = new HashSet<>(0);
+    private final Set<AdvogadoDgCoordenacao> dgAdvogados;
     
     @NotEmpty
     @ManyToMany
+    @Getter(AccessLevel.NONE)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "coordenacao_juridica_assunto",
         joinColumns = @JoinColumn(name = "coordenacao_juridicas_id", referencedColumnName = "id"),
         inverseJoinColumns = @JoinColumn(name = "assuntos_id", referencedColumnName = "id"))
-    private Set<Assunto> assuntos = new HashSet<>(0);
+    private final Set<Assunto> assuntos;
+    
+    public CoordenacaoJuridica() {
+        this.assuntos = new HashSet<>(0);
+        this.dgAdvogados = new HashSet<>(0);
+    }
     
     public CoordenacaoJuridica setCentena(String centena) {
         this.centena = trimToNull(centena);
@@ -98,25 +103,39 @@ public class CoordenacaoJuridica implements Serializable {
         return this;
     }
     
-    public CoordenacaoJuridica addDgAdvogado(AdvogadoDgCoordenacao advogadoDgCoordenacao) {
+    public CoordenacaoJuridica addDgAdvogado(final AdvogadoDgCoordenacao advogadoDgCoordenacao) {
         dgAdvogados.add(advogadoDgCoordenacao);
         advogadoDgCoordenacao.setCoordenacao(this);
         return this;
     }
     
-    public CoordenacaoJuridica removeDgAdvogado(AdvogadoDgCoordenacao advogadoDgCoordenacao) {
+    public CoordenacaoJuridica removeDgAdvogado(final AdvogadoDgCoordenacao advogadoDgCoordenacao) {
         dgAdvogados.remove(advogadoDgCoordenacao);
         advogadoDgCoordenacao.setCoordenacao(null);
         return this;
     }
     
-    public CoordenacaoJuridica addAssunto(Assunto assunto) {
+    public CoordenacaoJuridica addAssunto(final Assunto assunto) {
         assuntos.add(assunto);
         return this;
     }
     
-    public CoordenacaoJuridica removeAssunto(Assunto assunto) {
+    public CoordenacaoJuridica removeAssunto(final Assunto assunto) {
         assuntos.remove(assunto);
         return this;
+    }
+    
+    /**
+     * Creates a immutable of copy of these assuntos
+     */
+    public Set<Assunto> getAssuntos() {
+        return ImmutableSet.copyOf(assuntos);
+    }
+    
+    /**
+     * Creates a immutable of copy of these advogadoDgCoordenacao
+     */
+    public Set<AdvogadoDgCoordenacao> getDgAdvogados() {
+        return ImmutableSet.copyOf(dgAdvogados);
     }
 }

@@ -1,11 +1,10 @@
 package com.rcsoyer.servicosjuridicos.service.dto;
 
-import static org.apache.commons.lang3.StringUtils.trimToNull;
-
 import java.io.Serializable;
 import java.util.Set;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -35,24 +34,10 @@ public class CoordenacaoJuridicaDTO implements Serializable {
     @Size(max = 50)
     private String nome;
     
-    @Size(min = 3, max = 3)
+    @NotBlank
+    @Pattern(regexp = "[\\d]{3}")
     private String centena;
     
     @NotEmpty
     private Set<AssuntoDTO> assuntos;
-    
-    public CoordenacaoJuridicaDTO setCentena(String centena) {
-        this.centena = trimToNull(centena);
-        return this;
-    }
-    
-    public CoordenacaoJuridicaDTO setSigla(String sigla) {
-        this.sigla = trimToNull(sigla);
-        return this;
-    }
-    
-    public CoordenacaoJuridicaDTO setNome(String nome) {
-        this.nome = trimToNull(nome);
-        return this;
-    }
 }
