@@ -22,41 +22,41 @@ final class AdvDgCoordenacaoRestrictions {
     }
     
     private BooleanExpression extractPredicate() {
-        return Expressions.allOf(dgPessoalInicioRestriction(), dgPessoalFimRestriction(), dgDuplaRestriction(),
-                                 rangeDgCoordenacaoRestriction(), advogadoRestriction(), coordenacaoRestriction());
+        return Expressions.allOf(dgPessoalInicio(), dgPessoalFim(), dgDupla(),
+                                 rangeDgCoordenacao(), advogado(), coordenacao());
     }
     
-    private BooleanExpression dgPessoalInicioRestriction() {
+    private BooleanExpression dgPessoalInicio() {
         return Optional.ofNullable(dgCoordenacao.getDgPessoalInicio())
                        .map(qDgCoordenacao.dgPessoalInicio::eq)
                        .orElse(null);
     }
     
-    private BooleanExpression dgPessoalFimRestriction() {
+    private BooleanExpression dgPessoalFim() {
         return Optional.ofNullable(dgCoordenacao.getDgPessoalFim())
                        .map(qDgCoordenacao.dgPessoalFim::eq)
                        .orElse(null);
     }
     
-    private BooleanExpression dgDuplaRestriction() {
+    private BooleanExpression dgDupla() {
         return Optional.ofNullable(dgCoordenacao.getDgDupla())
                        .map(qDgCoordenacao.dgDupla::eq)
                        .orElse(null);
     }
     
-    private BooleanExpression rangeDgCoordenacaoRestriction() {
+    private BooleanExpression rangeDgCoordenacao() {
         return Optional.ofNullable(dgCoordenacao.getRangeDgCoordenacao())
                        .map(qDgCoordenacao.rangeDgCoordenacao::eq)
                        .orElse(null);
     }
     
-    private BooleanExpression advogadoRestriction() {
+    private BooleanExpression advogado() {
         return Optional.ofNullable(dgCoordenacao.getAdvogado())
                        .map(qDgCoordenacao.advogado::eq)
                        .orElse(null);
     }
     
-    private BooleanExpression coordenacaoRestriction() {
+    private BooleanExpression coordenacao() {
         return Optional.ofNullable(dgCoordenacao.getCoordenacao())
                        .map(qDgCoordenacao.coordenacao::eq)
                        .orElse(null);

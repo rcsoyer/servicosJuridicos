@@ -35,8 +35,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Accessors(chain = true)
 @EqualsAndHashCode(of = {"id", "advogado", "coordenacao"})
 @Table(name = "advogado_dg_coordenacao", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"dg_pessoal_inicio", "dg_pessoal_fim", "coordenacaoId"}),
-    @UniqueConstraint(columnNames = {"advogadoId", "coordenacaoId"})
+    @UniqueConstraint(columnNames = {"dg_pessoal_inicio", "dg_pessoal_fim", "coordenacao_id"}),
+    @UniqueConstraint(columnNames = {"advogado_id", "coordenacao_id"})
 })
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public final class AdvogadoDgCoordenacao implements Serializable {
@@ -72,12 +72,10 @@ public final class AdvogadoDgCoordenacao implements Serializable {
     
     @NotNull
     @ManyToOne(optional = false)
-    @JoinColumn(name = "advogadoId")
     private Advogado advogado;
     
     @NotNull
     @ManyToOne(optional = false)
-    @JoinColumn(name = "coordenacaoId")
     private CoordenacaoJuridica coordenacao;
     
 }

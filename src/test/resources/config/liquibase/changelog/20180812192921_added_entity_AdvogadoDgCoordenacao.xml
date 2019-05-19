@@ -59,4 +59,23 @@
         <modifyDataType tableName="advogado_dg_coordenacao" columnName="dg_dupla"
             newDataType="int"/>
     </changeSet>
+
+    <changeSet author="rcsoyer" id="20180812192921-3">
+        <addUniqueConstraint
+            columnNames="dg_pessoal_inicio, dg_pessoal_fim, coordenacao_id"
+            deferrable="true"
+            disabled="false"
+            initiallyDeferred="true"
+            tableName="advogado_dg_coordenacao"/>
+    </changeSet>
+
+    <changeSet author="rcsoyer" id="20180812192921-4">
+        <addUniqueConstraint
+            columnNames="advogado_id, coordenacao_id"
+            deferrable="true"
+            disabled="false"
+            initiallyDeferred="true"
+            tableName="advogado_dg_coordenacao"/>
+    </changeSet>
+
 </databaseChangeLog>
