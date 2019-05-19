@@ -3,6 +3,7 @@ package com.rcsoyer.servicosjuridicos.web.rest;
 import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityCreationAlert;
 import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityDeletionAlert;
 import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityUpdateAlert;
+import static com.rcsoyer.servicosjuridicos.web.rest.util.PaginationUtil.generatePaginationHttpHeaders;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
@@ -15,11 +16,13 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -107,6 +110,18 @@ public class AdvogadoDgCoordenacaoResource {
         return ResponseEntity.ok()
                              .headers(entityDeletionAlert(ENTITY_NAME, id.toString()))
                              .build();
+    }
+    
+    @Timed
+    @GetMapping
+    @ApiOperation("Get a paginated list of AdvogadoDgCoordenacao matching the supplied query parameters and pagination information")
+    public ResponseEntity<List<AdvogadoDgCoordenacaoDTO>> getByParams(
+        final AdvogadoDgCoordenacaoDTO dto, final Pageable pageable) {
+        log.debug("REST request to get a page of AdvogadoDgCoordenacao by input params");
+        final var page = service.seekByParams(dto, pageable);
+        return ResponseEntity.ok()
+                             .headers(generatePaginationHttpHeaders(page, "/api/advogado"))
+                             .body(page.getContent());
     }
     
     private Supplier<BadRequestAlertException> badRequestHasIdOnCreation() {

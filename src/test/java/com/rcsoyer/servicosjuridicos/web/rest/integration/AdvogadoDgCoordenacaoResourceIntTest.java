@@ -2,6 +2,7 @@ package com.rcsoyer.servicosjuridicos.web.rest.integration;
 
 import static com.rcsoyer.servicosjuridicos.domain.enumeration.RangeDgCoordenacao.INCLUSIVE;
 import static com.rcsoyer.servicosjuridicos.web.rest.TestUtil.convertObjectToJsonBytes;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -155,9 +156,32 @@ class AdvogadoDgCoordenacaoResourceIntTest extends ApiConfigTest {
     void deleteAdvogadoDgCoordenacao() throws Exception {
         final var dto = dgCoordenacaoService.save(newDgCoordenacaoDTO());
         
-        mockMvc.perform(delete(URL_DGCOORDENACAO_API + "/{id}", dto.getId().toString())
+        mockMvc.perform(delete(URL_DGCOORDENACAO_API + "/{id}", dto.getId())
                             .contentType(MediaType.APPLICATION_JSON_UTF8))
                .andExpect(status().isOk());
+    }
+    
+    @Test
+    void getByParams() throws Exception {
+        final var dto = dgCoordenacaoService.save(newDgCoordenacaoDTO());
+        dgCoordenacaoService.save(newDgCoordenacaoDTO2());
+        
+        mockMvc.perform(get(URL_DGCOORDENACAO_API)
+                            .param("advogado", dto.getAdvogado().toString())
+                            .param("coordenacao", dto.getCoordenacao().toString())
+                            .param("dgDupla", dto.getDgDupla().toString())
+                            .param("dgPessoalInicio", dto.getDgPessoalInicio().toString())
+                            .param("dgPessoalFim", dto.getDgPessoalFim().toString())
+                            .param("rangeDgCoordenacao", dto.getRangeDgCoordenacao().name())
+                            .contentType(MediaType.APPLICATION_JSON_UTF8))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$", hasSize(1)))
+               .andExpect(jsonPath("$.[0].id").value(dto.getId()))
+               .andExpect(jsonPath("$.[0].advogado").value(dto.getAdvogado()))
+               .andExpect(jsonPath("$.[0].coordenacao").value(dto.getCoordenacao()))
+               .andExpect(jsonPath("$.[0].dgDupla").value(dto.getDgDupla()))
+               .andExpect(jsonPath("$.[0].dgPessoalInicio").value(dto.getDgPessoalInicio()))
+               .andExpect(jsonPath("$.[0].rangeDgCoordenacao").value(dto.getRangeDgCoordenacao().name()));
     }
     
     private AdvogadoDgCoordenacaoDTO newDgCoordenacaoDTO() {
@@ -166,6 +190,30 @@ class AdvogadoDgCoordenacaoResourceIntTest extends ApiConfigTest {
                                              .setDgDupla(3)
                                              .setDgPessoalFim(4)
                                              .setDgPessoalInicio(5)
+                                             .setRangeDgCoordenacao(INCLUSIVE);
+    }
+    
+    private AdvogadoDgCoordenacaoDTO newDgCoordenacaoDTO2() {
+        final var advogado = advogadoService.save(new AdvogadoDTO().setCpf("73291542100")
+                                                                   .setNome("Charles the mingus")
+                                                                   .setRamal(666));
+        
+        final var assunto = assuntoService.save(new AssuntoDTO()
+                                                    .setDescricao("good bye and thank you for the fish")
+                                                    .setAtivo(Boolean.FALSE)
+                                                    .setPeso(5));
+        
+        final var coordenacaoJuridica = coordenacaoJuridicaService.save(new CoordenacaoJuridicaDTO()
+                                                                            .setAssuntos(Set.of(assunto))
+                                                                            .setCentena("008")
+                                                                            .setNome("Coordenacao na via láctea")
+                                                                            .setSigla("LAC"));
+        
+        return new AdvogadoDgCoordenacaoDTO().setAdvogado(advogado.getId())
+                                             .setCoordenacao(coordenacaoJuridica.getId())
+                                             .setDgDupla(7)
+                                             .setDgPessoalFim(0)
+                                             .setDgPessoalInicio(1)
                                              .setRangeDgCoordenacao(INCLUSIVE);
     }
 }
