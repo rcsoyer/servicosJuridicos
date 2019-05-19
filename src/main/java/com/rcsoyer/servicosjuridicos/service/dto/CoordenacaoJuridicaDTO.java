@@ -2,10 +2,9 @@ package com.rcsoyer.servicosjuridicos.service.dto;
 
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.Set;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
@@ -19,20 +18,20 @@ import lombok.experimental.Accessors;
  */
 @Getter
 @Setter
+@ToString
 @Accessors(chain = true)
-@EqualsAndHashCode(of = "id")
-@ToString(exclude = "assuntos")
+@EqualsAndHashCode(of = {"id", "nome", "sigla"})
 public class CoordenacaoJuridicaDTO implements Serializable {
     
     private static final long serialVersionUID = 6494069770673909164L;
     
     private Long id;
     
-    @NotEmpty
+    @NotBlank
     @Size(max = 6)
     private String sigla;
     
-    @NotEmpty
+    @NotBlank
     @Size(max = 50)
     private String nome;
     
@@ -41,11 +40,6 @@ public class CoordenacaoJuridicaDTO implements Serializable {
     
     @NotEmpty
     private Set<AssuntoDTO> assuntos;
-    
-    @JsonCreator
-    public static CoordenacaoJuridicaDTO of(String json) throws IOException {
-        return JsonConverter.readValue(json, CoordenacaoJuridicaDTO.class);
-    }
     
     public CoordenacaoJuridicaDTO setCentena(String centena) {
         this.centena = trimToNull(centena);
