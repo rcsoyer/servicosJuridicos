@@ -12,7 +12,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface AdvogadoMapper extends EntityMapper<AdvogadoDTO, Advogado> {
     
-    @Mapping(target = "processos", ignore = true)
     @Mapping(target = "feriasLicencas", ignore = true)
     @Mapping(target = "dgCoordenacoes", ignore = true)
     Advogado toEntity(AdvogadoDTO advogadoDTO);
