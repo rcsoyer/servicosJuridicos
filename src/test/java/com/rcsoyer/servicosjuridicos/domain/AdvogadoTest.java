@@ -20,21 +20,6 @@ class AdvogadoTest {
     }
     
     @Test
-    void setProcessos_notTheSameList() {
-        var processoJudicial1 = new ProcessoJudicial().setId(1L);
-        var processsos = new HashSet<ProcessoJudicial>(3);
-        processsos.add(processoJudicial1);
-        processsos.add(new ProcessoJudicial().setId(2L));
-        processsos.add(new ProcessoJudicial().setId(3L));
-        
-        processsos.forEach(advogado::addProcesso);
-        
-        processsos.remove(processoJudicial1);
-        
-        assertFalse(processsos.containsAll(advogado.getProcessos()));
-    }
-    
-    @Test
     void setFeriasLicencas_notTheSameList() {
         var feriasLicenca1 = new FeriasLicenca().setId(1L);
         var feriasLicencas = new HashSet<FeriasLicenca>(3);
@@ -79,12 +64,6 @@ class AdvogadoTest {
     }
     
     @Test
-    void getProcessos() {
-        assertThrows(UnsupportedOperationException.class,
-                     () -> advogado.getProcessos().remove(new ProcessoJudicial().setId(1L)));
-    }
-    
-    @Test
     void getFeriasLicencas() {
         assertThrows(UnsupportedOperationException.class,
                      () -> advogado.getFeriasLicencas().remove(new FeriasLicenca().setId(1L)));
@@ -94,25 +73,6 @@ class AdvogadoTest {
     void getDgCoordenacoes() {
         assertThrows(UnsupportedOperationException.class,
                      () -> advogado.getDgCoordenacoes().remove(new AdvogadoDgCoordenacao().setId(1L)));
-    }
-    
-    @Test
-    void addProcesso() {
-        var processo = new ProcessoJudicial().setId(1L);
-        advogado.addProcesso(processo);
-        
-        assertTrue(advogado.getProcessos().contains(processo));
-        assertEquals(advogado, processo.getAdvogado());
-    }
-    
-    @Test
-    void removeProcesso() {
-        var processo = new ProcessoJudicial().setId(1L);
-        advogado.addProcesso(processo);
-        advogado.removeProcesso(processo);
-        
-        assertFalse(advogado.getProcessos().contains(processo));
-        assertNull(processo.getAdvogado());
     }
     
     @Test
@@ -145,7 +105,9 @@ class AdvogadoTest {
     
     @Test
     void removeDgCoordenacao() {
-        var dgCoordenacao = new AdvogadoDgCoordenacao().setId(1L);
+        var dgCoordenacao = new AdvogadoDgCoordenacao().setId(1L)
+                                                       .setAdvogado(new Advogado().setId(1L))
+                                                       .setCoordenacao(new CoordenacaoJuridica().setId(1L));
         advogado.addDgCoordenacao(dgCoordenacao);
         advogado.removeDgCoordenacao(dgCoordenacao);
         

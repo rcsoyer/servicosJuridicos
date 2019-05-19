@@ -37,7 +37,7 @@ import org.hibernate.validator.constraints.br.CPF;
 @Table(name = "advogado")
 @EqualsAndHashCode(of = {"id", "cpf"})
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@ToString(exclude = {"processos", "feriasLicencas", "dgCoordenacoes"})
+@ToString(exclude = {"feriasLicencas", "dgCoordenacoes"})
 public final class Advogado implements Serializable {
     
     private static final long serialVersionUID = 1619909263889107243L;
@@ -68,11 +68,6 @@ public final class Advogado implements Serializable {
     private Integer ramal;
     
     @JsonIgnore
-    @OneToMany(mappedBy = "advogado", fetch = FetchType.LAZY)
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private final Set<ProcessoJudicial> processos;
-    
-    @JsonIgnore
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @OneToMany(mappedBy = "advogado", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private final Set<FeriasLicenca> feriasLicencas;
@@ -83,7 +78,6 @@ public final class Advogado implements Serializable {
     private final Set<AdvogadoDgCoordenacao> dgCoordenacoes;
     
     public Advogado() {
-        this.processos = new HashSet<>(0);
         this.dgCoordenacoes = new HashSet<>(0);
         this.feriasLicencas = new HashSet<>(0);
     }
@@ -96,13 +90,6 @@ public final class Advogado implements Serializable {
     public Advogado setCpf(String cpf) {
         this.cpf = trimToNull(cpf);
         return this;
-    }
-    
-    /**
-     * Unmodifiable view of these processos
-     */
-    public Set<ProcessoJudicial> getProcessos() {
-        return ImmutableSet.copyOf(processos);
     }
     
     /**
@@ -119,37 +106,25 @@ public final class Advogado implements Serializable {
         return ImmutableSet.copyOf(dgCoordenacoes);
     }
     
-    public Advogado addProcesso(final ProcessoJudicial processo) {
-        processos.add(processo);
-        processo.setAdvogado(this);
-        return this;
-    }
-    
-    public Advogado removeProcesso(ProcessoJudicial processoJudicial) {
-        processos.remove(processoJudicial);
-        processoJudicial.setAdvogado(null);
-        return this;
-    }
-    
-    public Advogado addFeriasLicenca(FeriasLicenca feriasLicenca) {
+    public Advogado addFeriasLicenca(final FeriasLicenca feriasLicenca) {
         feriasLicencas.add(feriasLicenca);
         feriasLicenca.setAdvogado(this);
         return this;
     }
     
-    public Advogado removeFeriasLicenca(FeriasLicenca feriasLicenca) {
+    public Advogado removeFeriasLicenca(final FeriasLicenca feriasLicenca) {
         feriasLicencas.remove(feriasLicenca);
         feriasLicenca.setAdvogado(null);
         return this;
     }
     
-    public Advogado addDgCoordenacao(AdvogadoDgCoordenacao advogadoDgCoordenacao) {
+    public Advogado addDgCoordenacao(final AdvogadoDgCoordenacao advogadoDgCoordenacao) {
         dgCoordenacoes.add(advogadoDgCoordenacao);
         advogadoDgCoordenacao.setAdvogado(this);
         return this;
     }
     
-    public Advogado removeDgCoordenacao(AdvogadoDgCoordenacao advogadoDgCoordenacao) {
+    public Advogado removeDgCoordenacao(final AdvogadoDgCoordenacao advogadoDgCoordenacao) {
         dgCoordenacoes.remove(advogadoDgCoordenacao);
         advogadoDgCoordenacao.setAdvogado(null);
         return this;
