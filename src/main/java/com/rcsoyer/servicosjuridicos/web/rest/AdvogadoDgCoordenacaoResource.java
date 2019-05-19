@@ -101,7 +101,7 @@ public class AdvogadoDgCoordenacaoResource {
     @Timed
     @DeleteMapping("/{id}")
     @ApiOperation("Delete an AdvogadoDgCoordenacao matching the given id")
-    public ResponseEntity<Void> delete(@PathVariable @Valid @Min(1L) Long id) {
+    public ResponseEntity<Void> deleteAdvogadoDgCoordenacao(@PathVariable @Valid @Min(1L) Long id) {
         log.info("REST request to delete AdvogadoDgCoordenacao: {}", id);
         service.delete(id);
         return ResponseEntity.ok()

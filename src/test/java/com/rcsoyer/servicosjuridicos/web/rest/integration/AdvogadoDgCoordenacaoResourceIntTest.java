@@ -2,6 +2,8 @@ package com.rcsoyer.servicosjuridicos.web.rest.integration;
 
 import static com.rcsoyer.servicosjuridicos.domain.enumeration.RangeDgCoordenacao.INCLUSIVE;
 import static com.rcsoyer.servicosjuridicos.web.rest.TestUtil.convertObjectToJsonBytes;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -33,6 +35,8 @@ class AdvogadoDgCoordenacaoResourceIntTest extends ApiConfigTest {
     private static final String URL_DGCOORDENACAO_API = "/api/advogado-dg-coordenacao";
     
     private MockMvc mockMvc;
+    private AdvogadoDTO advogado;
+    private CoordenacaoJuridicaDTO coordenacaoJuridica;
     
     @Autowired
     private AssuntoService assuntoService;
@@ -46,8 +50,6 @@ class AdvogadoDgCoordenacaoResourceIntTest extends ApiConfigTest {
     @Autowired
     private AdvogadoDgCoordenacaoService dgCoordenacaoService;
     
-    private AdvogadoDTO advogado;
-    private CoordenacaoJuridicaDTO coordenacaoJuridica;
     
     @BeforeAll
     void setUp() {
@@ -72,7 +74,6 @@ class AdvogadoDgCoordenacaoResourceIntTest extends ApiConfigTest {
                                                                        .setCentena("532")
                                                                        .setNome("Coordenacao que nao precisamos")
                                                                        .setSigla("FUK"));
-        
     }
     
     @Test
@@ -121,6 +122,42 @@ class AdvogadoDgCoordenacaoResourceIntTest extends ApiConfigTest {
                .andExpect(jsonPath("$.dgDupla").value(dto.getDgDupla()))
                .andExpect(jsonPath("$.dgPessoalInicio").value(dto.getDgPessoalInicio()))
                .andExpect(jsonPath("$.rangeDgCoordenacao").value(dto.getRangeDgCoordenacao().name()));
+    }
+    
+    @Test
+    void create_withoutId() throws Exception {
+        final var dto = newDgCoordenacaoDTO();
+        
+        mockMvc.perform(put(URL_DGCOORDENACAO_API)
+                            .contentType(MediaType.APPLICATION_JSON_UTF8)
+                            .content(convertObjectToJsonBytes(dto)))
+               .andExpect(status().isBadRequest());
+    }
+    
+    @Test
+    void getAdvogadoDgCoordenacao_ok() throws Exception {
+        final var dto = dgCoordenacaoService.save(newDgCoordenacaoDTO());
+        
+        mockMvc.perform(get(URL_DGCOORDENACAO_API + "/{id}", dto.getId())
+                            .contentType(MediaType.APPLICATION_JSON_UTF8))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.id").value(dto.getId()));
+    }
+    
+    @Test
+    void getAdvogadoDgCoordenacao_notFound() throws Exception {
+        mockMvc.perform(get(URL_DGCOORDENACAO_API + "/{id}", 666L)
+                            .contentType(MediaType.APPLICATION_JSON_UTF8))
+               .andExpect(status().isNotFound());
+    }
+    
+    @Test
+    void deleteAdvogadoDgCoordenacao() throws Exception {
+        final var dto = dgCoordenacaoService.save(newDgCoordenacaoDTO());
+        
+        mockMvc.perform(delete(URL_DGCOORDENACAO_API + "/{id}", dto.getId().toString())
+                            .contentType(MediaType.APPLICATION_JSON_UTF8))
+               .andExpect(status().isOk());
     }
     
     private AdvogadoDgCoordenacaoDTO newDgCoordenacaoDTO() {
