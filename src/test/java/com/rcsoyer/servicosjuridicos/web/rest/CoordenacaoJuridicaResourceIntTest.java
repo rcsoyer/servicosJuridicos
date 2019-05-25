@@ -1,13 +1,8 @@
 package com.rcsoyer.servicosjuridicos.web.rest;
 
 import static com.rcsoyer.servicosjuridicos.web.rest.TestUtil.createFormattingConversionService;
-import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -19,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.rcsoyer.servicosjuridicos.ServicosJuridicosApp;
 import com.rcsoyer.servicosjuridicos.domain.Assunto;
 import com.rcsoyer.servicosjuridicos.domain.CoordenacaoJuridica;
-import com.rcsoyer.servicosjuridicos.repository.coordenacao.CoordenacaoJuridicaRepository;
+import com.rcsoyer.servicosjuridicos.repository.CoordenacaoJuridicaRepository;
 import com.rcsoyer.servicosjuridicos.service.CoordenacaoJuridicaService;
 import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoJuridicaDTO;
 import com.rcsoyer.servicosjuridicos.service.mapper.CoordenacaoJuridicaMapper;
@@ -33,8 +28,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -227,43 +220,6 @@ public class CoordenacaoJuridicaResourceIntTest {
                                       .andExpect(jsonPath("$.[*].sigla").value(hasItem(DEFAULT_SIGLA)))
                                       .andExpect(jsonPath("$.[*].nome").value(hasItem(DEFAULT_NOME)))
                                       .andExpect(jsonPath("$.[*].centena").value(hasItem(DEFAULT_CENTENA)));
-    }
-    
-    public void getAllCoordenacaoJuridicasWithEagerRelationshipsIsEnabled() throws Exception {
-        CoordenacaoJuridicaResource coordenacaoJuridicaResource =
-            new CoordenacaoJuridicaResource(coordenacaoJuridicaServiceMock);
-        when(coordenacaoJuridicaServiceMock.findAllWithEagerRelationships(any(Pageable.class)))
-            .thenReturn(new PageImpl<>(emptyList()));
-        
-        MockMvc restCoordenacaoJuridicaMockMvc =
-            MockMvcBuilders.standaloneSetup(coordenacaoJuridicaResource)
-                           .setCustomArgumentResolvers(pageableArgumentResolver)
-                           .setControllerAdvice(exceptionTranslator)
-                           .setConversionService(createFormattingConversionService())
-                           .setMessageConverters(jacksonMessageConverter).build();
-        
-        restCoordenacaoJuridicaMockMvc.perform(get("/api/coordenacao-juridicas?eagerload=true"))
-                                      .andExpect(status().isOk());
-        
-        verify(coordenacaoJuridicaServiceMock, times(1)).findAllWithEagerRelationships(any());
-    }
-    
-    public void getAllCoordenacaoJuridicasWithEagerRelationshipsIsNotEnabled() throws Exception {
-        CoordenacaoJuridicaResource coordenacaoJuridicaResource =
-            new CoordenacaoJuridicaResource(coordenacaoJuridicaServiceMock);
-        when(coordenacaoJuridicaServiceMock.findAllWithEagerRelationships(any()))
-            .thenReturn(new PageImpl<>(emptyList()));
-        MockMvc restCoordenacaoJuridicaMockMvc =
-            MockMvcBuilders.standaloneSetup(coordenacaoJuridicaResource)
-                           .setCustomArgumentResolvers(pageableArgumentResolver)
-                           .setControllerAdvice(exceptionTranslator)
-                           .setConversionService(createFormattingConversionService())
-                           .setMessageConverters(jacksonMessageConverter).build();
-        
-        restCoordenacaoJuridicaMockMvc.perform(get("/api/coordenacao-juridicas?eagerload=true"))
-                                      .andExpect(status().isOk());
-        
-        verify(coordenacaoJuridicaServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
     
     @Test

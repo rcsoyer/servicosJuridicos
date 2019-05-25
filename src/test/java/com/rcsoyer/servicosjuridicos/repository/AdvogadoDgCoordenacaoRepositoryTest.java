@@ -9,7 +9,6 @@ import com.rcsoyer.servicosjuridicos.domain.Advogado;
 import com.rcsoyer.servicosjuridicos.domain.AdvogadoDgCoordenacao;
 import com.rcsoyer.servicosjuridicos.domain.Assunto;
 import com.rcsoyer.servicosjuridicos.domain.CoordenacaoJuridica;
-import com.rcsoyer.servicosjuridicos.repository.coordenacao.CoordenacaoJuridicaRepository;
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -40,8 +39,11 @@ class AdvogadoDgCoordenacaoRepositoryTest extends RepositoryConfigTest {
     
     @BeforeAll
     void setUp() {
-        final var assunto = new Assunto().setPeso(2).setDescricao("magic and dark entries").setAtivo(true);
-        this.advogado = new Advogado().setCpf("74726571583").setNome("Matt Murdock");
+        final var assunto = new Assunto().setPeso(2)
+                                         .setDescricao("magic and dark entries")
+                                         .setAtivo(true);
+        this.advogado = new Advogado().setCpf("74726571583")
+                                      .setNome("Matt Murdock");
         this.coordenacaoJuridica = new CoordenacaoJuridica().setNome("Seven thrones of hell")
                                                             .setSigla("FLOYD")
                                                             .setCentena("424")

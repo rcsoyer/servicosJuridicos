@@ -4,50 +4,58 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.ArrayList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class CoordenacaoJuridicaTest {
     
-    private CoordenacaoJuridica model;
+    private CoordenacaoJuridica coordenacao;
     
     @BeforeEach
     void setUp() {
-        this.model = new CoordenacaoJuridica().setId(1L);
+        this.coordenacao = new CoordenacaoJuridica().setId(1L);
     }
     
     @Test
     void setCentena() {
-        model.setCentena(" ");
-        assertNull(model.getCentena());
+        coordenacao.setCentena(" ");
+        
+        assertNull(coordenacao.getCentena());
     }
     
     @Test
     void setSigla_trimToNull() {
-        model.setSigla(" ");
-        assertNull(model.getSigla());
+        coordenacao.setSigla(" ");
+        
+        assertNull(coordenacao.getSigla());
     }
     
     @Test
     void setSigla_toTrimUpperCase() {
-        model.setSigla("abc ");
-        assertEquals(model.getSigla(), "ABC");
+        coordenacao.setSigla("abc ");
+        
+        assertEquals(coordenacao.getSigla(), "ABC");
     }
     
     @Test
     void setNome() {
-        model.setNome(" ");
-        assertNull(model.getNome());
+        coordenacao.setNome(" ");
+        
+        assertNull(coordenacao.getNome());
     }
     
     @Test
     void addDgAdvogado() {
         var advogadoDgCoordenacao = addGetAdvogadoDgCoordenacao();
-        var actualAdvogado = model.getDgAdvogados().stream().findFirst().get();
+        var actualAdvogado = coordenacao.getDgAdvogados().stream().findFirst().get();
+        
         assertEquals(advogadoDgCoordenacao, actualAdvogado);
-        assertEquals(advogadoDgCoordenacao.getCoordenacao(), model);
+        assertEquals(advogadoDgCoordenacao.getCoordenacao(), coordenacao);
     }
     
     @Test
@@ -69,26 +77,61 @@ class CoordenacaoJuridicaTest {
     @Test
     void addAssunto() {
         var assunto = addGetAssunto();
-        var actualAssunto = model.getAssuntos().stream().findFirst().get();
+        var actualAssunto = coordenacao.getAssuntos().stream().findFirst().get();
+        
         assertEquals(assunto, actualAssunto);
     }
     
     @Test
     void removeAssunto() {
         var assunto = addGetAssunto();
-        model.removeAssunto(assunto);
-        assertThat(model.getAssuntos(), not(hasItem(assunto)));
+        coordenacao.removeAssunto(assunto);
+        
+        assertThat(coordenacao.getAssuntos(), not(hasItem(assunto)));
+    }
+    
+    @Test
+    void getAssuntos() {
+        final var assuntos = new ArrayList<Assunto>(3);
+        final var assunto1 = new Assunto().setId(1L);
+        assuntos.add(assunto1);
+        assuntos.add(new Assunto().setId(2L));
+        assuntos.add(new Assunto().setId(3L));
+        
+        assuntos.forEach(coordenacao::addAssunto);
+        
+        assertThrows(UnsupportedOperationException.class, () -> coordenacao.getAssuntos().remove(assunto1));
+        
+        assuntos.remove(assunto1);
+        assertFalse(assuntos.containsAll(coordenacao.getAssuntos()));
+    }
+    
+    @Test
+    void getDgAdvogados() {
+        final var advogadosDgCoordenacoes = new ArrayList<AdvogadoDgCoordenacao>(3);
+        final var advogadoDgCoordenacao1 = new AdvogadoDgCoordenacao().setId(1L);
+        advogadosDgCoordenacoes.add(advogadoDgCoordenacao1);
+        advogadosDgCoordenacoes.add(new AdvogadoDgCoordenacao().setId(2L));
+        advogadosDgCoordenacoes.add(new AdvogadoDgCoordenacao().setId(3L));
+        
+        advogadosDgCoordenacoes.forEach(coordenacao::addDgAdvogado);
+        
+        assertThrows(UnsupportedOperationException.class,
+                     () -> coordenacao.getDgAdvogados().remove(advogadoDgCoordenacao1));
+        
+        advogadosDgCoordenacoes.remove(advogadoDgCoordenacao1);
+        assertFalse(advogadosDgCoordenacoes.containsAll(coordenacao.getDgAdvogados()));
     }
     
     private AdvogadoDgCoordenacao addGetAdvogadoDgCoordenacao() {
         var advogadoDgCoordenacao = new AdvogadoDgCoordenacao().setId(1L);
-        model.addDgAdvogado(advogadoDgCoordenacao);
+        coordenacao.addDgAdvogado(advogadoDgCoordenacao);
         return advogadoDgCoordenacao;
     }
     
     private Assunto addGetAssunto() {
         var assunto = new Assunto().setId(1L);
-        model.addAssunto(assunto);
+        coordenacao.addAssunto(assunto);
         return assunto;
     }
 }
