@@ -1,6 +1,7 @@
 package com.rcsoyer.servicosjuridicos.domain;
 
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -9,6 +10,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
+import java.util.Set;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -121,6 +125,19 @@ class CoordenacaoJuridicaTest {
         
         advogadosDgCoordenacoes.remove(advogadoDgCoordenacao1);
         assertFalse(advogadosDgCoordenacoes.containsAll(coordenacao.getDgAdvogados()));
+    }
+    
+    @Test
+    void testCentenaPattern() {
+        var validator = Validation.buildDefaultValidatorFactory().getValidator();
+        var coordenacao = new CoordenacaoJuridica().setCentena("00")
+                                                   .setSigla("42")
+                                                   .setNome("Doom")
+                                                   .addAssunto(new Assunto().setId(1L));
+        
+        Set<ConstraintViolation<CoordenacaoJuridica>> violations = validator.validate(coordenacao);
+        
+        assertThat(violations, hasSize(1));
     }
     
     private AdvogadoDgCoordenacao addGetAdvogadoDgCoordenacao() {
