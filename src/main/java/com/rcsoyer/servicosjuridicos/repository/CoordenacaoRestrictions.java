@@ -1,12 +1,14 @@
 package com.rcsoyer.servicosjuridicos.repository;
 
+import static java.util.function.Predicate.not;
+
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.rcsoyer.servicosjuridicos.domain.CoordenacaoJuridica;
 import com.rcsoyer.servicosjuridicos.domain.QCoordenacaoJuridica;
 import java.util.Optional;
-import org.apache.commons.collections4.CollectionUtils;
+import java.util.Set;
 
 /**
  * @author rcsoyer
@@ -44,7 +46,7 @@ final class CoordenacaoRestrictions {
     
     private BooleanExpression assuntosRestriction() {
         return Optional.ofNullable(coordenacao.getAssuntos())
-                       .filter(CollectionUtils::isNotEmpty)
+                       .filter(not(Set::isEmpty))
                        .map(qCoordenacao.assuntos.any()::in)
                        .orElse(null);
     }

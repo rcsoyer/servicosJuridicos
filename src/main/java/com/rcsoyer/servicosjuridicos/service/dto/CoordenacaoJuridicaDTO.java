@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @Setter
 @ToString
 @Accessors(chain = true)
-@EqualsAndHashCode(of = {"id", "nome", "sigla"})
+@EqualsAndHashCode(of = {"id"})
 public class CoordenacaoJuridicaDTO implements Serializable {
     
     private static final long serialVersionUID = 6494069770673909164L;

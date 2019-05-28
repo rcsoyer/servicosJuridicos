@@ -48,5 +48,19 @@
         <addPrimaryKey columnNames="coordenacao_juridicas_id, assuntos_id" tableName="coordenacao_juridica_assunto"/>
         
     </changeSet>
+
+    <changeSet author="rcsoyer" id="20190528-2">
+        <addUniqueConstraint columnNames="sigla"
+            constraintName="uniq_sigla"
+            deferrable="false"
+            initiallyDeferred="false"
+            tableName="coordenacao_juridica" />
+
+        <addUniqueConstraint columnNames="nome"
+            constraintName="uniq_nome"
+            deferrable="false"
+            initiallyDeferred="false"
+            tableName="coordenacao_juridica" />
+    </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>
