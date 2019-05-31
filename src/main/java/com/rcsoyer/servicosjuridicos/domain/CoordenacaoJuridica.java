@@ -6,6 +6,7 @@ import static org.apache.commons.lang3.StringUtils.upperCase;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.ImmutableSet;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -39,8 +40,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Getter
 @Accessors(chain = true)
-@EqualsAndHashCode(of = {"id"})
 @Table(name = "coordenacao_juridica")
+@EqualsAndHashCode(of = {"id", "sigla", "nome"})
 @ToString(exclude = {"dgAdvogados", "assuntos"})
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class CoordenacaoJuridica implements Serializable {
@@ -117,6 +118,11 @@ public class CoordenacaoJuridica implements Serializable {
     
     public CoordenacaoJuridica addAssunto(final Assunto assunto) {
         assuntos.add(assunto);
+        return this;
+    }
+    
+    public CoordenacaoJuridica addAssuntos(final Collection<Assunto> assuntos) {
+        this.assuntos.addAll(assuntos);
         return this;
     }
     
