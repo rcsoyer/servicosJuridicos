@@ -41,8 +41,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Getter
 @Accessors(chain = true)
 @Table(name = "coordenacao_juridica")
-@EqualsAndHashCode(of = {"id"})
-@ToString(exclude = {"dgAdvogados", "assuntos"})
+@EqualsAndHashCode(of = {"id", "sigla", "nome"})
+@ToString(exclude = {"dgAdvogados", "assuntos", "nome"})
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class CoordenacaoJuridica implements Serializable {
     
