@@ -2,6 +2,7 @@ package com.rcsoyer.servicosjuridicos.service.mapper;
 
 import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.rcsoyer.servicosjuridicos.domain.Assunto;
@@ -54,6 +55,29 @@ class CoordenacaoJuridicaMapperTest {
                      assertEquals(dto.getDescricao(), assunto.getDescricao());
                      assertEquals(dto.getPeso(), assunto.getPeso());
                  });
+    }
+    
+    @Test
+    void toEntityWithAssuntosIds() {
+        CoordenacaoJuridicaDTO coordenacaoJuridicaDto = new CoordenacaoJuridicaDTO()
+                                                            .setId(1L)
+                                                            .setCentena("423")
+                                                            .setNome("Lack of coodernation")
+                                                            .setSigla("OCU")
+                                                            .setAssuntosIds(Set.of(1L, 2L));
+        final var coordenacaoJuridica = mapper.toEntityWithAssuntosIds(coordenacaoJuridicaDto);
+        
+        assertEquals(coordenacaoJuridicaDto.getId(), coordenacaoJuridica.getId());
+        assertEquals(coordenacaoJuridicaDto.getCentena(), coordenacaoJuridica.getCentena());
+        assertEquals(coordenacaoJuridicaDto.getNome(), coordenacaoJuridica.getNome());
+        assertEquals(coordenacaoJuridicaDto.getSigla(), coordenacaoJuridica.getSigla());
+        
+        final Set<Long> assuntos = coordenacaoJuridica.getAssuntos()
+                                                      .stream()
+                                                      .map(Assunto::getId)
+                                                      .collect(toSet());
+        
+        assertEquals(coordenacaoJuridicaDto.getAssuntosIds(), assuntos);
     }
     
     @Test

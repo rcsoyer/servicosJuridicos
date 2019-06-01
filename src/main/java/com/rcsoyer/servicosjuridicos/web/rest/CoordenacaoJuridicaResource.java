@@ -8,8 +8,10 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 import com.codahale.metrics.annotation.Timed;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.rcsoyer.servicosjuridicos.service.CoordenacaoJuridicaService;
 import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoJuridicaDTO;
+import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoJuridicaDTO.AssuntoViews;
 import com.rcsoyer.servicosjuridicos.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.web.util.ResponseUtil;
 import io.swagger.annotations.ApiOperation;
@@ -52,6 +54,7 @@ public class CoordenacaoJuridicaResource {
     
     @Timed
     @PostMapping
+    @JsonView(AssuntoViews.CreateUpdate.class)
     @ApiOperation(value = "Create a new CoordenacaoJuridica", response = CoordenacaoJuridicaDTO.class)
     @ApiResponses({
         @ApiResponse(code = 201, message = "CoordenacaoJuridica created"),
@@ -72,6 +75,7 @@ public class CoordenacaoJuridicaResource {
     
     @Timed
     @PutMapping
+    @JsonView(AssuntoViews.CreateUpdate.class)
     @ApiOperation(value = "Update an existing CoordenacaoJuridica", response = CoordenacaoJuridicaDTO.class)
     @ApiResponses({
         @ApiResponse(code = 200, message = "CoordenacaoJuridica updated"),
@@ -91,6 +95,7 @@ public class CoordenacaoJuridicaResource {
     
     @Timed
     @GetMapping
+    @JsonView(AssuntoViews.QueryParams.class)
     @ApiOperation("Get a paginated list of CoordenacaoJuridica matching the supplied query parameters and pagination information")
     public ResponseEntity<List<CoordenacaoJuridicaDTO>> getCoordenacoes(
         final CoordenacaoJuridicaDTO dto, final Pageable pageable) {
@@ -103,6 +108,7 @@ public class CoordenacaoJuridicaResource {
     
     @Timed
     @GetMapping("/{id}")
+    @JsonView(AssuntoViews.CreateUpdate.class)
     @ApiOperation("Get an CoordenacaoJuridica matching the given id")
     @ApiResponses({
         @ApiResponse(code = 200, message = "CoordenacaoJuridica founded matching the given id"),

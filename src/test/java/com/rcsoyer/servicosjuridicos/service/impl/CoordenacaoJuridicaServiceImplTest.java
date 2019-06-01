@@ -120,7 +120,7 @@ class CoordenacaoJuridicaServiceImplTest {
         final var pageable = PageRequest.of(0, 10);
         final var pageResultFromRepositoy = new PageImpl<>(singletonList(coordenacaoResult), pageable, 1);
         
-        when(coordenacaoMapper.toEntity(queryParams)).thenReturn(coordenacaoOfDto);
+        when(coordenacaoMapper.toEntityWithAssuntosIds(queryParams)).thenReturn(coordenacaoOfDto);
         when(coordenacaoRepository.query(coordenacaoOfDto, pageable)).thenReturn(pageResultFromRepositoy);
         when(coordenacaoMapper.toDto(coordenacaoResult)).thenReturn(dtoResult);
         
@@ -135,7 +135,7 @@ class CoordenacaoJuridicaServiceImplTest {
         assertEquals(coordenacaoResult.getNome(), coordenacaoDtoFromServiceResult.getNome());
         assertEquals(coordenacaoResult.getSigla(), coordenacaoDtoFromServiceResult.getSigla());
         
-        verify(coordenacaoMapper, times(1)).toEntity(queryParams);
+        verify(coordenacaoMapper, times(1)).toEntityWithAssuntosIds(queryParams);
         verify(coordenacaoRepository, times(1)).query(coordenacaoOfDto, pageable);
         verify(coordenacaoMapper, times(1)).toDto(coordenacaoResult);
         verifyNoMoreInteractions(coordenacaoMapper, coordenacaoRepository);

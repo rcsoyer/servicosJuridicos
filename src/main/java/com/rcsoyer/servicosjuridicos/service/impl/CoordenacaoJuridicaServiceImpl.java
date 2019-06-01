@@ -58,7 +58,7 @@ public class CoordenacaoJuridicaServiceImpl implements CoordenacaoJuridicaServic
     @Transactional(readOnly = true)
     public Page<CoordenacaoJuridicaDTO> findByParams(final CoordenacaoJuridicaDTO dto,
                                                      final Pageable pageable) {
-        return repository.query(mapper.toEntity(dto), pageable)
+        return repository.query(mapper.toEntityWithAssuntosIds(dto), pageable)
                          .map(mapper::toDto);
     }
 }

@@ -32,6 +32,15 @@ public interface CoordenacaoJuridicaMapper extends EntityMapper<CoordenacaoJurid
                    .addAssuntos(createAssuntos(dto.getAssuntos()));
     }
     
+    default CoordenacaoJuridica toEntityWithAssuntosIds(final CoordenacaoJuridicaDTO dto) {
+        return new CoordenacaoJuridica()
+                   .setNome(dto.getNome())
+                   .setSigla(dto.getSigla())
+                   .setCentena(dto.getCentena())
+                   .setId(dto.getId())
+                   .addAssuntos(createAssuntosFromIds(dto.getAssuntosIds()));
+    }
+    
     private List<Assunto> createAssuntos(final Set<AssuntoDTO> assuntosDto) {
         return assuntosDto.stream()
                           .map(assuntoDto -> new Assunto()
@@ -40,5 +49,11 @@ public interface CoordenacaoJuridicaMapper extends EntityMapper<CoordenacaoJurid
                                                  .setPeso(assuntoDto.getPeso())
                                                  .setId(assuntoDto.getId()))
                           .collect(toList());
+    }
+    
+    private List<Assunto> createAssuntosFromIds(final Set<Long> assuntos) {
+        return assuntos.stream()
+                       .map(id -> new Assunto().setId(id))
+                       .collect(toList());
     }
 }
