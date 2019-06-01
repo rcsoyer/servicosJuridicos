@@ -3,6 +3,8 @@ package com.rcsoyer.servicosjuridicos.web.rest.integration;
 import static com.rcsoyer.servicosjuridicos.domain.enumeration.RangeDgCoordenacao.INCLUSIVE;
 import static com.rcsoyer.servicosjuridicos.web.rest.TestUtil.convertObjectToJsonBytes;
 import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -19,25 +21,22 @@ import com.rcsoyer.servicosjuridicos.service.dto.AdvogadoDTO;
 import com.rcsoyer.servicosjuridicos.service.dto.AdvogadoDgCoordenacaoDTO;
 import com.rcsoyer.servicosjuridicos.service.dto.AssuntoDTO;
 import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoJuridicaDTO;
-import com.rcsoyer.servicosjuridicos.web.rest.AdvogadoDgCoordenacaoResource;
 import java.util.Set;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-@TestInstance(Lifecycle.PER_CLASS)
 class AdvogadoDgCoordenacaoResourceIntTest extends ApiConfigTest {
     
     private static final String URL_DGCOORDENACAO_API = "/api/advogado-dg-coordenacao";
     
-    private MockMvc mockMvc;
     private AdvogadoDTO advogado;
     private CoordenacaoJuridicaDTO coordenacaoJuridica;
+    
+    @Autowired
+    private MockMvc mockMvc;
     
     @Autowired
     private AssuntoService assuntoService;
@@ -52,15 +51,8 @@ class AdvogadoDgCoordenacaoResourceIntTest extends ApiConfigTest {
     private AdvogadoDgCoordenacaoService dgCoordenacaoService;
     
     
-    @BeforeAll
+    @BeforeEach
     void setUp() {
-        final var dgCoordenacaoResource = new AdvogadoDgCoordenacaoResource(dgCoordenacaoService);
-        this.mockMvc = MockMvcBuilders.standaloneSetup(dgCoordenacaoResource)
-                                      .setCustomArgumentResolvers(pageableArgumentResolver)
-                                      .setControllerAdvice(exceptionTranslator)
-                                      .setMessageConverters(jacksonMessageConverter)
-                                      .build();
-        
         this.advogado = advogadoService.save(new AdvogadoDTO().setCpf("18645099535")
                                                               .setNome("Nelson Davis")
                                                               .setRamal(345));
@@ -82,6 +74,8 @@ class AdvogadoDgCoordenacaoResourceIntTest extends ApiConfigTest {
         final var dto = newDgCoordenacaoDTO();
         
         mockMvc.perform(post(URL_DGCOORDENACAO_API)
+                            .with(user(TEST_USER_ID))
+                            .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON_UTF8)
                             .content(convertObjectToJsonBytes(dto)))
                .andExpect(status().isCreated())
@@ -99,6 +93,8 @@ class AdvogadoDgCoordenacaoResourceIntTest extends ApiConfigTest {
         final var dto = newDgCoordenacaoDTO().setId(666L);
         
         mockMvc.perform(post(URL_DGCOORDENACAO_API)
+                            .with(user(TEST_USER_ID))
+                            .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON_UTF8)
                             .content(convertObjectToJsonBytes(dto)))
                .andExpect(status().isBadRequest());
@@ -113,6 +109,8 @@ class AdvogadoDgCoordenacaoResourceIntTest extends ApiConfigTest {
                                   .setDgPessoalInicio(9);
         
         mockMvc.perform(put(URL_DGCOORDENACAO_API)
+                            .with(user(TEST_USER_ID))
+                            .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON_UTF8)
                             .content(convertObjectToJsonBytes(dto)))
                .andExpect(status().isOk())
@@ -130,6 +128,8 @@ class AdvogadoDgCoordenacaoResourceIntTest extends ApiConfigTest {
         final var dto = newDgCoordenacaoDTO();
         
         mockMvc.perform(put(URL_DGCOORDENACAO_API)
+                            .with(user(TEST_USER_ID))
+                            .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON_UTF8)
                             .content(convertObjectToJsonBytes(dto)))
                .andExpect(status().isBadRequest());
@@ -140,6 +140,8 @@ class AdvogadoDgCoordenacaoResourceIntTest extends ApiConfigTest {
         final var dto = dgCoordenacaoService.save(newDgCoordenacaoDTO());
         
         mockMvc.perform(get(URL_DGCOORDENACAO_API + "/{id}", dto.getId())
+                            .with(user(TEST_USER_ID))
+                            .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON_UTF8))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$.id").value(dto.getId()));
@@ -148,6 +150,8 @@ class AdvogadoDgCoordenacaoResourceIntTest extends ApiConfigTest {
     @Test
     void getAdvogadoDgCoordenacao_notFound() throws Exception {
         mockMvc.perform(get(URL_DGCOORDENACAO_API + "/{id}", 666L)
+                            .with(user(TEST_USER_ID))
+                            .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON_UTF8))
                .andExpect(status().isNotFound());
     }
@@ -157,6 +161,8 @@ class AdvogadoDgCoordenacaoResourceIntTest extends ApiConfigTest {
         final var dto = dgCoordenacaoService.save(newDgCoordenacaoDTO());
         
         mockMvc.perform(delete(URL_DGCOORDENACAO_API + "/{id}", dto.getId())
+                            .with(user(TEST_USER_ID))
+                            .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON_UTF8))
                .andExpect(status().isOk());
     }
@@ -167,6 +173,8 @@ class AdvogadoDgCoordenacaoResourceIntTest extends ApiConfigTest {
         dgCoordenacaoService.save(newDgCoordenacaoDTO2());
         
         mockMvc.perform(get(URL_DGCOORDENACAO_API)
+                            .with(user(TEST_USER_ID))
+                            .with(csrf())
                             .param("advogado", dto.getAdvogado().toString())
                             .param("coordenacao", dto.getCoordenacao().toString())
                             .param("dgDupla", dto.getDgDupla().toString())

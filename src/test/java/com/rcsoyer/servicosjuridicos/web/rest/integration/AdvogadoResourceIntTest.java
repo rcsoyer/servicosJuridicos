@@ -3,6 +3,8 @@ package com.rcsoyer.servicosjuridicos.web.rest.integration;
 import static com.rcsoyer.servicosjuridicos.web.rest.TestUtil.convertObjectToJsonBytes;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -12,41 +14,28 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.rcsoyer.servicosjuridicos.service.AdvogadoService;
 import com.rcsoyer.servicosjuridicos.service.dto.AdvogadoDTO;
-import com.rcsoyer.servicosjuridicos.web.rest.AdvogadoResource;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-@TestInstance(Lifecycle.PER_CLASS)
 class AdvogadoResourceIntTest extends ApiConfigTest {
     
     private static final String URL_ADVOGADO_API = "/api/advogado";
     
+    @Autowired
     private MockMvc mockMvc;
     
     @Autowired
     private AdvogadoService advogadoService;
-    
-    @BeforeAll
-    void setUp() {
-        final var advogadoResource = new AdvogadoResource(advogadoService);
-        this.mockMvc = MockMvcBuilders.standaloneSetup(advogadoResource)
-                                      .setCustomArgumentResolvers(pageableArgumentResolver)
-                                      .setControllerAdvice(exceptionTranslator)
-                                      .setMessageConverters(jacksonMessageConverter)
-                                      .build();
-    }
     
     @Test
     void create_ok() throws Exception {
         final var dto = advogadoDto1();
         
         mockMvc.perform(post(URL_ADVOGADO_API)
+                            .with(user(TEST_USER_ID))
+                            .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON_UTF8)
                             .content(convertObjectToJsonBytes(dto)))
                .andExpect(status().isCreated())
@@ -62,6 +51,8 @@ class AdvogadoResourceIntTest extends ApiConfigTest {
         final var dto = advogadoDto1().setId(666L);
         
         mockMvc.perform(post(URL_ADVOGADO_API)
+                            .with(user(TEST_USER_ID))
+                            .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON_UTF8)
                             .content(convertObjectToJsonBytes(dto)))
                .andExpect(status().isBadRequest());
@@ -72,6 +63,8 @@ class AdvogadoResourceIntTest extends ApiConfigTest {
         final var dto = advogadoService.save(advogadoDto1());
         
         mockMvc.perform(put(URL_ADVOGADO_API)
+                            .with(user(TEST_USER_ID))
+                            .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON_UTF8)
                             .content(convertObjectToJsonBytes(dto)))
                .andExpect(status().isOk())
@@ -84,6 +77,8 @@ class AdvogadoResourceIntTest extends ApiConfigTest {
     @Test
     void update_whithoutId() throws Exception {
         mockMvc.perform(put(URL_ADVOGADO_API)
+                            .with(user(TEST_USER_ID))
+                            .with(csrf())
                             .contentType(MediaType.APPLICATION_JSON_UTF8)
                             .content(convertObjectToJsonBytes(advogadoDto1())))
                .andExpect(status().isBadRequest());
@@ -96,6 +91,8 @@ class AdvogadoResourceIntTest extends ApiConfigTest {
         
         mockMvc.perform(
             get(URL_ADVOGADO_API)
+                .with(user(TEST_USER_ID))
+                .with(csrf())
                 .param("cpf", advogado1.getCpf())
                 .param("nome", advogado1.getNome())
                 .param("ramal", advogado1.getRamal().toString()))
@@ -113,7 +110,9 @@ class AdvogadoResourceIntTest extends ApiConfigTest {
         var advogado2 = advogadoService.save(advogadoDto2());
         
         mockMvc.perform(
-            get(URL_ADVOGADO_API))
+            get(URL_ADVOGADO_API)
+                .with(user(TEST_USER_ID))
+                .with(csrf()))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$", hasSize(2)))
                .andExpect(jsonPath("$.[0].id", equalTo(advogado1.getId().intValue())))
@@ -131,7 +130,9 @@ class AdvogadoResourceIntTest extends ApiConfigTest {
         var advogado = advogadoService.save(advogadoDto1());
         
         mockMvc.perform(
-            get(URL_ADVOGADO_API + "/{id}", advogado.getId()))
+            get(URL_ADVOGADO_API + "/{id}", advogado.getId())
+                .with(user(TEST_USER_ID))
+                .with(csrf()))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$.id").value(advogado.getId().intValue()))
                .andExpect(jsonPath("$.cpf").value(advogado.getCpf()))
@@ -144,7 +145,9 @@ class AdvogadoResourceIntTest extends ApiConfigTest {
         final var unknownAdvogado = advogadoDto1().setId(777L);
         
         mockMvc.perform(
-            get(URL_ADVOGADO_API + "/{id}", unknownAdvogado.getId()))
+            get(URL_ADVOGADO_API + "/{id}", unknownAdvogado.getId())
+                .with(user(TEST_USER_ID))
+                .with(csrf()))
                .andExpect(status().isNotFound());
     }
     
@@ -153,7 +156,9 @@ class AdvogadoResourceIntTest extends ApiConfigTest {
         var advogado = advogadoService.save(advogadoDto1());
         
         mockMvc.perform(
-            delete(URL_ADVOGADO_API + "/{id}", advogado.getId()))
+            delete(URL_ADVOGADO_API + "/{id}", advogado.getId())
+                .with(user(TEST_USER_ID))
+                .with(csrf()))
                .andExpect(status().isOk());
     }
     

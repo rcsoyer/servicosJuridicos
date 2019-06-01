@@ -3,6 +3,8 @@ package com.rcsoyer.servicosjuridicos.web.rest.integration;
 import static com.rcsoyer.servicosjuridicos.web.rest.TestUtil.convertObjectToJsonBytes;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -12,33 +14,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.rcsoyer.servicosjuridicos.service.AssuntoService;
 import com.rcsoyer.servicosjuridicos.service.dto.AssuntoDTO;
-import com.rcsoyer.servicosjuridicos.web.rest.AssuntoResource;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-@TestInstance(Lifecycle.PER_CLASS)
 class AssuntoResourceIntTest extends ApiConfigTest {
     
     @Autowired
     private AssuntoService assuntoService;
     
+    @Autowired
     private MockMvc mockMvc;
-    
-    @BeforeAll
-    void setUp() {
-        var assuntoResource = new AssuntoResource(assuntoService);
-        this.mockMvc = MockMvcBuilders.standaloneSetup(assuntoResource)
-                                      .setCustomArgumentResolvers(pageableArgumentResolver)
-                                      .setControllerAdvice(exceptionTranslator)
-                                      .setMessageConverters(jacksonMessageConverter)
-                                      .build();
-    }
     
     @Test
     void createAssunto_ok() throws Exception {
@@ -46,6 +33,8 @@ class AssuntoResourceIntTest extends ApiConfigTest {
         
         mockMvc.perform(
             post("/api/assunto")
+                .with(user(TEST_USER_ID))
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(assunto)))
                .andExpect(status().isCreated())
@@ -61,6 +50,8 @@ class AssuntoResourceIntTest extends ApiConfigTest {
         
         mockMvc.perform(
             post("/api/assunto")
+                .with(user(TEST_USER_ID))
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(assunto)))
                .andExpect(status().isBadRequest());
@@ -72,6 +63,8 @@ class AssuntoResourceIntTest extends ApiConfigTest {
         
         mockMvc.perform(
             put("/api/assunto")
+                .with(user(TEST_USER_ID))
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(assunto)))
                .andExpect(status().isOk())
@@ -87,6 +80,8 @@ class AssuntoResourceIntTest extends ApiConfigTest {
         
         mockMvc.perform(
             put("/api/assunto")
+                .with(user(TEST_USER_ID))
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .content(convertObjectToJsonBytes(assunto)))
                .andExpect(status().isBadRequest());
@@ -99,6 +94,8 @@ class AssuntoResourceIntTest extends ApiConfigTest {
         
         mockMvc.perform(
             get("/api/assunto")
+                .with(user(TEST_USER_ID))
+                .with(csrf())
                 .param("peso", assunto1.getPeso().toString())
                 .param("ativo", assunto1.isAtivo().toString())
                 .param("descricao", assunto1.getDescricao()))
@@ -116,7 +113,9 @@ class AssuntoResourceIntTest extends ApiConfigTest {
         var assunto2 = assuntoService.save(assuntoDto2());
         
         mockMvc.perform(
-            get("/api/assunto"))
+            get("/api/assunto")
+                .with(user(TEST_USER_ID))
+                .with(csrf()))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$", hasSize(2)))
                .andExpect(jsonPath("$.[0].id", equalTo(assunto1.getId().intValue())))
@@ -134,7 +133,9 @@ class AssuntoResourceIntTest extends ApiConfigTest {
         var assunto = assuntoService.save(assuntoDto1());
         
         mockMvc.perform(
-            get("/api/assunto/{id}", assunto.getId()))
+            get("/api/assunto/{id}", assunto.getId())
+                .with(user(TEST_USER_ID))
+                .with(csrf()))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$.id", equalTo(assunto.getId().intValue())));
     }
@@ -142,7 +143,9 @@ class AssuntoResourceIntTest extends ApiConfigTest {
     @Test
     void getAssunto_notFound() throws Exception {
         mockMvc.perform(
-            get("/api/assunto/{id}", 666L))
+            get("/api/assunto/{id}", 666L)
+                .with(user(TEST_USER_ID))
+                .with(csrf()))
                .andExpect(status().isNotFound());
     }
     
@@ -151,7 +154,9 @@ class AssuntoResourceIntTest extends ApiConfigTest {
         var assunto = assuntoService.save(assuntoDto1());
         
         mockMvc.perform(
-            delete("/api/assunto/{id}", assunto.getId()))
+            delete("/api/assunto/{id}", assunto.getId())
+                .with(user(TEST_USER_ID))
+                .with(csrf()))
                .andExpect(status().isOk());
     }
     

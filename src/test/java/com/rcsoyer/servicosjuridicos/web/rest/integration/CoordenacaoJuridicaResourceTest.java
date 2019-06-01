@@ -14,16 +14,14 @@ import com.rcsoyer.servicosjuridicos.service.CoordenacaoJuridicaService;
 import com.rcsoyer.servicosjuridicos.service.dto.AssuntoDTO;
 import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoJuridicaDTO;
 import java.util.Set;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 class CoordenacaoJuridicaResourceTest extends ApiConfigTest {
     
-    private final static String TEST_USER_ID = "user-id-123";
     private static final String URL_COORDENACAO_API = "/api/coordenacao-juridica";
     
     @Autowired
@@ -35,18 +33,15 @@ class CoordenacaoJuridicaResourceTest extends ApiConfigTest {
     @Autowired
     private AssuntoService assuntoService;
     
+    private CoordenacaoJuridicaDTO dto;
+    
+    @BeforeEach
+    void setUp() {
+        this.dto = coordenacaoJuridicaDto();
+    }
+    
     @Test
     void createCoordenacaoJuridica() throws Exception {
-        final var dto = coordenacaoJuridicaDto();
-     /*  final var dto = new CoordenacaoJuridicaDTO()
-                            .setSigla("ICLPOY")
-                            .setNome("Institute Cannabinistico Logistic OFF ya")
-                            .setCentena("421")
-                            .setAssuntos(Set.of(new AssuntoDTO().setId(1L),
-                                                new AssuntoDTO().setId(2L)));
-                                                
-      */
-        
         mockMvc.perform(post(URL_COORDENACAO_API)
                             .with(user(TEST_USER_ID))
                             .with(csrf())
@@ -62,9 +57,8 @@ class CoordenacaoJuridicaResourceTest extends ApiConfigTest {
     }
     
     @Test
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     void updateCoordenacaoJuridica() throws Exception {
-        final var createdCoordenacao = coordenacaoService.save(coordenacaoJuridicaDto())
+        final var createdCoordenacao = coordenacaoService.save(dto)
                                                          .setCentena("765")
                                                          .setNome("Just another coordenacao");
         mockMvc.perform(put(URL_COORDENACAO_API)
