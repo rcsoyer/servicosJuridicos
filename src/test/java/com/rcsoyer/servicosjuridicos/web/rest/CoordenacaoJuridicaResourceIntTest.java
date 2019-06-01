@@ -60,9 +60,6 @@ public class CoordenacaoJuridicaResourceIntTest {
     @Autowired
     private CoordenacaoJuridicaMapper coordenacaoJuridicaMapper;
     
-    @Mock
-    private CoordenacaoJuridicaService coordenacaoJuridicaServiceMock;
-    
     @Autowired
     private CoordenacaoJuridicaService coordenacaoJuridicaService;
     

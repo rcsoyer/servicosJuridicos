@@ -20,6 +20,12 @@ eureka:
         appname: servicosJuridicos
         instanceId: servicosJuridicos:${spring.application.instance-id:${random.value}}
 
+logging:
+    level:
+        org:
+            hibernate:
+                type: trace
+
 spring:
     application:
         name: servicosJuridicos
@@ -39,7 +45,7 @@ spring:
         open-in-view: false
         show-sql: false
         hibernate:
-            ddl-auto: none
+            ddl-auto: validate
             naming:
                 physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
                 implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
@@ -52,6 +58,7 @@ spring:
             hibernate.hbm2ddl.auto: validate
             hibernate.jdbc.time_zone: UTC
             hibernate.enable_lazy_load_no_trans: true
+            hibernate.show_sql: true
     liquibase:
         contexts: test
         change-log: classpath:/config/liquibase/master.xml

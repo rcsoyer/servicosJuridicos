@@ -1,59 +1,17 @@
 package com.rcsoyer.servicosjuridicos.web.rest.integration;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static com.rcsoyer.servicosjuridicos.web.rest.TestUtil.convertObjectToJsonBytes;
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.rcsoyer.servicosjuridicos.service.AdvogadoService;
+import com.rcsoyer.servicosjuridicos.service.AssuntoService;
 import com.rcsoyer.servicosjuridicos.service.CoordenacaoJuridicaService;
 import com.rcsoyer.servicosjuridicos.service.dto.AssuntoDTO;
 import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoJuridicaDTO;
-import com.rcsoyer.servicosjuridicos.web.rest.AdvogadoResource;
 import com.rcsoyer.servicosjuridicos.web.rest.CoordenacaoJuridicaResource;
-import java.io.IOException;
 import java.util.Set;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import static com.rcsoyer.servicosjuridicos.web.rest.TestUtil.convertObjectToJsonBytes;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import com.rcsoyer.servicosjuridicos.service.AdvogadoService;
-import com.rcsoyer.servicosjuridicos.service.dto.AdvogadoDTO;
-import com.rcsoyer.servicosjuridicos.web.rest.AdvogadoResource;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import static com.rcsoyer.servicosjuridicos.web.rest.TestUtil.convertObjectToJsonBytes;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import com.rcsoyer.servicosjuridicos.service.AdvogadoService;
-import com.rcsoyer.servicosjuridicos.service.dto.AdvogadoDTO;
-import com.rcsoyer.servicosjuridicos.web.rest.AdvogadoResource;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -73,6 +31,9 @@ class CoordenacaoJuridicaResourceTest extends ApiConfigTest {
     @Autowired
     private CoordenacaoJuridicaService coordenacaoService;
     
+    @Autowired
+    private AssuntoService assuntoService;
+    
     @BeforeAll
     void setUp() {
         final var coordenacaoResource = new CoordenacaoJuridicaResource(coordenacaoService);
@@ -85,12 +46,7 @@ class CoordenacaoJuridicaResourceTest extends ApiConfigTest {
     
     @Test
     void createCoordenacaoJuridica() throws Exception {
-        final var dto = new CoordenacaoJuridicaDTO()
-                            .setSigla("ICLPOY")
-                            .setNome("Institute Cannabinistico Logistic OFF ya")
-                            .setCentena("421")
-                            .setAssuntos(Set.of(new AssuntoDTO().setId(1L),
-                                                new AssuntoDTO().setId(2L)));
+        final var dto = coordenacaoJuridicaDto();
         
         mockMvc.perform(post(URL_COORDENACAO_API)
                             .contentType(MediaType.APPLICATION_JSON)
@@ -102,6 +58,22 @@ class CoordenacaoJuridicaResourceTest extends ApiConfigTest {
                .andExpect(jsonPath("$.sigla").value(dto.getSigla()))
                .andExpect(jsonPath("$.centena").value(dto.getCentena()))
                .andExpect(jsonPath("$.assuntos", hasSize(2)));
+    }
+    
+    private CoordenacaoJuridicaDTO coordenacaoJuridicaDto() {
+        final var assuntoDTO1 = assuntoService.save(new AssuntoDTO()
+                                                        .setAtivo(Boolean.TRUE)
+                                                        .setDescricao("assunto 1")
+                                                        .setPeso(1));
+        final var assuntoDTO2 = assuntoService.save(new AssuntoDTO()
+                                                        .setAtivo(Boolean.FALSE)
+                                                        .setDescricao("assunto 2")
+                                                        .setPeso(2));
+        return new CoordenacaoJuridicaDTO()
+                   .setSigla("ICLPOY")
+                   .setNome("Institute Cannabinistico Logistic OFF ya")
+                   .setCentena("421")
+                   .setAssuntos(Set.of(assuntoDTO1, assuntoDTO2));
     }
     
     @Test
