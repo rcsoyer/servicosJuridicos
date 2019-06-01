@@ -72,7 +72,9 @@ class CoordenacaoJuridicaResourceTest extends ApiConfigTest {
     @Test
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     void updateCoordenacaoJuridica() throws Exception {
-        final var createdCoordenacao = coordenacaoService.save(coordenacaoJuridicaDto());
+        final var createdCoordenacao = coordenacaoService.save(coordenacaoJuridicaDto())
+                                                         .setCentena("765")
+                                                         .setNome("Just another coordenacao");
         
         mockMvc.perform(put(URL_COORDENACAO_API)
                             .contentType(MediaType.APPLICATION_JSON)
