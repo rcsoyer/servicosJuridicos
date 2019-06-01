@@ -9,6 +9,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -16,7 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rcsoyer.servicosjuridicos.service.AssuntoService;
 import com.rcsoyer.servicosjuridicos.service.CoordenacaoJuridicaService;
 import com.rcsoyer.servicosjuridicos.service.dto.AssuntoDTO;
-import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoJuridicaDTO;
+import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoCreateUpdateDto;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-class CoordenacaoJuridicaResourceTest extends ApiConfigTest {
+class CoordenacaoJuridicaResourceIntTest extends ApiConfigTest {
     
     private static final String URL_COORDENACAO_API = "/api/coordenacao-juridica";
     
@@ -41,7 +42,7 @@ class CoordenacaoJuridicaResourceTest extends ApiConfigTest {
     @Autowired
     private ObjectMapper objectMapper;
     
-    private CoordenacaoJuridicaDTO dto;
+    private CoordenacaoCreateUpdateDto dto;
     
     @BeforeEach
     void setUp() {
@@ -86,11 +87,13 @@ class CoordenacaoJuridicaResourceTest extends ApiConfigTest {
     @Test
     void getCoordenacoes() throws Exception {
         final var coodernacao1 = coordenacaoService.save(dto);
-        final var coordenacao2 = coordenacaoService.save(new CoordenacaoJuridicaDTO()
-                                                             .setNome("Second coordenation")
-                                                             .setSigla("SCO")
-                                                             .setCentena("770")
-                                                             .setAssuntos(dto.getAssuntos()));
+        
+        // has the same Assuntos but does not match in the other filters
+        coordenacaoService.save(new CoordenacaoCreateUpdateDto()
+                                    .setNome("Second coordenation")
+                                    .setSigla("SCO")
+                                    .setCentena("770")
+                                    .setAssuntos(coodernacao1.getAssuntos()));
         List<Long> assuntosIds = coodernacao1.getAssuntos()
                                              .stream()
                                              .map(AssuntoDTO::getId)
@@ -106,12 +109,14 @@ class CoordenacaoJuridicaResourceTest extends ApiConfigTest {
                 .param("assuntosIds", assuntosIds.get(0).toString())
                 .param("assuntosIds", assuntosIds.get(1).toString())
                 .contentType(MediaType.APPLICATION_JSON))
+               .andDo(print())
                .andExpect(status().isOk())
                .andExpect(jsonPath("$", hasSize(1)))
                .andExpect(jsonPath("$.[0].id", equalTo(coodernacao1.getId().intValue())))
                .andExpect(jsonPath("$.[0].nome", equalTo(coodernacao1.getNome())))
                .andExpect(jsonPath("$.[0].sigla", equalTo(coodernacao1.getSigla())))
-               .andExpect(jsonPath("$.[0].centena", equalTo(coodernacao1.getCentena())));
+               .andExpect(jsonPath("$.[0].centena", equalTo(coodernacao1.getCentena())))
+               .andExpect(jsonPath("$.[0].assuntos", hasSize(2)));
     }
     
     @Test
@@ -122,7 +127,7 @@ class CoordenacaoJuridicaResourceTest extends ApiConfigTest {
     void deleteCoordenacaoJuridica() {
     }
     
-    private CoordenacaoJuridicaDTO newCoordenacaoJuridicaDto() {
+    private CoordenacaoCreateUpdateDto newCoordenacaoJuridicaDto() {
         final var assuntoDTO1 = assuntoService.save(new AssuntoDTO()
                                                         .setAtivo(Boolean.TRUE)
                                                         .setDescricao("assunto 1")
@@ -131,7 +136,7 @@ class CoordenacaoJuridicaResourceTest extends ApiConfigTest {
                                                         .setAtivo(Boolean.FALSE)
                                                         .setDescricao("assunto 2")
                                                         .setPeso(2));
-        return new CoordenacaoJuridicaDTO()
+        return new CoordenacaoCreateUpdateDto()
                    .setSigla("ICLPOY")
                    .setNome("Institute Cannabinistico Logistic OFF ya")
                    .setCentena("421")

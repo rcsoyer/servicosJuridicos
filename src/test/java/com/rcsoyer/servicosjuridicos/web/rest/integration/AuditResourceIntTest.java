@@ -1,4 +1,4 @@
-package com.rcsoyer.servicosjuridicos.web.rest;
+package com.rcsoyer.servicosjuridicos.web.rest.integration;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -13,6 +13,8 @@ import com.rcsoyer.servicosjuridicos.config.audit.AuditEventConverter;
 import com.rcsoyer.servicosjuridicos.domain.PersistentAuditEvent;
 import com.rcsoyer.servicosjuridicos.repository.PersistenceAuditEventRepository;
 import com.rcsoyer.servicosjuridicos.service.AuditEventService;
+import com.rcsoyer.servicosjuridicos.web.rest.AuditResource;
+import com.rcsoyer.servicosjuridicos.web.rest.TestUtil;
 import java.time.Instant;
 import org.junit.Before;
 import org.junit.Test;

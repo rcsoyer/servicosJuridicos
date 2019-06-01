@@ -20,7 +20,7 @@ import com.rcsoyer.servicosjuridicos.service.CoordenacaoJuridicaService;
 import com.rcsoyer.servicosjuridicos.service.dto.AdvogadoDTO;
 import com.rcsoyer.servicosjuridicos.service.dto.AdvogadoDgCoordenacaoDTO;
 import com.rcsoyer.servicosjuridicos.service.dto.AssuntoDTO;
-import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoJuridicaDTO;
+import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoCreateUpdateDto;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ class AdvogadoDgCoordenacaoResourceIntTest extends ApiConfigTest {
     private static final String URL_DGCOORDENACAO_API = "/api/advogado-dg-coordenacao";
     
     private AdvogadoDTO advogado;
-    private CoordenacaoJuridicaDTO coordenacaoJuridica;
+    private CoordenacaoCreateUpdateDto coordenacaoJuridica;
     
     @Autowired
     private MockMvc mockMvc;
@@ -62,7 +62,7 @@ class AdvogadoDgCoordenacaoResourceIntTest extends ApiConfigTest {
                                                     .setAtivo(Boolean.TRUE)
                                                     .setPeso(4));
         
-        this.coordenacaoJuridica = coordenacaoJuridicaService.save(new CoordenacaoJuridicaDTO()
+        this.coordenacaoJuridica = coordenacaoJuridicaService.save(new CoordenacaoCreateUpdateDto()
                                                                        .setAssuntos(Set.of(assunto))
                                                                        .setCentena("532")
                                                                        .setNome("Coordenacao que nao precisamos")
@@ -211,7 +211,7 @@ class AdvogadoDgCoordenacaoResourceIntTest extends ApiConfigTest {
                                                     .setAtivo(Boolean.FALSE)
                                                     .setPeso(5));
         
-        final var coordenacaoJuridica = coordenacaoJuridicaService.save(new CoordenacaoJuridicaDTO()
+        final var coordenacaoJuridica = coordenacaoJuridicaService.save(new CoordenacaoCreateUpdateDto()
                                                                             .setAssuntos(Set.of(assunto))
                                                                             .setCentena("008")
                                                                             .setNome("Coordenacao na via láctea")

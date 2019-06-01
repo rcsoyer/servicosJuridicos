@@ -8,10 +8,9 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 
 import com.codahale.metrics.annotation.Timed;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.rcsoyer.servicosjuridicos.service.CoordenacaoJuridicaService;
-import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoJuridicaDTO;
-import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoJuridicaDTO.AssuntoViews;
+import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoCreateUpdateDto;
+import com.rcsoyer.servicosjuridicos.service.dto.QueryParamsCoordenacao;
 import com.rcsoyer.servicosjuridicos.web.rest.errors.BadRequestAlertException;
 import io.github.jhipster.web.util.ResponseUtil;
 import io.swagger.annotations.ApiOperation;
@@ -54,14 +53,13 @@ public class CoordenacaoJuridicaResource {
     
     @Timed
     @PostMapping
-    @JsonView(AssuntoViews.CreateUpdate.class)
-    @ApiOperation(value = "Create a new CoordenacaoJuridica", response = CoordenacaoJuridicaDTO.class)
+    @ApiOperation(value = "Create a new CoordenacaoJuridica", response = CoordenacaoCreateUpdateDto.class)
     @ApiResponses({
         @ApiResponse(code = 201, message = "CoordenacaoJuridica created"),
         @ApiResponse(code = 400, message = "A new CoordenacaoJuridica must not have and ID")
     })
-    public ResponseEntity<CoordenacaoJuridicaDTO> createCoordenacaoJuridica(
-        @Valid @RequestBody final CoordenacaoJuridicaDTO coordenacaoJuridicaDto) {
+    public ResponseEntity<CoordenacaoCreateUpdateDto> createCoordenacaoJuridica(
+        @Valid @RequestBody final CoordenacaoCreateUpdateDto coordenacaoJuridicaDto) {
         log.info("REST request to create a CoordenacaoJuridica: {}", coordenacaoJuridicaDto);
         return Optional.of(coordenacaoJuridicaDto)
                        .filter(dto -> isNull(dto.getId()))
@@ -75,14 +73,13 @@ public class CoordenacaoJuridicaResource {
     
     @Timed
     @PutMapping
-    @JsonView(AssuntoViews.CreateUpdate.class)
-    @ApiOperation(value = "Update an existing CoordenacaoJuridica", response = CoordenacaoJuridicaDTO.class)
+    @ApiOperation(value = "Update an existing CoordenacaoJuridica", response = CoordenacaoCreateUpdateDto.class)
     @ApiResponses({
         @ApiResponse(code = 200, message = "CoordenacaoJuridica updated"),
         @ApiResponse(code = 400, message = "An existing CoordenacaoJuridica must have an ID")
     })
-    public ResponseEntity<CoordenacaoJuridicaDTO> updateCoordenacaoJuridica(
-        @Valid @RequestBody final CoordenacaoJuridicaDTO coordenacaoJuridicaDto) {
+    public ResponseEntity<CoordenacaoCreateUpdateDto> updateCoordenacaoJuridica(
+        @Valid @RequestBody final CoordenacaoCreateUpdateDto coordenacaoJuridicaDto) {
         log.info("REST request to update CoordenacaoJuridica: {}", coordenacaoJuridicaDto);
         return Optional.of(coordenacaoJuridicaDto)
                        .filter(dto -> nonNull(dto.getId()))
@@ -95,12 +92,11 @@ public class CoordenacaoJuridicaResource {
     
     @Timed
     @GetMapping
-    @JsonView(AssuntoViews.QueryParams.class)
     @ApiOperation("Get a paginated list of CoordenacaoJuridica matching the supplied query parameters and pagination information")
-    public ResponseEntity<List<CoordenacaoJuridicaDTO>> getCoordenacoes(
-        final CoordenacaoJuridicaDTO dto, final Pageable pageable) {
-        log.debug("REST request to get a page of CoordenacaoJuridicas with: {} and {}", dto, pageable);
-        final Page<CoordenacaoJuridicaDTO> page = service.findByParams(dto, pageable);
+    public ResponseEntity<List<CoordenacaoCreateUpdateDto>> getCoordenacoes(
+        final QueryParamsCoordenacao queryParams, final Pageable pageable) {
+        log.debug("REST request to get a page of CoordenacaoJuridicas with: {} and {}", queryParams, pageable);
+        final Page<CoordenacaoCreateUpdateDto> page = service.findByParams(queryParams, pageable);
         return ResponseEntity.ok()
                              .headers(generatePaginationHttpHeaders(page, "/api/coordenacao-juridica"))
                              .body(page.getContent());
@@ -108,13 +104,12 @@ public class CoordenacaoJuridicaResource {
     
     @Timed
     @GetMapping("/{id}")
-    @JsonView(AssuntoViews.CreateUpdate.class)
     @ApiOperation("Get an CoordenacaoJuridica matching the given id")
     @ApiResponses({
         @ApiResponse(code = 200, message = "CoordenacaoJuridica founded matching the given id"),
         @ApiResponse(code = 404, message = "No CoordenacaoJuridica found with the given id")
     })
-    public ResponseEntity<CoordenacaoJuridicaDTO> getCoordenacaoJuridica(@PathVariable @Valid @Min(1L) Long id) {
+    public ResponseEntity<CoordenacaoCreateUpdateDto> getCoordenacaoJuridica(@PathVariable @Valid @Min(1L) Long id) {
         log.debug("REST request to get CoordenacaoJuridica: {}", id);
         return ResponseUtil.wrapOrNotFound(service.findOne(id));
     }

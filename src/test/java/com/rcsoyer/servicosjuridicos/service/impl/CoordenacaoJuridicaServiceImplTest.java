@@ -10,7 +10,8 @@ import static org.mockito.Mockito.when;
 
 import com.rcsoyer.servicosjuridicos.domain.CoordenacaoJuridica;
 import com.rcsoyer.servicosjuridicos.repository.CoordenacaoJuridicaRepository;
-import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoJuridicaDTO;
+import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoCreateUpdateDto;
+import com.rcsoyer.servicosjuridicos.service.dto.QueryParamsCoordenacao;
 import com.rcsoyer.servicosjuridicos.service.mapper.CoordenacaoJuridicaMapper;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,7 @@ class CoordenacaoJuridicaServiceImplTest {
     
     @Test
     void save() {
-        final var dtoParamInicio = new CoordenacaoJuridicaDTO()
+        final var dtoParamInicio = new CoordenacaoCreateUpdateDto()
                                        .setNome("U.S.S Discovery")
                                        .setSigla("DISC")
                                        .setCentena("123");
@@ -49,7 +50,7 @@ class CoordenacaoJuridicaServiceImplTest {
                                             .setNome("U.S.S Discovery")
                                             .setSigla("DISC")
                                             .setCentena("123");
-        final var dtoFromSave = new CoordenacaoJuridicaDTO()
+        final var dtoFromSave = new CoordenacaoCreateUpdateDto()
                                     .setId(1L)
                                     .setNome("U.S.S Discovery")
                                     .setSigla("DISC")
@@ -59,7 +60,7 @@ class CoordenacaoJuridicaServiceImplTest {
         when(coordenacaoRepository.save(coordenacaoOfDto)).thenReturn(coordenacaoFromSave);
         when(coordenacaoMapper.toDto(coordenacaoFromSave)).thenReturn(dtoFromSave);
         
-        final CoordenacaoJuridicaDTO result = coordenacaoService.save(dtoParamInicio);
+        final CoordenacaoCreateUpdateDto result = coordenacaoService.save(dtoParamInicio);
         
         assertEquals(coordenacaoFromSave.getId(), result.getId());
         assertEquals(coordenacaoFromSave.getCentena(), result.getCentena());
@@ -78,9 +79,9 @@ class CoordenacaoJuridicaServiceImplTest {
         final var coordenacao = new CoordenacaoJuridica().setId(coordenacaoId);
         
         when(coordenacaoRepository.findById(coordenacaoId)).thenReturn(Optional.of(coordenacao));
-        when(coordenacaoMapper.toDto(coordenacao)).thenReturn(new CoordenacaoJuridicaDTO().setId(coordenacaoId));
+        when(coordenacaoMapper.toDto(coordenacao)).thenReturn(new CoordenacaoCreateUpdateDto().setId(coordenacaoId));
         
-        Optional<CoordenacaoJuridicaDTO> one = coordenacaoService.findOne(coordenacaoId);
+        Optional<CoordenacaoCreateUpdateDto> one = coordenacaoService.findOne(coordenacaoId);
         
         assertEquals(coordenacaoId, one.get().getId());
         verify(coordenacaoRepository, times(1)).findById(coordenacaoId);
@@ -101,13 +102,13 @@ class CoordenacaoJuridicaServiceImplTest {
     
     @Test
     void findByParams() {
-        final var queryParams = new CoordenacaoJuridicaDTO()
+        final var queryParams = new QueryParamsCoordenacao()
                                     .setCentena("324")
                                     .setNome("Coordenacao trabalhista");
         final var coordenacaoOfDto = new CoordenacaoJuridica()
                                          .setCentena("324")
                                          .setNome("Coordenacao trabalhista");
-        final var dtoResult = new CoordenacaoJuridicaDTO()
+        final var dtoResult = new CoordenacaoCreateUpdateDto()
                                   .setId(666L)
                                   .setSigla("ABC")
                                   .setCentena("324")
@@ -120,22 +121,22 @@ class CoordenacaoJuridicaServiceImplTest {
         final var pageable = PageRequest.of(0, 10);
         final var pageResultFromRepositoy = new PageImpl<>(singletonList(coordenacaoResult), pageable, 1);
         
-        when(coordenacaoMapper.toEntityWithAssuntosIds(queryParams)).thenReturn(coordenacaoOfDto);
+        when(coordenacaoMapper.toEntity(queryParams)).thenReturn(coordenacaoOfDto);
         when(coordenacaoRepository.query(coordenacaoOfDto, pageable)).thenReturn(pageResultFromRepositoy);
         when(coordenacaoMapper.toDto(coordenacaoResult)).thenReturn(dtoResult);
         
-        final Page<CoordenacaoJuridicaDTO> pageResult = coordenacaoService.findByParams(queryParams, pageable);
+        final Page<CoordenacaoCreateUpdateDto> pageResult = coordenacaoService.findByParams(queryParams, pageable);
         
         assertEquals(pageResultFromRepositoy.getSize(), pageResult.getSize());
         
-        final CoordenacaoJuridicaDTO coordenacaoDtoFromServiceResult = pageResult.getContent().get(0);
+        final CoordenacaoCreateUpdateDto coordenacaoDtoFromServiceResult = pageResult.getContent().get(0);
         
         assertEquals(coordenacaoResult.getId(), coordenacaoDtoFromServiceResult.getId());
         assertEquals(coordenacaoResult.getCentena(), coordenacaoDtoFromServiceResult.getCentena());
         assertEquals(coordenacaoResult.getNome(), coordenacaoDtoFromServiceResult.getNome());
         assertEquals(coordenacaoResult.getSigla(), coordenacaoDtoFromServiceResult.getSigla());
         
-        verify(coordenacaoMapper, times(1)).toEntityWithAssuntosIds(queryParams);
+        verify(coordenacaoMapper, times(1)).toEntity(queryParams);
         verify(coordenacaoRepository, times(1)).query(coordenacaoOfDto, pageable);
         verify(coordenacaoMapper, times(1)).toDto(coordenacaoResult);
         verifyNoMoreInteractions(coordenacaoMapper, coordenacaoRepository);

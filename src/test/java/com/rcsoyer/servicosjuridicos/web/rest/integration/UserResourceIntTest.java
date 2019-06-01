@@ -1,4 +1,4 @@
-package com.rcsoyer.servicosjuridicos.web.rest;
+package com.rcsoyer.servicosjuridicos.web.rest.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -20,6 +20,8 @@ import com.rcsoyer.servicosjuridicos.service.MailService;
 import com.rcsoyer.servicosjuridicos.service.UserService;
 import com.rcsoyer.servicosjuridicos.service.dto.UserDTO;
 import com.rcsoyer.servicosjuridicos.service.mapper.UserMapper;
+import com.rcsoyer.servicosjuridicos.web.rest.TestUtil;
+import com.rcsoyer.servicosjuridicos.web.rest.UserResource;
 import com.rcsoyer.servicosjuridicos.web.rest.errors.ExceptionTranslator;
 import com.rcsoyer.servicosjuridicos.web.rest.vm.ManagedUserVM;
 import java.time.Instant;

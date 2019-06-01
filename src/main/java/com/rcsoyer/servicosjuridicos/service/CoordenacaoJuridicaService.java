@@ -1,6 +1,7 @@
 package com.rcsoyer.servicosjuridicos.service;
 
-import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoJuridicaDTO;
+import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoCreateUpdateDto;
+import com.rcsoyer.servicosjuridicos.service.dto.QueryParamsCoordenacao;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,9 +17,9 @@ public interface CoordenacaoJuridicaService {
      * @param coordenacaoJuridicaDTO the entity to save
      * @return the persisted entity
      */
-    CoordenacaoJuridicaDTO save(CoordenacaoJuridicaDTO coordenacaoJuridicaDTO);
+    CoordenacaoCreateUpdateDto save(CoordenacaoCreateUpdateDto coordenacaoJuridicaDTO);
     
-    Page<CoordenacaoJuridicaDTO> findByParams(CoordenacaoJuridicaDTO dto, Pageable pageable);
+    Page<CoordenacaoCreateUpdateDto> findByParams(QueryParamsCoordenacao queryParams, Pageable pageable);
     
     /**
      * Get the "id" coordenacaoJuridica.
@@ -26,7 +27,7 @@ public interface CoordenacaoJuridicaService {
      * @param id the id of the entity
      * @return the entity
      */
-    Optional<CoordenacaoJuridicaDTO> findOne(Long id);
+    Optional<CoordenacaoCreateUpdateDto> findOne(Long id);
     
     /**
      * Delete the "id" coordenacaoJuridica.

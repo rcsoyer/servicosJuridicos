@@ -3,7 +3,8 @@ package com.rcsoyer.servicosjuridicos.service.impl;
 import com.rcsoyer.servicosjuridicos.domain.CoordenacaoJuridica;
 import com.rcsoyer.servicosjuridicos.repository.CoordenacaoJuridicaRepository;
 import com.rcsoyer.servicosjuridicos.service.CoordenacaoJuridicaService;
-import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoJuridicaDTO;
+import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoCreateUpdateDto;
+import com.rcsoyer.servicosjuridicos.service.dto.QueryParamsCoordenacao;
 import com.rcsoyer.servicosjuridicos.service.mapper.CoordenacaoJuridicaMapper;
 import java.util.Optional;
 import java.util.function.Function;
@@ -32,9 +33,9 @@ public class CoordenacaoJuridicaServiceImpl implements CoordenacaoJuridicaServic
     }
     
     @Override
-    public CoordenacaoJuridicaDTO save(final CoordenacaoJuridicaDTO dto) {
+    public CoordenacaoCreateUpdateDto save(final CoordenacaoCreateUpdateDto dto) {
         log.debug("Transforming and  saving CoordenacaoJuridica: {}", dto);
-        Function<CoordenacaoJuridicaDTO, CoordenacaoJuridica> toEntity = mapper::toEntity;
+        Function<CoordenacaoCreateUpdateDto, CoordenacaoJuridica> toEntity = mapper::toEntity;
         return toEntity.andThen(repository::save)
                        .andThen(mapper::toDto)
                        .apply(dto);
@@ -42,7 +43,7 @@ public class CoordenacaoJuridicaServiceImpl implements CoordenacaoJuridicaServic
     
     @Override
     @Transactional(readOnly = true)
-    public Optional<CoordenacaoJuridicaDTO> findOne(Long id) {
+    public Optional<CoordenacaoCreateUpdateDto> findOne(Long id) {
         log.debug("Querying the DB to find a CoordenacaoJuridica with: id={}", id);
         return repository.findById(id)
                          .map(mapper::toDto);
@@ -56,9 +57,9 @@ public class CoordenacaoJuridicaServiceImpl implements CoordenacaoJuridicaServic
     
     @Override
     @Transactional(readOnly = true)
-    public Page<CoordenacaoJuridicaDTO> findByParams(final CoordenacaoJuridicaDTO dto,
-                                                     final Pageable pageable) {
-        return repository.query(mapper.toEntityWithAssuntosIds(dto), pageable)
+    public Page<CoordenacaoCreateUpdateDto> findByParams(final QueryParamsCoordenacao queryParams,
+                                                         final Pageable pageable) {
+        return repository.query(mapper.toEntity(queryParams), pageable)
                          .map(mapper::toDto);
     }
 }

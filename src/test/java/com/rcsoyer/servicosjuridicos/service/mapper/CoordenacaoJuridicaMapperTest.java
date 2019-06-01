@@ -8,7 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.rcsoyer.servicosjuridicos.domain.Assunto;
 import com.rcsoyer.servicosjuridicos.domain.CoordenacaoJuridica;
 import com.rcsoyer.servicosjuridicos.service.dto.AssuntoDTO;
-import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoJuridicaDTO;
+import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoCreateUpdateDto;
+import com.rcsoyer.servicosjuridicos.service.dto.QueryParamsCoordenacao;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
@@ -27,7 +28,7 @@ class CoordenacaoJuridicaMapperTest {
     
     @Test
     void toEntity() {
-        CoordenacaoJuridicaDTO coordenacaoJuridicaDto = createCoordenacaoJuridicaDto();
+        CoordenacaoCreateUpdateDto coordenacaoJuridicaDto = createCoordenacaoJuridicaDto();
         final var coordenacaoJuridica = mapper.toEntity(coordenacaoJuridicaDto);
         
         assertEquals(coordenacaoJuridicaDto.getId(), coordenacaoJuridica.getId());
@@ -59,13 +60,14 @@ class CoordenacaoJuridicaMapperTest {
     
     @Test
     void toEntityWithAssuntosIds() {
-        CoordenacaoJuridicaDTO coordenacaoJuridicaDto = new CoordenacaoJuridicaDTO()
+        final var assuntosIds = Set.of(1L, 2L);
+        QueryParamsCoordenacao coordenacaoJuridicaDto = new QueryParamsCoordenacao()
                                                             .setId(1L)
                                                             .setCentena("423")
                                                             .setNome("Lack of coodernation")
                                                             .setSigla("OCU")
-                                                            .setAssuntosIds(Set.of(1L, 2L));
-        final var coordenacaoJuridica = mapper.toEntityWithAssuntosIds(coordenacaoJuridicaDto);
+                                                            .setAssuntos(assuntosIds);
+        final var coordenacaoJuridica = mapper.toEntity(coordenacaoJuridicaDto);
         
         assertEquals(coordenacaoJuridicaDto.getId(), coordenacaoJuridica.getId());
         assertEquals(coordenacaoJuridicaDto.getCentena(), coordenacaoJuridica.getCentena());
@@ -77,12 +79,12 @@ class CoordenacaoJuridicaMapperTest {
                                                       .map(Assunto::getId)
                                                       .collect(toSet());
         
-        assertEquals(coordenacaoJuridicaDto.getAssuntosIds(), assuntos);
+        assertEquals(assuntosIds, assuntos);
     }
     
     @Test
     void fromId() {
-        final var dto = new CoordenacaoJuridicaDTO().setId(1L);
+        final var dto = new CoordenacaoCreateUpdateDto().setId(1L);
         CoordenacaoJuridica coordenacaoJuridica = mapper.fromId(dto.getId());
         
         assertEquals(dto.getId(), coordenacaoJuridica.getId());
@@ -138,7 +140,7 @@ class CoordenacaoJuridicaMapperTest {
                  });
     }
     
-    private CoordenacaoJuridicaDTO createCoordenacaoJuridicaDto() {
+    private CoordenacaoCreateUpdateDto createCoordenacaoJuridicaDto() {
         final var assuntoDto1 = new AssuntoDTO()
                                     .setId(1L)
                                     .setDescricao("Futebol")
@@ -151,7 +153,7 @@ class CoordenacaoJuridicaMapperTest {
                                     .setAtivo(Boolean.FALSE)
                                     .setPeso(2)
                                     .setDescricao("frequentemente usado na falta de maior intimidade");
-        return new CoordenacaoJuridicaDTO()
+        return new CoordenacaoCreateUpdateDto()
                    .setId(1L)
                    .setCentena("423")
                    .setNome("Lack of coodernation")

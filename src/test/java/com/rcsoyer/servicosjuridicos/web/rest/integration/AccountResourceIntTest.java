@@ -1,4 +1,4 @@
-package com.rcsoyer.servicosjuridicos.web.rest;
+package com.rcsoyer.servicosjuridicos.web.rest.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -21,6 +21,8 @@ import com.rcsoyer.servicosjuridicos.service.MailService;
 import com.rcsoyer.servicosjuridicos.service.UserService;
 import com.rcsoyer.servicosjuridicos.service.dto.PasswordChangeDTO;
 import com.rcsoyer.servicosjuridicos.service.dto.UserDTO;
+import com.rcsoyer.servicosjuridicos.web.rest.AccountResource;
+import com.rcsoyer.servicosjuridicos.web.rest.TestUtil;
 import com.rcsoyer.servicosjuridicos.web.rest.errors.ExceptionTranslator;
 import com.rcsoyer.servicosjuridicos.web.rest.vm.KeyAndPasswordVM;
 import com.rcsoyer.servicosjuridicos.web.rest.vm.ManagedUserVM;

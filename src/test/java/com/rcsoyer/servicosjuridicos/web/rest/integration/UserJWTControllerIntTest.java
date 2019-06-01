@@ -1,4 +1,4 @@
-package com.rcsoyer.servicosjuridicos.web.rest;
+package com.rcsoyer.servicosjuridicos.web.rest.integration;
 
 import static org.hamcrest.Matchers.isEmptyString;
 import static org.hamcrest.Matchers.not;
@@ -12,6 +12,8 @@ import com.rcsoyer.servicosjuridicos.ServicosJuridicosApp;
 import com.rcsoyer.servicosjuridicos.domain.User;
 import com.rcsoyer.servicosjuridicos.repository.UserRepository;
 import com.rcsoyer.servicosjuridicos.security.jwt.TokenProvider;
+import com.rcsoyer.servicosjuridicos.web.rest.TestUtil;
+import com.rcsoyer.servicosjuridicos.web.rest.UserJWTController;
 import com.rcsoyer.servicosjuridicos.web.rest.errors.ExceptionTranslator;
 import com.rcsoyer.servicosjuridicos.web.rest.vm.LoginVM;
 import org.junit.Before;

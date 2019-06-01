@@ -1,4 +1,4 @@
-package com.rcsoyer.servicosjuridicos.web.rest;
+package com.rcsoyer.servicosjuridicos.web.rest.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -9,6 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import ch.qos.logback.classic.AsyncAppender;
 import ch.qos.logback.classic.LoggerContext;
 import com.rcsoyer.servicosjuridicos.ServicosJuridicosApp;
+import com.rcsoyer.servicosjuridicos.web.rest.LogsResource;
+import com.rcsoyer.servicosjuridicos.web.rest.TestUtil;
 import com.rcsoyer.servicosjuridicos.web.rest.vm.LoggerVM;
 import org.junit.Before;
 import org.junit.Test;
