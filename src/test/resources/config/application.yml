@@ -24,7 +24,7 @@ logging:
     level:
         org:
             hibernate:
-                type: trace
+                type: info
 
 spring:
     application:

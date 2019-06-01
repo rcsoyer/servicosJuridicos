@@ -1,5 +1,7 @@
 package com.rcsoyer.servicosjuridicos.web.rest.integration;
 
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+
 import com.rcsoyer.servicosjuridicos.ServicosJuridicosApp;
 import com.rcsoyer.servicosjuridicos.web.rest.errors.ExceptionTranslator;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,7 +12,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = ServicosJuridicosApp.class)
+@SpringBootTest(classes = ServicosJuridicosApp.class, webEnvironment = RANDOM_PORT)
 abstract class ApiConfigTest {
     
     @Autowired
