@@ -132,14 +132,14 @@ public class CoordenacaoJuridica implements Serializable {
     }
     
     /**
-     * Creates a immutable of copy of these assuntos
+     * Creates a immutable copy of these assuntos
      */
     public Set<Assunto> getAssuntos() {
         return ImmutableSet.copyOf(assuntos);
     }
     
     /**
-     * Creates a immutable of copy of these advogadoDgCoordenacao
+     * Creates a immutable copy of these advogadoDgCoordenacao
      */
     public Set<AdvogadoDgCoordenacao> getDgAdvogados() {
         return ImmutableSet.copyOf(dgAdvogados);

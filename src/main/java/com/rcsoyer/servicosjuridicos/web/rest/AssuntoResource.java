@@ -69,7 +69,7 @@ public class AssuntoResource {
     @PutMapping
     @ApiOperation(value = "Update an existing assunto", response = AssuntoDTO.class)
     @ApiResponses({
-        @ApiResponse(code = 200, message = "Assunto created"),
+        @ApiResponse(code = 200, message = "Assunto updated"),
         @ApiResponse(code = 400, message = "An existing Assunto must have an ID")
     })
     public ResponseEntity<AssuntoDTO> updateAssunto(@Valid @RequestBody AssuntoDTO dto) {

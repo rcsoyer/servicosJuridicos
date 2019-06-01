@@ -1,27 +1,29 @@
 package com.rcsoyer.servicosjuridicos.web.rest;
 
+import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityCreationAlert;
+import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityDeletionAlert;
+import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityUpdateAlert;
+import static com.rcsoyer.servicosjuridicos.web.rest.util.PaginationUtil.generatePaginationHttpHeaders;
+import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
+
 import com.codahale.metrics.annotation.Timed;
 import com.rcsoyer.servicosjuridicos.service.CoordenacaoJuridicaService;
 import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoJuridicaDTO;
-import com.rcsoyer.servicosjuridicos.service.dto.PageableDTO;
 import com.rcsoyer.servicosjuridicos.web.rest.errors.BadRequestAlertException;
-import com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil;
-import com.rcsoyer.servicosjuridicos.web.rest.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 import javax.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.validation.constraints.Min;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,138 +32,112 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
  * REST controller for managing CoordenacaoJuridica.
  */
+@Slf4j
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/coordenacao-juridica")
 public class CoordenacaoJuridicaResource {
     
-    private final CoordenacaoJuridicaService service;
     private static final String ENTITY_NAME = "coordenacaoJuridica";
-    private final Logger log = LoggerFactory.getLogger(CoordenacaoJuridicaResource.class);
     
-    public CoordenacaoJuridicaResource(CoordenacaoJuridicaService coordenacaoJuridicaService) {
+    private final CoordenacaoJuridicaService service;
+    
+    public CoordenacaoJuridicaResource(final CoordenacaoJuridicaService coordenacaoJuridicaService) {
         this.service = coordenacaoJuridicaService;
     }
     
-    /**
-     * POST /coordenacao-juridicas : Create a new coordenacaoJuridica.
-     *
-     * @param dto the coordenacaoJuridicaDTO to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new coordenacaoJuridicaDTO, or with status
-     * 400 (Bad Request) if the coordenacaoJuridica has already an ID
-     * @throws URISyntaxException if the Location URI syntax is incorrect
-     */
     @Timed
-    @PostMapping("/coordenacao-juridica")
+    @PostMapping
+    @ApiOperation(value = "Create a new CoordenacaoJuridica", response = CoordenacaoJuridicaDTO.class)
+    @ApiResponses({
+        @ApiResponse(code = 201, message = "CoordenacaoJuridica created"),
+        @ApiResponse(code = 400, message = "A new CoordenacaoJuridica must not have and ID")
+    })
     public ResponseEntity<CoordenacaoJuridicaDTO> createCoordenacaoJuridica(
-        @Valid @RequestBody CoordenacaoJuridicaDTO dto) throws URISyntaxException {
-        log.debug("REST request to save CoordenacaoJuridica : {}", dto);
-        throwsBadRequestIfHasId(dto);
-        CoordenacaoJuridicaDTO result = service.save(dto);
-        Long resultId = result.getId();
-        URI uriCreate = new URI("/api/coordenacao-juridicas/" + resultId);
-        HttpHeaders headerCreationAlert = HeaderUtil.entityCreationAlert(ENTITY_NAME, resultId.toString());
-        return ResponseEntity.created(uriCreate)
-                             .headers(headerCreationAlert)
-                             .body(result);
+        @Valid @RequestBody final CoordenacaoJuridicaDTO coordenacaoJuridicaDto) {
+        log.info("REST request to create a CoordenacaoJuridica: {}", coordenacaoJuridicaDto);
+        return Optional.of(coordenacaoJuridicaDto)
+                       .filter(dto -> isNull(dto.getId()))
+                       .map(service::save)
+                       .map(savedDto -> ResponseEntity
+                                            .created(URI.create("/api/coordenacao-juridica/" + savedDto.getId()))
+                                            .headers(entityCreationAlert(ENTITY_NAME, savedDto.getId().toString()))
+                                            .body(savedDto))
+                       .orElseThrow(badRequestHasIdOnCreation());
     }
     
-    private void throwsBadRequestIfHasId(CoordenacaoJuridicaDTO dto) {
-        Supplier<BadRequestAlertException> throwBadRequestExcpetion = () -> {
-            String msgError = "A new coordenacaoJuridica cannot already have an ID";
-            BadRequestAlertException badRequestAlertException =
-                new BadRequestAlertException(msgError, ENTITY_NAME, "idexists");
-            log.error(msgError, badRequestAlertException);
-            return badRequestAlertException;
-        };
-        Predicate<CoordenacaoJuridicaDTO> hasNoId = coordenacao -> Objects.isNull(coordenacao.getId());
-        Optional.of(dto)
-                .filter(hasNoId)
-                .orElseThrow(throwBadRequestExcpetion);
-    }
-    
-    /**
-     * PUT /coordenacao-juridicas : Updates an existing coordenacaoJuridica.
-     *
-     * @param dto the coordenacaoJuridicaDTO to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated coordenacaoJuridicaDTO, or with status
-     * 400 (Bad Request) if the coordenacaoJuridicaDTO is not valid, or with status 500 (Internal Server Error) if the
-     * coordenacaoJuridicaDTO couldn't be updated
-     * @throws URISyntaxException if the Location URI syntax is incorrect
-     */
     @Timed
-    @PutMapping("/coordenacao-juridica")
+    @PutMapping
+    @ApiOperation(value = "Update an existing CoordenacaoJuridica", response = CoordenacaoJuridicaDTO.class)
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "CoordenacaoJuridica updated"),
+        @ApiResponse(code = 400, message = "An existing CoordenacaoJuridica must have an ID")
+    })
     public ResponseEntity<CoordenacaoJuridicaDTO> updateCoordenacaoJuridica(
-        @Valid @RequestBody CoordenacaoJuridicaDTO dto) throws URISyntaxException {
-        log.debug("REST request to update CoordenacaoJuridica : {}", dto);
-        throwsBadRequestIfHasNoId(dto);
-        CoordenacaoJuridicaDTO result = service.save(dto);
-        String idString = dto.getId().toString();
-        HttpHeaders headerUpdateAlert = HeaderUtil.entityUpdateAlert(ENTITY_NAME, idString);
-        return ResponseEntity.ok()
-                             .headers(headerUpdateAlert)
-                             .body(result);
-    }
-    
-    private void throwsBadRequestIfHasNoId(CoordenacaoJuridicaDTO dto) {
-        Supplier<BadRequestAlertException> throwBadRequestExcpetion = () -> {
-            String msgError = "Invalid id";
-            BadRequestAlertException badRequestAlertException =
-                new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-            log.error(msgError, badRequestAlertException);
-            return badRequestAlertException;
-        };
-        Predicate<CoordenacaoJuridicaDTO> hasId = assunto -> Objects.nonNull(assunto.getId());
-        Optional.of(dto)
-                .filter(hasId)
-                .orElseThrow(throwBadRequestExcpetion);
+        @Valid @RequestBody final CoordenacaoJuridicaDTO coordenacaoJuridicaDto) {
+        log.info("REST request to update CoordenacaoJuridica: {}", coordenacaoJuridicaDto);
+        return Optional.of(coordenacaoJuridicaDto)
+                       .filter(dto -> nonNull(dto.getId()))
+                       .map(service::save)
+                       .map(result -> ResponseEntity.ok()
+                                                    .headers(entityUpdateAlert(ENTITY_NAME, result.getId().toString()))
+                                                    .body(result))
+                       .orElseThrow(badRequestHasNoIdOnUpdate());
     }
     
     @Timed
-    @GetMapping("/getCoordenacoes")
+    @GetMapping
+    @ApiOperation("Get a paginated list of CoordenacaoJuridica matching the supplied query parameters and pagination information")
     public ResponseEntity<List<CoordenacaoJuridicaDTO>> getCoordenacoes(
-        @RequestParam("dto") CoordenacaoJuridicaDTO dto,
-        @RequestParam("pageable") PageableDTO pageableDTO) {
-        log.debug("REST request to get a page of CoordenacaoJuridicas");
-        Pageable pageable = pageableDTO.getPageable();
-        Page<CoordenacaoJuridicaDTO> page = service.findByParams(dto, pageable);
-        HttpHeaders headers =
-            PaginationUtil.generatePaginationHttpHeaders(page, "/api/coordenacoes");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        final CoordenacaoJuridicaDTO dto, final Pageable pageable) {
+        log.debug("REST request to get a page of CoordenacaoJuridicas with: {} and {}", dto, pageable);
+        final Page<CoordenacaoJuridicaDTO> page = service.findByParams(dto, pageable);
+        return ResponseEntity.ok()
+                             .headers(generatePaginationHttpHeaders(page, "/api/coordenacao-juridica"))
+                             .body(page.getContent());
     }
     
-    /**
-     * GET /coordenacao-juridicas/:id : get the "id" coordenacaoJuridica.
-     *
-     * @param id the id of the coordenacaoJuridicaDTO to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the coordenacaoJuridicaDTO, or with status 404 (Not
-     * Found)
-     */
     @Timed
-    @GetMapping("/coordenacao-juridica/{id}")
-    public ResponseEntity<CoordenacaoJuridicaDTO> getCoordenacaoJuridica(@PathVariable Long id) {
-        log.debug("REST request to get CoordenacaoJuridica : {}", id);
-        Optional<CoordenacaoJuridicaDTO> coordenacaoJuridicaDTO = service.findOne(id);
-        return ResponseUtil.wrapOrNotFound(coordenacaoJuridicaDTO);
+    @GetMapping("/{id}")
+    @ApiOperation("Get an CoordenacaoJuridica matching the given id")
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "CoordenacaoJuridica founded matching the given id"),
+        @ApiResponse(code = 404, message = "No CoordenacaoJuridica found with the given id")
+    })
+    public ResponseEntity<CoordenacaoJuridicaDTO> getCoordenacaoJuridica(@PathVariable @Valid @Min(1L) Long id) {
+        log.debug("REST request to get CoordenacaoJuridica: {}", id);
+        return ResponseUtil.wrapOrNotFound(service.findOne(id));
     }
     
-    /**
-     * DELETE /coordenacao-juridicas/:id : delete the "id" coordenacaoJuridica.
-     *
-     * @param id the id of the coordenacaoJuridicaDTO to delete
-     * @return the ResponseEntity with status 200 (OK)
-     */
     @Timed
-    @DeleteMapping("/coordenacao-juridica/{id}")
-    public ResponseEntity<Void> deleteCoordenacaoJuridica(@PathVariable Long id) {
-        log.debug("REST request to delete CoordenacaoJuridica : {}", id);
+    @DeleteMapping("/{id}")
+    @ApiOperation("Delete a CoordenacaoJuridica matching the given id")
+    public ResponseEntity<Void> deleteCoordenacaoJuridica(@PathVariable @Valid @Min(1L) Long id) {
+        log.debug("REST request to delete CoordenacaoJuridica: {}", id);
         service.delete(id);
         return ResponseEntity.ok()
-                             .headers(HeaderUtil.entityDeletionAlert(ENTITY_NAME, id.toString())).build();
+                             .headers(entityDeletionAlert(ENTITY_NAME, id.toString()))
+                             .build();
+    }
+    
+    private Supplier<BadRequestAlertException> badRequestHasIdOnCreation() {
+        return () -> {
+            final var badRequestAlertException = new BadRequestAlertException(
+                "A new coordenacaoJuridica cannot already have an ID", ENTITY_NAME, "idexists");
+            log.error("Wrong attempt to create a CoordenacaoJuridica", badRequestAlertException);
+            return badRequestAlertException;
+        };
+    }
+    
+    private Supplier<BadRequestAlertException> badRequestHasNoIdOnUpdate() {
+        return () -> {
+            final var badRequestAlertException = new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            log.error("Invalid attempt to update a CoordenacaoJuridica", badRequestAlertException);
+            return badRequestAlertException;
+        };
     }
 }

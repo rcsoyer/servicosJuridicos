@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -138,6 +139,17 @@ class CoordenacaoJuridicaTest {
         Set<ConstraintViolation<CoordenacaoJuridica>> violations = validator.validate(coordenacao);
         
         assertThat(violations, hasSize(1));
+    }
+    
+    @Test
+    void addAssuntos() {
+        final var assunto1 = new Assunto().setId(1L).setDescricao("Assunto 1");
+        final var assunto2 = new Assunto().setId(2L).setDescricao("Assunto 2");
+        Set<Assunto> assuntos = Set.of(assunto1, assunto2);
+        
+        coordenacao.addAssuntos(assuntos);
+        
+        assertTrue(coordenacao.getAssuntos().containsAll(assuntos));
     }
     
     private AdvogadoDgCoordenacao addGetAdvogadoDgCoordenacao() {
