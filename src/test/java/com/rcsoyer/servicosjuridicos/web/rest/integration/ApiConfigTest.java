@@ -6,11 +6,13 @@ import com.rcsoyer.servicosjuridicos.ServicosJuridicosApp;
 import com.rcsoyer.servicosjuridicos.web.rest.errors.ExceptionTranslator;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+@AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = ServicosJuridicosApp.class, webEnvironment = RANDOM_PORT)
 abstract class ApiConfigTest {
