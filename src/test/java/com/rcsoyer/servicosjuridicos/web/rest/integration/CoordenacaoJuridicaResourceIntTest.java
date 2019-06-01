@@ -13,7 +13,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rcsoyer.servicosjuridicos.service.AssuntoService;
 import com.rcsoyer.servicosjuridicos.service.CoordenacaoJuridicaService;
 import com.rcsoyer.servicosjuridicos.service.dto.AssuntoDTO;
@@ -38,9 +37,6 @@ class CoordenacaoJuridicaResourceIntTest extends ApiConfigTest {
     
     @Autowired
     private AssuntoService assuntoService;
-    
-    @Autowired
-    private ObjectMapper objectMapper;
     
     private CoordenacaoCreateUpdateDto dto;
     
