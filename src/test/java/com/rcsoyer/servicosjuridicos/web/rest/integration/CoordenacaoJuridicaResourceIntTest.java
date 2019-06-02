@@ -46,7 +46,7 @@ class CoordenacaoJuridicaResourceIntTest extends ApiConfigTest {
     }
     
     @Test
-    void createCoordenacaoJuridica() throws Exception {
+    void createCoordenacaoJuridica_ok() throws Exception {
         mockMvc.perform(post(URL_COORDENACAO_API)
                             .with(user(TEST_USER_ID))
                             .with(csrf())
@@ -59,6 +59,17 @@ class CoordenacaoJuridicaResourceIntTest extends ApiConfigTest {
                .andExpect(jsonPath("$.sigla").value(dto.getSigla()))
                .andExpect(jsonPath("$.centena").value(dto.getCentena()))
                .andExpect(jsonPath("$.assuntos", hasSize(2)));
+    }
+    
+    @Test
+    void createCoordenacaoJuridica_badRequestHasIdOnCreation() throws Exception {
+        mockMvc.perform(post(URL_COORDENACAO_API)
+                            .with(user(TEST_USER_ID))
+                            .with(csrf())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(convertObjectToJsonBytes(dto.setId(666L))))
+               .andExpect(status().isBadRequest())
+               .andExpect(jsonPath("message").value("error.idexists"));
     }
     
     @Test
