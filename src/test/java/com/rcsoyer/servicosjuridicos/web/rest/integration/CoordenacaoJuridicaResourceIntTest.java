@@ -123,7 +123,28 @@ class CoordenacaoJuridicaResourceIntTest extends ApiConfigTest {
     }
     
     @Test
-    void getCoordenacaoJuridica() {
+    void getCoordenacaoJuridica() throws Exception {
+        final CoordenacaoCreateUpdateDto coodernacao = coordenacaoService.save(dto);
+        
+        mockMvc.perform(
+            get(URL_COORDENACAO_API + "/{id}", coodernacao.getId())
+                .with(user(TEST_USER_ID))
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.id", equalTo(coodernacao.getId().intValue())))
+               .andExpect(jsonPath("$.nome", equalTo(coodernacao.getNome())))
+               .andExpect(jsonPath("$.sigla", equalTo(coodernacao.getSigla())))
+               .andExpect(jsonPath("$.centena", equalTo(coodernacao.getCentena())))
+               .andExpect(jsonPath("$.assuntos", hasSize(2)))
+               .andExpect(jsonPath("$.assuntos.[0].id").isNumber())
+               .andExpect(jsonPath("$.assuntos.[0].descricao").isNotEmpty())
+               .andExpect(jsonPath("$.assuntos.[0].ativo").isBoolean())
+               .andExpect(jsonPath("$.assuntos.[0].peso").isNumber())
+               .andExpect(jsonPath("$.assuntos.[1].id").isNumber())
+               .andExpect(jsonPath("$.assuntos.[1].descricao").isNotEmpty())
+               .andExpect(jsonPath("$.assuntos.[1].ativo").isBoolean())
+               .andExpect(jsonPath("$.assuntos.[1].peso").isNumber());
     }
     
     @Test
