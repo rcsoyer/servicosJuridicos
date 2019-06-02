@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -29,9 +30,12 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode
 @Accessors(chain = true)
-@EqualsAndHashCode(of = "id")
-@Table(name = "ferias_licenca")
+@Table(name = "ferias_licenca", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"dtInicio", "advogado"}),
+    @UniqueConstraint(columnNames = {"dtFim", "advogado"})
+})
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class FeriasLicenca implements Serializable {
     
