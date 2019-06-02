@@ -16,7 +16,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @EqualsAndHashCode(of = {"id", "sigla", "nome"})
-abstract class CoordenacaoJuridicaDTO<T> {
+public abstract class CoordenacaoJuridicaDTO<T> {
     
     protected Long id;
     
@@ -48,6 +48,5 @@ abstract class CoordenacaoJuridicaDTO<T> {
     protected abstract CoordenacaoJuridicaDTO setCentena(String centena);
     
     protected abstract CoordenacaoJuridicaDTO setAssuntos(Set<T> assuntos);
-    
     
 }

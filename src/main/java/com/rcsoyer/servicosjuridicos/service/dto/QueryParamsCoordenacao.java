@@ -9,7 +9,7 @@ import lombok.ToString;
 
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class QueryParamsCoordenacao extends CoordenacaoJuridicaDTO<Long> implements Serializable {
+public final class QueryParamsCoordenacao extends CoordenacaoJuridicaDTO<Long> implements Serializable {
     
     private static final long serialVersionUID = -4989963223796988291L;
     
@@ -37,11 +37,10 @@ public class QueryParamsCoordenacao extends CoordenacaoJuridicaDTO<Long> impleme
         return this;
     }
     
-    
     @Override
     public QueryParamsCoordenacao setAssuntos(final Set<Long> assuntos) {
         this.assuntos = assuntos.stream()
-                                .map(id -> new AssuntoDTO().setId(id))
+                                .map(assuntoId -> new AssuntoDTO().setId(assuntoId))
                                 .collect(toSet());
         return this;
     }

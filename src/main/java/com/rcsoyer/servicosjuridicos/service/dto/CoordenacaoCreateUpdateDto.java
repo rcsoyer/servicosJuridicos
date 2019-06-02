@@ -7,7 +7,7 @@ import lombok.ToString;
 
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class CoordenacaoCreateUpdateDto extends CoordenacaoJuridicaDTO<AssuntoDTO> implements Serializable {
+public final class CoordenacaoCreateUpdateDto extends CoordenacaoJuridicaDTO<AssuntoDTO> implements Serializable {
     
     private static final long serialVersionUID = 4610080190846912510L;
     

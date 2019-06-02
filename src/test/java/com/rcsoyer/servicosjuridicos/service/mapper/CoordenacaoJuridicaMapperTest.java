@@ -19,37 +19,40 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+@SpringBootTest
 @ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = {CoordenacaoJuridicaMapperImpl.class, AssuntoMapperImpl.class})
 class CoordenacaoJuridicaMapperTest {
     
     @Inject
     private CoordenacaoJuridicaMapper mapper;
     
     @Test
-    void toEntity() {
-        CoordenacaoCreateUpdateDto coordenacaoJuridicaDto = createCoordenacaoJuridicaDto();
-        final var coordenacaoJuridica = mapper.toEntity(coordenacaoJuridicaDto);
+    void toEntity_withCoordenacaoCreateUpdateDto() {
+        final CoordenacaoCreateUpdateDto coordenacaoJuridicaDto = newCoordenacaoJuridicaDto();
         
-        assertEquals(coordenacaoJuridicaDto.getId(), coordenacaoJuridica.getId());
-        assertEquals(coordenacaoJuridicaDto.getCentena(), coordenacaoJuridica.getCentena());
-        assertEquals(coordenacaoJuridicaDto.getNome(), coordenacaoJuridica.getNome());
-        assertEquals(coordenacaoJuridicaDto.getSigla(), coordenacaoJuridica.getSigla());
+        final CoordenacaoJuridica coordenacaoResult = mapper.toEntity(coordenacaoJuridicaDto);
+        
+        assertEquals(coordenacaoJuridicaDto.getId(), coordenacaoResult.getId());
+        assertEquals(coordenacaoJuridicaDto.getCentena(), coordenacaoResult.getCentena());
+        assertEquals(coordenacaoJuridicaDto.getNome(), coordenacaoResult.getNome());
+        assertEquals(coordenacaoJuridicaDto.getSigla(), coordenacaoResult.getSigla());
         
         final List<AssuntoDTO> assuntosDto = coordenacaoJuridicaDto.getAssuntos()
                                                                    .stream()
                                                                    .sorted(comparing(AssuntoDTO::getId))
                                                                    .collect(toList());
         
-        final List<Assunto> assuntos = coordenacaoJuridica.getAssuntos()
-                                                          .stream()
-                                                          .sorted(comparing(Assunto::getId))
-                                                          .collect(toList());
+        final List<Assunto> assuntosResult = coordenacaoResult.getAssuntos()
+                                                              .stream()
+                                                              .sorted(comparing(Assunto::getId))
+                                                              .collect(toList());
         
-        IntStream.range(0, 2)
+        assertEquals(assuntosDto.size(), assuntosResult.size());
+        
+        IntStream.range(0, assuntosResult.size())
                  .forEach(index -> {
                      AssuntoDTO dto = assuntosDto.get(index);
-                     Assunto assunto = assuntos.get(index);
+                     Assunto assunto = assuntosResult.get(index);
             
                      assertEquals(dto.getId(), assunto.getId());
                      assertEquals(dto.isAtivo(), assunto.getAtivo());
@@ -59,27 +62,28 @@ class CoordenacaoJuridicaMapperTest {
     }
     
     @Test
-    void toEntityWithAssuntosIds() {
+    void toEntity_withQueryParamsCoordenacao() {
         final var assuntosIds = Set.of(1L, 2L);
-        QueryParamsCoordenacao coordenacaoJuridicaDto = new QueryParamsCoordenacao()
-                                                            .setId(1L)
-                                                            .setCentena("423")
-                                                            .setNome("Lack of coodernation")
-                                                            .setSigla("OCU")
-                                                            .setAssuntos(assuntosIds);
-        final var coordenacaoJuridica = mapper.toEntity(coordenacaoJuridicaDto);
+        final var queryParamsCoordenacao = new QueryParamsCoordenacao()
+                                               .setId(1L)
+                                               .setCentena("423")
+                                               .setNome("Lack of coodernation")
+                                               .setSigla("OCU")
+                                               .setAssuntos(assuntosIds);
         
-        assertEquals(coordenacaoJuridicaDto.getId(), coordenacaoJuridica.getId());
-        assertEquals(coordenacaoJuridicaDto.getCentena(), coordenacaoJuridica.getCentena());
-        assertEquals(coordenacaoJuridicaDto.getNome(), coordenacaoJuridica.getNome());
-        assertEquals(coordenacaoJuridicaDto.getSigla(), coordenacaoJuridica.getSigla());
+        final CoordenacaoJuridica coordenacaoResult = mapper.toEntity(queryParamsCoordenacao);
         
-        final Set<Long> assuntos = coordenacaoJuridica.getAssuntos()
-                                                      .stream()
-                                                      .map(Assunto::getId)
-                                                      .collect(toSet());
+        assertEquals(queryParamsCoordenacao.getId(), coordenacaoResult.getId());
+        assertEquals(queryParamsCoordenacao.getCentena(), coordenacaoResult.getCentena());
+        assertEquals(queryParamsCoordenacao.getNome(), coordenacaoResult.getNome());
+        assertEquals(queryParamsCoordenacao.getSigla(), coordenacaoResult.getSigla());
         
-        assertEquals(assuntosIds, assuntos);
+        final Set<Long> assuntosResult = coordenacaoResult.getAssuntos()
+                                                          .stream()
+                                                          .map(Assunto::getId)
+                                                          .collect(toSet());
+        
+        assertEquals(assuntosIds, assuntosResult);
     }
     
     @Test
@@ -111,26 +115,28 @@ class CoordenacaoJuridicaMapperTest {
                                     .setSigla("OCU")
                                     .addAssuntos(Set.of(assunto1, assunto2));
         
-        final var coordenacaoJuridicaDto = mapper.toDto(coordenacao);
+        final CoordenacaoCreateUpdateDto coordenacaoDtoResult = mapper.toDto(coordenacao);
         
-        assertEquals(coordenacao.getId(), coordenacaoJuridicaDto.getId());
-        assertEquals(coordenacao.getCentena(), coordenacaoJuridicaDto.getCentena());
-        assertEquals(coordenacao.getNome(), coordenacaoJuridicaDto.getNome());
-        assertEquals(coordenacao.getSigla(), coordenacaoJuridicaDto.getSigla());
+        assertEquals(coordenacao.getId(), coordenacaoDtoResult.getId());
+        assertEquals(coordenacao.getCentena(), coordenacaoDtoResult.getCentena());
+        assertEquals(coordenacao.getNome(), coordenacaoDtoResult.getNome());
+        assertEquals(coordenacao.getSigla(), coordenacaoDtoResult.getSigla());
         
         final List<Assunto> assuntos = coordenacao.getAssuntos()
                                                   .stream()
                                                   .sorted(comparing(Assunto::getId))
                                                   .collect(toList());
         
-        final List<AssuntoDTO> assuntosDto = coordenacaoJuridicaDto.getAssuntos()
-                                                                   .stream()
-                                                                   .sorted(comparing(AssuntoDTO::getId))
-                                                                   .collect(toList());
+        final List<AssuntoDTO> assuntosDtoResult = coordenacaoDtoResult.getAssuntos()
+                                                                       .stream()
+                                                                       .sorted(comparing(AssuntoDTO::getId))
+                                                                       .collect(toList());
         
-        IntStream.range(0, 2)
+        assertEquals(assuntos.size(), assuntosDtoResult.size());
+        
+        IntStream.range(0, assuntosDtoResult.size())
                  .forEach(index -> {
-                     AssuntoDTO dto = assuntosDto.get(index);
+                     AssuntoDTO dto = assuntosDtoResult.get(index);
                      Assunto assunto = assuntos.get(index);
             
                      assertEquals(dto.getId(), assunto.getId());
@@ -140,7 +146,7 @@ class CoordenacaoJuridicaMapperTest {
                  });
     }
     
-    private CoordenacaoCreateUpdateDto createCoordenacaoJuridicaDto() {
+    private CoordenacaoCreateUpdateDto newCoordenacaoJuridicaDto() {
         final var assuntoDto1 = new AssuntoDTO()
                                     .setId(1L)
                                     .setDescricao("Futebol")
