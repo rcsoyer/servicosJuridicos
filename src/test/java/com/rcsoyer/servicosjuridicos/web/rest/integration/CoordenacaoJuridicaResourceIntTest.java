@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -168,7 +169,25 @@ class CoordenacaoJuridicaResourceIntTest extends ApiConfigTest {
     }
     
     @Test
-    void deleteCoordenacaoJuridica() {
+    void deleteCoordenacaoJuridica_ok() throws Exception {
+        final CoordenacaoCreateUpdateDto coordernacao = coordenacaoService.save(dto);
+        
+        mockMvc.perform(
+            delete(URL_COORDENACAO_API + "/{id}", coordernacao.getId())
+                .with(user(TEST_USER_ID))
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON))
+               .andExpect(status().isOk());
+    }
+    
+    @Test
+    void deleteCoordenacaoJuridica_isBadRequest() throws Exception {
+        mockMvc.perform(
+            delete(URL_COORDENACAO_API + "/{id}", -99999)
+                .with(user(TEST_USER_ID))
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON))
+               .andExpect(status().isBadRequest());
     }
     
     private CoordenacaoCreateUpdateDto newCoordenacaoJuridicaDto() {
