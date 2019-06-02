@@ -111,7 +111,7 @@ public class CoordenacaoJuridicaResource {
         @ApiResponse(code = 200, message = "CoordenacaoJuridica founded matching the given id"),
         @ApiResponse(code = 404, message = "No CoordenacaoJuridica found with the given id")
     })
-    public ResponseEntity<CoordenacaoCreateUpdateDto> getCoordenacaoJuridica(@PathVariable @Valid @Min(1L) Long id) {
+    public ResponseEntity<CoordenacaoCreateUpdateDto> getCoordenacaoJuridica(@PathVariable @Min(1L) Long id) {
         log.debug("REST request to get CoordenacaoJuridica: {}", id);
         return ResponseUtil.wrapOrNotFound(service.findOne(id));
     }
@@ -119,7 +119,7 @@ public class CoordenacaoJuridicaResource {
     @Timed
     @DeleteMapping("/{id}")
     @ApiOperation("Delete a CoordenacaoJuridica matching the given id")
-    public ResponseEntity<Void> deleteCoordenacaoJuridica(@PathVariable @Valid @Min(1L) Long id) {
+    public ResponseEntity<Void> deleteCoordenacaoJuridica(@PathVariable @Min(1L) Long id) {
         log.debug("REST request to delete CoordenacaoJuridica: {}", id);
         service.delete(id);
         return ResponseEntity.ok()
