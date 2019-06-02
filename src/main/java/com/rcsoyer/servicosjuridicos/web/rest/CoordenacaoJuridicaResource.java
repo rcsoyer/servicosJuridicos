@@ -12,6 +12,7 @@ import com.rcsoyer.servicosjuridicos.service.CoordenacaoJuridicaService;
 import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoCreateUpdateDto;
 import com.rcsoyer.servicosjuridicos.service.dto.QueryParamsCoordenacao;
 import com.rcsoyer.servicosjuridicos.web.rest.errors.BadRequestAlertException;
+import com.rcsoyer.servicosjuridicos.web.rest.errors.BadRequestAlertException.BadRequestAlertExceptionBuilder;
 import io.github.jhipster.web.util.ResponseUtil;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -129,8 +130,13 @@ public class CoordenacaoJuridicaResource {
     
     private Supplier<BadRequestAlertException> badRequestHasIdOnCreation() {
         return () -> {
-            final var badRequestAlertException = new BadRequestAlertException(
-                "A new coordenacaoJuridica cannot already have an ID", ENTITY_NAME, "idexists");
+            final var badRequestAlertException = BadRequestAlertExceptionBuilder
+                                                     .newBuilder()
+                                                     .defaultMessage(
+                                                         "A new coordenacaoJuridica cannot already have an ID")
+                                                     .entityName(ENTITY_NAME)
+                                                     .errorKey("idexists")
+                                                     .build();
             log.error("Wrong attempt to create a CoordenacaoJuridica", badRequestAlertException);
             return badRequestAlertException;
         };
@@ -138,7 +144,11 @@ public class CoordenacaoJuridicaResource {
     
     private Supplier<BadRequestAlertException> badRequestHasNoIdOnUpdate() {
         return () -> {
-            final var badRequestAlertException = new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+            final var badRequestAlertException = BadRequestAlertExceptionBuilder.newBuilder()
+                                                                                .defaultMessage("Invalid id")
+                                                                                .entityName(ENTITY_NAME)
+                                                                                .errorKey("idnull")
+                                                                                .build();
             log.error("Invalid attempt to update a CoordenacaoJuridica", badRequestAlertException);
             return badRequestAlertException;
         };
