@@ -123,7 +123,7 @@ class CoordenacaoJuridicaResourceIntTest extends ApiConfigTest {
     }
     
     @Test
-    void getCoordenacaoJuridica() throws Exception {
+    void getCoordenacaoJuridica_idExists() throws Exception {
         final CoordenacaoCreateUpdateDto coodernacao = coordenacaoService.save(dto);
         
         mockMvc.perform(
@@ -145,6 +145,26 @@ class CoordenacaoJuridicaResourceIntTest extends ApiConfigTest {
                .andExpect(jsonPath("$.assuntos.[1].descricao").isNotEmpty())
                .andExpect(jsonPath("$.assuntos.[1].ativo").isBoolean())
                .andExpect(jsonPath("$.assuntos.[1].peso").isNumber());
+    }
+    
+    @Test
+    void getCoordenacaoJuridica_notFound() throws Exception {
+        mockMvc.perform(
+            get(URL_COORDENACAO_API + "/{id}", 9999999)
+                .with(user(TEST_USER_ID))
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON))
+               .andExpect(status().isNotFound());
+    }
+    
+    @Test
+    void getCoordenacaoJuridica_idValueBadRequest() throws Exception {
+        mockMvc.perform(
+            get(URL_COORDENACAO_API + "/{id}", -1L)
+                .with(user(TEST_USER_ID))
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_JSON))
+               .andExpect(status().isBadRequest());
     }
     
     @Test
