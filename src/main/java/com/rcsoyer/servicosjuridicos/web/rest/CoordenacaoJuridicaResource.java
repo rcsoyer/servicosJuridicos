@@ -96,7 +96,7 @@ public class CoordenacaoJuridicaResource {
     public ResponseEntity<List<CoordenacaoCreateUpdateDto>> getCoordenacoes(
         final QueryParamsCoordenacao queryParams, final Pageable pageable) {
         log.debug("REST request to get a page of CoordenacaoJuridicas with: {} and {}", queryParams, pageable);
-        final Page<CoordenacaoCreateUpdateDto> page = service.findByParams(queryParams, pageable);
+        final Page<CoordenacaoCreateUpdateDto> page = service.seekByParams(queryParams, pageable);
         return ResponseEntity.ok()
                              .headers(generatePaginationHttpHeaders(page, "/api/coordenacao-juridica"))
                              .body(page.getContent());

@@ -125,7 +125,7 @@ class CoordenacaoJuridicaServiceImplTest {
         when(coordenacaoRepository.query(coordenacaoOfDto, pageable)).thenReturn(pageResultFromRepositoy);
         when(coordenacaoMapper.toDto(coordenacaoResult)).thenReturn(dtoResult);
         
-        final Page<CoordenacaoCreateUpdateDto> pageResult = coordenacaoService.findByParams(queryParams, pageable);
+        final Page<CoordenacaoCreateUpdateDto> pageResult = coordenacaoService.seekByParams(queryParams, pageable);
         
         assertEquals(pageResultFromRepositoy.getSize(), pageResult.getSize());
         

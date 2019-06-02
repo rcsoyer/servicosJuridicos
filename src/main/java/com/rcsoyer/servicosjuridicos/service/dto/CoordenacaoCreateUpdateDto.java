@@ -5,6 +5,11 @@ import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+/**
+ * {@inheritDoc}
+ *
+ * A kind of CoordenacaoJuridicaDTO usually used at creation or update
+ */
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public final class CoordenacaoCreateUpdateDto extends CoordenacaoJuridicaDTO<AssuntoDTO> implements Serializable {

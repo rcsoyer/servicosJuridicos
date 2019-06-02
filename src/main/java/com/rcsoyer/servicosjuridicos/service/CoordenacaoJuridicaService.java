@@ -19,7 +19,7 @@ public interface CoordenacaoJuridicaService {
      */
     CoordenacaoCreateUpdateDto save(CoordenacaoCreateUpdateDto coordenacaoJuridicaDTO);
     
-    Page<CoordenacaoCreateUpdateDto> findByParams(QueryParamsCoordenacao queryParams, Pageable pageable);
+    Page<CoordenacaoCreateUpdateDto> seekByParams(QueryParamsCoordenacao queryParams, Pageable pageable);
     
     /**
      * Get the "id" coordenacaoJuridica.

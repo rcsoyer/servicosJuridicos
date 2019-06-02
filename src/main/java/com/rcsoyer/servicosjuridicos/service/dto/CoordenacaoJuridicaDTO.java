@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.ToString;
 
 /**
- * A DTO for the CoordenacaoJuridica entity.
+ * A DTO for the CoordenacaoJuridica entity
  */
 @Getter
 @ToString

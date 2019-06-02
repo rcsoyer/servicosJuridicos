@@ -9,7 +9,6 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -82,7 +81,7 @@ class CoordenacaoJuridicaResourceIntTest extends ApiConfigTest {
     
     @Test
     void getCoordenacoes() throws Exception {
-        final var coodernacao1 = coordenacaoService.save(dto);
+        final CoordenacaoCreateUpdateDto coodernacao1 = coordenacaoService.save(dto);
         
         // has the same Assuntos but does not match in the other filters
         coordenacaoService.save(new CoordenacaoCreateUpdateDto()
@@ -90,10 +89,11 @@ class CoordenacaoJuridicaResourceIntTest extends ApiConfigTest {
                                     .setSigla("SCO")
                                     .setCentena("770")
                                     .setAssuntos(coodernacao1.getAssuntos()));
-        List<Long> assuntosIds = coodernacao1.getAssuntos()
-                                             .stream()
-                                             .map(AssuntoDTO::getId)
-                                             .collect(toList());
+        
+        final List<Long> assuntosIds = coodernacao1.getAssuntos()
+                                                   .stream()
+                                                   .map(AssuntoDTO::getId)
+                                                   .collect(toList());
         
         mockMvc.perform(
             get(URL_COORDENACAO_API)
@@ -105,14 +105,21 @@ class CoordenacaoJuridicaResourceIntTest extends ApiConfigTest {
                 .param("assuntos", assuntosIds.get(0).toString())
                 .param("assuntos", assuntosIds.get(1).toString())
                 .contentType(MediaType.APPLICATION_JSON))
-               .andDo(print())
                .andExpect(status().isOk())
                .andExpect(jsonPath("$", hasSize(1)))
                .andExpect(jsonPath("$.[0].id", equalTo(coodernacao1.getId().intValue())))
                .andExpect(jsonPath("$.[0].nome", equalTo(coodernacao1.getNome())))
                .andExpect(jsonPath("$.[0].sigla", equalTo(coodernacao1.getSigla())))
                .andExpect(jsonPath("$.[0].centena", equalTo(coodernacao1.getCentena())))
-               .andExpect(jsonPath("$.[0].assuntos", hasSize(2)));
+               .andExpect(jsonPath("$.[0].assuntos", hasSize(2)))
+               .andExpect(jsonPath("$.[0].assuntos.[0].id").isNumber())
+               .andExpect(jsonPath("$.[0].assuntos.[0].descricao").isNotEmpty())
+               .andExpect(jsonPath("$.[0].assuntos.[0].ativo").isBoolean())
+               .andExpect(jsonPath("$.[0].assuntos.[0].peso").isNumber())
+               .andExpect(jsonPath("$.[0].assuntos.[1].id").isNumber())
+               .andExpect(jsonPath("$.[0].assuntos.[1].descricao").isNotEmpty())
+               .andExpect(jsonPath("$.[0].assuntos.[1].ativo").isBoolean())
+               .andExpect(jsonPath("$.[0].assuntos.[1].peso").isNumber());
     }
     
     @Test

@@ -9,6 +9,7 @@ import com.rcsoyer.servicosjuridicos.domain.Assunto;
 import com.rcsoyer.servicosjuridicos.domain.CoordenacaoJuridica;
 import com.rcsoyer.servicosjuridicos.service.dto.AssuntoDTO;
 import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoCreateUpdateDto;
+import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoJuridicaDTO;
 import com.rcsoyer.servicosjuridicos.service.dto.QueryParamsCoordenacao;
 import java.util.List;
 import java.util.Set;
@@ -115,7 +116,7 @@ class CoordenacaoJuridicaMapperTest {
                                     .setSigla("OCU")
                                     .addAssuntos(Set.of(assunto1, assunto2));
         
-        final CoordenacaoCreateUpdateDto coordenacaoDtoResult = mapper.toDto(coordenacao);
+        final CoordenacaoJuridicaDTO<AssuntoDTO> coordenacaoDtoResult = mapper.toDto(coordenacao);
         
         assertEquals(coordenacao.getId(), coordenacaoDtoResult.getId());
         assertEquals(coordenacao.getCentena(), coordenacaoDtoResult.getCentena());

@@ -7,6 +7,12 @@ import java.util.Set;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+/**
+ * {@inheritDoc}
+ *
+ * A kind of CoordenacaoJuridicaDTO created specifically when a client passes only the assuntosIDs. This usually happens
+ * when querying the application from an API
+ */
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 public final class QueryParamsCoordenacao extends CoordenacaoJuridicaDTO<Long> implements Serializable {

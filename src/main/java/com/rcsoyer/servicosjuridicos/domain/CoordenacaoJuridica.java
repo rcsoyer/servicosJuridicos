@@ -35,7 +35,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
- * A CoordenacaoJuridica.
+ * A CoordenacaoJuridica. <p> When creating or updating all the fields are required
  */
 @Entity
 @Getter

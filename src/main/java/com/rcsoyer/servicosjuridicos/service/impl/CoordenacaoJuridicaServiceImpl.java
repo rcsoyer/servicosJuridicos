@@ -57,7 +57,7 @@ public class CoordenacaoJuridicaServiceImpl implements CoordenacaoJuridicaServic
     
     @Override
     @Transactional(readOnly = true)
-    public Page<CoordenacaoCreateUpdateDto> findByParams(final QueryParamsCoordenacao queryParams,
+    public Page<CoordenacaoCreateUpdateDto> seekByParams(final QueryParamsCoordenacao queryParams,
                                                          final Pageable pageable) {
         return repository.query(mapper.toEntity(queryParams), pageable)
                          .map(mapper::toDto);
