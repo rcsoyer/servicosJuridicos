@@ -73,6 +73,17 @@ class CoordenacaoJuridicaResourceIntTest extends ApiConfigTest {
     }
     
     @Test
+    void createCoordenacaoJuridica_missingMandatoryFields() throws Exception {
+        mockMvc.perform(post(URL_COORDENACAO_API)
+                            .with(user(TEST_USER_ID))
+                            .with(csrf())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(convertObjectToJsonBytes(new CoordenacaoCreateUpdateDto())))
+               .andExpect(status().isBadRequest())
+               .andExpect(jsonPath("message").value("error.validation"));
+    }
+    
+    @Test
     void updateCoordenacaoJuridica() throws Exception {
         final var createdCoordenacao = coordenacaoService.save(dto)
                                                          .setCentena("765")
@@ -135,7 +146,7 @@ class CoordenacaoJuridicaResourceIntTest extends ApiConfigTest {
     }
     
     @Test
-    void getCoordenacaoJuridica_idExists() throws Exception {
+    void getCoordenacaoJuridica_ok() throws Exception {
         final CoordenacaoCreateUpdateDto coodernacao = coordenacaoService.save(dto);
         
         mockMvc.perform(
