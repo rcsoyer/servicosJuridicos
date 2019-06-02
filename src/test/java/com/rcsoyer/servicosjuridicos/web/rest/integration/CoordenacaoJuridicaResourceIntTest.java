@@ -84,7 +84,7 @@ class CoordenacaoJuridicaResourceIntTest extends ApiConfigTest {
     }
     
     @Test
-    void updateCoordenacaoJuridica() throws Exception {
+    void updateCoordenacaoJuridica_ok() throws Exception {
         final var createdCoordenacao = coordenacaoService.save(dto)
                                                          .setCentena("765")
                                                          .setNome("Just another coordenacao");
@@ -115,16 +115,16 @@ class CoordenacaoJuridicaResourceIntTest extends ApiConfigTest {
     
     @Test
     void getCoordenacoes() throws Exception {
-        final CoordenacaoCreateUpdateDto coodernacao1 = coordenacaoService.save(dto);
+        final CoordenacaoCreateUpdateDto coordenacao1 = coordenacaoService.save(dto);
         
         // has the same Assuntos but does not match in the other filters
         coordenacaoService.save(new CoordenacaoCreateUpdateDto()
-                                    .setNome("Second coordenation")
+                                    .setNome("Second genesis")
                                     .setSigla("SCO")
                                     .setCentena("770")
-                                    .setAssuntos(coodernacao1.getAssuntos()));
+                                    .setAssuntos(coordenacao1.getAssuntos()));
         
-        final List<Long> assuntosIds = coodernacao1.getAssuntos()
+        final List<Long> assuntosIds = coordenacao1.getAssuntos()
                                                    .stream()
                                                    .map(AssuntoDTO::getId)
                                                    .collect(toList());
@@ -133,18 +133,18 @@ class CoordenacaoJuridicaResourceIntTest extends ApiConfigTest {
             get(URL_COORDENACAO_API)
                 .with(user(TEST_USER_ID))
                 .with(csrf())
-                .param("nome", coodernacao1.getNome())
-                .param("sigla", coodernacao1.getSigla())
-                .param("centena", coodernacao1.getCentena())
+                .param("nome", coordenacao1.getNome())
+                .param("sigla", coordenacao1.getSigla())
+                .param("centena", coordenacao1.getCentena())
                 .param("assuntos", assuntosIds.get(0).toString())
                 .param("assuntos", assuntosIds.get(1).toString())
                 .contentType(MediaType.APPLICATION_JSON))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$", hasSize(1)))
-               .andExpect(jsonPath("$.[0].id", equalTo(coodernacao1.getId().intValue())))
-               .andExpect(jsonPath("$.[0].nome", equalTo(coodernacao1.getNome())))
-               .andExpect(jsonPath("$.[0].sigla", equalTo(coodernacao1.getSigla())))
-               .andExpect(jsonPath("$.[0].centena", equalTo(coodernacao1.getCentena())))
+               .andExpect(jsonPath("$.[0].id", equalTo(coordenacao1.getId().intValue())))
+               .andExpect(jsonPath("$.[0].nome", equalTo(coordenacao1.getNome())))
+               .andExpect(jsonPath("$.[0].sigla", equalTo(coordenacao1.getSigla())))
+               .andExpect(jsonPath("$.[0].centena", equalTo(coordenacao1.getCentena())))
                .andExpect(jsonPath("$.[0].assuntos", hasSize(2)))
                .andExpect(jsonPath("$.[0].assuntos.[0].id").isNumber())
                .andExpect(jsonPath("$.[0].assuntos.[0].descricao").isNotEmpty())
@@ -158,18 +158,18 @@ class CoordenacaoJuridicaResourceIntTest extends ApiConfigTest {
     
     @Test
     void getCoordenacaoJuridica_ok() throws Exception {
-        final CoordenacaoCreateUpdateDto coodernacao = coordenacaoService.save(dto);
+        final CoordenacaoCreateUpdateDto coordenacao = coordenacaoService.save(dto);
         
         mockMvc.perform(
-            get(URL_COORDENACAO_API + "/{id}", coodernacao.getId())
+            get(URL_COORDENACAO_API + "/{id}", coordenacao.getId())
                 .with(user(TEST_USER_ID))
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON))
                .andExpect(status().isOk())
-               .andExpect(jsonPath("$.id", equalTo(coodernacao.getId().intValue())))
-               .andExpect(jsonPath("$.nome", equalTo(coodernacao.getNome())))
-               .andExpect(jsonPath("$.sigla", equalTo(coodernacao.getSigla())))
-               .andExpect(jsonPath("$.centena", equalTo(coodernacao.getCentena())))
+               .andExpect(jsonPath("$.id", equalTo(coordenacao.getId().intValue())))
+               .andExpect(jsonPath("$.nome", equalTo(coordenacao.getNome())))
+               .andExpect(jsonPath("$.sigla", equalTo(coordenacao.getSigla())))
+               .andExpect(jsonPath("$.centena", equalTo(coordenacao.getCentena())))
                .andExpect(jsonPath("$.assuntos", hasSize(2)))
                .andExpect(jsonPath("$.assuntos.[0].id").isNumber())
                .andExpect(jsonPath("$.assuntos.[0].descricao").isNotEmpty())
@@ -203,10 +203,10 @@ class CoordenacaoJuridicaResourceIntTest extends ApiConfigTest {
     
     @Test
     void deleteCoordenacaoJuridica_ok() throws Exception {
-        final CoordenacaoCreateUpdateDto coordernacao = coordenacaoService.save(dto);
+        final CoordenacaoCreateUpdateDto coordenacao = coordenacaoService.save(dto);
         
         mockMvc.perform(
-            delete(URL_COORDENACAO_API + "/{id}", coordernacao.getId())
+            delete(URL_COORDENACAO_API + "/{id}", coordenacao.getId())
                 .with(user(TEST_USER_ID))
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_JSON))
