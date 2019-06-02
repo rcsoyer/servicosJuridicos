@@ -103,6 +103,17 @@ class CoordenacaoJuridicaResourceIntTest extends ApiConfigTest {
     }
     
     @Test
+    void updateCoordenacaoJuridica_hasNoIdOnUpdate() throws Exception {
+        mockMvc.perform(put(URL_COORDENACAO_API)
+                            .with(user(TEST_USER_ID))
+                            .with(csrf())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(convertObjectToJsonBytes(dto)))
+               .andExpect(status().isBadRequest())
+               .andExpect(jsonPath("message").value("error.idnull"));
+    }
+    
+    @Test
     void getCoordenacoes() throws Exception {
         final CoordenacaoCreateUpdateDto coodernacao1 = coordenacaoService.save(dto);
         
