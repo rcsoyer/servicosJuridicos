@@ -1,6 +1,6 @@
 package com.rcsoyer.servicosjuridicos.service.dto;
 
-import com.rcsoyer.servicosjuridicos.domain.enumeration.FeriasLicensaTipo;
+import com.rcsoyer.servicosjuridicos.domain.enumeration.FeriasLicencaTipo;
 import java.io.Serializable;
 import java.time.LocalDate;
 import javax.validation.constraints.Min;
@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @ToString
 @EqualsAndHashCode
 @Accessors(chain = true)
-public class FeriasLicencaDTO implements Serializable {
+public final class FeriasLicencaDTO implements Serializable {
     
     private static final long serialVersionUID = 8253942326687428160L;
     
@@ -32,7 +32,7 @@ public class FeriasLicencaDTO implements Serializable {
     private LocalDate dtFim;
     
     @NotNull
-    private FeriasLicensaTipo tipo;
+    private FeriasLicencaTipo tipo;
     
     @Min(1L)
     @NotNull

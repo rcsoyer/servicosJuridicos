@@ -44,8 +44,8 @@
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="servicosJuridicosApp.feriasLicenca.tipo" for="field_tipo">Tipo</label>
                     <select class="form-control" name="tipo" [(ngModel)]="feriasLicenca.tipo" id="field_tipo"  required>
-                        <option value="FERIAS">{{'servicosJuridicosApp.FeriasLicensaTipo.FERIAS' | translate}}</option>
-                        <option value="LICENSA">{{'servicosJuridicosApp.FeriasLicensaTipo.LICENSA' | translate}}</option>
+                        <option value="FERIAS">{{'servicosJuridicosApp.FeriasLicencaTipo.FERIAS' | translate}}</option>
+                        <option value="LICENSA">{{'servicosJuridicosApp.FeriasLicencaTipo.LICENCA' | translate}}</option>
                     </select>
                     <div [hidden]="!(editForm.controls.tipo?.dirty && editForm.controls.tipo?.invalid)">
                         <small class="form-text text-danger"

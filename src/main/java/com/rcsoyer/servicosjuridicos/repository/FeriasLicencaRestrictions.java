@@ -18,10 +18,11 @@ final class FeriasLicencaRestrictions {
     }
     
     static Predicate getRestrictions(final FeriasLicenca feriasLicenca) {
-        return new FeriasLicencaRestrictions(feriasLicenca).defineRestrictions();
+        return new FeriasLicencaRestrictions(feriasLicenca)
+                   .extractPredicate();
     }
     
-    private BooleanExpression defineRestrictions() {
+    private BooleanExpression extractPredicate() {
         return Expressions.allOf(dtInicioRestriction(), dtFimRestriction(),
                                  feriasLicencaTipoRestriction(), advogadoRestriction());
     }

@@ -1,6 +1,6 @@
 package com.rcsoyer.servicosjuridicos.domain;
 
-import com.rcsoyer.servicosjuridicos.domain.enumeration.FeriasLicensaTipo;
+import com.rcsoyer.servicosjuridicos.domain.enumeration.FeriasLicencaTipo;
 import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -33,11 +33,11 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @EqualsAndHashCode
 @Accessors(chain = true)
 @Table(name = "ferias_licenca", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"dtInicio", "advogado"}),
-    @UniqueConstraint(columnNames = {"dtFim", "advogado"})
+    @UniqueConstraint(columnNames = {"dt_inicio", "advogado_id"}),
+    @UniqueConstraint(columnNames = {"dt_fim", "advogado_id"})
 })
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class FeriasLicenca implements Serializable {
+public final class FeriasLicenca implements Serializable {
     
     private static final long serialVersionUID = 8831667760716620943L;
     
@@ -58,7 +58,7 @@ public class FeriasLicenca implements Serializable {
     @NotNull
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private FeriasLicensaTipo tipo;
+    private FeriasLicencaTipo tipo;
     
     @NotNull
     @ManyToOne(optional = false)

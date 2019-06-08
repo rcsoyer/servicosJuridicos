@@ -27,7 +27,7 @@
                 <td><a [routerLink]="['/ferias-licenca', feriasLicenca.id, 'view' ]">{{feriasLicenca.id}}</a></td>
                 <td>{{feriasLicenca.dtInicio | date:'mediumDate'}}</td>
                 <td>{{feriasLicenca.dtFim | date:'mediumDate'}}</td>
-                <td jhiTranslate="{{'servicosJuridicosApp.FeriasLicensaTipo.' + feriasLicenca.tipo}}">{{feriasLicenca.tipo}}</td>
+                <td jhiTranslate="{{'servicosJuridicosApp.FeriasLicencaTipo.' + feriasLicenca.tipo}}">{{feriasLicenca.tipo}}</td>
                 <td>
                     <div *ngIf="feriasLicenca.advogadoId">
                         <a [routerLink]="['../advogado', feriasLicenca.advogadoId , 'view' ]" >{{feriasLicenca.advogadoId}}</a>
