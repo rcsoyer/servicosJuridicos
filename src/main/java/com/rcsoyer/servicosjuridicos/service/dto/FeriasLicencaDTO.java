@@ -1,8 +1,6 @@
 package com.rcsoyer.servicosjuridicos.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.rcsoyer.servicosjuridicos.domain.enumeration.FeriasLicensaTipo;
-import java.io.IOException;
 import java.io.Serializable;
 import java.time.LocalDate;
 import javax.validation.constraints.Min;
@@ -19,8 +17,8 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @ToString
+@EqualsAndHashCode
 @Accessors(chain = true)
-@EqualsAndHashCode(of = "id")
 public class FeriasLicencaDTO implements Serializable {
     
     private static final long serialVersionUID = 8253942326687428160L;
@@ -36,12 +34,8 @@ public class FeriasLicencaDTO implements Serializable {
     @NotNull
     private FeriasLicensaTipo tipo;
     
-    @Min(1)
+    @Min(1L)
     @NotNull
     private Long advogadoId;
     
-    @JsonCreator
-    public static FeriasLicencaDTO of(String json) throws IOException {
-        return JsonConverter.readValue(json, FeriasLicencaDTO.class);
-    }
 }

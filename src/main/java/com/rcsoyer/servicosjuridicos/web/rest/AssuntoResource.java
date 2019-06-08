@@ -119,19 +119,27 @@ public class AssuntoResource {
     
     private Supplier<BadRequestAlertException> hasIdOnCreationBadRequest() {
         return () -> {
-            var msgError = "A new assunto cannot already have an ID";
-            var badRequestAlertException = new BadRequestAlertException(msgError, ENTITY_NAME, "idexists");
-            log.error(msgError, badRequestAlertException);
+            final var badRequestAlertException = BadRequestAlertException
+                                                     .builder()
+                                                     .defaultMessage("A new assunto cannot already have an ID")
+                                                     .entityName(ENTITY_NAME)
+                                                     .errorKey("idexists")
+                                                     .build();
+            log.error("Wrong attempt to create an Assunto", badRequestAlertException);
             return badRequestAlertException;
         };
     }
     
     private Supplier<BadRequestAlertException> hasNoIdOnUpdateBadRequest() {
         return () -> {
-            var msgError = "An existing Assunto must have an id";
-            var badRequestAlertException = new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-            log.error(msgError, badRequestAlertException);
-            return badRequestAlertException;
+            final var badRequest = BadRequestAlertException
+                                       .builder()
+                                       .defaultMessage("An existing Assunto must have an id")
+                                       .entityName(ENTITY_NAME)
+                                       .errorKey("idnull")
+                                       .build();
+            log.error("Wrong attempt to modify an Assunto", badRequest);
+            return badRequest;
         };
     }
 }

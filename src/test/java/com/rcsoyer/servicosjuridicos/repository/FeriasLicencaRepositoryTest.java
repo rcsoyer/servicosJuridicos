@@ -39,10 +39,15 @@ class FeriasLicencaRepositoryTest extends RepositoryConfigTest {
     @Test
     void query() {
         var ferias = new FeriasLicenca().setTipo(FERIAS).setDtFim(dtFim);
+        
         Page<FeriasLicenca> feriasLicencasBD = repository.query(ferias, PageRequest.of(0, 10));
+        
         assertTrue(feriasLicencasBD.hasContent());
+        
         FeriasLicenca feriasLicencaFounded = feriasLicencasBD.getContent().get(0);
+        
         var actualAdvogado = feriasLicencaFounded.getAdvogado();
+        
         assertEquals(actualAdvogado, this.feriasLicenca.getAdvogado());
         assertEquals(ferias.getDtFim(), feriasLicencaFounded.getDtFim());
         assertEquals(ferias.getTipo(), feriasLicencaFounded.getTipo());

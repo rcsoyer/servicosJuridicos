@@ -121,8 +121,12 @@ public class AdvogadoResource {
     
     private Supplier<BadRequestAlertException> badRequestHasIdOnCreation() {
         return () -> {
-            var badRequestAlertException =
-                new BadRequestAlertException("A new Advogado cannot already have an ID", ENTITY_NAME, "idexists");
+            final var badRequestAlertException = BadRequestAlertException
+                                                     .builder()
+                                                     .defaultMessage("A new Advogado cannot already have an ID")
+                                                     .entityName(ENTITY_NAME)
+                                                     .errorKey("idexists")
+                                                     .build();
             log.error("Invalid attempt to create an Advogado", badRequestAlertException);
             return badRequestAlertException;
         };
@@ -130,8 +134,12 @@ public class AdvogadoResource {
     
     private Supplier<BadRequestAlertException> badRequestHasNoIdOnUpdate() {
         return () -> {
-            var badRequestAlertException =
-                new BadRequestAlertException("An existing Advogado must have an ID", ENTITY_NAME, "idnull");
+            final var badRequestAlertException = BadRequestAlertException
+                                                     .builder()
+                                                     .defaultMessage("An existing Advogado must have an ID")
+                                                     .entityName(ENTITY_NAME)
+                                                     .errorKey("idnull")
+                                                     .build();
             log.error("Invalid attempt to update an Advogado", badRequestAlertException);
             return badRequestAlertException;
         };

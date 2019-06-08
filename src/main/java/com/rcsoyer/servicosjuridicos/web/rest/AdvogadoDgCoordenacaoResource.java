@@ -126,9 +126,12 @@ public class AdvogadoDgCoordenacaoResource {
     
     private Supplier<BadRequestAlertException> badRequestHasIdOnCreation() {
         return () -> {
-            final var idExists =
-                new BadRequestAlertException(
-                    "A new AdvogadoDgCoordenacao cannot already have an ID", ENTITY_NAME, "idexists");
+            final var idExists = BadRequestAlertException
+                                     .builder()
+                                     .defaultMessage("A new AdvogadoDgCoordenacao cannot already have an ID")
+                                     .errorKey("idexists")
+                                     .entityName(ENTITY_NAME)
+                                     .build();
             log.error("Invalid attempt to create an AdvogadoDgCoordenacao", idExists);
             return idExists;
         };
@@ -136,8 +139,12 @@ public class AdvogadoDgCoordenacaoResource {
     
     private Supplier<BadRequestAlertException> badRequestHasNoIdOnUpdate() {
         return () -> {
-            final var idNull =
-                new BadRequestAlertException("A existing AdvogadoDgCoordenacao must have an ID", ENTITY_NAME, "idnull");
+            final var idNull = BadRequestAlertException
+                                   .builder()
+                                   .defaultMessage("An existing AdvogadoDgCoordenacao must have an ID")
+                                   .errorKey("idnull")
+                                   .entityName(ENTITY_NAME)
+                                   .build();
             log.error("Invalid attempt to update an AdvogadoDgCoordenacao", idNull);
             return idNull;
         };

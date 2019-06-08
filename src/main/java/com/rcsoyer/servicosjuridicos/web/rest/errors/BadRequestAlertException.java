@@ -12,13 +12,7 @@ public class BadRequestAlertException extends AbstractThrowableProblem {
     private final String errorKey;
     private final String entityName;
     
-    @Deprecated(forRemoval = true)
-    public BadRequestAlertException(String defaultMessage, String entityName, String errorKey) {
-        this(ErrorConstants.DEFAULT_TYPE, defaultMessage, entityName, errorKey);
-    }
-    
-    @Deprecated(forRemoval = true)
-    public BadRequestAlertException(URI type, String defaultMessage, String entityName, String errorKey) {
+    BadRequestAlertException(URI type, String defaultMessage, String entityName, String errorKey) {
         super(type, defaultMessage, Status.BAD_REQUEST, null, null, null,
               getAlertParameters(entityName, errorKey));
         this.entityName = entityName;
@@ -38,6 +32,10 @@ public class BadRequestAlertException extends AbstractThrowableProblem {
                       "params", entityName);
     }
     
+    public static BadRequestAlertExceptionBuilder builder() {
+        return new BadRequestAlertExceptionBuilder();
+    }
+    
     public static final class BadRequestAlertExceptionBuilder {
         
         private URI type;
@@ -46,10 +44,6 @@ public class BadRequestAlertException extends AbstractThrowableProblem {
         private String defaultMessage;
         
         private BadRequestAlertExceptionBuilder() {
-        }
-        
-        public static BadRequestAlertExceptionBuilder newBuilder() {
-            return new BadRequestAlertExceptionBuilder();
         }
         
         public BadRequestAlertExceptionBuilder type(final URI type) {

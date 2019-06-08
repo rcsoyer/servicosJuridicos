@@ -12,7 +12,6 @@ import com.rcsoyer.servicosjuridicos.service.CoordenacaoJuridicaService;
 import com.rcsoyer.servicosjuridicos.service.dto.CoordenacaoCreateUpdateDto;
 import com.rcsoyer.servicosjuridicos.service.dto.QueryParamsCoordenacao;
 import com.rcsoyer.servicosjuridicos.web.rest.errors.BadRequestAlertException;
-import com.rcsoyer.servicosjuridicos.web.rest.errors.BadRequestAlertException.BadRequestAlertExceptionBuilder;
 import io.github.jhipster.web.util.ResponseUtil;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -63,7 +62,7 @@ public class CoordenacaoJuridicaResource {
     })
     public ResponseEntity<CoordenacaoCreateUpdateDto> createCoordenacaoJuridica(
         @Valid @RequestBody final CoordenacaoCreateUpdateDto coordenacaoJuridicaDto) {
-        log.info("REST request to create a CoordenacaoJuridica: {}", coordenacaoJuridicaDto);
+        log.info("request to create a CoordenacaoJuridica: {}", coordenacaoJuridicaDto);
         return Optional.of(coordenacaoJuridicaDto)
                        .filter(dto -> isNull(dto.getId()))
                        .map(service::save)
@@ -83,7 +82,7 @@ public class CoordenacaoJuridicaResource {
     })
     public ResponseEntity<CoordenacaoCreateUpdateDto> updateCoordenacaoJuridica(
         @Valid @RequestBody final CoordenacaoCreateUpdateDto coordenacaoJuridicaDto) {
-        log.info("REST request to update CoordenacaoJuridica: {}", coordenacaoJuridicaDto);
+        log.info("request to update CoordenacaoJuridica: {}", coordenacaoJuridicaDto);
         return Optional.of(coordenacaoJuridicaDto)
                        .filter(dto -> nonNull(dto.getId()))
                        .map(service::save)
@@ -98,7 +97,7 @@ public class CoordenacaoJuridicaResource {
     @ApiOperation("Get a paginated list of CoordenacaoJuridica matching the supplied query parameters and pagination information")
     public ResponseEntity<List<CoordenacaoCreateUpdateDto>> getCoordenacoes(
         final QueryParamsCoordenacao queryParams, final Pageable pageable) {
-        log.debug("REST request to get a page of CoordenacaoJuridicas with: {} and {}", queryParams, pageable);
+        log.debug("request to get a page of CoordenacaoJuridicas with: {} and {}", queryParams, pageable);
         final Page<CoordenacaoCreateUpdateDto> page = service.seekByParams(queryParams, pageable);
         return ResponseEntity.ok()
                              .headers(generatePaginationHttpHeaders(page, "/api/coordenacao-juridica"))
@@ -113,7 +112,7 @@ public class CoordenacaoJuridicaResource {
         @ApiResponse(code = 404, message = "No CoordenacaoJuridica found with the given id")
     })
     public ResponseEntity<CoordenacaoCreateUpdateDto> getCoordenacaoJuridica(@PathVariable @Min(1L) Long id) {
-        log.debug("REST request to get CoordenacaoJuridica: {}", id);
+        log.debug("request to get CoordenacaoJuridica: {}", id);
         return ResponseUtil.wrapOrNotFound(service.findOne(id));
     }
     
@@ -121,7 +120,7 @@ public class CoordenacaoJuridicaResource {
     @DeleteMapping("/{id}")
     @ApiOperation("Delete a CoordenacaoJuridica matching the given id")
     public ResponseEntity<Void> deleteCoordenacaoJuridica(@PathVariable @Min(1L) Long id) {
-        log.debug("REST request to delete CoordenacaoJuridica: {}", id);
+        log.info("Request to delete CoordenacaoJuridica: {}", id);
         service.delete(id);
         return ResponseEntity.ok()
                              .headers(entityDeletionAlert(ENTITY_NAME, id.toString()))
@@ -130,8 +129,8 @@ public class CoordenacaoJuridicaResource {
     
     private Supplier<BadRequestAlertException> badRequestHasIdOnCreation() {
         return () -> {
-            final var badRequestAlertException = BadRequestAlertExceptionBuilder
-                                                     .newBuilder()
+            final var badRequestAlertException = BadRequestAlertException
+                                                     .builder()
                                                      .defaultMessage(
                                                          "A new coordenacaoJuridica cannot already have an ID")
                                                      .entityName(ENTITY_NAME)
@@ -144,11 +143,11 @@ public class CoordenacaoJuridicaResource {
     
     private Supplier<BadRequestAlertException> badRequestHasNoIdOnUpdate() {
         return () -> {
-            final var badRequestAlertException = BadRequestAlertExceptionBuilder.newBuilder()
-                                                                                .defaultMessage("Invalid id")
-                                                                                .entityName(ENTITY_NAME)
-                                                                                .errorKey("idnull")
-                                                                                .build();
+            final var badRequestAlertException = BadRequestAlertException.builder()
+                                                                         .defaultMessage("Invalid id")
+                                                                         .entityName(ENTITY_NAME)
+                                                                         .errorKey("idnull")
+                                                                         .build();
             log.error("Invalid attempt to update a CoordenacaoJuridica", badRequestAlertException);
             return badRequestAlertException;
         };

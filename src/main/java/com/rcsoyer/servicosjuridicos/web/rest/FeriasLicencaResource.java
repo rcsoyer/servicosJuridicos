@@ -1,5 +1,8 @@
 package com.rcsoyer.servicosjuridicos.web.rest;
 
+import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityCreationAlert;
+import static java.util.Objects.isNull;
+
 import com.codahale.metrics.annotation.Timed;
 import com.rcsoyer.servicosjuridicos.service.FeriasLicencaService;
 import com.rcsoyer.servicosjuridicos.service.dto.FeriasLicencaDTO;
@@ -10,6 +13,8 @@ import io.github.jhipster.web.util.ResponseUtil;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
 import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,21 +55,33 @@ public class FeriasLicencaResource {
      * @param feriasLicencaDTO the feriasLicencaDTO to create
      * @return the ResponseEntity with status 201 (Created) and with body the new feriasLicencaDTO, or with status 400
      * (Bad Request) if the feriasLicenca has already an ID
-     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/ferias-licencas")
     @Timed
-    public ResponseEntity<FeriasLicencaDTO> createFeriasLicenca(@Valid @RequestBody FeriasLicencaDTO feriasLicencaDTO)
-        throws URISyntaxException {
+    public ResponseEntity<FeriasLicencaDTO> createFeriasLicenca(
+        @Valid @RequestBody final FeriasLicencaDTO feriasLicencaDTO) {
         log.debug("REST request to save FeriasLicenca : {}", feriasLicencaDTO);
-        if (feriasLicencaDTO.getId() != null) {
-            throw new BadRequestAlertException("A new feriasLicenca cannot already have an ID", ENTITY_NAME,
-                                               "idexists");
-        }
-        FeriasLicencaDTO result = service.save(feriasLicencaDTO);
-        return ResponseEntity.created(new URI("/api/ferias-licencas/" + result.getId()))
-                             .headers(HeaderUtil.entityCreationAlert(ENTITY_NAME, result.getId().toString()))
-                             .body(result);
+        return Optional.of(feriasLicencaDTO)
+                       .filter(dto -> isNull(dto.getId()))
+                       .map(service::save)
+                       .map(dto -> ResponseEntity
+                                       .created(URI.create("/api/ferias-licencas/" + dto.getId().toString()))
+                                       .headers(entityCreationAlert(ENTITY_NAME, dto.getId().toString()))
+                                       .body(dto))
+                       .orElseThrow(badRequestHasIdUponCreation());
+    }
+    
+    private Supplier<BadRequestAlertException> badRequestHasIdUponCreation() {
+        return () -> {
+            final var badRequest = BadRequestAlertException
+                                       .builder()
+                                       .defaultMessage("A new feriasLicenca cannot already have an ID")
+                                       .entityName(ENTITY_NAME)
+                                       .errorKey("idexists")
+                                       .build();
+            log.error("Wrong attempt to create a Ferias Licenca", badRequest);
+            return badRequest;
+        };
     }
     
     /**
