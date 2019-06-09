@@ -90,12 +90,8 @@ class CustomAuditEventRepositoryIntTest {
     
     @Test
     void addAuditEventTruncateLargeData() {
-        Map<String, Object> data = new HashMap<>();
-        StringBuilder largeData = new StringBuilder();
-        for (int i = 0; i < EVENT_DATA_COLUMN_MAX_LENGTH + 10; i++) {
-            largeData.append("a");
-        }
-        data.put("test-key", largeData);
+        String largeData = "a".repeat(EVENT_DATA_COLUMN_MAX_LENGTH + 10);
+        Map<String, Object> data = Map.of("test-key", largeData);
         AuditEvent event = new AuditEvent("test-user", "test-type", data);
         customAuditEventRepository.add(event);
         List<PersistentAuditEvent> persistentAuditEvents = persistenceAuditEventRepository.findAll();
