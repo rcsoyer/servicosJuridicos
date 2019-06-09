@@ -30,8 +30,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
 @Accessors(chain = true)
+@EqualsAndHashCode(of = "id")
 @Table(name = "ferias_licenca", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"dt_inicio", "advogado_id"}),
     @UniqueConstraint(columnNames = {"dt_fim", "advogado_id"})

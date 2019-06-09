@@ -22,24 +22,43 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="dt_inicio" type="date">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
 
             <column name="dt_fim" type="date">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
 
             <column name="tipo" type="varchar(255)">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
 
             <column name="advogado_id" type="bigint">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
 
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
-        
+
     </changeSet>
+
+    <changeSet author="rcsoyer" id="20190609-1">
+        <addUniqueConstraint
+            columnNames="dt_inicio, advogado_id"
+            deferrable="true"
+            disabled="false"
+            initiallyDeferred="true"
+            tableName="ferias_licenca"/>
+    </changeSet>
+
+    <changeSet author="rcsoyer" id="20190609-2">
+        <addUniqueConstraint
+            columnNames="dt_fim, advogado_id"
+            deferrable="true"
+            disabled="false"
+            initiallyDeferred="true"
+            tableName="ferias_licenca"/>
+    </changeSet>
+
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>

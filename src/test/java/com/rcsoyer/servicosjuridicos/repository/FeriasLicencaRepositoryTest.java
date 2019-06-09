@@ -1,7 +1,9 @@
 package com.rcsoyer.servicosjuridicos.repository;
 
 import static com.rcsoyer.servicosjuridicos.domain.enumeration.FeriasLicencaTipo.FERIAS;
+import static com.rcsoyer.servicosjuridicos.domain.enumeration.FeriasLicencaTipo.LICENCA;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.rcsoyer.servicosjuridicos.domain.Advogado;
@@ -9,6 +11,7 @@ import com.rcsoyer.servicosjuridicos.domain.FeriasLicenca;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -39,6 +42,30 @@ class FeriasLicencaRepositoryTest extends RepositoryConfigTest {
         assertEquals(searchParams.getDtFim(), feriasLicencaFounded.getDtFim());
         assertEquals(searchParams.getTipo(), feriasLicencaFounded.getTipo());
         assertEquals(searchParams.getDtInicio(), feriasLicencaFounded.getDtInicio());
+    }
+    
+    @Test
+    void save_testUniqueDtInicioAdvogado() {
+        final var feriasLicenca1 = savedFeriasLicenca();
+        
+        assertThrows(DataIntegrityViolationException.class,
+                     () -> feriasLicencaRepository.saveAndFlush(new FeriasLicenca()
+                                                                    .setTipo(LICENCA)
+                                                                    .setDtInicio(feriasLicenca1.getDtInicio())
+                                                                    .setDtFim(LocalDate.now())
+                                                                    .setAdvogado(feriasLicenca1.getAdvogado())));
+    }
+    
+    @Test
+    void save_testUniqueDtFimAdvogado() {
+        final var feriasLicenca1 = savedFeriasLicenca();
+        
+        assertThrows(DataIntegrityViolationException.class,
+                     () -> feriasLicencaRepository.saveAndFlush(new FeriasLicenca()
+                                                                    .setTipo(LICENCA)
+                                                                    .setDtInicio(LocalDate.now())
+                                                                    .setDtFim(feriasLicenca1.getDtFim())
+                                                                    .setAdvogado(feriasLicenca1.getAdvogado())));
     }
     
     private FeriasLicenca savedFeriasLicenca() {
