@@ -19,14 +19,6 @@ public interface FeriasLicencaService {
     FeriasLicencaDTO save(FeriasLicencaDTO feriasLicencaDTO);
     
     /**
-     * Get all the feriasLicencas.
-     *
-     * @param pageable the pagination information
-     * @return the list of entities
-     */
-    Page<FeriasLicencaDTO> findAll(Pageable pageable);
-    
-    /**
      * Get the "id" feriasLicenca.
      *
      * @param id the id of the entity
@@ -41,5 +33,5 @@ public interface FeriasLicencaService {
      */
     void delete(Long id);
     
-    Page<FeriasLicencaDTO> findByParams(FeriasLicencaDTO dto, Pageable pageable);
+    Page<FeriasLicencaDTO> seekByParams(FeriasLicencaDTO dto, Pageable pageable);
 }

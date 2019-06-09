@@ -13,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 /**
  * Service Implementation for managing FeriasLicenca.
  */
@@ -31,12 +30,6 @@ public class FeriasLicencaServiceImpl implements FeriasLicencaService {
         this.repository = feriasLicencaRepository;
     }
     
-    /**
-     * Save a feriasLicenca.
-     *
-     * @param dto the entity to save
-     * @return the persisted entity
-     */
     @Override
     public FeriasLicencaDTO save(final FeriasLicencaDTO dto) {
         log.debug("Request to save FeriasLicenca : {}", dto);
@@ -46,26 +39,6 @@ public class FeriasLicencaServiceImpl implements FeriasLicencaService {
                               .apply(dto);
     }
     
-    /**
-     * Get all the feriasLicencas.
-     *
-     * @param pageable the pagination information
-     * @return the list of entities
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public Page<FeriasLicencaDTO> findAll(final Pageable pageable) {
-        log.debug("Request to get all FeriasLicencas");
-        return repository.findAll(pageable)
-                         .map(mapper::toDto);
-    }
-    
-    /**
-     * Get one feriasLicenca by id.
-     *
-     * @param id the id of the entity
-     * @return the entity
-     */
     @Override
     @Transactional(readOnly = true)
     public Optional<FeriasLicencaDTO> findOne(Long id) {
@@ -74,11 +47,6 @@ public class FeriasLicencaServiceImpl implements FeriasLicencaService {
                          .map(mapper::toDto);
     }
     
-    /**
-     * Delete the feriasLicenca by id.
-     *
-     * @param id the id of the entity
-     */
     @Override
     public void delete(Long id) {
         log.debug("Request to delete FeriasLicenca : {}", id);
@@ -86,7 +54,8 @@ public class FeriasLicencaServiceImpl implements FeriasLicencaService {
     }
     
     @Override
-    public Page<FeriasLicencaDTO> findByParams(final FeriasLicencaDTO dto, final Pageable pageable) {
+    @Transactional(readOnly = true)
+    public Page<FeriasLicencaDTO> seekByParams(final FeriasLicencaDTO dto, final Pageable pageable) {
         return repository.query(mapper.toEntity(dto), pageable)
                          .map(mapper::toDto);
     }
