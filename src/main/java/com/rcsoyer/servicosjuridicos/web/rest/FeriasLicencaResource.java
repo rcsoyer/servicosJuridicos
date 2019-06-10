@@ -1,22 +1,31 @@
 package com.rcsoyer.servicosjuridicos.web.rest;
 
 import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityCreationAlert;
+import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityDeletionAlert;
+import static com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil.entityUpdateAlert;
+import static com.rcsoyer.servicosjuridicos.web.rest.util.PaginationUtil.generatePaginationHttpHeaders;
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 import com.codahale.metrics.annotation.Timed;
 import com.rcsoyer.servicosjuridicos.service.FeriasLicencaService;
 import com.rcsoyer.servicosjuridicos.service.dto.FeriasLicencaDTO;
 import com.rcsoyer.servicosjuridicos.web.rest.errors.BadRequestAlertException;
-import com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import java.net.URI;
-import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 import javax.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.validation.constraints.Min;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,40 +38,85 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * REST controller for managing FeriasLicenca.
  */
+@Slf4j
+@Validated
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/ferias-licencas")
 public class FeriasLicencaResource {
-    
-    private final Logger log = LoggerFactory.getLogger(FeriasLicencaResource.class);
     
     private static final String ENTITY_NAME = "feriasLicenca";
     
     private final FeriasLicencaService service;
     
-    public FeriasLicencaResource(FeriasLicencaService feriasLicencaService) {
+    public FeriasLicencaResource(final FeriasLicencaService feriasLicencaService) {
         this.service = feriasLicencaService;
     }
     
-    /**
-     * POST  /ferias-licencas : Create a new feriasLicenca.
-     *
-     * @param feriasLicencaDTO the feriasLicencaDTO to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new feriasLicencaDTO, or with status 400
-     * (Bad Request) if the feriasLicenca has already an ID
-     */
-    @PostMapping("/ferias-licencas")
     @Timed
+    @PostMapping
+    @ApiOperation(value = "Create a new FeriasLicenca", response = FeriasLicencaDTO.class)
+    @ApiResponses({@ApiResponse(code = 201, message = "FeriasLicenca created"),
+                      @ApiResponse(code = 400, message = "A new FeriasLicenca must not have an ID")
+                  })
     public ResponseEntity<FeriasLicencaDTO> createFeriasLicenca(
         @Valid @RequestBody final FeriasLicencaDTO feriasLicencaDTO) {
-        log.debug("REST request to save FeriasLicenca : {}", feriasLicencaDTO);
+        log.info("REST request to save FeriasLicenca : {}", feriasLicencaDTO);
         return Optional.of(feriasLicencaDTO)
                        .filter(dto -> isNull(dto.getId()))
                        .map(service::save)
-                       .map(dto -> ResponseEntity
-                                       .created(URI.create("/api/ferias-licencas/" + dto.getId().toString()))
-                                       .headers(entityCreationAlert(ENTITY_NAME, dto.getId().toString()))
-                                       .body(dto))
+                       .map(result -> ResponseEntity
+                                          .created(URI.create("/api/ferias-licencas/" + result.getId().toString()))
+                                          .headers(entityCreationAlert(ENTITY_NAME, result.getId().toString()))
+                                          .body(result))
                        .orElseThrow(badRequestHasIdUponCreation());
+    }
+    
+    @Timed
+    @PutMapping
+    @ApiOperation(value = "Create a new FeriasLicenca", response = FeriasLicencaDTO.class)
+    @ApiResponses({@ApiResponse(code = 200, message = "FeriasLicenca updated"),
+                      @ApiResponse(code = 400, message = "An existing FeriasLicenca must have an ID")
+                  })
+    public ResponseEntity<FeriasLicencaDTO> updateFeriasLicenca(
+        @Valid @RequestBody final FeriasLicencaDTO feriasLicencaDTO) {
+        log.info("REST request to update FeriasLicenca : {}", feriasLicencaDTO);
+        return Optional.of(feriasLicencaDTO)
+                       .filter(dto -> nonNull(dto.getId()))
+                       .map(service::save)
+                       .map(result -> ResponseEntity.ok()
+                                                    .headers(entityUpdateAlert(ENTITY_NAME, result.getId().toString()))
+                                                    .body(result))
+                       .orElseThrow(badRequestDontHaveIdOnUpdate());
+    }
+    
+    @Timed
+    @GetMapping("/{id}")
+    @ApiOperation("Get a FeriasLicenca matching the given ID")
+    public ResponseEntity<FeriasLicencaDTO> getFeriasLicenca(@PathVariable @Min(1L) Long id) {
+        log.debug("REST request to get FeriasLicenca : {}", id);
+        return ResponseUtil.wrapOrNotFound(service.findOne(id));
+    }
+    
+    @Timed
+    @DeleteMapping("/{id}")
+    @ApiOperation("Delete a FeriasLicenca matching the given ID")
+    public ResponseEntity<Void> deleteFeriasLicenca(@PathVariable @Min(1L) Long id) {
+        log.info("Request to delete FeriasLicenca: {}", id);
+        service.delete(id);
+        return ResponseEntity.ok()
+                             .headers(entityDeletionAlert(ENTITY_NAME, id.toString()))
+                             .build();
+    }
+    
+    @Timed
+    @GetMapping
+    @ApiOperation("Get a paginated list of FeriasLicenca matching the supplied query parameters and pagination information")
+    public ResponseEntity<List<FeriasLicencaDTO>> getFeriasLicencas(final FeriasLicencaDTO queryParams,
+                                                                    final Pageable pageable) {
+        final Page<FeriasLicencaDTO> pageResult = service.seekByParams(queryParams, pageable);
+        return ResponseEntity.ok()
+                             .headers(generatePaginationHttpHeaders(pageResult, "/api/assunto"))
+                             .body(pageResult.getContent());
     }
     
     private Supplier<BadRequestAlertException> badRequestHasIdUponCreation() {
@@ -78,55 +132,16 @@ public class FeriasLicencaResource {
         };
     }
     
-    /**
-     * PUT  /ferias-licencas : Updates an existing feriasLicenca.
-     *
-     * @param feriasLicencaDTO the feriasLicencaDTO to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated feriasLicencaDTO, or with status 400
-     * (Bad Request) if the feriasLicencaDTO is not valid, or with status 500 (Internal Server Error) if the
-     * feriasLicencaDTO couldn't be updated
-     * @throws URISyntaxException if the Location URI syntax is incorrect
-     */
-    @PutMapping("/ferias-licencas")
-    @Timed
-    public ResponseEntity<FeriasLicencaDTO> updateFeriasLicenca(@Valid @RequestBody FeriasLicencaDTO feriasLicencaDTO)
-        throws URISyntaxException {
-        log.debug("REST request to update FeriasLicenca : {}", feriasLicencaDTO);
-        if (feriasLicencaDTO.getId() == null) {
-            return createFeriasLicenca(feriasLicencaDTO);
-        }
-        FeriasLicencaDTO result = service.save(feriasLicencaDTO);
-        return ResponseEntity.ok()
-                             .headers(
-                                 HeaderUtil.entityUpdateAlert(ENTITY_NAME, feriasLicencaDTO.getId().toString()))
-                             .body(result);
-    }
-    
-    /**
-     * GET  /ferias-licencas/:id : get the "id" feriasLicenca.
-     *
-     * @param id the id of the feriasLicencaDTO to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the feriasLicencaDTO, or with status 404 (Not
-     * Found)
-     */
-    @GetMapping("/ferias-licencas/{id}")
-    @Timed
-    public ResponseEntity<FeriasLicencaDTO> getFeriasLicenca(@PathVariable Long id) {
-        log.debug("REST request to get FeriasLicenca : {}", id);
-        return ResponseUtil.wrapOrNotFound(service.findOne(id));
-    }
-    
-    /**
-     * DELETE  /ferias-licencas/:id : delete the "id" feriasLicenca.
-     *
-     * @param id the id of the feriasLicencaDTO to delete
-     * @return the ResponseEntity with status 200 (OK)
-     */
-    @DeleteMapping("/ferias-licencas/{id}")
-    @Timed
-    public ResponseEntity<Void> deleteFeriasLicenca(@PathVariable Long id) {
-        log.debug("REST request to delete FeriasLicenca : {}", id);
-        service.delete(id);
-        return ResponseEntity.ok().headers(HeaderUtil.entityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    private Supplier<BadRequestAlertException> badRequestDontHaveIdOnUpdate() {
+        return () -> {
+            final var badRequest = BadRequestAlertException
+                                       .builder()
+                                       .defaultMessage("If don't have an ID there's nothing to update")
+                                       .entityName(ENTITY_NAME)
+                                       .errorKey("idnull")
+                                       .build();
+            log.error("Wrong attempt to update a FeriasLicenca", badRequest);
+            return badRequest;
+        };
     }
 }

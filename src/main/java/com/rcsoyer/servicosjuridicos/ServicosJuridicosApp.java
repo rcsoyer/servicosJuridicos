@@ -69,9 +69,9 @@ public class ServicosJuridicosApp {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(ServicosJuridicosApp.class);
+        final SpringApplication app = new SpringApplication(ServicosJuridicosApp.class);
         DefaultProfileUtil.addDefaultProfile(app);
-        Environment env = app.run(args).getEnvironment();
+        final Environment env = app.run(args).getEnvironment();
         logApplicationStartup(env);
     }
     
