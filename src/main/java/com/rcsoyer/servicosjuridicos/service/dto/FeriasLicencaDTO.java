@@ -23,6 +23,7 @@ public final class FeriasLicencaDTO implements Serializable {
     
     private static final long serialVersionUID = 8253942326687428160L;
     
+    @Min(1L)
     private Long id;
     
     @NotNull

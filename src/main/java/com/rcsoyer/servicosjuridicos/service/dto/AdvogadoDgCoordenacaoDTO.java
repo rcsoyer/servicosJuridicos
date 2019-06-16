@@ -23,6 +23,7 @@ public final class AdvogadoDgCoordenacaoDTO implements Serializable {
     
     private static final long serialVersionUID = 7110673865104666877L;
     
+    @Min(1L)
     private Long id;
     
     @Min(0)

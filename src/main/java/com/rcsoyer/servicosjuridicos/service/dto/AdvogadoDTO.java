@@ -23,6 +23,7 @@ public final class AdvogadoDTO implements Serializable {
     
     private static final long serialVersionUID = 185125590770954216L;
     
+    @Min(1L)
     private Long id;
     
     @NotBlank

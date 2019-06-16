@@ -18,10 +18,11 @@ import lombok.experimental.Accessors;
 @ToString
 @Accessors(chain = true)
 @EqualsAndHashCode(of = {"id", "descricao"})
-public class AssuntoDTO implements Serializable {
+public final class AssuntoDTO implements Serializable {
     
     private static final long serialVersionUID = -3670483173597422016L;
     
+    @Min(1L)
     private Long id;
     
     @NotBlank
@@ -29,12 +30,12 @@ public class AssuntoDTO implements Serializable {
     private String descricao;
     
     @NotNull
-    @Getter(value = AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
     private Boolean ativo;
     
+    @Min(1)
+    @Max(5)
     @NotNull
-    @Min(value = 1)
-    @Max(value = 5)
     private Integer peso;
     
     public Boolean isAtivo() {

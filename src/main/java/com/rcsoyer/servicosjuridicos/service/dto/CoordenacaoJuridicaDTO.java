@@ -2,6 +2,7 @@ package com.rcsoyer.servicosjuridicos.service.dto;
 
 import java.util.HashSet;
 import java.util.Set;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
@@ -18,6 +19,7 @@ import lombok.ToString;
 @EqualsAndHashCode(of = {"id", "sigla", "nome"})
 public abstract class CoordenacaoJuridicaDTO<T> {
     
+    @Min(1L)
     protected Long id;
     
     @NotBlank
