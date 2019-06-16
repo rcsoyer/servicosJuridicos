@@ -5,6 +5,7 @@ import java.util.Map;
 import org.zalando.problem.AbstractThrowableProblem;
 import org.zalando.problem.Status;
 
+@SuppressWarnings("squid:MaximumInheritanceDepth")
 public class BadRequestAlertException extends AbstractThrowableProblem {
     
     private static final long serialVersionUID = -8518368110360363962L;

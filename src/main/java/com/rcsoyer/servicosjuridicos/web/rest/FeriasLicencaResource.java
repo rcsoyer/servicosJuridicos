@@ -54,7 +54,6 @@ public class FeriasLicencaResource {
     
     @Timed
     @PostMapping
-    @ApiOperation(value = "Create a new FeriasLicenca", response = FeriasLicencaDTO.class)
     @ApiResponses({@ApiResponse(code = 201, message = "FeriasLicenca created"),
                       @ApiResponse(code = 400, message = "A new FeriasLicenca must not have an ID")
                   })
@@ -68,7 +67,7 @@ public class FeriasLicencaResource {
                                           .created(URI.create("/api/ferias-licencas/" + result.getId().toString()))
                                           .headers(entityCreationAlert(ENTITY_NAME, result.getId().toString()))
                                           .body(result))
-                       .orElseThrow(badRequestHasIdUponCreation());
+                       .orElseThrow(badRequestHasIdUponCreation(feriasLicencaDTO));
     }
     
     @Timed
@@ -86,7 +85,7 @@ public class FeriasLicencaResource {
                        .map(result -> ResponseEntity.ok()
                                                     .headers(entityUpdateAlert(ENTITY_NAME, result.getId().toString()))
                                                     .body(result))
-                       .orElseThrow(badRequestDontHaveIdOnUpdate());
+                       .orElseThrow(badRequestDontHaveIdOnUpdate(feriasLicencaDTO));
     }
     
     @Timed
@@ -119,29 +118,27 @@ public class FeriasLicencaResource {
                              .body(pageResult.getContent());
     }
     
-    private Supplier<BadRequestAlertException> badRequestHasIdUponCreation() {
+    private Supplier<BadRequestAlertException> badRequestHasIdUponCreation(final FeriasLicencaDTO dto) {
         return () -> {
-            final var badRequest = BadRequestAlertException
-                                       .builder()
-                                       .defaultMessage("A new feriasLicenca cannot already have an ID")
-                                       .entityName(ENTITY_NAME)
-                                       .errorKey("idexists")
-                                       .build();
-            log.error("Wrong attempt to create a Ferias Licenca", badRequest);
-            return badRequest;
+            log.warn("Wrong attempt to create a Ferias Licenca: {}", dto);
+            return BadRequestAlertException
+                       .builder()
+                       .defaultMessage("A new feriasLicenca cannot already have an ID")
+                       .entityName(ENTITY_NAME)
+                       .errorKey("idexists")
+                       .build();
         };
     }
     
-    private Supplier<BadRequestAlertException> badRequestDontHaveIdOnUpdate() {
+    private Supplier<BadRequestAlertException> badRequestDontHaveIdOnUpdate(final FeriasLicencaDTO dto) {
         return () -> {
-            final var badRequest = BadRequestAlertException
-                                       .builder()
-                                       .defaultMessage("If don't have an ID there's nothing to update")
-                                       .entityName(ENTITY_NAME)
-                                       .errorKey("idnull")
-                                       .build();
-            log.error("Wrong attempt to update a FeriasLicenca", badRequest);
-            return badRequest;
+            log.warn("Wrong attempt to update a FeriasLicenca: {}", dto);
+            return BadRequestAlertException
+                       .builder()
+                       .defaultMessage("If don't have an ID there's nothing to update")
+                       .entityName(ENTITY_NAME)
+                       .errorKey("idnull")
+                       .build();
         };
     }
 }
