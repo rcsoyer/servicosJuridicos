@@ -5,12 +5,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.rcsoyer.servicosjuridicos.service.ModalidadeService;
 import com.rcsoyer.servicosjuridicos.service.dto.ModalidadeDTO;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,13 +24,6 @@ class ModalidadeResourceIntTest extends ApiConfigTest {
     
     @Autowired
     private ModalidadeService service;
-    
-    private ModalidadeDTO persistedModalidade;
-    
-    @BeforeEach
-    void setUp() {
-        this.persistedModalidade = service.save(newModalidade());
-    }
     
     @Test
     void createModalidade_ok() throws Exception {
@@ -65,7 +58,17 @@ class ModalidadeResourceIntTest extends ApiConfigTest {
     }
     
     @Test
-    void updateModalidade() {
+    void updateModalidade_ok() throws Exception {
+        final ModalidadeDTO modalidade = newPersistedModalidade();
+        
+        mockMvc.perform(put(URL_MODALIDADE_API)
+                            .with(user(TEST_USER_ID))
+                            .with(csrf())
+                            .contentType(APPLICATION_JSON_UTF8)
+                            .content(convertObjectToJsonBytes(modalidade)))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.id").value(modalidade.getId()))
+               .andExpect(jsonPath("$.descricao").value(modalidade.getDescricao()));
     }
     
     @Test
@@ -83,6 +86,10 @@ class ModalidadeResourceIntTest extends ApiConfigTest {
     private ModalidadeDTO newModalidade() {
         return new ModalidadeDTO()
                    .setDescricao("modalidade 1");
+    }
+    
+    private ModalidadeDTO newPersistedModalidade() {
+        return service.save(newModalidade());
     }
     
 }
