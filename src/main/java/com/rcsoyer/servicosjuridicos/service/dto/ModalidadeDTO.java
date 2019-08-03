@@ -24,13 +24,13 @@ public final class ModalidadeDTO implements Serializable {
     
     private static final long serialVersionUID = 8196822569253387907L;
     
-    @Min(1L)
     @Null(groups = ModalidadeOnCreate.class)
     @NotNull(groups = ModalidadeOnUpdate.class)
+    @Min(value = 1L, groups = ModalidadeOnUpdate.class)
     private Long id;
     
-    @NotBlank
-    @Size(max = 60)
+    @NotBlank(groups = {ModalidadeOnCreate.class, ModalidadeOnUpdate.class})
+    @Size(max = 60, groups = {ModalidadeOnCreate.class, ModalidadeOnUpdate.class})
     private String descricao;
     
 }
