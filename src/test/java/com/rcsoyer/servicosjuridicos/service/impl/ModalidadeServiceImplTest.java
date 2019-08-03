@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import com.rcsoyer.servicosjuridicos.domain.Modalidade;
@@ -91,6 +92,13 @@ class ModalidadeServiceImplTest {
     
     @Test
     void delete() {
+        final long id = 1L;
+        
+        service.delete(id);
+        
+        verify(repository).deleteById(id);
+        verifyNoMoreInteractions(repository);
+        verifyZeroInteractions(mapper);
     }
     
     @Test
