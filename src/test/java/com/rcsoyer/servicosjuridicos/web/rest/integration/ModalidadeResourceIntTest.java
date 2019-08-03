@@ -16,7 +16,6 @@ import com.rcsoyer.servicosjuridicos.service.dto.ModalidadeDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 class ModalidadeResourceIntTest extends ApiConfigTest {
     
@@ -83,13 +82,12 @@ class ModalidadeResourceIntTest extends ApiConfigTest {
                             .with(csrf())
                             .contentType(APPLICATION_JSON_UTF8)
                             .content(convertObjectToJsonBytes(modalidade)))
-               .andDo(MockMvcResultHandlers.print())
                .andExpect(status().isBadRequest())
+               .andExpect(jsonPath("$.fieldErrors", hasSize(2)))
+               .andExpect(jsonPath("$.message").value("error.validation"))
                .andExpect(jsonPath("$.title").value("Method argument not valid"))
-               .andExpect(jsonPath("$.fieldErrors[0].field").value("descricao"))
-               .andExpect(jsonPath("$.fieldErrors[0].message").value("NotBlank"))
-               .andExpect(jsonPath("$.fieldErrors[1].field").value("id"))
-               .andExpect(jsonPath("$.fieldErrors[1].message").value("NotNull"));
+               .andExpect(jsonPath("$.fieldErrors[*].field", containsInAnyOrder("id", "descricao")))
+               .andExpect(jsonPath("$.fieldErrors[*].message", containsInAnyOrder("NotNull", "NotBlank")));
     }
     
     @Test
