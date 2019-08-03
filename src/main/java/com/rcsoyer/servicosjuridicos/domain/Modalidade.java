@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
@@ -35,7 +34,6 @@ public final class Modalidade implements Serializable {
     
     @Id
     @Setter
-    @Min(1L)
     @SequenceGenerator(name = "sequenceGenerator")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     private Long id;
