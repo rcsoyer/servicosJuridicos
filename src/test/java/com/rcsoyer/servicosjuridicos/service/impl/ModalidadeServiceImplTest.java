@@ -1,6 +1,7 @@
 package com.rcsoyer.servicosjuridicos.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -39,8 +40,12 @@ class ModalidadeServiceImplTest {
     
     @Test
     void save() {
-        final var persistedDto = new ModalidadeDTO().setId(1L);
-        final var persistedModalidade = new Modalidade().setId(1L);
+        final var persistedDto = new ModalidadeDTO()
+                                     .setId(1L)
+                                     .setDescricao(dto.getDescricao());
+        final var persistedModalidade = new Modalidade()
+                                            .setId(1L)
+                                            .setDescricao(modalidade.getDescricao());
         
         when(mapper.toEntity(dto))
             .thenReturn(modalidade);
@@ -51,8 +56,7 @@ class ModalidadeServiceImplTest {
         
         final ModalidadeDTO result = service.save(dto);
         
-        assertThat(result.getDescricao())
-            .isEqualTo(result.getDescricao());
+        assertEquals(dto.getDescricao(), result.getDescricao());
         
         assertThat(result.getId())
             .isNotNull();
