@@ -1,6 +1,8 @@
 package com.rcsoyer.servicosjuridicos.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 import com.rcsoyer.servicosjuridicos.domain.Modalidade;
@@ -41,8 +43,8 @@ class ModalidadeServiceImplTest {
         final var persistedModalidade = new Modalidade().setId(1L);
         
         when(mapper.toEntity(dto))
-            .thenReturn(this.modalidade);
-        when(repository.save(this.modalidade))
+            .thenReturn(modalidade);
+        when(repository.save(modalidade))
             .thenReturn(persistedModalidade);
         when(mapper.toDto(persistedModalidade))
             .thenReturn(persistedDto);
@@ -54,6 +56,11 @@ class ModalidadeServiceImplTest {
         
         assertThat(result.getId())
             .isNotNull();
+        
+        verify(mapper).toEntity(dto);
+        verify(repository).save(modalidade);
+        verify(mapper).toDto(persistedModalidade);
+        verifyNoMoreInteractions(mapper, repository);
     }
     
     @Test

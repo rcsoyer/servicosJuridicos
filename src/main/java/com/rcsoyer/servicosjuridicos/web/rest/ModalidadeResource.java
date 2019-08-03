@@ -7,6 +7,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.rcsoyer.servicosjuridicos.service.ModalidadeService;
 import com.rcsoyer.servicosjuridicos.service.dto.ModalidadeDTO;
 import com.rcsoyer.servicosjuridicos.service.dto.PageableDTO;
+import com.rcsoyer.servicosjuridicos.service.dto.validationgroups.ModalidadeOnCreate;
 import com.rcsoyer.servicosjuridicos.web.rest.errors.BadRequestAlertException;
 import com.rcsoyer.servicosjuridicos.web.rest.util.HeaderUtil;
 import com.rcsoyer.servicosjuridicos.web.rest.util.PaginationUtil;
@@ -17,13 +18,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 import javax.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,15 +38,15 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * REST controller for managing Modalidade.
  */
+@Slf4j
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/modalidade")
 public class ModalidadeResource {
     
     private static final String ENTITY_NAME = "modalidade";
     private final ModalidadeService modalidadeService;
-    private final Logger log = LoggerFactory.getLogger(ModalidadeResource.class);
     
-    public ModalidadeResource(ModalidadeService modalidadeService) {
+    public ModalidadeResource(final ModalidadeService modalidadeService) {
         this.modalidadeService = modalidadeService;
     }
     
@@ -55,12 +56,12 @@ public class ModalidadeResource {
      * @param modalidadeDTO the modalidadeDTO to create
      * @return the ResponseEntity with status 201 (Created) and with body the new modalidadeDTO, or with status 400 (Bad
      * Request) if the modalidade has already an ID
-     * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @Timed
-    @PostMapping("/modalidade")
+    @PostMapping
     public ResponseEntity<ModalidadeDTO> createModalidade(
-        @Valid @RequestBody final ModalidadeDTO modalidadeDTO) throws URISyntaxException {
+        @Validated(ModalidadeOnCreate.class) @RequestBody
+            final ModalidadeDTO modalidadeDTO) throws URISyntaxException {
         log.debug("REST request to save Modalidade : {}", modalidadeDTO);
         badRequestHasIdUponCreation();
         ModalidadeDTO result = modalidadeService.save(modalidadeDTO);
