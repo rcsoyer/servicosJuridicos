@@ -75,7 +75,7 @@ class ModalidadeResourceIntTest extends ApiConfigTest {
     }
     
     @Test
-    void updateModalidade_invalidParams() throws Exception {
+    void updateModalidade_invalidNoIdAndNoDescricacao() throws Exception {
         final var modalidade = new ModalidadeDTO();
         
         mockMvc.perform(put(URL_MODALIDADE_API)
@@ -92,7 +92,7 @@ class ModalidadeResourceIntTest extends ApiConfigTest {
     }
     
     @Test
-    void updateModalidade_idLessThan1() throws Exception {
+    void updateModalidade_invalidIdLessThan1AndDescricaoMoreThan60() throws Exception {
         final var modalidade = new ModalidadeDTO().setId(-1L);
         
         mockMvc.perform(put(URL_MODALIDADE_API)
