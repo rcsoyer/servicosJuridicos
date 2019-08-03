@@ -26,8 +26,9 @@ class ModalidadeRepositoryTest extends RepositoryConfigTest {
     void query() {
         final Page<Modalidade> result = repository.query(modalidade, PageRequest.of(0, 20));
         
-        assertThat(result).isNotEmpty();
-        assertThat(result).containsExactly(modalidade);
+        assertThat(result)
+            .isNotEmpty()
+            .containsExactly(modalidade);
     }
     
 }
