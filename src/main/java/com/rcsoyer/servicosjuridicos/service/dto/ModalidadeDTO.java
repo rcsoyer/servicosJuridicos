@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 /**
  * A DTO for the Modalidade entity.
@@ -16,6 +17,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @EqualsAndHashCode
+@Accessors(chain = true)
 public final class ModalidadeDTO implements Serializable {
     
     private static final long serialVersionUID = 8196822569253387907L;

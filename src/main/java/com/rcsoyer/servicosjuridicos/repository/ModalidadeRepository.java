@@ -16,6 +16,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ModalidadeRepository extends JpaRepository<Modalidade, Long>, QuerydslPredicateExecutor<Modalidade> {
     
+    /**
+     * Query the database about any modalidades that matches the given search params
+     */
     default Page<Modalidade> query(final Modalidade modalidade, final Pageable pageable) {
         return findAll(getRestrictions(modalidade), pageable);
     }
