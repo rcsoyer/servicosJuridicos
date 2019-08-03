@@ -29,4 +29,5 @@ class ModalidadeRepositoryTest extends RepositoryConfigTest {
         assertThat(result).isNotEmpty();
         assertThat(result).containsExactly(modalidade);
     }
+    
 }
