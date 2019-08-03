@@ -51,7 +51,7 @@ public class ModalidadeServiceImpl implements ModalidadeService {
     
     @Override
     @Transactional(readOnly = true)
-    public Page<ModalidadeDTO> findByParams(final ModalidadeDTO dto, final Pageable pageable) {
+    public Page<ModalidadeDTO> seekByParams(final ModalidadeDTO dto, final Pageable pageable) {
         log.debug("Seek modalidades by params searchParams={} and pageable={}", dto, pageable);
         return repository.query(mapper.toEntity(dto), pageable)
                          .map(mapper::toDto);

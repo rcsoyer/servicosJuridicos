@@ -1,7 +1,8 @@
 package com.rcsoyer.servicosjuridicos.service.impl;
 
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -12,12 +13,17 @@ import com.rcsoyer.servicosjuridicos.repository.ModalidadeRepository;
 import com.rcsoyer.servicosjuridicos.service.dto.ModalidadeDTO;
 import com.rcsoyer.servicosjuridicos.service.mapper.ModalidadeMapper;
 import java.util.Optional;
+import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 @ExtendWith(MockitoExtension.class)
 class ModalidadeServiceImplTest {
@@ -58,7 +64,7 @@ class ModalidadeServiceImplTest {
         
         final ModalidadeDTO result = service.save(dto);
         
-        assertEquals(dto.getDescricao(), result.getDescricao());
+        Assert.assertEquals(dto.getDescricao(), result.getDescricao());
         
         assertThat(result.getId())
             .isNotNull();
@@ -84,7 +90,7 @@ class ModalidadeServiceImplTest {
         
         final Optional<ModalidadeDTO> result = service.findOne(id);
         
-        assertEquals(dto, result.get());
+        Assert.assertEquals(dto, result.get());
         verify(repository).findById(id);
         verify(mapper).toDto(modalidade);
         verifyNoMoreInteractions(mapper, repository);
@@ -102,6 +108,25 @@ class ModalidadeServiceImplTest {
     }
     
     @Test
-    void findByParams() {
+    void seekByParams() {
+        final var pageable = PageRequest.of(0, 10);
+        final Page<ModalidadeDTO> dtoPage = new PageImpl<>(singletonList(dto));
+        final Page<Modalidade> modalidadesPage = new PageImpl<>(singletonList(modalidade));
+        
+        when(mapper.toEntity(dto))
+            .thenReturn(modalidade);
+        when(repository.query(modalidade, pageable))
+            .thenReturn(modalidadesPage);
+        
+        service.seekByParams(dto, pageable);
+        
+        assertEquals(modalidadesPage.getSize(), dtoPage.getSize());
+        Assertions.assertEquals(modalidadesPage.getContent().get(0).getId(),
+                                modalidadesPage.getContent().get(0).getId());
+        verify(mapper).toEntity(dto);
+        verify(repository).query(modalidade, pageable);
+        verify(mapper).toDto(modalidade);
+        verifyNoMoreInteractions(repository, mapper);
     }
+    
 }

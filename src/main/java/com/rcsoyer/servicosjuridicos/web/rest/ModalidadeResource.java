@@ -126,7 +126,7 @@ public class ModalidadeResource {
                                                               @RequestParam("pageable") PageableDTO pageableDTO) {
         log.debug("REST request to get a page of Modalidades by input params");
         Pageable pageable = pageableDTO.getPageable();
-        Page<ModalidadeDTO> page = modalidadeService.findByParams(dto, pageable);
+        Page<ModalidadeDTO> page = modalidadeService.seekByParams(dto, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/queryModalidades");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

@@ -33,6 +33,6 @@ public interface ModalidadeService {
      */
     void delete(Long id);
     
-    Page<ModalidadeDTO> findByParams(ModalidadeDTO dto, Pageable pageable);
+    Page<ModalidadeDTO> seekByParams(ModalidadeDTO dto, Pageable pageable);
     
 }
