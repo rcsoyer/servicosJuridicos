@@ -26,9 +26,9 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Getter
 @ToString
-@EqualsAndHashCode
 @Accessors(chain = true)
 @Table(name = "modalidade")
+@EqualsAndHashCode(of = "id")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public final class Modalidade implements Serializable {
     

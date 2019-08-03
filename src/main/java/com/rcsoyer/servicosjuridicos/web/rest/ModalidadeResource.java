@@ -119,21 +119,6 @@ public class ModalidadeResource {
         };
     }
     
-    /**
-     * GET /modalidades : get all the modalidades.
-     *
-     * @param pageable the pagination information
-     * @return the ResponseEntity with status 200 (OK) and the list of modalidades in body
-     */
-    @Timed
-    @GetMapping("/modalidade")
-    public ResponseEntity<List<ModalidadeDTO>> getAllModalidades(Pageable pageable) {
-        log.debug("REST request to get a page of Modalidades");
-        Page<ModalidadeDTO> page = modalidadeService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/modalidade");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-    }
-    
     @Timed
     @GetMapping("/queryModalidades")
     public ResponseEntity<List<ModalidadeDTO>> getModalidades(@RequestParam("dto") ModalidadeDTO dto,
