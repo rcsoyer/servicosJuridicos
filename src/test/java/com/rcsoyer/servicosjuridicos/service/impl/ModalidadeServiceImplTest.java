@@ -10,6 +10,7 @@ import com.rcsoyer.servicosjuridicos.domain.Modalidade;
 import com.rcsoyer.servicosjuridicos.repository.ModalidadeRepository;
 import com.rcsoyer.servicosjuridicos.service.dto.ModalidadeDTO;
 import com.rcsoyer.servicosjuridicos.service.mapper.ModalidadeMapper;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -68,7 +69,24 @@ class ModalidadeServiceImplTest {
     }
     
     @Test
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     void findOne() {
+        final long id = 1L;
+        dto.setId(id);
+        modalidade.setId(id);
+        
+        when(repository.findById(id))
+            .thenReturn(Optional.of(modalidade));
+        
+        when(mapper.toDto(modalidade))
+            .thenReturn(dto);
+        
+        final Optional<ModalidadeDTO> result = service.findOne(id);
+        
+        assertEquals(dto, result.get());
+        verify(repository).findById(id);
+        verify(mapper).toDto(modalidade);
+        verifyNoMoreInteractions(mapper, repository);
     }
     
     @Test
