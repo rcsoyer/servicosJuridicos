@@ -60,6 +60,25 @@ class ModalidadeResourceIntTest extends ApiConfigTest {
     }
     
     @Test
+    void createModalidade_invalidWithIdAndDescriptionMoreThanMax() throws Exception {
+        final var modalidade = new ModalidadeDTO()
+                                   .setId(1L)
+                                   .setDescricao("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        
+        mockMvc.perform(post(URL_MODALIDADE_API)
+                            .with(user(TEST_USER_ID))
+                            .with(csrf())
+                            .contentType(APPLICATION_JSON_UTF8)
+                            .content(convertObjectToJsonBytes(modalidade)))
+               .andExpect(status().isBadRequest())
+               .andExpect(jsonPath("$.fieldErrors", hasSize(2)))
+               .andExpect(jsonPath("$.message").value("error.validation"))
+               .andExpect(jsonPath("$.title").value("Method argument not valid"))
+               .andExpect(jsonPath("$.fieldErrors[*].field", containsInAnyOrder("id", "descricao")))
+               .andExpect(jsonPath("$.fieldErrors[*].message", containsInAnyOrder("Null", "Size")));
+    }
+    
+    @Test
     void updateModalidade_ok() throws Exception {
         final ModalidadeDTO modalidade = newPersistedModalidade();
         
