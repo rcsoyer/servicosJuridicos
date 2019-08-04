@@ -167,7 +167,16 @@ class ModalidadeResourceIntTest extends ApiConfigTest {
     }
     
     @Test
-    void getModalidade() {
+    void getModalidade_found() throws Exception {
+        final ModalidadeDTO modalidade = newPersistedModalidade();
+        
+        mockMvc.perform(
+            get(URL_MODALIDADE_API + "/{id}", modalidade.getId())
+                .with(user(TEST_USER_ID))
+                .with(csrf()))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.id").value(modalidade.getId().intValue()))
+               .andExpect(jsonPath("$.descricao").value(modalidade.getDescricao()));
     }
     
     @Test
