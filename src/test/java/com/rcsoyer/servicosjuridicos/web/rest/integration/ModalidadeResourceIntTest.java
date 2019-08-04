@@ -130,7 +130,7 @@ class ModalidadeResourceIntTest extends ApiConfigTest {
     }
     
     @Test
-    void getModalidades() throws Exception {
+    void getModalidades_matchingParams() throws Exception {
         final ModalidadeDTO modalidade1 = service.save(new ModalidadeDTO().setDescricao("modalidade 1"));
         final ModalidadeDTO modalidade2 = service.save(new ModalidadeDTO().setDescricao("modalidade 2"));
         
@@ -144,6 +144,26 @@ class ModalidadeResourceIntTest extends ApiConfigTest {
                                                                   modalidade2.getId().intValue())))
                .andExpect(jsonPath("$.[*].descricao",
                                    containsInAnyOrder(modalidade1.getDescricao(), modalidade2.getDescricao())));
+    }
+    
+    @Test
+    void getModalidades_noParams() throws Exception {
+        final ModalidadeDTO modalidade1 = service.save(new ModalidadeDTO().setDescricao("algo de novo no horizonte"));
+        final ModalidadeDTO modalidade2 = service.save(new ModalidadeDTO().setDescricao("fumar faz mal a saúde"));
+        final ModalidadeDTO modalidade3 = service.save(new ModalidadeDTO().setDescricao("ervas naturais elevem"));
+        
+        mockMvc.perform(get(URL_MODALIDADE_API)
+                            .with(user(TEST_USER_ID))
+                            .with(csrf()))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$", hasSize(3)))
+               .andExpect(jsonPath("$.[*].id", containsInAnyOrder(modalidade1.getId().intValue(),
+                                                                  modalidade2.getId().intValue(),
+                                                                  modalidade3.getId().intValue())))
+               .andExpect(jsonPath("$.[*].descricao",
+                                   containsInAnyOrder(modalidade1.getDescricao(),
+                                                      modalidade2.getDescricao(),
+                                                      modalidade3.getDescricao())));
     }
     
     @Test
