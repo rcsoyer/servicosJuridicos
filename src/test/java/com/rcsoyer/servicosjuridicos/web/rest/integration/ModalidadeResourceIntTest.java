@@ -134,11 +134,10 @@ class ModalidadeResourceIntTest extends ApiConfigTest {
         final ModalidadeDTO modalidade1 = service.save(new ModalidadeDTO().setDescricao("modalidade 1"));
         final ModalidadeDTO modalidade2 = service.save(new ModalidadeDTO().setDescricao("modalidade 2"));
         
-        mockMvc.perform(
-            get(URL_MODALIDADE_API)
-                .with(user(TEST_USER_ID))
-                .with(csrf())
-                .param("descricao", "modalidade"))
+        mockMvc.perform(get(URL_MODALIDADE_API)
+                            .with(user(TEST_USER_ID))
+                            .with(csrf())
+                            .param("descricao", "modalidade"))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$", hasSize(2)))
                .andExpect(jsonPath("$.[*].id", containsInAnyOrder(modalidade1.getId().intValue(),
