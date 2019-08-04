@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -129,7 +130,21 @@ class ModalidadeResourceIntTest extends ApiConfigTest {
     }
     
     @Test
-    void getModalidades() {
+    void getModalidades() throws Exception {
+        final ModalidadeDTO modalidade1 = service.save(new ModalidadeDTO().setDescricao("modalidade 1"));
+        final ModalidadeDTO modalidade2 = service.save(new ModalidadeDTO().setDescricao("modalidade 2"));
+        
+        mockMvc.perform(
+            get(URL_MODALIDADE_API)
+                .with(user(TEST_USER_ID))
+                .with(csrf())
+                .param("descricao", "modalidade"))
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$", hasSize(2)))
+               .andExpect(jsonPath("$.[*].id", containsInAnyOrder(modalidade1.getId().intValue(),
+                                                                  modalidade2.getId().intValue())))
+               .andExpect(jsonPath("$.[*].descricao",
+                                   containsInAnyOrder(modalidade1.getDescricao(), modalidade2.getDescricao())));
     }
     
     @Test
