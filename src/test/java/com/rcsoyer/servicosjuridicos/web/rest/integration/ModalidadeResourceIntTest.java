@@ -17,7 +17,6 @@ import com.rcsoyer.servicosjuridicos.service.dto.ModalidadeDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 class ModalidadeResourceIntTest extends ApiConfigTest {
     
@@ -192,13 +191,12 @@ class ModalidadeResourceIntTest extends ApiConfigTest {
         mockMvc.perform(get(URL_MODALIDADE_API + "/{id}", -666L)
                             .with(user(TEST_USER_ID))
                             .with(csrf()))
-               .andDo(MockMvcResultHandlers.print())
                .andExpect(status().isBadRequest())
                .andExpect(jsonPath("$.violations", hasSize(1)))
                .andExpect(jsonPath("$.message").value("error.validation"))
                .andExpect(jsonPath("$.title").value("Constraint Violation"))
                .andExpect(jsonPath("$.violations[0].field").value("getModalidade.id"))
-               .andExpect(jsonPath("$.violations[*].message").value("must be greater than or equal to 1"));
+               .andExpect(jsonPath("$.violations[0].message").value("must be greater than or equal to 1"));
     }
     
     @Test
