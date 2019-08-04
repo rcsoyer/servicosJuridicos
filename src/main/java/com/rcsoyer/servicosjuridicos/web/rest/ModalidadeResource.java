@@ -39,6 +39,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ModalidadeResource {
     
     private static final String ENTITY_NAME = "modalidade";
+    
     private final ModalidadeService service;
     
     public ModalidadeResource(final ModalidadeService modalidadeService) {
@@ -126,4 +127,5 @@ public class ModalidadeResource {
                              .headers(entityDeletionAlert(ENTITY_NAME, id.toString()))
                              .build();
     }
+    
 }

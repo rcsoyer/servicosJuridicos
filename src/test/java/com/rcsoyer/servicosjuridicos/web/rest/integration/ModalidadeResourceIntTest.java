@@ -16,7 +16,6 @@ import com.rcsoyer.servicosjuridicos.service.dto.ModalidadeDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 class ModalidadeResourceIntTest extends ApiConfigTest {
     
@@ -44,7 +43,7 @@ class ModalidadeResourceIntTest extends ApiConfigTest {
     }
     
     @Test
-    void createModalidade_invalidParams() throws Exception {
+    void createModalidade_invalidWithIdAndNoDescription() throws Exception {
         final var modalidade = new ModalidadeDTO().setId(666L);
         
         mockMvc.perform(post(URL_MODALIDADE_API)
@@ -93,20 +92,21 @@ class ModalidadeResourceIntTest extends ApiConfigTest {
     
     @Test
     void updateModalidade_invalidIdLessThan1AndDescricaoMoreThan60() throws Exception {
-        final var modalidade = new ModalidadeDTO().setId(-1L);
+        final var modalidade = new ModalidadeDTO()
+                                   .setId(-1L)
+                                   .setDescricao("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         
         mockMvc.perform(put(URL_MODALIDADE_API)
                             .with(user(TEST_USER_ID))
                             .with(csrf())
                             .contentType(APPLICATION_JSON_UTF8)
                             .content(convertObjectToJsonBytes(modalidade)))
-               .andDo(MockMvcResultHandlers.print())
                .andExpect(status().isBadRequest())
                .andExpect(jsonPath("$.fieldErrors", hasSize(2)))
                .andExpect(jsonPath("$.message").value("error.validation"))
                .andExpect(jsonPath("$.title").value("Method argument not valid"))
                .andExpect(jsonPath("$.fieldErrors[*].field", containsInAnyOrder("id", "descricao")))
-               .andExpect(jsonPath("$.fieldErrors[*].message", containsInAnyOrder("Min", "NotBlank")));
+               .andExpect(jsonPath("$.fieldErrors[*].message", containsInAnyOrder("Min", "Size")));
     }
     
     @Test
