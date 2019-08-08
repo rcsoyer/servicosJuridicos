@@ -89,13 +89,12 @@ class AdvogadoResourceIntTest extends ApiConfigTest {
         final var advogado1 = advogadoService.save(advogadoDto1());
         advogadoService.save(advogadoDto2());
         
-        mockMvc.perform(
-            get(URL_ADVOGADO_API)
-                .with(user(TEST_USER_ID))
-                .with(csrf())
-                .param("cpf", advogado1.getCpf())
-                .param("nome", advogado1.getNome())
-                .param("ramal", advogado1.getRamal().toString()))
+        mockMvc.perform(get(URL_ADVOGADO_API)
+                            .with(user(TEST_USER_ID))
+                            .with(csrf())
+                            .param("cpf", advogado1.getCpf())
+                            .param("nome", advogado1.getNome())
+                            .param("ramal", advogado1.getRamal().toString()))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$", hasSize(1)))
                .andExpect(jsonPath("$.[0].id", equalTo(advogado1.getId().intValue())))
@@ -109,10 +108,9 @@ class AdvogadoResourceIntTest extends ApiConfigTest {
         var advogado1 = advogadoService.save(advogadoDto1());
         var advogado2 = advogadoService.save(advogadoDto2());
         
-        mockMvc.perform(
-            get(URL_ADVOGADO_API)
-                .with(user(TEST_USER_ID))
-                .with(csrf()))
+        mockMvc.perform(get(URL_ADVOGADO_API)
+                            .with(user(TEST_USER_ID))
+                            .with(csrf()))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$", hasSize(2)))
                .andExpect(jsonPath("$.[0].id", equalTo(advogado1.getId().intValue())))
@@ -129,10 +127,9 @@ class AdvogadoResourceIntTest extends ApiConfigTest {
     void getAdvogado_found() throws Exception {
         var advogado = advogadoService.save(advogadoDto1());
         
-        mockMvc.perform(
-            get(URL_ADVOGADO_API + "/{id}", advogado.getId())
-                .with(user(TEST_USER_ID))
-                .with(csrf()))
+        mockMvc.perform(get(URL_ADVOGADO_API + "/{id}", advogado.getId())
+                            .with(user(TEST_USER_ID))
+                            .with(csrf()))
                .andExpect(status().isOk())
                .andExpect(jsonPath("$.id").value(advogado.getId().intValue()))
                .andExpect(jsonPath("$.cpf").value(advogado.getCpf()))
@@ -155,10 +152,9 @@ class AdvogadoResourceIntTest extends ApiConfigTest {
     void deleteAdvogado() throws Exception {
         var advogado = advogadoService.save(advogadoDto1());
         
-        mockMvc.perform(
-            delete(URL_ADVOGADO_API + "/{id}", advogado.getId())
-                .with(user(TEST_USER_ID))
-                .with(csrf()))
+        mockMvc.perform(delete(URL_ADVOGADO_API + "/{id}", advogado.getId())
+                            .with(user(TEST_USER_ID))
+                            .with(csrf()))
                .andExpect(status().isOk());
     }
     

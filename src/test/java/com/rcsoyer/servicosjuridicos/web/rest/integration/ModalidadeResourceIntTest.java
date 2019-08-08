@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -17,6 +18,7 @@ import com.rcsoyer.servicosjuridicos.service.dto.ModalidadeDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 class ModalidadeResourceIntTest extends ApiConfigTest {
     
@@ -200,7 +202,20 @@ class ModalidadeResourceIntTest extends ApiConfigTest {
     }
     
     @Test
-    void deleteModalidade() {
+    void deleteModalidade_ok() throws Exception {
+        mockMvc.perform(delete(URL_MODALIDADE_API + "/{id}", newPersistedModalidade().getId())
+                            .with(user(TEST_USER_ID))
+                            .with(csrf()))
+               .andExpect(status().isOk());
+    }
+    
+    @Test
+    void deleteModalidade_unknownEnity() throws Exception {
+        mockMvc.perform(delete(URL_MODALIDADE_API + "/{id}", 666L)
+                            .with(user(TEST_USER_ID))
+                            .with(csrf()))
+               .andDo(MockMvcResultHandlers.print())
+               .andExpect(status().isNotAcceptable());
     }
     
     private ModalidadeDTO newModalidade() {
