@@ -15,14 +15,14 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public ApiError handleEmptyResultDataAccess(EmptyResultDataAccessException cause) {
-        log.error("There was an attempt to modify nonexistent entity");
+        log.warn("There was an attempt to modify nonexistent entity");
         return new ApiError("Erro! Tentativa de modificar dados desconhecidos", cause.getMessage());
     }
     
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiError handleMethodArgumentNotValid(MethodArgumentNotValidException cause) {
-        log.warn("There was an attempt to insert invalid data in the application");
+        log.info("There was an attempt to insert invalid data in the application");
         return new ApiError("Dados inválidos", cause.getMessage());
     }
     
