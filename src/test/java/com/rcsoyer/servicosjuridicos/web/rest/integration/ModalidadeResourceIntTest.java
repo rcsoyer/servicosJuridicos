@@ -18,6 +18,7 @@ import com.rcsoyer.servicosjuridicos.service.dto.ModalidadeDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 class ModalidadeResourceIntTest extends ApiConfigTest {
     
@@ -103,6 +104,7 @@ class ModalidadeResourceIntTest extends ApiConfigTest {
                             .with(csrf())
                             .contentType(APPLICATION_JSON_UTF8)
                             .content(convertObjectToJsonBytes(modalidade)))
+               .andDo(MockMvcResultHandlers.print())
                .andExpect(status().isBadRequest())
                .andExpect(jsonPath("$.fieldErrors", hasSize(2)))
                .andExpect(jsonPath("$.message").value("error.validation"))
