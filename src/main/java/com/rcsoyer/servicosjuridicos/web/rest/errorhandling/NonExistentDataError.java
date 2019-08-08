@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @ToString
 @EqualsAndHashCode
-class ApiError {
+final class NonExistentDataError {
     
     private final String message;
     private final HttpStatus status;
@@ -20,7 +20,7 @@ class ApiError {
     @JsonFormat(shape = STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private final LocalDateTime timestamp;
     
-    ApiError(HttpStatus status, String message) {
+    NonExistentDataError(HttpStatus status, String message) {
         this.status = status;
         this.message = message;
         this.timestamp = LocalDateTime.now();

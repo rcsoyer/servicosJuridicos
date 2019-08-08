@@ -13,9 +13,9 @@ public class ErrorHandler {
     
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     @ExceptionHandler(EmptyResultDataAccessException.class)
-    public ApiError handleEmptyResultDataAccess() {
+    public NonExistentDataError handleEmptyResultDataAccess() {
         log.warn("There was an attempt to modify nonexistent entity");
-        return new ApiError(HttpStatus.NOT_ACCEPTABLE, "Erro! Tentativa de modificar dados desconhecidos");
+        return new NonExistentDataError(HttpStatus.NOT_ACCEPTABLE, "Erro! Tentativa de modificar dados desconhecidos");
     }
     
 }
