@@ -11,7 +11,6 @@ import com.rcsoyer.servicosjuridicos.service.dto.ModalidadeDTO;
 import com.rcsoyer.servicosjuridicos.service.dto.validationgroups.ModalidadeOnCreate;
 import com.rcsoyer.servicosjuridicos.service.dto.validationgroups.ModalidadeOnUpdate;
 import io.github.jhipster.web.util.ResponseUtil;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.vavr.Function1;
 import java.net.URI;
@@ -94,7 +93,7 @@ public class ModalidadeResource {
      */
     @Timed
     @GetMapping
-    @ApiOperation("")
+    @ApiOperation("Retrieve a page of modalidades matching the search parameters and pagination")
     public ResponseEntity<List<ModalidadeDTO>> getModalidades(final ModalidadeDTO searchParams,
                                                               final Pageable pageable) {
         log.debug("REST request to get a page of Modalidades by search params: searchParams={} and pageable={}",
