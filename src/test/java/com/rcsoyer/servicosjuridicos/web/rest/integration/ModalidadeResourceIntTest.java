@@ -18,7 +18,6 @@ import com.rcsoyer.servicosjuridicos.service.dto.ModalidadeDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 class ModalidadeResourceIntTest extends ApiConfigTest {
     
@@ -210,11 +209,18 @@ class ModalidadeResourceIntTest extends ApiConfigTest {
     }
     
     @Test
+    void deleteModalidade_invalidId() throws Exception {
+        mockMvc.perform(delete(URL_MODALIDADE_API + "/{id}", -666L)
+                            .with(user(TEST_USER_ID))
+                            .with(csrf()))
+               .andExpect(status().isBadRequest());
+    }
+    
+    @Test
     void deleteModalidade_unknownEnity() throws Exception {
         mockMvc.perform(delete(URL_MODALIDADE_API + "/{id}", 666L)
                             .with(user(TEST_USER_ID))
                             .with(csrf()))
-               .andDo(MockMvcResultHandlers.print())
                .andExpect(status().isNotAcceptable());
     }
     

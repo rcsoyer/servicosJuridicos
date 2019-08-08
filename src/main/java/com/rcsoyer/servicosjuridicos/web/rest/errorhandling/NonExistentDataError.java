@@ -9,6 +9,10 @@ import lombok.Getter;
 import lombok.ToString;
 import org.springframework.http.HttpStatus;
 
+/**
+ * Erro response with http status error 406 for when there was an attempt to modify unknown or nonexistent data in the
+ * application
+ */
 @Getter
 @ToString
 @EqualsAndHashCode
@@ -20,9 +24,9 @@ final class NonExistentDataError {
     @JsonFormat(shape = STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private final LocalDateTime timestamp;
     
-    NonExistentDataError(HttpStatus status, String message) {
-        this.status = status;
-        this.message = message;
+    NonExistentDataError() {
+        this.status = HttpStatus.NOT_ACCEPTABLE;
+        this.message = "Erro! Tentativa de modificar dados desconhecidos";
         this.timestamp = LocalDateTime.now();
     }
 }

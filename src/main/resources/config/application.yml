@@ -77,6 +77,11 @@ spring:
             enabled: false
     thymeleaf:
         mode: HTML
+    log4j:
+        logger:
+            orm:
+                jpa=INFO
+
 
 server:
     servlet:
@@ -100,8 +105,8 @@ jhipster:
         core-pool-size: 2
         max-pool-size: 50
         queue-capacity: 10000
-    # By default CORS is disabled. Uncomment to enable.
-    #cors:
+        # By default CORS is disabled. Uncomment to enable.
+        #cors:
         #allowed-origins: "*"
         #allowed-methods: "*"
         #allowed-headers: "*"
