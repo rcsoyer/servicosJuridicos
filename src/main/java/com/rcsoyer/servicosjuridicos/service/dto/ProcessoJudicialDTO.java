@@ -40,8 +40,10 @@ public final class ProcessoJudicialDTO implements Serializable {
     
     private LocalDateTime prazoFinal;
     
+    @Null(groups = ProcessoJudicialOnCreate.class)
     private LocalDateTime dtAtribuicao;
     
+    @Null(groups = {ProcessoJudicialOnCreate.class, ProcessoJudicialOnUpdate.class})
     private LocalDateTime dtInicio;
     
     private LocalDateTime dtConclusao;
