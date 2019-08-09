@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import java.io.IOException;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -35,14 +36,13 @@ public final class ProcessoJudicialDTO implements Serializable {
     @Size(min = 20, max = 20)
     private String numero;
     
-    @NotNull
-    private LocalDate prazoFinal;
+    private LocalDateTime prazoFinal;
     
-    private LocalDate dtAtribuicao;
+    private LocalDateTime dtAtribuicao;
     
-    private LocalDate dtInicio;
+    private LocalDateTime dtInicio;
     
-    private LocalDate dtConclusao;
+    private LocalDateTime dtConclusao;
     
     private AdvogadoDTO advogado;
     
@@ -51,11 +51,6 @@ public final class ProcessoJudicialDTO implements Serializable {
     
     @NotNull
     private ModalidadeDTO modalidade;
-    
-    @JsonCreator
-    public static ProcessoJudicialDTO of(String json) throws IOException {
-        return JsonConverter.readValue(json, ProcessoJudicialDTO.class);
-    }
     
     public ProcessoJudicialDTO setNumero(String numero) {
         this.numero = trimToNull(numero);

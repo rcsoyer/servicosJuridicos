@@ -3,11 +3,8 @@ package com.rcsoyer.servicosjuridicos.domain;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -44,6 +42,7 @@ public final class ProcessoJudicial implements Serializable {
     private static final long serialVersionUID = 5978891789222560660L;
     
     @Id
+    @Min(1L)
     @SequenceGenerator(name = "sequenceGenerator")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     private Long id;
@@ -54,19 +53,19 @@ public final class ProcessoJudicial implements Serializable {
     @Column(length = 20, nullable = false, unique = true)
     private String numero;
     
-    @NotNull
     @Column(name = "prazo_final", nullable = false)
-    private LocalDate prazoFinal;
+    private LocalDateTime prazoFinal;
+    
+    @Setter(AccessLevel.NONE)
+    @Column(name = "dt_atribuicao", nullable = false)
+    private LocalDateTime dtAtribuicao;
     
     @NotNull
-    @Column(name = "dt_atribuicao", nullable = false)
-    private LocalDate dtAtribuicao;
-    
     @Column(name = "dt_inicio")
-    private LocalDate dtInicio;
+    private LocalDateTime dtInicio;
     
     @Column(name = "dt_conclusao")
-    private LocalDate dtConclusao;
+    private LocalDateTime dtConclusao;
     
     @NotNull
     @ManyToOne(optional = false)
@@ -79,12 +78,6 @@ public final class ProcessoJudicial implements Serializable {
     @NotNull
     @ManyToOne(optional = false)
     private Advogado advogado;
-    
-    public ProcessoJudicial setDtAtribuicao(final LocalDate dtAtribuicao) {
-        this.dtAtribuicao = Optional.ofNullable(dtAtribuicao)
-                                    .orElseGet(LocalDate::now);
-        return this;
-    }
     
     public ProcessoJudicial setNumero(String numero) {
         this.numero = trimToNull(numero);
@@ -99,17 +92,4 @@ public final class ProcessoJudicial implements Serializable {
         return Objects.isNull(advogado);
     }
     
-    public void verificarTrocouAdvogado(final ProcessoJudicial consultadoBD) {
-        Optional.of(this)
-                .filter(advogadoDiferente(consultadoBD))
-                .ifPresent(setNewDtAtribuicao());
-    }
-    
-    private Predicate<ProcessoJudicial> advogadoDiferente(final ProcessoJudicial consultadoBD) {
-        return processo -> !consultadoBD.getAdvogado().equals(processo.getAdvogado());
-    }
-    
-    private Consumer<ProcessoJudicial> setNewDtAtribuicao() {
-        return processo -> processo.setDtAtribuicao(LocalDate.now());
-    }
 }
