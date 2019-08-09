@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/**
+ * Catch specific exceptions and gives in return proper error responses
+ */
 @Slf4j
 @RestControllerAdvice
 public class ErrorHandler {
@@ -22,7 +25,7 @@ public class ErrorHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiError handleMethodArgumentNotValid(MethodArgumentNotValidException cause) {
-        log.info("There was an attempt to insert invalid data in the application");
+        log.debug("There was an attempt to insert invalid data into the application");
         return new ApiError("Dados inválidos", cause.getMessage());
     }
     
