@@ -36,10 +36,10 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Setter
 @ToString
 @Accessors(chain = true)
-@EqualsAndHashCode(of = {"id", "numero"})
+@EqualsAndHashCode(of = "id")
 @Table(name = "processo_judicial")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ProcessoJudicial implements Serializable {
+public final class ProcessoJudicial implements Serializable {
     
     private static final long serialVersionUID = 5978891789222560660L;
     
