@@ -56,7 +56,7 @@ public final class ProcessoJudicial implements Serializable {
     @Column(name = "prazo_final", nullable = false)
     private LocalDateTime prazoFinal;
     
-    @Setter(AccessLevel.NONE)
+    @NotNull
     @Column(name = "dt_atribuicao", nullable = false)
     private LocalDateTime dtAtribuicao;
     

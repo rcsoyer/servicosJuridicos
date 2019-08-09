@@ -1,6 +1,6 @@
 package com.rcsoyer.servicosjuridicos.repository;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.rcsoyer.servicosjuridicos.domain.Advogado;
 import com.rcsoyer.servicosjuridicos.domain.Assunto;
@@ -8,11 +8,10 @@ import com.rcsoyer.servicosjuridicos.domain.Modalidade;
 import com.rcsoyer.servicosjuridicos.domain.ProcessoJudicial;
 import com.rcsoyer.servicosjuridicos.repository.processo.ProcessoJudicialRepository;
 import java.time.LocalDateTime;
-import org.junit.jupiter.api.Assertions;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 class ProcessoJudicialRepositoryTest extends RepositoryConfigTest {
@@ -36,7 +35,7 @@ class ProcessoJudicialRepositoryTest extends RepositoryConfigTest {
         final var assunto = assuntoRepository.save(new Assunto()
                                                        .setAtivo(Boolean.TRUE)
                                                        .setDescricao("assunto de urgencia")
-                                                       .setPeso(7));
+                                                       .setPeso(2));
         
         final var modalidade = this.modalidadeRepository.save(new Modalidade()
                                                                   .setDescricao("modalidade de curitiba"));
@@ -46,19 +45,26 @@ class ProcessoJudicialRepositoryTest extends RepositoryConfigTest {
                                                          .setNome("Matt Murdock")
                                                          .setRamal(666));
         
+        final var now = LocalDateTime.now();
         this.persistedProcesso = processoRepository.save(new ProcessoJudicial()
                                                              .setAdvogado(advogado)
                                                              .setAssunto(assunto)
                                                              .setModalidade(modalidade)
-                                                             .setDtConclusao(LocalDateTime.now())
+                                                             .setDtInicio(now)
+                                                             .setDtAtribuicao(now)
+                                                             .setDtConclusao(LocalDateTime.MIN)
                                                              .setNumero("12345678901234567890")
                                                              .setPrazoFinal(LocalDateTime.MAX));
     }
     
     @Test
     void query() {
-        final Page<ProcessoJudicial> result = processoRepository.query(persistedProcesso, PageRequest.of(0, 20));
+        final List<ProcessoJudicial> result = processoRepository.query(persistedProcesso, PageRequest.of(0, 20))
+                                                                .getContent();
         
-        assertEquals(persistedProcesso, result.getContent().get(0));
+        assertThat(result)
+            .hasSize(1);
+        assertThat(result.get(0))
+            .isEqualTo(persistedProcesso);
     }
 }

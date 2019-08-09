@@ -22,40 +22,40 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="numero" type="varchar(20)">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
 
-            <column name="prazo_final" type="date">
-                <constraints nullable="false" />
+            <column name="prazo_final" type="timestamp">
+                <constraints nullable="false"/>
             </column>
 
-            <column name="dt_atribuicao" type="date">
-                <constraints nullable="false" />
+            <column name="dt_atribuicao" type="timestamp">
+                <constraints nullable="false"/>
             </column>
 
-            <column name="dt_inicio" type="date">
-                <constraints nullable="true" />
+            <column name="dt_inicio" type="timestamp">
+                <constraints nullable="true"/>
             </column>
 
-            <column name="dt_conclusao" type="date">
-                <constraints nullable="true" />
+            <column name="dt_conclusao" type="timestamp">
+                <constraints nullable="true"/>
             </column>
 
             <column name="assunto_id" type="bigint">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
 
             <column name="modalidade_id" type="bigint">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
 
             <column name="advogado_id" type="bigint">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
 
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
-        
+
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 </databaseChangeLog>
