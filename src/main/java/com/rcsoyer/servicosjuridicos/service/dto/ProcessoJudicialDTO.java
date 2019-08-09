@@ -2,14 +2,13 @@ package com.rcsoyer.servicosjuridicos.service.dto;
 
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import java.io.IOException;
+import com.rcsoyer.servicosjuridicos.service.dto.validationgroups.ProcessoJudicialOnCreate;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -28,12 +27,14 @@ public final class ProcessoJudicialDTO implements Serializable {
     
     private static final long serialVersionUID = 4412327118758497711L;
     
-    @Min(1L)
+    @Null(groups = ProcessoJudicialOnCreate.class)
+    @NotNull(groups = ProcessoJudicialOnUpdate.class)
+    @Min(value = 1L, groups = ProcessoJudicialOnUpdate.class)
     private Long id;
     
-    @NotBlank
     @Setter(AccessLevel.NONE)
-    @Size(min = 20, max = 20)
+    @NotBlank(groups = {ProcessoJudicialOnCreate.class, ProcessoJudicialOnUpdate.class})
+    @Size(min = 20, max = 20, groups = {ProcessoJudicialOnCreate.class, ProcessoJudicialOnUpdate.class})
     private String numero;
     
     private LocalDateTime prazoFinal;
