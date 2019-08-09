@@ -3,6 +3,7 @@ package com.rcsoyer.servicosjuridicos.service.dto;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 import com.rcsoyer.servicosjuridicos.service.dto.validationgroups.ProcessoJudicialOnCreate;
+import com.rcsoyer.servicosjuridicos.service.dto.validationgroups.ProcessoJudicialOnUpdate;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.validation.constraints.Min;
