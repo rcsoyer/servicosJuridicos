@@ -54,7 +54,7 @@ class ProcessoJudicialRepositoryTest extends RepositoryConfigTest {
                                                              .setDtAtribuicao(now)
                                                              .setDtConclusao(LocalDateTime.MIN)
                                                              .setNumero("12345678901234567890")
-                                                             .setPrazoFinal(LocalDateTime.MAX));
+                                                             .setPrazoFinal(LocalDateTime.parse("2020-12-03T10:15:30")));
     }
     
     @Test

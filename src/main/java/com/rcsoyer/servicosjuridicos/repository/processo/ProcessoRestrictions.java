@@ -31,7 +31,9 @@ final class ProcessoRestrictions {
     
     private BooleanExpression extractRestrictions() {
         return Expressions.allOf(numeroRestriction(), advogadoRestriction(),
-                                 assuntoRestriction(), modalidadeRestriction());
+                                 assuntoRestriction(), modalidadeRestriction(),
+                                 dtAtribuicaoRestriction(), dtInicioRestriction(),
+                                 dtConclusaoRestriction(), prazoFinalRestriction());
     }
     
     private BooleanExpression numeroRestriction() {
@@ -55,6 +57,30 @@ final class ProcessoRestrictions {
     private BooleanExpression modalidadeRestriction() {
         return Optional.ofNullable(processo.getModalidade())
                        .map(qProcesso.modalidade::eq)
+                       .orElse(null);
+    }
+    
+    private BooleanExpression prazoFinalRestriction() {
+        return Optional.ofNullable(processo.getPrazoFinal())
+                       .map(qProcesso.prazoFinal::eq)
+                       .orElse(null);
+    }
+    
+    private BooleanExpression dtAtribuicaoRestriction() {
+        return Optional.ofNullable(processo.getDtAtribuicao())
+                       .map(qProcesso.dtAtribuicao::eq)
+                       .orElse(null);
+    }
+    
+    private BooleanExpression dtInicioRestriction() {
+        return Optional.ofNullable(processo.getDtInicio())
+                       .map(qProcesso.dtInicio::eq)
+                       .orElse(null);
+    }
+    
+    private BooleanExpression dtConclusaoRestriction() {
+        return Optional.ofNullable(processo.getDtConclusao())
+                       .map(qProcesso.dtConclusao::eq)
                        .orElse(null);
     }
     
