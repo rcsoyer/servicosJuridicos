@@ -1,6 +1,6 @@
 package com.rcsoyer.servicosjuridicos.service.impl;
 
-import static com.rcsoyer.servicosjuridicos.domain.enumeration.RangeDgCoordenacao.INCLUSIVE;
+import static com.rcsoyer.servicosjuridicos.domain.advdgcoordenacao.RangeDgCoordenacao.INCLUSIVE;
 import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -15,7 +15,7 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
 import com.rcsoyer.servicosjuridicos.domain.Advogado;
-import com.rcsoyer.servicosjuridicos.domain.AdvogadoDgCoordenacao;
+import com.rcsoyer.servicosjuridicos.domain.advdgcoordenacao.AdvogadoDgCoordenacao;
 import com.rcsoyer.servicosjuridicos.domain.CoordenacaoJuridica;
 import com.rcsoyer.servicosjuridicos.repository.AdvogadoDgCoordenacaoRepository;
 import com.rcsoyer.servicosjuridicos.service.dto.AdvogadoDgCoordenacaoDTO;

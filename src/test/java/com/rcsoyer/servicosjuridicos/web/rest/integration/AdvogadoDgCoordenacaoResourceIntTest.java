@@ -1,6 +1,6 @@
 package com.rcsoyer.servicosjuridicos.web.rest.integration;
 
-import static com.rcsoyer.servicosjuridicos.domain.enumeration.RangeDgCoordenacao.INCLUSIVE;
+import static com.rcsoyer.servicosjuridicos.domain.advdgcoordenacao.RangeDgCoordenacao.INCLUSIVE;
 import static com.rcsoyer.servicosjuridicos.web.rest.TestUtil.convertObjectToJsonBytes;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.rcsoyer.servicosjuridicos.domain.enumeration.RangeDgCoordenacao;
+import com.rcsoyer.servicosjuridicos.domain.advdgcoordenacao.RangeDgCoordenacao;
 import com.rcsoyer.servicosjuridicos.service.AdvogadoDgCoordenacaoService;
 import com.rcsoyer.servicosjuridicos.service.AdvogadoService;
 import com.rcsoyer.servicosjuridicos.service.AssuntoService;

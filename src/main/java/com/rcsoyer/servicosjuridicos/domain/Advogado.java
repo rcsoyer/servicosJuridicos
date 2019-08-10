@@ -4,6 +4,8 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.ImmutableSet;
+import com.rcsoyer.servicosjuridicos.domain.advdgcoordenacao.AdvogadoDgCoordenacao;
+import com.rcsoyer.servicosjuridicos.domain.feriaslicenca.FeriasLicenca;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;

@@ -1,6 +1,6 @@
 package com.rcsoyer.servicosjuridicos.service.impl;
 
-import com.rcsoyer.servicosjuridicos.domain.AdvogadoDgCoordenacao;
+import com.rcsoyer.servicosjuridicos.domain.advdgcoordenacao.AdvogadoDgCoordenacao;
 import com.rcsoyer.servicosjuridicos.repository.AdvogadoDgCoordenacaoRepository;
 import com.rcsoyer.servicosjuridicos.service.AdvogadoDgCoordenacaoService;
 import com.rcsoyer.servicosjuridicos.service.dto.AdvogadoDgCoordenacaoDTO;

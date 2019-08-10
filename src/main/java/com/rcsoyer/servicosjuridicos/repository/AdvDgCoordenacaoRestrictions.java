@@ -3,7 +3,7 @@ package com.rcsoyer.servicosjuridicos.repository;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
-import com.rcsoyer.servicosjuridicos.domain.AdvogadoDgCoordenacao;
+import com.rcsoyer.servicosjuridicos.domain.advdgcoordenacao.AdvogadoDgCoordenacao;
 import com.rcsoyer.servicosjuridicos.domain.QAdvogadoDgCoordenacao;
 import java.util.Optional;
 

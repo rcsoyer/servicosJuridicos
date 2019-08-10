@@ -1,11 +1,11 @@
 package com.rcsoyer.servicosjuridicos.config;
 
 import com.rcsoyer.servicosjuridicos.domain.Advogado;
-import com.rcsoyer.servicosjuridicos.domain.AdvogadoDgCoordenacao;
+import com.rcsoyer.servicosjuridicos.domain.advdgcoordenacao.AdvogadoDgCoordenacao;
 import com.rcsoyer.servicosjuridicos.domain.Assunto;
 import com.rcsoyer.servicosjuridicos.domain.Authority;
 import com.rcsoyer.servicosjuridicos.domain.CoordenacaoJuridica;
-import com.rcsoyer.servicosjuridicos.domain.FeriasLicenca;
+import com.rcsoyer.servicosjuridicos.domain.feriaslicenca.FeriasLicenca;
 import com.rcsoyer.servicosjuridicos.domain.Modalidade;
 import com.rcsoyer.servicosjuridicos.domain.ProcessoJudicial;
 import com.rcsoyer.servicosjuridicos.domain.User;

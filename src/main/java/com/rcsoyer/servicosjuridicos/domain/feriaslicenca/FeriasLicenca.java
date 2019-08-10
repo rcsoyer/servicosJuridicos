@@ -1,6 +1,6 @@
-package com.rcsoyer.servicosjuridicos.domain;
+package com.rcsoyer.servicosjuridicos.domain.feriaslicenca;
 
-import com.rcsoyer.servicosjuridicos.domain.enumeration.FeriasLicencaTipo;
+import com.rcsoyer.servicosjuridicos.domain.Advogado;
 import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.Column;

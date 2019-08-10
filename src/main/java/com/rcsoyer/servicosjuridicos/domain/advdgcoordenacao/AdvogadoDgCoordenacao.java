@@ -1,6 +1,7 @@
-package com.rcsoyer.servicosjuridicos.domain;
+package com.rcsoyer.servicosjuridicos.domain.advdgcoordenacao;
 
-import com.rcsoyer.servicosjuridicos.domain.enumeration.RangeDgCoordenacao;
+import com.rcsoyer.servicosjuridicos.domain.Advogado;
+import com.rcsoyer.servicosjuridicos.domain.CoordenacaoJuridica;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;

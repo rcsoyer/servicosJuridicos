@@ -1,4 +1,4 @@
-package com.rcsoyer.servicosjuridicos.domain.enumeration;
+package com.rcsoyer.servicosjuridicos.domain.feriaslicenca;
 
 /**
  * The FeriasLicencaTipo enumeration.

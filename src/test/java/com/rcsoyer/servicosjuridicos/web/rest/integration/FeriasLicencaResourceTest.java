@@ -1,6 +1,6 @@
 package com.rcsoyer.servicosjuridicos.web.rest.integration;
 
-import static com.rcsoyer.servicosjuridicos.domain.enumeration.FeriasLicencaTipo.LICENCA;
+import static com.rcsoyer.servicosjuridicos.domain.feriaslicenca.FeriasLicencaTipo.LICENCA;
 import static com.rcsoyer.servicosjuridicos.web.rest.TestUtil.convertObjectToJsonBytes;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;

@@ -2,7 +2,7 @@ package com.rcsoyer.servicosjuridicos.repository;
 
 import static com.rcsoyer.servicosjuridicos.repository.FeriasLicencaRestrictions.getRestrictions;
 
-import com.rcsoyer.servicosjuridicos.domain.FeriasLicenca;
+import com.rcsoyer.servicosjuridicos.domain.feriaslicenca.FeriasLicenca;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

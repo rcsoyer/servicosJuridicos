@@ -1,6 +1,6 @@
 package com.rcsoyer.servicosjuridicos.service.dto;
 
-import com.rcsoyer.servicosjuridicos.domain.enumeration.RangeDgCoordenacao;
+import com.rcsoyer.servicosjuridicos.domain.advdgcoordenacao.RangeDgCoordenacao;
 import java.io.Serializable;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;

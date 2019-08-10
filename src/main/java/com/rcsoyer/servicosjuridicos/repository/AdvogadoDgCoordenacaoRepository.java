@@ -2,7 +2,7 @@ package com.rcsoyer.servicosjuridicos.repository;
 
 import static com.rcsoyer.servicosjuridicos.repository.AdvDgCoordenacaoRestrictions.getRestrictions;
 
-import com.rcsoyer.servicosjuridicos.domain.AdvogadoDgCoordenacao;
+import com.rcsoyer.servicosjuridicos.domain.advdgcoordenacao.AdvogadoDgCoordenacao;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,6 +1,6 @@
 package com.rcsoyer.servicosjuridicos.service.mapper;
 
-import com.rcsoyer.servicosjuridicos.domain.AdvogadoDgCoordenacao;
+import com.rcsoyer.servicosjuridicos.domain.advdgcoordenacao.AdvogadoDgCoordenacao;
 import com.rcsoyer.servicosjuridicos.service.dto.AdvogadoDgCoordenacaoDTO;
 import java.util.Optional;
 import org.mapstruct.Mapper;

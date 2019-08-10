@@ -5,6 +5,7 @@ import static org.apache.commons.lang3.StringUtils.upperCase;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.ImmutableSet;
+import com.rcsoyer.servicosjuridicos.domain.advdgcoordenacao.AdvogadoDgCoordenacao;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
