@@ -1,7 +1,5 @@
 package com.rcsoyer.servicosjuridicos.service.dto;
 
-import static org.apache.commons.lang3.StringUtils.trimToNull;
-
 import com.rcsoyer.servicosjuridicos.service.dto.validationgroups.ProcessoJudicialOnCreate;
 import com.rcsoyer.servicosjuridicos.service.dto.validationgroups.ProcessoJudicialOnUpdate;
 import java.io.Serializable;
@@ -11,7 +9,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
-import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,7 +30,6 @@ public final class ProcessoJudicialDTO implements Serializable {
     @Min(value = 1L, groups = ProcessoJudicialOnUpdate.class)
     private Long id;
     
-    @Setter(AccessLevel.NONE)
     @NotBlank(groups = {ProcessoJudicialOnCreate.class, ProcessoJudicialOnUpdate.class})
     @Size(min = 20, max = 20, groups = {ProcessoJudicialOnCreate.class, ProcessoJudicialOnUpdate.class})
     private String numero;
@@ -56,8 +52,4 @@ public final class ProcessoJudicialDTO implements Serializable {
     @NotNull
     private ModalidadeDTO modalidade;
     
-    public ProcessoJudicialDTO setNumero(String numero) {
-        this.numero = trimToNull(numero);
-        return this;
-    }
 }
