@@ -26,7 +26,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.validator.constraints.br.CPF;
@@ -35,9 +34,8 @@ import org.hibernate.validator.constraints.br.CPF;
  * A Advogado
  */
 @Entity
-@Accessors(chain = true)
 @Table(name = "advogado")
-@EqualsAndHashCode(of = {"id", "cpf"})
+@EqualsAndHashCode(of = "id")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @ToString(exclude = {"feriasLicencas", "dgCoordenacoes"})
 public final class Advogado implements Serializable {
@@ -53,7 +51,7 @@ public final class Advogado implements Serializable {
     
     @Getter
     @NotBlank
-    @Size(max = 80)
+    @Size(min = 1, max = 80)
     @Column(length = 80, nullable = false)
     private String nome;
     

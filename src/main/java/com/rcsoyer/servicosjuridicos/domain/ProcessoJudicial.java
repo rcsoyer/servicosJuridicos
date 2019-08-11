@@ -4,7 +4,6 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,7 +21,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -33,7 +31,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Getter
 @Setter
 @ToString
-@Accessors(chain = true)
 @EqualsAndHashCode(of = "id")
 @Table(name = "processo_judicial")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -84,12 +81,11 @@ public final class ProcessoJudicial implements Serializable {
         return this;
     }
     
-    public boolean foiDistribuido() {
-        return Objects.nonNull(id);
-    }
-    
-    public boolean naoFoiAtribuidoAdvogado() {
-        return Objects.isNull(advogado);
+    /**
+     * Get the digit in a process that defines to which attorney the process goes
+     */
+    public int getSextoDigito() {
+        return Integer.parseInt(numero.substring(5));
     }
     
 }

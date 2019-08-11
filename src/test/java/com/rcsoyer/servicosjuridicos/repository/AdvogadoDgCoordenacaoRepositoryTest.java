@@ -1,14 +1,15 @@
 package com.rcsoyer.servicosjuridicos.repository;
 
 import static com.rcsoyer.servicosjuridicos.domain.advdgcoordenacao.RangeDgCoordenacao.INCLUSIVE;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.rcsoyer.servicosjuridicos.domain.Advogado;
-import com.rcsoyer.servicosjuridicos.domain.advdgcoordenacao.AdvogadoDgCoordenacao;
 import com.rcsoyer.servicosjuridicos.domain.Assunto;
 import com.rcsoyer.servicosjuridicos.domain.CoordenacaoJuridica;
+import com.rcsoyer.servicosjuridicos.domain.advdgcoordenacao.AdvogadoDgCoordenacao;
 import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 @TestInstance(Lifecycle.PER_CLASS)
@@ -62,7 +64,7 @@ class AdvogadoDgCoordenacaoRepositoryTest extends RepositoryConfigTest {
     
     @Test
     void query() {
-        final var page = dgCoordenacaoRepository.query(dgCoordenacao, PageRequest.of(0, 10));
+        final Page<AdvogadoDgCoordenacao> page = dgCoordenacaoRepository.query(dgCoordenacao, PageRequest.of(0, 10));
         List<AdvogadoDgCoordenacao> content = page.getContent();
         
         assertTrue(page.hasContent());
@@ -106,5 +108,12 @@ class AdvogadoDgCoordenacaoRepositoryTest extends RepositoryConfigTest {
                                                              .setRangeDgCoordenacao(INCLUSIVE);
         
         assertThrows(DataIntegrityViolationException.class, () -> dgCoordenacaoRepository.saveAndFlush(dgCoordenacao));
+    }
+    
+    @Test
+    void findByDgPessoalInicioOrDgPessoalFimOrDgDuplaIs() {
+        final List<AdvogadoDgCoordenacao> result = dgCoordenacaoRepository.findByAnyDigitoEq(3);
+        
+        assertThat(result).hasSize(1);
     }
 }

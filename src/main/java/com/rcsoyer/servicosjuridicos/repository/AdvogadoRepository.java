@@ -18,4 +18,5 @@ public interface AdvogadoRepository extends JpaRepository<Advogado, Long>, Query
     default Page<Advogado> query(final Advogado advogado, final Pageable pageable) {
         return findAll(getRestrictions(advogado), pageable);
     }
+    
 }

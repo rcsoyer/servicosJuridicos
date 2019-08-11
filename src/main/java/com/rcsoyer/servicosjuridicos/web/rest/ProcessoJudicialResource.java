@@ -1,5 +1,6 @@
 package com.rcsoyer.servicosjuridicos.web.rest;
 
+import com.rcsoyer.servicosjuridicos.domain.ProcessoJudicial;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -87,22 +88,6 @@ public class ProcessoJudicialResource {
         .body(result);
   }
 
-  /**
-   * GET /processo-judicials : get all the processoJudicials.
-   *
-   * @param pageable the pagination information
-   * @return the ResponseEntity with status 200 (OK) and the list of processoJudicials in body
-   */
-  @GetMapping("/processo-judicials")
-  @Timed
-  public ResponseEntity<List<ProcessoJudicialDTO>> getAllProcessoJudicials(Pageable pageable) {
-    log.debug("REST request to get a page of ProcessoJudicials");
-    Page<ProcessoJudicialDTO> page = processoJudicialService.findAll(pageable);
-    HttpHeaders headers =
-        PaginationUtil.generatePaginationHttpHeaders(page, "/api/processo-judicials");
-    return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-  }
-
   @Timed
   @GetMapping("/processos-judiciais")
   public ResponseEntity<List<ProcessoJudicialDTO>> getProcessosJudiciais(
@@ -127,8 +112,7 @@ public class ProcessoJudicialResource {
   @Timed
   public ResponseEntity<ProcessoJudicialDTO> getProcessoJudicial(@PathVariable Long id) {
     log.debug("REST request to get ProcessoJudicial : {}", id);
-    ProcessoJudicialDTO processoJudicialDTO = processoJudicialService.findOne(id);
-    return ResponseUtil.wrapOrNotFound(Optional.ofNullable(processoJudicialDTO));
+    return ResponseUtil.wrapOrNotFound(processoJudicialService.findOne(id));
   }
 
   /**

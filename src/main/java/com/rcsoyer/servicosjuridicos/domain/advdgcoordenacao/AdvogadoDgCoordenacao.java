@@ -21,19 +21,17 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
- * A AdvogadoDgCoordenacao.
+ * The connection between an Advogado and Coordenacoes
  */
 @Entity
 @Getter
 @Setter
 @ToString
-@Accessors(chain = true)
-@EqualsAndHashCode(of = {"id", "advogado", "coordenacao"})
+@EqualsAndHashCode(of = "id")
 @Table(name = "advogado_dg_coordenacao", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"dg_pessoal_inicio", "dg_pessoal_fim", "coordenacao_id"}),
     @UniqueConstraint(columnNames = {"advogado_id", "coordenacao_id"})
