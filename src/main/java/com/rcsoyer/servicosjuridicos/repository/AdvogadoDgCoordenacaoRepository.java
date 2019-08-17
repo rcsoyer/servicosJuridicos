@@ -19,15 +19,15 @@ import org.springframework.stereotype.Repository;
 public interface AdvogadoDgCoordenacaoRepository extends JpaRepository<AdvogadoDgCoordenacao, Long>,
                                                          QuerydslPredicateExecutor<AdvogadoDgCoordenacao> {
     
-    int countByDgDuplaEquals(Integer digitoDupla);
+    int countByDgDuplaEquals(int digitoDupla);
     
     default Page<AdvogadoDgCoordenacao> query(final AdvogadoDgCoordenacao dgCoordenacao, final Pageable pageable) {
         return findAll(getRestrictions(dgCoordenacao), pageable);
     }
     
     @Query("FROM AdvogadoDgCoordenacao a WHERE "
-               + "(a.rangeDgCoordenacao = 'EXCLUSIVE' AND (a.dgPessoalInicio = ?1 OR a.dgPessoalFim = ?1)) "
-               + "OR ((a.rangeDgCoordenacao = 'INCLUSIVE' AND (a.dgPessoalInicio >= ?1 AND a.dgPessoalFim <= ?1))) "
+               + "(a.dgPessoalInicio = ?1 OR a.dgPessoalFim = ?1) "
+               + "OR (a.dgPessoalInicio >= ?1 AND a.dgPessoalFim <= ?1) "
                + "OR a.dgDupla = ?1")
     List<AdvogadoDgCoordenacao> findByAnyDigitoEq(int sextoDigito);
     

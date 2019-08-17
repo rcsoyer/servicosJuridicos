@@ -1,13 +1,19 @@
 package com.rcsoyer.servicosjuridicos.service.impl;
 
+import static java.util.Comparator.comparingInt;
+
+import com.rcsoyer.servicosjuridicos.domain.Advogado;
 import com.rcsoyer.servicosjuridicos.domain.ProcessoJudicial;
-import com.rcsoyer.servicosjuridicos.repository.AdvogadoRepository;
+import com.rcsoyer.servicosjuridicos.domain.advdgcoordenacao.AdvogadoDgCoordenacao;
+import com.rcsoyer.servicosjuridicos.repository.AdvogadoDgCoordenacaoRepository;
 import com.rcsoyer.servicosjuridicos.repository.processo.ProcessoJudicialRepository;
 import com.rcsoyer.servicosjuridicos.service.ProcessoJudicialService;
 import com.rcsoyer.servicosjuridicos.service.dto.ProcessoJudicialDTO;
 import com.rcsoyer.servicosjuridicos.service.mapper.ProcessoJudicialMapper;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.ToIntFunction;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,14 +30,14 @@ public class ProcessoJudicialServiceImpl implements ProcessoJudicialService {
     
     private final ProcessoJudicialMapper mapper;
     private final ProcessoJudicialRepository repository;
-    private final AdvogadoRepository advogadoRepository;
+    private final AdvogadoDgCoordenacaoRepository advCoordenacaoRepository;
     
     public ProcessoJudicialServiceImpl(final ProcessoJudicialRepository processoJudicialRepository,
                                        final ProcessoJudicialMapper processoJudicialMapper,
-                                       final AdvogadoRepository advogadoRepository) {
+                                       final AdvogadoDgCoordenacaoRepository advCoordenacaoRepository) {
         this.mapper = processoJudicialMapper;
         this.repository = processoJudicialRepository;
-        this.advogadoRepository = advogadoRepository;
+        this.advCoordenacaoRepository = advCoordenacaoRepository;
     }
     
     @Override
@@ -65,8 +71,13 @@ public class ProcessoJudicialServiceImpl implements ProcessoJudicialService {
     }
     
     private void distribuir(final ProcessoJudicial processo) {
-        final int sextoDigito = processo.getSextoDigito();
-        
+        int sextoDigito = processo.getSextoDigito();
+        final List<AdvogadoDgCoordenacao> advogadosDigitos = advCoordenacaoRepository.findByAnyDigitoEq(sextoDigito);
+        final ToIntFunction<Advogado> numberOfProcessos = advogado -> advogado.getProcessosJudiciais().size();
+        final Optional<Advogado> advogadoWithLessProcessos = advogadosDigitos.stream()
+                                                                             .map(AdvogadoDgCoordenacao::getAdvogado)
+                                                                             .min(comparingInt(numberOfProcessos));
+        advogadoWithLessProcessos.ifPresent(processo::setAdvogado);
     }
     
 }

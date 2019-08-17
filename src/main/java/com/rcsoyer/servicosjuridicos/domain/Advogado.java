@@ -77,6 +77,9 @@ public final class Advogado implements Serializable {
     @OneToMany(mappedBy = "advogado", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private final Set<AdvogadoDgCoordenacao> dgCoordenacoes;
     
+    @OneToMany(mappedBy = "processosJudiciais")
+    private Set<ProcessoJudicial> processosJudiciais;
+    
     public Advogado() {
         this.dgCoordenacoes = new HashSet<>(0);
         this.feriasLicencas = new HashSet<>(0);
@@ -129,4 +132,12 @@ public final class Advogado implements Serializable {
         advogadoDgCoordenacao.setAdvogado(null);
         return this;
     }
+    
+    /**
+     * Unmodiafiable copy to the advogo's processos
+     */
+    public Set<ProcessoJudicial> getProcessosJudiciais() {
+        return Set.copyOf(processosJudiciais);
+    }
+    
 }
