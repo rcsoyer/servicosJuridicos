@@ -39,7 +39,7 @@ import org.hibernate.validator.constraints.br.CPF;
 @Table(name = "advogado")
 @EqualsAndHashCode(of = "id")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@ToString(exclude = {"feriasLicencas", "dgCoordenacoes"})
+@ToString(exclude = {"feriasLicencas", "dgCoordenacoes", "processosJudiciais"})
 public final class Advogado implements Serializable {
     
     private static final long serialVersionUID = 1619909263889107243L;

@@ -29,9 +29,9 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Getter
 @Setter
-@ToString
 @Accessors(chain = true)
 @EqualsAndHashCode(of = "id")
+@ToString(exclude = "advogado")
 @Table(name = "ferias_licenca", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"dt_inicio", "advogado_id"}),
     @UniqueConstraint(columnNames = {"dt_fim", "advogado_id"})

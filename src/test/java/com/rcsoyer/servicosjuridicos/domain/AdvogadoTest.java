@@ -122,19 +122,26 @@ class AdvogadoTest {
     }
     
     @Test
-    void canReceiveProcesso_ok() {
+    void canReceiveProcesso_can() {
         final var feriasLicenca = new FeriasLicenca()
                                       .setId(1L)
                                       .setDtInicio(LocalDate.of(2019, Month.DECEMBER, 26));
         
         advogado.addFeriasLicenca(feriasLicenca);
         
-        final var processo = new ProcessoJudicial()
-                                 .setId(1L)
-                                 .setDtAtribuicao(LocalDateTime.now())
-                                 .setAdvogado(advogado);
+        assertTrue(advogado.canReceiveProcesso());
         
-        assertNotNull(processo.getAdvogado());
+    }
+    
+    @Test
+    void canReceiveProcesso_cannot() {
+        final var feriasLicenca = new FeriasLicenca()
+                                      .setId(1L)
+                                      .setDtInicio(LocalDate.now());
+    
+        advogado.addFeriasLicenca(feriasLicenca);
+    
+        assertFalse(advogado.canReceiveProcesso());
         
     }
     
