@@ -1,13 +1,13 @@
 package com.rcsoyer.servicosjuridicos.repository;
 
-import static com.rcsoyer.servicosjuridicos.domain.feriaslicenca.FeriasLicencaTipo.FERIAS;
-import static com.rcsoyer.servicosjuridicos.domain.feriaslicenca.FeriasLicencaTipo.LICENCA;
+import static com.rcsoyer.servicosjuridicos.domain.FeriasLicencaTipo.FERIAS;
+import static com.rcsoyer.servicosjuridicos.domain.FeriasLicencaTipo.LICENCA;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.rcsoyer.servicosjuridicos.domain.Advogado;
-import com.rcsoyer.servicosjuridicos.domain.feriaslicenca.FeriasLicenca;
+import com.rcsoyer.servicosjuridicos.domain.FeriasLicenca;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

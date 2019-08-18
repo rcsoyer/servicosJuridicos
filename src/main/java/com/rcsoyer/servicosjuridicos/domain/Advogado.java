@@ -1,14 +1,11 @@
 package com.rcsoyer.servicosjuridicos.domain;
 
-import static java.time.temporal.ChronoUnit.DAYS;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rcsoyer.servicosjuridicos.domain.advdgcoordenacao.AdvogadoDgCoordenacao;
-import com.rcsoyer.servicosjuridicos.domain.feriaslicenca.FeriasLicenca;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -136,11 +133,8 @@ public final class Advogado implements Serializable {
         return this;
     }
     
-    /**
-     * Unmodiafiable copy to the advogo's processos
-     */
-    public Set<ProcessoJudicial> getProcessosJudiciais() {
-        return Set.copyOf(processosJudiciais);
+    public int numberOfProcessosJudiciais() {
+        return processosJudiciais.size();
     }
     
     /**
@@ -148,26 +142,14 @@ public final class Advogado implements Serializable {
      */
     boolean canReceiveProcesso() {
         if (isNotEmpty(feriasLicencas)) {
-            final LocalDate now = LocalDate.now();
+            Predicate<FeriasLicenca> feriasLicencaInLessThanFiveDays = FeriasLicenca::feriasLicencaInLessThanFiveDays;
+            Predicate<FeriasLicenca> feriasLicencaInProgress = FeriasLicenca::feriasLicencaInProgress;
             return feriasLicencas.stream()
-                                 .noneMatch(feriasLicencaInLessThanFiveDays(now)
-                                                .or(feriasLicencaInProgress(now)));
+                                 .noneMatch(feriasLicencaInLessThanFiveDays
+                                                .or(feriasLicencaInProgress));
         }
         
         return true;
-    }
-    
-    private Predicate<FeriasLicenca> feriasLicencaInLessThanFiveDays(final LocalDate now) {
-        return feriasLicenca -> {
-            long daysUntilFerias = now.until(feriasLicenca.getDtInicio(), DAYS);
-            return daysUntilFerias > 0 && daysUntilFerias < 5;
-        };
-    }
-    
-    private Predicate<FeriasLicenca> feriasLicencaInProgress(final LocalDate now) {
-        return feriasLicenca -> now.isEqual(feriasLicenca.getDtInicio()) || now.isEqual(feriasLicenca.getDtFim())
-                                    || (now.isAfter(feriasLicenca.getDtInicio()) &&
-                                            now.isBefore(feriasLicenca.getDtFim()));
     }
     
 }

@@ -9,7 +9,7 @@ import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
-import com.rcsoyer.servicosjuridicos.domain.feriaslicenca.FeriasLicenca;
+import com.rcsoyer.servicosjuridicos.domain.FeriasLicenca;
 import com.rcsoyer.servicosjuridicos.repository.FeriasLicencaRepository;
 import com.rcsoyer.servicosjuridicos.service.dto.FeriasLicencaDTO;
 import com.rcsoyer.servicosjuridicos.service.mapper.FeriasLicencaMapper;

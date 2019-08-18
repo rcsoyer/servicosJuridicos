@@ -1,6 +1,7 @@
-package com.rcsoyer.servicosjuridicos.domain.feriaslicenca;
+package com.rcsoyer.servicosjuridicos.domain;
 
-import com.rcsoyer.servicosjuridicos.domain.Advogado;
+import static java.time.temporal.ChronoUnit.DAYS;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import javax.persistence.Column;
@@ -62,5 +63,16 @@ public final class FeriasLicenca implements Serializable {
     @NotNull
     @ManyToOne(optional = false)
     private Advogado advogado;
+    
+    boolean feriasLicencaInLessThanFiveDays() {
+        long daysUntilFerias = LocalDate.now().until(dtInicio, DAYS);
+        return daysUntilFerias > 0 && daysUntilFerias < 5;
+    }
+    
+    boolean feriasLicencaInProgress() {
+        final LocalDate now = LocalDate.now();
+        return now.isEqual(dtInicio) || now.isEqual(dtFim)
+                   || (now.isAfter(dtInicio) && now.isBefore(dtFim));
+    }
     
 }

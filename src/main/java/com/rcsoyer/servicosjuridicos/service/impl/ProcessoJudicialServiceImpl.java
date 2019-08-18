@@ -1,6 +1,8 @@
 package com.rcsoyer.servicosjuridicos.service.impl;
 
 import static java.util.Comparator.comparingInt;
+import static java.util.Objects.isNull;
+import static java.util.stream.Collectors.toList;
 
 import com.rcsoyer.servicosjuridicos.domain.Advogado;
 import com.rcsoyer.servicosjuridicos.domain.ProcessoJudicial;
@@ -13,7 +15,6 @@ import com.rcsoyer.servicosjuridicos.service.mapper.ProcessoJudicialMapper;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.ToIntFunction;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -70,14 +71,23 @@ public class ProcessoJudicialServiceImpl implements ProcessoJudicialService {
                          .map(mapper::toDto);
     }
     
-    private void distribuir(final ProcessoJudicial processo) {
+    private void distributeProcess(final ProcessoJudicial processo) {
         int sextoDigito = processo.getSextoDigito();
         final List<AdvogadoDgCoordenacao> advogadosDigitos = advCoordenacaoRepository.findByAnyDigitoEq(sextoDigito);
-        final ToIntFunction<Advogado> numberOfProcessos = advogado -> advogado.getProcessosJudiciais().size();
-        final Optional<Advogado> advogadoWithLessProcessos = advogadosDigitos.stream()
-                                                                             .map(AdvogadoDgCoordenacao::getAdvogado)
-                                                                             .min(comparingInt(numberOfProcessos));
-        advogadoWithLessProcessos.ifPresent(processo::setAdvogado);
+        List<Advogado> orderedByNumberOfProcessos = advogadosDigitos
+                                                        .stream()
+                                                        .map(AdvogadoDgCoordenacao::getAdvogado)
+                                                        .sorted(comparingInt(Advogado::numberOfProcessosJudiciais))
+                                                        .collect(toList());
+        chooseAdvogado(orderedByNumberOfProcessos, processo);
+    }
+    
+    private void chooseAdvogado(final List<Advogado> advogados, final ProcessoJudicial processo) {
+        if (!advogados.isEmpty() && isNull(processo.getAdvogado())) {
+            processo.setAdvogado(advogados.get(0));
+            advogados.remove(0);
+            chooseAdvogado(advogados, processo);
+        }
     }
     
 }

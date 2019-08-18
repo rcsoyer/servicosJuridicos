@@ -1,11 +1,11 @@
 package com.rcsoyer.servicosjuridicos.service.mapper;
 
-import static com.rcsoyer.servicosjuridicos.domain.feriaslicenca.FeriasLicencaTipo.LICENCA;
+import static com.rcsoyer.servicosjuridicos.domain.FeriasLicencaTipo.LICENCA;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 import com.rcsoyer.servicosjuridicos.domain.Advogado;
-import com.rcsoyer.servicosjuridicos.domain.feriaslicenca.FeriasLicenca;
+import com.rcsoyer.servicosjuridicos.domain.FeriasLicenca;
 import com.rcsoyer.servicosjuridicos.service.dto.FeriasLicencaDTO;
 import java.time.LocalDate;
 import org.junit.jupiter.api.Test;

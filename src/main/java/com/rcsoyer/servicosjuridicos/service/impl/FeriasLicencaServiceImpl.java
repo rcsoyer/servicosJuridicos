@@ -1,6 +1,6 @@
 package com.rcsoyer.servicosjuridicos.service.impl;
 
-import com.rcsoyer.servicosjuridicos.domain.feriaslicenca.FeriasLicenca;
+import com.rcsoyer.servicosjuridicos.domain.FeriasLicenca;
 import com.rcsoyer.servicosjuridicos.repository.FeriasLicencaRepository;
 import com.rcsoyer.servicosjuridicos.service.FeriasLicencaService;
 import com.rcsoyer.servicosjuridicos.service.dto.FeriasLicencaDTO;

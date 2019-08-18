@@ -3,7 +3,7 @@ package com.rcsoyer.servicosjuridicos.repository;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
-import com.rcsoyer.servicosjuridicos.domain.feriaslicenca.FeriasLicenca;
+import com.rcsoyer.servicosjuridicos.domain.FeriasLicenca;
 import com.rcsoyer.servicosjuridicos.domain.feriaslicenca.QFeriasLicenca;
 import java.util.Optional;
 
