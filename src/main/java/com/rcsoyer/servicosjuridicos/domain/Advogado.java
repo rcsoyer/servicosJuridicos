@@ -1,6 +1,7 @@
 package com.rcsoyer.servicosjuridicos.domain;
 
 import static java.time.temporal.ChronoUnit.DAYS;
+import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -146,11 +147,27 @@ public final class Advogado implements Serializable {
      * Business rule: an advocate cannot receive processes if it's 5 days for it's vacations(feriasLicenca)
      */
     boolean canReceiveProcesso() {
-        final LocalDate now = LocalDate.now();
-        final Predicate<FeriasLicenca> feriasInFiveDays =
-            feriasLicenca -> DAYS.between(now, feriasLicenca.getDtInicio()) <= 5;
-        return feriasLicencas.stream()
-                             .noneMatch(feriasInFiveDays);
+        if (isNotEmpty(feriasLicencas)) {
+            final LocalDate now = LocalDate.now();
+            return feriasLicencas.stream()
+                                 .noneMatch(feriasLicencaInLessThanFiveDays(now)
+                                                .or(feriasLicencaInProgress(now)));
+        }
+        
+        return true;
+    }
+    
+    private Predicate<FeriasLicenca> feriasLicencaInLessThanFiveDays(final LocalDate now) {
+        return feriasLicenca -> {
+            long daysUntilFerias = now.until(feriasLicenca.getDtInicio(), DAYS);
+            return daysUntilFerias < 0 || daysUntilFerias > 5;
+        };
+    }
+    
+    private Predicate<FeriasLicenca> feriasLicencaInProgress(final LocalDate now) {
+        return feriasLicenca -> now.isEqual(feriasLicenca.getDtInicio()) || now.isEqual(feriasLicenca.getDtFim())
+                                    || (now.isAfter(feriasLicenca.getDtInicio()) &&
+                                            now.isBefore(feriasLicenca.getDtFim()));
     }
     
 }
