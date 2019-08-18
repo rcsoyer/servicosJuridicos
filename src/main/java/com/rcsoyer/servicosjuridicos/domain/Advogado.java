@@ -1,14 +1,16 @@
 package com.rcsoyer.servicosjuridicos.domain;
 
+import static java.time.temporal.ChronoUnit.DAYS;
 import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.common.collect.ImmutableSet;
 import com.rcsoyer.servicosjuridicos.domain.advdgcoordenacao.AdvogadoDgCoordenacao;
 import com.rcsoyer.servicosjuridicos.domain.feriaslicenca.FeriasLicenca;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Predicate;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -99,14 +101,14 @@ public final class Advogado implements Serializable {
      * Unmodifiable view of these feriasLicencas
      */
     public Set<FeriasLicenca> getFeriasLicencas() {
-        return ImmutableSet.copyOf(feriasLicencas);
+        return Set.copyOf(feriasLicencas);
     }
     
     /**
      * Unmodifiable view of these dgCoordenacoes
      */
     public Set<AdvogadoDgCoordenacao> getDgCoordenacoes() {
-        return ImmutableSet.copyOf(dgCoordenacoes);
+        return Set.copyOf(dgCoordenacoes);
     }
     
     public Advogado addFeriasLicenca(final FeriasLicenca feriasLicenca) {
@@ -138,6 +140,17 @@ public final class Advogado implements Serializable {
      */
     public Set<ProcessoJudicial> getProcessosJudiciais() {
         return Set.copyOf(processosJudiciais);
+    }
+    
+    /**
+     * Business rule: an advocate cannot receive processes if it's 5 days for it's vacations
+     */
+    public boolean canReceiveProcesso() {
+        final var now = LocalDate.now();
+        final Predicate<FeriasLicenca> feriasInFiveDays =
+            feriasLicenca -> DAYS.between(now, feriasLicenca.getDtInicio()) < 5;
+        return feriasLicencas.stream()
+                             .noneMatch(feriasInFiveDays);
     }
     
 }
