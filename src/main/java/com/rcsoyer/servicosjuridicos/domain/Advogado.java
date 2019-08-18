@@ -160,7 +160,7 @@ public final class Advogado implements Serializable {
     private Predicate<FeriasLicenca> feriasLicencaInLessThanFiveDays(final LocalDate now) {
         return feriasLicenca -> {
             long daysUntilFerias = now.until(feriasLicenca.getDtInicio(), DAYS);
-            return daysUntilFerias < 0 || (daysUntilFerias > 0 && daysUntilFerias < 5);
+            return daysUntilFerias > 0 && daysUntilFerias < 5;
         };
     }
     
