@@ -4,6 +4,7 @@ import static org.apache.commons.lang3.StringUtils.trimToNull;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -73,6 +74,7 @@ public final class ProcessoJudicial implements Serializable {
     private Modalidade modalidade;
     
     @NotNull
+    @Setter(AccessLevel.NONE)
     @ManyToOne(optional = false)
     private Advogado advogado;
     
@@ -86,6 +88,13 @@ public final class ProcessoJudicial implements Serializable {
      */
     public int getSextoDigito() {
         return Integer.parseInt(numero.substring(5));
+    }
+    
+    public ProcessoJudicial setAdvogado(final Advogado advogado) {
+        Optional.of(advogado)
+                .filter(Advogado::canReceiveProcesso)
+                .ifPresent(adv -> this.advogado = adv);
+        return this;
     }
     
 }

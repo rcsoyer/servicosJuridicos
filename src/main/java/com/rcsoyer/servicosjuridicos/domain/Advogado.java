@@ -143,12 +143,12 @@ public final class Advogado implements Serializable {
     }
     
     /**
-     * Business rule: an advocate cannot receive processes if it's 5 days for it's vacations
+     * Business rule: an advocate cannot receive processes if it's 5 days for it's vacations(feriasLicenca)
      */
-    public boolean canReceiveProcesso() {
-        final var now = LocalDate.now();
+    boolean canReceiveProcesso() {
+        final LocalDate now = LocalDate.now();
         final Predicate<FeriasLicenca> feriasInFiveDays =
-            feriasLicenca -> DAYS.between(now, feriasLicenca.getDtInicio()) < 5;
+            feriasLicenca -> DAYS.between(now, feriasLicenca.getDtInicio()) <= 5;
         return feriasLicencas.stream()
                              .noneMatch(feriasInFiveDays);
     }
