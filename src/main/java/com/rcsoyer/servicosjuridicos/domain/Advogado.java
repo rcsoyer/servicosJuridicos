@@ -77,7 +77,7 @@ public final class Advogado implements Serializable {
     @OneToMany(mappedBy = "advogado", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private final Set<AdvogadoDgCoordenacao> dgCoordenacoes;
     
-    @OneToMany(mappedBy = "processosJudiciais")
+    @OneToMany(mappedBy = "advogado")
     private Set<ProcessoJudicial> processosJudiciais;
     
     public Advogado() {

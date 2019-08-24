@@ -1,5 +1,7 @@
 package com.rcsoyer.servicosjuridicos.domain;
 
+import static java.time.DayOfWeek.SATURDAY;
+import static java.time.DayOfWeek.SUNDAY;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 import java.io.Serializable;
@@ -65,7 +67,19 @@ public final class FeriasLicenca implements Serializable {
     private Advogado advogado;
     
     boolean feriasLicencaInLessThanFiveDays() {
-        long daysUntilFerias = LocalDate.now().until(dtInicio, DAYS);
+        final LocalDate lastDayForTakeProcesso = dtInicio.minusDays(5);
+        LocalDate theDay;
+        
+        if (lastDayForTakeProcesso.getDayOfWeek() == SATURDAY) {
+            theDay = lastDayForTakeProcesso.minusDays(2);
+        } else if (lastDayForTakeProcesso.getDayOfWeek() == SUNDAY) {
+            theDay = lastDayForTakeProcesso.minusDays(1);
+        } else {
+            theDay = lastDayForTakeProcesso;
+        }
+        
+        final LocalDate today = LocalDate.now();
+        long daysUntilFerias = today.until(theDay, DAYS);
         return daysUntilFerias > 0 && daysUntilFerias < 5;
     }
     
