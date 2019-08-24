@@ -1,5 +1,7 @@
 package com.rcsoyer.servicosjuridicos.service;
 
+import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
+
 import com.rcsoyer.servicosjuridicos.config.Constants;
 import com.rcsoyer.servicosjuridicos.domain.Authority;
 import com.rcsoyer.servicosjuridicos.domain.User;
@@ -20,8 +22,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,22 +34,18 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Service class for managing users.
  */
+@Slf4j
 @Service
 @Transactional
 public class UserService {
     
-    private final Logger log = LoggerFactory.getLogger(UserService.class);
-    
+    private final CacheManager cacheManager;
     private final UserRepository userRepository;
-    
     private final PasswordEncoder passwordEncoder;
-    
     private final AuthorityRepository authorityRepository;
     
-    private final CacheManager cacheManager;
-    
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
-                       AuthorityRepository authorityRepository, CacheManager cacheManager) {
+    public UserService(final UserRepository userRepository, final PasswordEncoder passwordEncoder,
+                       final AuthorityRepository authorityRepository, final CacheManager cacheManager) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
@@ -138,31 +135,31 @@ public class UserService {
         return true;
     }
     
-    public User createUser(UserDTO userDTO) {
-        User user = new User();
-        user.setLogin(userDTO.getLogin().toLowerCase());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setEmail(userDTO.getEmail().toLowerCase());
-        user.setImageUrl(userDTO.getImageUrl());
-        if (userDTO.getLangKey() == null) {
-            user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
+    public User createUser(final UserDTO dto) {
+        final User user = new User()
+                              .setLogin(dto.getLogin().toLowerCase())
+                              .setFirstName(dto.getFirstName())
+                              .setLastName(dto.getLastName())
+                              .setEmail(dto.getEmail().toLowerCase())
+                              .setImageUrl(dto.getImageUrl());
+        
+        if (dto.getLangKey() == null) {
+            user.setLangKey(Constants.DEFAULT_LANGUAGE);
         } else {
-            user.setLangKey(userDTO.getLangKey());
+            user.setLangKey(dto.getLangKey());
         }
+        
         String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
         user.setPassword(encryptedPassword);
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
         user.setActivated(true);
-        if (userDTO.getAuthorities() != null) {
-            Set<Authority> authorities = userDTO.getAuthorities().stream()
-                                                .map(authorityRepository::findById)
-                                                .filter(Optional::isPresent)
-                                                .map(Optional::get)
-                                                .collect(Collectors.toSet());
+        
+        if (isNotEmpty(dto.getAuthorities())) {
+            final Set<Authority> authorities = authorityRepository.findByNameIn(dto.getAuthorities());
             user.setAuthorities(authorities);
         }
+        
         userRepository.save(user);
         this.clearUserCaches(user);
         log.debug("Created Information for User: {}", user);
