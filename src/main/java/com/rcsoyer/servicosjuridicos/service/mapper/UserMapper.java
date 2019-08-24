@@ -1,76 +1,76 @@
 package com.rcsoyer.servicosjuridicos.service.mapper;
 
+import static java.util.stream.Collectors.toSet;
+
 import com.rcsoyer.servicosjuridicos.domain.Authority;
 import com.rcsoyer.servicosjuridicos.domain.User;
 import com.rcsoyer.servicosjuridicos.service.dto.UserDTO;
-import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  * Mapper for the entity User and its DTO called UserDTO.
  *
- * Normal mappers are generated using MapStruct, this one is hand-coded as MapStruct support is
- * still in beta, and requires a manual step with an IDE.
+ * Normal mappers are generated using MapStruct, this one is hand-coded as MapStruct support is still in beta, and
+ * requires a manual step with an IDE.
  */
-@Service
+@Component
 public class UserMapper {
-
-    public UserDTO userToUserDTO(User user) {
-        return new UserDTO(user);
+    
+    public UserDTO userToUserDTO(final User user) {
+        return new UserDTO()
+                   .setId(user.getId())
+                   .setLogin(user.getLogin())
+                   .setFirstName(user.getFirstName())
+                   .setLastName(user.getLastName())
+                   .setEmail(user.getEmail())
+                   .setActivated(user.getActivated())
+                   .setImageUrl(user.getImageUrl())
+                   .setLangKey(user.getLangKey())
+                   .setCreatedBy(user.getCreatedBy())
+                   .setCreatedDate(user.getCreatedDate())
+                   .setLastModifiedBy(user.getLastModifiedBy())
+                   .setLastModifiedDate(user.getLastModifiedDate())
+                   .setAuthorities(user.getAuthorities()
+                                       .stream()
+                                       .map(Authority::getName)
+                                       .collect(toSet()));
     }
-
-    public List<UserDTO> usersToUserDTOs(List<User> users) {
-        return users.stream()
-            .filter(Objects::nonNull)
-            .map(this::userToUserDTO)
-            .collect(Collectors.toList());
+    
+    public User userDTOToUser(final UserDTO userDTO) {
+        return Optional.ofNullable(userDTO)
+                       .map(dto -> {
+                           final User user = new User();
+                           user.setId(dto.getId());
+                           user.setLogin(dto.getLogin());
+                           user.setFirstName(dto.getFirstName());
+                           user.setLastName(dto.getLastName());
+                           user.setEmail(dto.getEmail());
+                           user.setImageUrl(dto.getImageUrl());
+                           user.setActivated(dto.isActivated());
+                           user.setLangKey(dto.getLangKey());
+            
+                           Set<Authority> authorities = authoritiesFromStrings(dto.getAuthorities());
+                           Optional.ofNullable(authorities)
+                                   .ifPresent(user::setAuthorities);
+                           return user;
+                       })
+                       .orElse(null);
     }
-
-    public User userDTOToUser(UserDTO userDTO) {
-        if (userDTO == null) {
-            return null;
-        } else {
-            User user = new User();
-            user.setId(userDTO.getId());
-            user.setLogin(userDTO.getLogin());
-            user.setFirstName(userDTO.getFirstName());
-            user.setLastName(userDTO.getLastName());
-            user.setEmail(userDTO.getEmail());
-            user.setImageUrl(userDTO.getImageUrl());
-            user.setActivated(userDTO.isActivated());
-            user.setLangKey(userDTO.getLangKey());
-            Set<Authority> authorities = this.authoritiesFromStrings(userDTO.getAuthorities());
-            if (authorities != null) {
-                user.setAuthorities(authorities);
-            }
-            return user;
-        }
-    }
-
-    public List<User> userDTOsToUsers(List<UserDTO> userDTOs) {
-        return userDTOs.stream()
-            .filter(Objects::nonNull)
-            .map(this::userDTOToUser)
-            .collect(Collectors.toList());
-    }
-
+    
     public User userFromId(Long id) {
-        if (id == null) {
-            return null;
-        }
-        User user = new User();
-        user.setId(id);
-        return user;
+        return Optional.ofNullable(id)
+                       .map(new User()::setId)
+                       .orElse(null);
     }
-
-    public Set<Authority> authoritiesFromStrings(Set<String> strings) {
-        return strings.stream().map(string -> {
-            Authority auth = new Authority();
-            auth.setName(string);
-            return auth;
-        }).collect(Collectors.toSet());
+    
+    private Set<Authority> authoritiesFromStrings(Set<String> authorities) {
+        return authorities.stream()
+                          .map(authorityName -> {
+                              final Authority auth = new Authority();
+                              auth.setName(authorityName);
+                              return auth;
+                          }).collect(toSet());
     }
 }

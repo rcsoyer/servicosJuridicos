@@ -1,14 +1,19 @@
 package com.rcsoyer.servicosjuridicos.service.dto;
 
-import com.rcsoyer.servicosjuridicos.config.Constants;
+import static com.rcsoyer.servicosjuridicos.config.Constants.LOGIN_REGEX;
+
 import com.rcsoyer.servicosjuridicos.domain.Authority;
 import com.rcsoyer.servicosjuridicos.domain.User;
+import com.rcsoyer.servicosjuridicos.service.dto.view.UserView;
 import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
@@ -24,44 +29,55 @@ import lombok.ToString;
 @Setter
 @ToString
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(of = {"id", "login", "firstName"})
 public class UserDTO {
     
-    @Min(1L)
+    @Null(groups = UserView.Create.class)
+    @NotNull(groups = UserView.Update.class)
+    @Min(value = 1L, groups = UserView.Update.class)
     private Long id;
     
-    @NotBlank
-    @Size(max = 50)
-    @Pattern(regexp = Constants.LOGIN_REGEX)
+    @NotBlank(groups = {UserView.Create.class, UserView.Update.class})
+    @Size(min = 1, max = 50, groups = {UserView.Create.class, UserView.Update.class})
+    @Pattern(regexp = LOGIN_REGEX, groups = {UserView.Create.class, UserView.Update.class})
     private String login;
     
-    @Size(max = 50)
+    @NotBlank(groups = {UserView.Create.class, UserView.Update.class})
+    @Size(min = 1, max = 50, groups = {UserView.Create.class, UserView.Update.class})
     private String firstName;
     
-    @Size(max = 50)
+    @NotBlank(groups = {UserView.Create.class, UserView.Update.class})
+    @Size(min = 1, max = 50, groups = {UserView.Create.class, UserView.Update.class})
     private String lastName;
     
-    @Email
-    @Size(min = 5, max = 254)
+    @Email(groups = {UserView.Create.class, UserView.Update.class})
+    @Size(min = 5, max = 254, groups = {UserView.Create.class, UserView.Update.class})
     private String email;
     
-    @Size(max = 256)
+    @Size(min = 1, max = 256, groups = {UserView.Create.class, UserView.Update.class})
     private String imageUrl;
     
-    private boolean activated = false;
-    
-    @Size(min = 2, max = 6)
+    @Size(min = 2, max = 6, groups = {UserView.Create.class, UserView.Update.class})
     private String langKey;
     
+    @Null(groups = {UserView.Create.class})
+    @NotNull(groups = UserView.Update.class)
     private String createdBy;
     
+    @Null(groups = {UserView.Create.class})
+    @NotNull(groups = UserView.Update.class)
     private Instant createdDate;
     
+    @NotBlank(groups = UserView.Update.class)
     private String lastModifiedBy;
     
+    @NotNull(groups = UserView.Update.class)
     private Instant lastModifiedDate;
     
+    @NotEmpty(groups = {UserView.Create.class, UserView.Update.class})
     private Set<String> authorities;
+    
+    private boolean activated;
     
     public UserDTO(final User user) {
         this.id = user.getId();
