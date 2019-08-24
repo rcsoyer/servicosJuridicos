@@ -93,14 +93,7 @@ public class UserResource {
     @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<User> createUser(@Valid @RequestBody final UserDTO userDTO) throws URISyntaxException {
         log.debug("REST request to save User : {}", userDTO);
-        if (isNull(userDTO.getId())) {
-            throw BadRequestAlertException
-                      .builder()
-                      .defaultMessage("A new user cannot already have an ID")
-                      .entityName("userManagement")
-                      .errorKey("idexists")
-                      .build();
-        } else if (userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).isPresent()) {
+        if (userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).isPresent()) {
             throw new LoginAlreadyUsedException();
         } else if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
             throw new EmailAlreadyUsedException();
