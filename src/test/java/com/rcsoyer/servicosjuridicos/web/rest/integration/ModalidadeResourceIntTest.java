@@ -56,11 +56,8 @@ class ModalidadeResourceIntTest extends ApiConfigTest {
                             .contentType(APPLICATION_JSON_UTF8)
                             .content(convertObjectToJsonBytes(modalidade)))
                .andExpect(status().isBadRequest())
-               .andExpect(jsonPath("$.fieldErrors", hasSize(2)))
-               .andExpect(jsonPath("$.message").value("error.validation"))
-               .andExpect(jsonPath("$.title").value("Method argument not valid"))
-               .andExpect(jsonPath("$.fieldErrors[*].field", containsInAnyOrder("id", "descricao")))
-               .andExpect(jsonPath("$.fieldErrors[*].message", containsInAnyOrder("Null", "NotBlank")));
+               .andExpect(jsonPath("$.errors", hasSize(2)))
+               .andExpect(jsonPath("$.message").value("Dados inválidos"));
     }
     
     @Test
@@ -75,11 +72,8 @@ class ModalidadeResourceIntTest extends ApiConfigTest {
                             .contentType(APPLICATION_JSON_UTF8)
                             .content(convertObjectToJsonBytes(modalidade)))
                .andExpect(status().isBadRequest())
-               .andExpect(jsonPath("$.fieldErrors", hasSize(2)))
-               .andExpect(jsonPath("$.message").value("Dados inválidos"))
-               .andExpect(jsonPath("$.title").value("Method argument not valid"))
-               .andExpect(jsonPath("$.fieldErrors[*].field", containsInAnyOrder("id", "descricao")))
-               .andExpect(jsonPath("$.fieldErrors[*].message", containsInAnyOrder("Null", "Size")));
+               .andExpect(jsonPath("$.errors", hasSize(2)))
+               .andExpect(jsonPath("$.message").value("Dados inválidos"));
     }
     
     @Test
@@ -107,18 +101,15 @@ class ModalidadeResourceIntTest extends ApiConfigTest {
                             .content(convertObjectToJsonBytes(modalidade)))
                .andDo(MockMvcResultHandlers.print())
                .andExpect(status().isBadRequest())
-               .andExpect(jsonPath("$.fieldErrors", hasSize(2)))
-               .andExpect(jsonPath("$.message").value("error.validation"))
-               .andExpect(jsonPath("$.title").value("Method argument not valid"))
-               .andExpect(jsonPath("$.fieldErrors[*].field", containsInAnyOrder("id", "descricao")))
-               .andExpect(jsonPath("$.fieldErrors[*].message", containsInAnyOrder("NotNull", "NotBlank")));
+               .andExpect(jsonPath("$.errors", hasSize(2)))
+               .andExpect(jsonPath("$.message").value("Dados inválidos"));
     }
     
     @Test
     void updateModalidade_invalidIdLessThan1AndDescricaoMoreThan60() throws Exception {
         final var modalidade = new ModalidadeDTO()
                                    .setId(-1L)
-                                   .setDescricao("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                                   .setDescricao(RandomStringUtils.randomAlphanumeric(62));
         
         mockMvc.perform(put(URL_MODALIDADE_API)
                             .with(user(TEST_USER_ID))
@@ -126,11 +117,8 @@ class ModalidadeResourceIntTest extends ApiConfigTest {
                             .contentType(APPLICATION_JSON_UTF8)
                             .content(convertObjectToJsonBytes(modalidade)))
                .andExpect(status().isBadRequest())
-               .andExpect(jsonPath("$.fieldErrors", hasSize(2)))
-               .andExpect(jsonPath("$.message").value("error.validation"))
-               .andExpect(jsonPath("$.title").value("Method argument not valid"))
-               .andExpect(jsonPath("$.fieldErrors[*].field", containsInAnyOrder("id", "descricao")))
-               .andExpect(jsonPath("$.fieldErrors[*].message", containsInAnyOrder("Min", "Size")));
+               .andExpect(jsonPath("$.errors", hasSize(2)))
+               .andExpect(jsonPath("$.message").value("Dados inválidos"));
     }
     
     @Test

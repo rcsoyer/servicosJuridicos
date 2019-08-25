@@ -4,7 +4,7 @@ import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
-import org.springframework.validation.ObjectError;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @Getter
@@ -12,11 +12,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 @EqualsAndHashCode(callSuper = true)
 final class MethodArgumentError extends ApiError {
     
-    private final List<ObjectError> errors;
+    private final List<FieldError> errors;
     
     MethodArgumentError(final MethodArgumentNotValidException argsNotValidExc) {
         super("Dados inválidos", argsNotValidExc.getMessage());
-        this.errors = argsNotValidExc.getBindingResult().getAllErrors();
+        this.errors = argsNotValidExc.getBindingResult().getFieldErrors();
     }
     
 }
