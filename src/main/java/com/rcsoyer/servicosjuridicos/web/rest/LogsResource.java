@@ -1,11 +1,12 @@
 package com.rcsoyer.servicosjuridicos.web.rest;
 
+import static java.util.stream.Collectors.toList;
+
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.LoggerContext;
 import com.codahale.metrics.annotation.Timed;
 import com.rcsoyer.servicosjuridicos.web.rest.vm.LoggerVM;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,25 +20,26 @@ import org.springframework.web.bind.annotation.RestController;
  * Controller for view and managing Log Level at runtime.
  */
 @RestController
-@RequestMapping("/management")
+@RequestMapping("/management/logs")
 public class LogsResource {
     
-    @GetMapping("/logs")
     @Timed
+    @GetMapping
     public List<LoggerVM> getList() {
-        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
-        return context.getLoggerList()
-                      .stream()
-                      .map(LoggerVM::new)
-                      .collect(Collectors.toList());
+        return ((LoggerContext) LoggerFactory.getILoggerFactory())
+                   .getLoggerList()
+                   .stream()
+                   .map(LoggerVM::new)
+                   .collect(toList());
     }
     
-    @PutMapping("/logs")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @Timed
-    public void changeLevel(@RequestBody LoggerVM jsonLogger) {
-        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
+    @PutMapping
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void changeLevel(@RequestBody final LoggerVM jsonLogger) {
+        final var context = (LoggerContext) LoggerFactory.getILoggerFactory();
         context.getLogger(jsonLogger.getName())
                .setLevel(Level.valueOf(jsonLogger.getLevel()));
     }
+    
 }
