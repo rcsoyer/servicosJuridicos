@@ -1,5 +1,7 @@
 package com.rcsoyer.servicosjuridicos.domain;
 
+import static org.apache.commons.lang3.StringUtils.trimToNull;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rcsoyer.servicosjuridicos.config.Constants;
 import java.io.Serializable;
@@ -150,7 +152,7 @@ public final class User extends AbstractAuditingEntity implements Serializable {
     }
     
     public User setResetKey(String resetKey) {
-        this.resetKey = resetKey.trim();
+        this.resetKey = trimToNull(resetKey);
         return this;
     }
     
