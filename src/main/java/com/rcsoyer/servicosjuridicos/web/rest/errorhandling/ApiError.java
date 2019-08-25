@@ -13,11 +13,11 @@ import lombok.ToString;
 @Getter
 @ToString
 @EqualsAndHashCode(exclude = "timestamp")
-class ApiError {
+abstract class ApiError {
     
-    private final String message;
-    private final String cause;
-    private final String timestamp;
+    protected final String message;
+    protected final String cause;
+    protected final String timestamp;
     
     ApiError(String message, String cause) {
         this.message = message;

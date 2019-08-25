@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.rcsoyer.servicosjuridicos.service.ModalidadeService;
 import com.rcsoyer.servicosjuridicos.service.dto.ModalidadeDTO;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
@@ -66,7 +67,7 @@ class ModalidadeResourceIntTest extends ApiConfigTest {
     void createModalidade_invalidWithIdAndDescriptionMoreThanMax() throws Exception {
         final var modalidade = new ModalidadeDTO()
                                    .setId(1L)
-                                   .setDescricao("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                                   .setDescricao(RandomStringUtils.randomAlphanumeric(61));
         
         mockMvc.perform(post(URL_MODALIDADE_API)
                             .with(user(TEST_USER_ID))
@@ -75,7 +76,7 @@ class ModalidadeResourceIntTest extends ApiConfigTest {
                             .content(convertObjectToJsonBytes(modalidade)))
                .andExpect(status().isBadRequest())
                .andExpect(jsonPath("$.fieldErrors", hasSize(2)))
-               .andExpect(jsonPath("$.message").value("error.validation"))
+               .andExpect(jsonPath("$.message").value("Dados inválidos"))
                .andExpect(jsonPath("$.title").value("Method argument not valid"))
                .andExpect(jsonPath("$.fieldErrors[*].field", containsInAnyOrder("id", "descricao")))
                .andExpect(jsonPath("$.fieldErrors[*].message", containsInAnyOrder("Null", "Size")));
