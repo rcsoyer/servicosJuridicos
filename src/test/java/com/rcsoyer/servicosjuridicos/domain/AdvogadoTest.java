@@ -2,7 +2,6 @@ package com.rcsoyer.servicosjuridicos.domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -123,7 +122,8 @@ class AdvogadoTest {
     void canReceiveProcesso_can() {
         final var feriasLicenca = new FeriasLicenca()
                                       .setId(1L)
-                                      .setDtInicio(LocalDate.of(2019, Month.DECEMBER, 26));
+                                      .setDtInicio(LocalDate.of(2019, Month.DECEMBER, 26))
+                                      .setDtFim(LocalDate.of(2020, Month.JANUARY, 26));
         
         advogado.addFeriasLicenca(feriasLicenca);
         
@@ -136,9 +136,9 @@ class AdvogadoTest {
         final var feriasLicenca = new FeriasLicenca()
                                       .setId(1L)
                                       .setDtInicio(LocalDate.now());
-    
+        
         advogado.addFeriasLicenca(feriasLicenca);
-    
+        
         assertFalse(advogado.canReceiveProcesso());
         
     }
