@@ -80,7 +80,7 @@ class CoordenacaoJuridicaResourceIntTest extends ApiConfigTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(convertObjectToJsonBytes(new CoordenacaoCreateUpdateDto())))
                .andExpect(status().isBadRequest())
-               .andExpect(jsonPath("message").value("error.validation"));
+               .andExpect(jsonPath("message").value("Dados inválidos"));
     }
     
     @Test
