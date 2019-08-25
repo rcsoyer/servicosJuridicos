@@ -173,14 +173,6 @@ public final class User extends AbstractAuditingEntity implements Serializable {
         return this;
     }
     
-    public void removeAllAuthorities() {
-        authorities.clear();
-    }
-    
-    public void addAuthority(final Authority authority) {
-        authorities.add(authority);
-    }
-    
     public boolean getActivated() {
         return activated;
     }
