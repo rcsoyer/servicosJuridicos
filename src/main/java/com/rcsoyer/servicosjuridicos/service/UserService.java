@@ -169,34 +169,28 @@ public class UserService {
     /**
      * Update all information for a specific user, and return the modified user.
      *
-     * @param userDTO user to update
+     * @param dataUpdate user to update
      * @return updated user
      */
-    public Optional<UserDTO> updateUser(final UserDTO userDTO) {
-        return Optional.of(userRepository.findById(userDTO.getId()))
-                       .filter(Optional::isPresent)
-                       .map(Optional::get)
-                       .map(user -> {
-                           this.clearUserCaches(user);
-                           user.setLogin(userDTO.getLogin().toLowerCase());
-                           user.setFirstName(userDTO.getFirstName());
-                           user.setLastName(userDTO.getLastName());
-                           user.setEmail(userDTO.getEmail().toLowerCase());
-                           user.setImageUrl(userDTO.getImageUrl());
-                           user.setActivated(userDTO.isActivated());
-                           user.setLangKey(userDTO.getLangKey());
-                           user.removeAllAuthorities();
-                           userDTO.getAuthorities()
-                                  .stream()
-                                  .map(authorityRepository::findById)
-                                  .filter(Optional::isPresent)
-                                  .map(Optional::get)
-                                  .forEach(user::addAuthority);
-                           this.clearUserCaches(user);
-                           log.debug("Changed Information for User: {}", user);
-                           return user;
-                       })
-                       .map(UserDTO::new);
+    public Optional<UserDTO> updateUser(final UserDTO dataUpdate) {
+        return userRepository.findById(dataUpdate.getId())
+                             .map(user -> {
+                                 clearUserCaches(user);
+                                 user.setLogin(dataUpdate.getLogin().toLowerCase());
+                                 user.setFirstName(dataUpdate.getFirstName());
+                                 user.setLastName(dataUpdate.getLastName());
+                                 user.setEmail(dataUpdate.getEmail().toLowerCase());
+                                 user.setImageUrl(dataUpdate.getImageUrl());
+                                 user.setActivated(dataUpdate.isActivated());
+                                 user.setLangKey(dataUpdate.getLangKey());
+                                 final Set<Authority> authorities =
+                                     authorityRepository.findByNameIn(dataUpdate.getAuthorities());
+                                 user.setAuthorities(authorities);
+                                 this.clearUserCaches(user);
+                                 log.debug("Changed Information for User: {}", user);
+                                 return user;
+                             })
+                             .map(UserDTO::new);
     }
     
     public void deleteUser(String login) {
