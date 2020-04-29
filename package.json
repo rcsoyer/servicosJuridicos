@@ -24,7 +24,7 @@
     "angular2-text-mask": "^8.0.4",
     "bootstrap": "4.0.0",
     "core-js": "2.5.3",
-    "jquery": "3.3.1",
+    "jquery": "3.5.0",
     "lodash": "^4.17.5",
     "moment": "2.21.0",
     "mydatepicker": "^2.6.2",
